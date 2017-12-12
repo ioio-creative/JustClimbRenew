@@ -127,10 +127,9 @@ namespace JustClimbTrial.Views.Pages
         {
             routeSetViewModel.LoadData();
 
-            rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, kinectSensor.CoordinateMapper);
+            rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, (this.Parent as MainWindow).KinectManagerClient.ManagerCoorMapper);
             bool isAnyRocksOnWall = rocksOnWallViewModel.
                 LoadAndDrawRocksOnWall(AppGlobal.WallID);
-
             rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
 
             SetUpBtnCommandsInRockStatusUserControls();

@@ -14,7 +14,14 @@ namespace JustClimbTrial.Kinect
         public KinectSensor kinectSensor;
         public MultiSourceFrameReader multiSourceReader;
         public MultiSourceFrame multiSourceFrame;
-
+        public CoordinateMapper ManagerCoorMapper
+        {
+            get
+            {
+               return kinectSensor.CoordinateMapper;
+            }
+            set { }
+        }
 
         public event EventHandler<ColorImgSrcEventArgs> ColorImageSourceArrived;
         public event EventHandler<DepthImgSrcEventArgs> DepthImageSourceArrived;

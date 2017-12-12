@@ -42,8 +42,8 @@ namespace JustClimbTrial.Views.Pages
         {
             // Set the media's starting SpeedRatio to the current value of the
             // their respective slider controls.
-            mediaPlayback.SpeedRatio = (double)speedRatioSlider.Value;
-            playgroundMonitor.SpeedRatio = (double)speedRatioSlider.Value;
+            mediaPlayback.SpeedRatio = (double)speedRatioSlider.Value/100;
+            playgroundMonitor.SpeedRatio = (double)speedRatioSlider.Value/100;
         }
         private void ShowMediaInformation()
         {
@@ -110,10 +110,10 @@ namespace JustClimbTrial.Views.Pages
             playgroundMonitor.Stop();
         }
 
-        private void ChangeMediaSpeedRatio(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void ChangeMediaSpeedRatio(object sender, MouseButtonEventArgs e)
         {
-            mediaPlayback.SpeedRatio = (double)speedRatioSlider.Value;
-            playgroundMonitor.SpeedRatio = (double)speedRatioSlider.Value;
+            mediaPlayback.SpeedRatio = (double)speedRatioSlider.Value/100;
+            playgroundMonitor.SpeedRatio = (double)speedRatioSlider.Value/100;
 
             timer.Interval = TimeSpan.FromMilliseconds((int)(defaultTick / speedRatioSlider.Value));
         }
@@ -165,6 +165,13 @@ namespace JustClimbTrial.Views.Pages
             timer.Stop();
             //Point mouseOnNav = e.GetPosition(navigationSlider);
             //navigationSlider.Value = navigationSlider.Maximum * mouseOnNav.X / navigationSlider.ActualWidth;
+        }
+
+        private void SpeedResetBtn_Click(object sender, RoutedEventArgs e)
+        {
+            speedRatioSlider.Value = 100;
+            mediaPlayback.SpeedRatio = 1;
+            playgroundMonitor.SpeedRatio = 1;
         }
     }
 }

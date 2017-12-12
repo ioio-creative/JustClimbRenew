@@ -242,8 +242,10 @@ namespace JustClimbTrial.ViewModels
 
         #region database
 
-        public void SaveRocksOnWall(string newWallNo)
+        public string SaveRocksOnWall(string newWallNo)
         {
+            string newWallKey = "";
+
             if (rocksOnWall.Any())
             {
                 // convert IList<ViewModels.RockViewModel> to ICollection<DataAccess.Rock>
@@ -256,8 +258,10 @@ namespace JustClimbTrial.ViewModels
                     WallDesc = ""                 
                 };
 
-                WallAndRocksDataAccess.InsertWallAndRocks(newWall, rocksToSave, true);
+                newWallKey = WallAndRocksDataAccess.InsertWallAndRocks(newWall, rocksToSave, true);
             }
+
+            return newWallKey;
         }
 
         private bool LoadRocksOnWall(string wallId)

@@ -39,7 +39,7 @@ namespace JustClimbTrial.Kinect
 
             DepthSpacePoint depPtFromMousePt = dCoordinatesInColorFrame[(int)(x_temp + 0.5f) + (int)(y_temp + 0.5f) * (int)dimensions.Item1];
 
-            if (depPtFromMousePt.X == float.NegativeInfinity && depPtFromMousePt.Y == float.NegativeInfinity)
+            if (depPtFromMousePt.X == float.NegativeInfinity || depPtFromMousePt.Y == float.NegativeInfinity)
             {
                 return default(CameraSpacePoint);
             }

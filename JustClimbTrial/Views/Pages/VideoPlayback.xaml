@@ -41,10 +41,20 @@
             <Button Name="stopBtn" Content="Stop" Click="StopMediaBtnClicked" Width="50" Height="20" Margin="10" />
 
             <!-- Speed slider. This slider allows you to change the speed of the media playback. -->
-            <TextBlock Foreground="White" Margin="5"  VerticalAlignment="Center">Speed</TextBlock>
-            <Slider Name="speedRatioSlider" VerticalAlignment="Center" ValueChanged="ChangeMediaSpeedRatio" 
-                    IsMoveToPointEnabled="True" TickPlacement="Both" Ticks="0.25, 1, 3" IsSnapToTickEnabled="False" 
-                    Value="1" Minimum="0.25" Maximum="3"  Width="70" />
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5" Width="80" MinWidth="60">
+                <TextBlock HorizontalAlignment="Right" Foreground="Black" Margin="5"  VerticalAlignment="Center">
+                        <Run Text="Speed: " />
+                        <Run Text="{Binding ElementName=speedRatioSlider, Path=Value}" />
+                        <Run Text="%" />
+                </TextBlock>
+            </StackPanel>
+
+            <Slider Name="speedRatioSlider" VerticalAlignment="Center" PreviewMouseUp="ChangeMediaSpeedRatio" 
+                    IsMoveToPointEnabled="True" TickPlacement="None" TickFrequency="5" IsSnapToTickEnabled="True" 
+                    Value="100" Minimum="25" Maximum="300"  Width="100" Margin="10"/>
+            <!--Reset Speed Buttom-->
+            <Button Name="speedResetBtn" Content="Reset Speed" Click="SpeedResetBtn_Click" Width="80" Height="20" Margin="10" />
+
         </StackPanel>
     </Grid>
 </Page>

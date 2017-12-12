@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.DataAccess.Entities;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
@@ -33,7 +34,6 @@ namespace JustClimbTrial.Views.Pages
 
         // declare Kinect object and frame reader
         private KinectManager kinectManagerClient;
-        private MultiSourceFrameReader mulSourceReader;
 
         private float colorWidth, colorHeight, depthWidth, depthHeight;
 
@@ -76,6 +76,8 @@ namespace JustClimbTrial.Views.Pages
         private int newWallNo;
 
         private bool isSnapShotTaken = false;
+
+        private MainWindow myMainWindowParent;
 
         #endregion
 
@@ -156,7 +158,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void SaveWall(object parameter = null)
         {
-            rocksOnWallViewModel.SaveRocksOnWall(newWallNo.ToString());
+            string newWallKey = rocksOnWallViewModel.SaveRocksOnWall(newWallNo.ToString());
+            AppGlobal.WallID = newWallKey;
         }
 
         #endregion
@@ -166,14 +169,15 @@ namespace JustClimbTrial.Views.Pages
 
         public void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            kinectManagerClient = (this.Parent as MainWindow).KinectManagerClient;
+            myMainWindowParent = this.Parent as MainWindow;
+
+            kinectManagerClient = myMainWindowParent.KinectManagerClient;
             if (kinectManagerClient.kinectSensor != null)
             {
                 //Unsubsricbe playground handler to in Mainwindow class and use local handler instead
-                kinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
+                kinectManagerClient.ColorImageSourceArrived -= myMainWindowParent.HandleColorImageSourceArrived;
 
                 kinectManagerClient.multiSourceReader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
-                //mulSourceReader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
 
                 colorWidth = KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;
                 colorHeight = KinectExtensions.FrameDimensions[SpaceMode.Color].Item2;
@@ -209,7 +213,7 @@ namespace JustClimbTrial.Views.Pages
         {
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
 
-            (this.Parent as MainWindow).KinectManagerClient.ColorImageSourceArrived += (this.Parent as MainWindow).HandleColorImageSourceArrived;
+            //myMainWindowParent.KinectManagerClient.ColorImageSourceArrived += myMainWindowParent.HandleColorImageSourceArrived;
 
 
             if (kinectManagerClient.multiSourceReader != null)
@@ -317,58 +321,36 @@ namespace JustClimbTrial.Views.Pages
             {
                 return;
             }
-
-            DepthFrame depthFrame = null;
-            ColorFrame colorFrame = mSourceFrame.ColorFrameReference.AcquireFrame();
-
-            using (colorFrame)
+           
+            using (ColorFrame colorFrame = mSourceFrame.ColorFrameReference.AcquireFrame())
             {
                 if (colorFrame != null)
                 {
                     BitmapSource newWallColorBitmapSrc = KinectManager.ToBitmap(colorFrame);
                     cameraIMG.Source = newWallColorBitmapSrc;
                     colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
-                    (this.Parent as MainWindow).PlaygroundWindow.ShowImage(newWallColorBitmapSrc);
+                    myMainWindowParent.PlaygroundWindow.ShowImage(newWallColorBitmapSrc);
                 }
-                
-                try
+            }
+  
+            using (DepthFrame depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame())
+            {          
+                if (depthFrame != null)
                 {
-                    depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame();
-                    if (depthFrame != null)
-                    {                        
-                        // Access the depth frame data directly via LockImageBuffer to avoid making a copy
-                        using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
-                        {
-                            kinectManagerClient.kinectSensor.CoordinateMapper.MapColorFrameToDepthSpaceUsingIntPtr(
-                                depthFrameData.UnderlyingBuffer,
-                                depthFrameData.Size,
-                                colorMappedToDepthSpace);
-
-                            depthFrame.CopyFrameDataToArray(lastNotNullDepthData);
-                        }
-                        // We're done with the DepthFrame 
-                        depthFrame.Dispose();
-                        depthFrame = null;
-                    }
-                }
-                finally
-                {
-                    if (depthFrame != null)
+                    // Access the depth frame data directly via LockImageBuffer to avoid making a copy
+                    using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
                     {
-                        depthFrame.Dispose();
-                    }
+                        kinectManagerClient.kinectSensor.CoordinateMapper.MapColorFrameToDepthSpaceUsingIntPtr(
+                            depthFrameData.UnderlyingBuffer,
+                            depthFrameData.Size,
+                            colorMappedToDepthSpace);
 
-                    if (colorFrame != null)
-                    {
-                        colorFrame.Dispose();
-                    }
+                        depthFrame.CopyFrameDataToArray(lastNotNullDepthData);
+                    }   
                 }
-
             }
         }
-
         #endregion
-
 
         #region slider value converters
 
