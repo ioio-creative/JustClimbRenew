@@ -1,0 +1,124 @@
+﻿<Page x:Class="JustClimbTrial.Views.Pages.Routes"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
+      xmlns:viewModel="clr-namespace:JustClimbTrial.ViewModels"
+      xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="360" d:DesignWidth="640"
+      Title="Just Climb - Boulder Routes" 
+      WindowTitle="Just Climb - Boulder Routes" 
+      Loaded="Page_Loaded">
+    <Page.Resources>
+        <viewModel:RoutesViewModel x:Key="routesViewModel" />
+    </Page.Resources>
+    <Page.DataContext>
+        <StaticResource ResourceKey="routesViewModel" />
+    </Page.DataContext>
+    <Grid x:Name="gridContainer">
+        <Grid.Resources>
+            <CollectionViewSource x:Key="cvsRoutes" Source="{Binding RouteViewModels}">
+                <!--
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Difficulty" />
+                    <PropertyGroupDescription PropertyName="AgeGroup" />
+                </CollectionViewSource.GroupDescriptions>
+                -->
+            </CollectionViewSource>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!-- row 0 -->
+        <userControl:HeaderRowNavigation 
+            x:Name="navHead"
+            Grid.Row="0" Grid.ColumnSpan="5" 
+            HeaderRowTitle="{Binding Title}" />
+        <!-- end of row 0 -->
+        
+        <!-- row 1 -->
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Age" />
+            <ComboBox x:Name="ddlAge"
+                Grid.Column="1" 
+                ItemsSource="{Binding AgeGroups}"
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedAgeGroup, 
+                    Mode=TwoWay, 
+                    UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding AgeDesc}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Difficulty" />
+            <ComboBox x:Name="ddlDifficulty"
+                Grid.Column="1"
+                ItemsSource="{Binding RouteDifficulties}"
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedDifficulty, 
+                    Mode=TwoWay, 
+                    UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DifficultyDesc}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <!-- end of row 1 -->
+        
+        <!-- row 2 -->
+        <DataGrid x:Name="dgridRoutes" 
+                  SelectionUnit="FullRow" 
+                  SelectionMode="Single" 
+                  AutoGenerateColumns="false" 
+                  IsEnabled="True" 
+                  IsReadOnly="True"
+                  EnableRowVirtualization="True" 
+                  Width="auto" 
+                  ItemsSource="{Binding Source={StaticResource ResourceKey=cvsRoutes}}"                  
+                  Margin="10,10,10,10" 
+                  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" 
+                  RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="routeNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto"/>
+                <DataGridTextColumn x:Name="difficultyColumn" Binding="{Binding DifficultyDesc}" Header="Difficulty" Width="Auto"/>
+                <DataGridTextColumn x:Name="ageGroupColumn" Binding="{Binding AgeDesc}" Header="Age Group" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!-- end of row 2 -->
+        
+        <!-- row 3 -->
+        <Button x:Name="btnGameStart" 
+            Grid.Row="3" Grid.Column="2"                
+            Click="btnGameStart_Click">
+            GAME
+        </Button>
+        <!-- end of row 3 -->
+    </Grid>
+</Page>

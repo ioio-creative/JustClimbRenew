@@ -1,0 +1,42 @@
+﻿<Page x:Class="JustClimbTrial.Views.Pages.JustClimbHome"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"       
+      mc:Ignorable="d"
+      d:DesignHeight="360" d:DesignWidth="640"
+      Title="Just Climb - Home"
+      WindowTitle="Just Climb - Home"
+      Loaded="Home_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Image Source="/Resources/Images/JustClimbLogo.png"
+               Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"
+               HorizontalAlignment="Stretch"
+               Margin="0,0,0,10" />
+        <Button x:Name="btnStart"
+            Grid.Row="4" Grid.Column="2" 
+            VerticalAlignment="Stretch"
+            Margin="0,10,0,0" 
+            Click="btnStart_Click">
+            START
+        </Button>
+    </Grid>
+</Page>

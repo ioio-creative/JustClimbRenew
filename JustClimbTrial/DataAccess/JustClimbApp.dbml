@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="JustClimb" Class="JustClimbAppDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=sing-mssql-1.chdc0elhkwnt.ap-southeast-1.rds.amazonaws.com;Initial Catalog=JustClimb;User ID=IoioSa" SettingsObjectName="JustClimbTrial.Properties.Settings" SettingsPropertyName="JustClimbConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.AgeGroup" Member="AgeGroups">
+    <Type Name="AgeGroup">
+      <Column Name="AgeGroupID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AgeDesc" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="IsValid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BoulderRoute" Member="BoulderRoutes">
+    <Type Name="BoulderRoute">
+      <Column Name="RouteID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RouteNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Difficulty" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="AgeGroup" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Wall" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BoulderRouteVideo" Member="BoulderRouteVideos">
+    <Type Name="BoulderRouteVideo">
+      <Column Name="VideoID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="VideoNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Route" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="IsDemo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeletedDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RockOnBoulderRoute" Member="RockOnBoulderRoutes">
+    <Type Name="RockOnBoulderRoute">
+      <Column Name="RockOnBoulderID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Rock" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="BoulderRoute" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="BoulderRockRole" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RockOnTrainingRoute" Member="RockOnTrainingRoutes">
+    <Type Name="RockOnTrainingRoute">
+      <Column Name="RockOnTrainingID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Rock" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TrainingRoute" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TrainingRouteSeq" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RouteDifficulty" Member="RouteDifficulties">
+    <Type Name="RouteDifficulty">
+      <Column Name="RouteDifficultyID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DifficultyDesc" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="IsValid" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrainingRoute" Member="TrainingRoutes">
+    <Type Name="TrainingRoute">
+      <Column Name="RouteID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RouteNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Difficulty" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="AgeGroup" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Wall" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrainingRouteVideo" Member="TrainingRouteVideos">
+    <Type Name="TrainingRouteVideo">
+      <Column Name="VideoID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="VideoNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Route" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="IsDemo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeletedDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Wall" Member="Walls">
+    <Type Name="Wall">
+      <Column Name="WallID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WallNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="WallDesc" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Rock" Member="Rocks">
+    <Type Name="Rock">
+      <Column Name="RockID" Type="System.String" DbType="VarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Wall" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="CoorX" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CoorY" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CoorZ" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CreateDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeleteDT" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Width" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Height" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

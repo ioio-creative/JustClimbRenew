@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="JustClimbTrial.Views.UserControls.HeaderRowNavigation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JustClimbTrial.Views.UserControls"
+             mc:Ignorable="d"             
+             d:DesignHeight="100" d:DesignWidth="640"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button x:Name="btnStaffOptions" 
+            Grid.Column="0"
+            PreviewMouseDown="btnStaffOptions_PreviewMouseDown">
+            <Button.Background>
+                <ImageBrush ImageSource="/Resources/Images/JustClimbSquareLogo.jpg" />
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnRescanWall" 
+                Grid.Column="1" Content="Rescan Wall" 
+                Visibility="{Binding StaffOptionsVisibility}"
+                Click="btnRescanWall_Click" />
+        <Button x:Name="btnRouteSet" 
+                Grid.Column="2" Content="Route Set" 
+                Visibility="{Binding StaffOptionsVisibility}"
+                Click="btnRouteSet_Click" />
+        <TextBlock x:Name="lbTitle"
+            Grid.Column="4" 
+            Text="{Binding HeaderRowTitle}">
+        </TextBlock>
+        <Button x:Name="btnHome" 
+            Grid.Column="5" 
+            Click="btnHome_Click">
+            <Image Source="/Resources/Images/Home.jpg" />
+        </Button>
+    </Grid>
+</UserControl>
