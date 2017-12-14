@@ -33,7 +33,8 @@ namespace JustClimbTrial.Views.Pages
         public VideoPlayback()
         {
             InitializeComponent();
-            //add some handlers manually because slider IsMoveToPointEnabled is TRUE
+            //add some handlers manually because slider IsMoveToPointEnabled absorbs MouseButtonEvent
+            //reference-- https://social.msdn.microsoft.com/Forums/vstudio/en-US/e1318ef4-c76c-4267-9031-3bb7a0db502b/sliderismovetopointenabled-aborts-mouse-click-events?forum=wpf
             navigationSlider.AddHandler(Slider.PreviewMouseDownEvent, new MouseButtonEventHandler(NavSlider_MouseDown), true);
             navigationSlider.AddHandler(Slider.PreviewMouseUpEvent, new MouseButtonEventHandler(NavSlider_MouseUp), true);            
         }

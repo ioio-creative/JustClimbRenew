@@ -95,7 +95,7 @@ namespace JustClimbTrial.Kinect
         {
             dCoordinatesInColorFrame = colorSpaceMap;
             ExportDCoordinatesFile();
-            IsSnapshotTaken = true;
+            IsSnapshotTaken = ExportDCoordinatesFile();
 
             wallDepthData = dFrameData;
             wallBitmap = colFrameData;
@@ -103,8 +103,9 @@ namespace JustClimbTrial.Kinect
             return IsSnapshotTaken;
         }
 
-        private void ExportDCoordinatesFile()
+        private bool ExportDCoordinatesFile()
         {
+            bool exportMapperSuccess = false;
             // Set a variable to the My Documents path.
             string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string wallMapPath = mydocpath + "\\JustClimb\\KinectWall Log";
@@ -126,9 +127,15 @@ namespace JustClimbTrial.Kinect
                     outputFile.WriteLine($"Color[{CPIndex%colorWidth}][{CPIndex/colorWidth}] = Depth[{dPoint.X}][{dPoint.Y}]");
                     CPIndex++;
                 }
+                exportMapperSuccess = true;
             }
+            return exportMapperSuccess;
         }
 
+        //private bool ExportWallPNGFile()
+        //{
+
+        //}
 
     }//class KinectWall
 }//namespace

@@ -23,9 +23,55 @@ namespace JustClimbTrial.Kinect
             set { }
         }
 
+        #region ImageSrc Events and Handlers
+
         public event EventHandler<ColorImgSrcEventArgs> ColorImageSourceArrived;
         public event EventHandler<DepthImgSrcEventArgs> DepthImageSourceArrived;
         public event EventHandler<InfraredImgSrcEventArgs> InfraredImageSourceArrived;
+        public class ColorImgSrcEventArgs : EventArgs
+        {
+            private readonly BitmapSource colorBitmapSrc;
+
+            public ColorImgSrcEventArgs(BitmapSource ColorBitmapSrc)
+            {
+                colorBitmapSrc = ColorBitmapSrc;
+            }
+
+            public BitmapSource GetColorBitmapSrc()
+            {
+                return colorBitmapSrc;
+            }
+        }
+        public class DepthImgSrcEventArgs : EventArgs
+        {
+            private readonly BitmapSource depthBitmapSrc;
+
+            public DepthImgSrcEventArgs(BitmapSource DepthBitmapSrc)
+            {
+                depthBitmapSrc = DepthBitmapSrc;
+            }
+
+            public BitmapSource GetDepthBitmapSrc()
+            {
+                return depthBitmapSrc;
+            }
+        }
+        public class InfraredImgSrcEventArgs : EventArgs
+        {
+            private readonly BitmapSource infraredBitmapSrc;
+
+            public InfraredImgSrcEventArgs(BitmapSource InfraredBitmapSrc)
+            {
+                infraredBitmapSrc = InfraredBitmapSrc;
+            }
+
+            public BitmapSource GetInfraredBitmapSrc()
+            {
+                return infraredBitmapSrc;
+            }
+        } 
+
+        #endregion
 
         public KinectManager()
         {
@@ -221,49 +267,6 @@ namespace JustClimbTrial.Kinect
         }
     }
 
-    public class ColorImgSrcEventArgs : EventArgs
-    {
-        private readonly BitmapSource colorBitmapSrc;
 
-        public ColorImgSrcEventArgs(BitmapSource ColorBitmapSrc)
-        {
-            colorBitmapSrc = ColorBitmapSrc;
-        }
-
-        public BitmapSource GetColorBitmapSrc()
-        {
-            return colorBitmapSrc;
-        }
-    }
-
-    public class DepthImgSrcEventArgs : EventArgs
-    {
-        private readonly BitmapSource depthBitmapSrc;
-
-        public DepthImgSrcEventArgs(BitmapSource DepthBitmapSrc)
-        {
-            depthBitmapSrc = DepthBitmapSrc;
-        }
-
-        public BitmapSource GetDepthBitmapSrc()
-        {
-            return depthBitmapSrc;
-        }
-    }
-
-    public class InfraredImgSrcEventArgs : EventArgs
-    {
-        private readonly BitmapSource infraredBitmapSrc;
-
-        public InfraredImgSrcEventArgs(BitmapSource InfraredBitmapSrc)
-        {
-            infraredBitmapSrc = InfraredBitmapSrc;
-        }
-
-        public BitmapSource GetInfraredBitmapSrc()
-        {
-            return infraredBitmapSrc;
-        }
-    }
 
 }

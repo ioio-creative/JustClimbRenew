@@ -1,6 +1,8 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -443,9 +445,35 @@ namespace JustClimbTrial.Kinect
 
         #region Export Color Frame to IMG file
 
-        public static async void colorImgSrcSavingHandler(ImageSource colorImgSrc)
+        public static async void EncodeBitmapSrcToPNGFile(BitmapSource colorImgSrc, int frameCounter)
         {
+            // create a png bitmap encoder which knows how to save a .png file
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            // create frame from the writable bitmap and add to encoder
+            encoder.Frames.Add(BitmapFrame.Create(colorImgSrc));
 
+            string myPhotos = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+
+            string path = System.IO.Path.Combine(myPhotos, "TestSequence01", frameCounter.ToString("00000") + ".png");
+
+            // write the new file to disk
+            try
+            {
+                await Task.Run(() =>
+                {
+                    // FileStream is IDisposable
+                    using (FileStream fs = new FileStream(path, FileMode.Create))
+                    {
+                        encoder.Save(fs);
+                        Console.WriteLine("FrameExport Successful");
+                        frameCounter++;
+                    }
+                });
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine("FrameExport Exception");
+            }
         }
 
 
