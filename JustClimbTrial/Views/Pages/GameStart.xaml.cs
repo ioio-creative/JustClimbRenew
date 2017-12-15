@@ -1,10 +1,18 @@
-﻿using JustClimbTrial.DataAccess.Entities;
+﻿using JustClimbTrial.DataAccess;
+using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Linq;
+using JustClimbTrial.Kinect;
+using static JustClimbTrial.Kinect.KinectManager;
+using Microsoft.Kinect;
+using JustClimbTrial.Views.Windows;
+using System.Windows.Media;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -17,8 +25,18 @@ namespace JustClimbTrial.Views.Pages
         private ClimbMode climbMode;
         private GameStartViewModel viewModel;
 
+        private IEnumerable<RockOnRouteViewModel> rocksOnBoulderRoute;
+        private RockOnRouteViewModel startRockOnBoulderRoute;
+        private RockOnRouteViewModel endRockOnBoulderRoute;
+
+        private KinectManager kinectManagerClient;
+        private Playground playgroundWindow;
+        private Canvas playgroundCanvas;
+
+
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
+
             routeId = aRouteId;
             climbMode = aClimbMode;
 
@@ -48,19 +66,8 @@ namespace JustClimbTrial.Views.Pages
             // set titles
             Title = "Just Climb - Game Start";
             WindowTitle = Title;
-            string headerRowTitleFormat = "{0} Route {1} - Video Playback";
-            switch (climbMode)
-            {
-                case ClimbMode.Training:                    
-                    navHead.HeaderRowTitle = 
-                        string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
-                    break;
-                case ClimbMode.Boulder:
-                default:                    
-                    navHead.HeaderRowTitle =
-                        string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
-                    break;
-            }
+            
+            
         }
 
 
@@ -69,6 +76,30 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             viewModel.LoadData();
+
+            kinectManagerClient = (this.Parent as MainWindow).KinectManagerClient;
+            playgroundWindow = (this.Parent as MainWindow).PlaygroundWindow;
+            playgroundCanvas = playgroundWindow.playgroundCanvas;
+            //kinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
+            playgroundCanvas.Background = Brushes.Black;
+            kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
+
+            string headerRowTitleFormat = "{0} Route {1} - Video Playback";
+            switch (climbMode)
+            {
+                case ClimbMode.Training:
+                    navHead.HeaderRowTitle =
+                        string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    navHead.HeaderRowTitle =
+                        string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
+                    rocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
+                    //startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                    //endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+                    break;
+            }
         }
 
         private void btnDemo_Click(object sender, RoutedEventArgs e)
@@ -87,6 +118,23 @@ namespace JustClimbTrial.Views.Pages
         private void btnRestartGame_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
+        {
+            playgroundCanvas.Children.Clear();
+            IList<Body> bodies = e.GetBodyList();
+            foreach (var body in bodies)
+            {
+                if (body != null)
+                {
+                    if (body.IsTracked)
+                    {
+                        playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
+                    }
+                }
+
+            }
         }
 
         #endregion        

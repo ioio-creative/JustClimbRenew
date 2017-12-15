@@ -25,9 +25,7 @@ namespace JustClimbTrial.Kinect
 
         #region ImageSrc Events and Handlers
 
-        public event EventHandler<ColorImgSrcEventArgs> ColorImageSourceArrived;
-        public event EventHandler<DepthImgSrcEventArgs> DepthImageSourceArrived;
-        public event EventHandler<InfraredImgSrcEventArgs> InfraredImageSourceArrived;
+        public event EventHandler<ColorImgSrcEventArgs> ColorImageSourceArrived;      
         public class ColorImgSrcEventArgs : EventArgs
         {
             private readonly BitmapSource colorBitmapSrc;
@@ -42,6 +40,8 @@ namespace JustClimbTrial.Kinect
                 return colorBitmapSrc;
             }
         }
+
+        public event EventHandler<DepthImgSrcEventArgs> DepthImageSourceArrived;
         public class DepthImgSrcEventArgs : EventArgs
         {
             private readonly BitmapSource depthBitmapSrc;
@@ -56,6 +56,8 @@ namespace JustClimbTrial.Kinect
                 return depthBitmapSrc;
             }
         }
+
+        public event EventHandler<InfraredImgSrcEventArgs> InfraredImageSourceArrived;
         public class InfraredImgSrcEventArgs : EventArgs
         {
             private readonly BitmapSource infraredBitmapSrc;
@@ -69,7 +71,23 @@ namespace JustClimbTrial.Kinect
             {
                 return infraredBitmapSrc;
             }
-        } 
+        }
+
+        public event EventHandler<BodyListArrEventArgs> BodyFrameArrived;
+        public class BodyListArrEventArgs
+        {
+            private readonly IList<Body> kinectBodies;
+
+            public BodyListArrEventArgs(IList<Body> bodies)
+            {
+                kinectBodies = bodies;
+            }
+
+            public IList<Body> GetBodyList()
+            {
+                return kinectBodies;
+            }
+        }
 
         #endregion
 
@@ -160,18 +178,31 @@ namespace JustClimbTrial.Kinect
                         }
                     }
                 }
+
+                if (BodyFrameArrived != null)
+                {
+                    using (BodyFrame bodyFrame = multiSourceFrame.BodyFrameReference.AcquireFrame())
+                    {
+                        if (bodyFrame != null)
+                        {
+                            IList <Body> kinectBodies = new Body[bodyFrame.BodyFrameSource.BodyCount];
+                            bodyFrame.GetAndRefreshBodyData(kinectBodies);
+                            BodyFrameArrived(sender, new BodyListArrEventArgs(kinectBodies));
+                        }
+                    }
+                }
             }
 
         }
 
         //ColorFrame Stream to Image
-        public static BitmapSource ToBitmap(ColorFrame frame)
+        public BitmapSource ToBitmap(ColorFrame frame)
         {
             int width = frame.FrameDescription.Width;
             int height = frame.FrameDescription.Height;
-            PixelFormat format = PixelFormats.Bgr32;
+            PixelFormat pixelFormat = PixelFormats.Bgr32;
 
-            byte[] pixels = new byte[width * height * ((PixelFormats.Bgr32.BitsPerPixel + 7) / 8)];
+            byte[] pixels = new byte[width * height *( (pixelFormat.BitsPerPixel + 7) / 8)];
 
             if (frame.RawColorImageFormat == ColorImageFormat.Bgra)
             {
@@ -182,88 +213,31 @@ namespace JustClimbTrial.Kinect
                 frame.CopyConvertedFrameDataToArray(pixels, ColorImageFormat.Bgra);
             }
 
-
-            int stride = width * format.BitsPerPixel / 8;
-
-            return BitmapSource.Create(width, height, 96, 96, format, null, pixels, stride);
+            return KinectExtensions.ToBitmap(pixels, width, height, pixelFormat);      
         }
 
         //DepthFrame Stream to Image
-        public static BitmapSource ToBitmap(DepthFrame frame, bool reliable)
+        public BitmapSource ToBitmap(DepthFrame frame, bool reliable)
         {
             int width = frame.FrameDescription.Width;
             int height = frame.FrameDescription.Height;
-            PixelFormat format = PixelFormats.Bgr32;
-            ushort minDepth = 0;
-            ushort maxDepth = ushort.MaxValue;
 
-            if (reliable)
-            {
-                //minDepth = frame.DepthMinReliableDistance;
-                minDepth = 2000;//frame.DepthMinReliableDistance;
-                maxDepth = 5000;//frame.DepthMaxReliableDistance;
-                //Console.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
-            }
-
-            ushort[] depthData = new ushort[width * height];
-            byte[] pixelData = new byte[width * height * (PixelFormats.Bgr32.BitsPerPixel + 7) / 8];
-
+            ushort[] depthData = new ushort[width * height];          
             frame.CopyFrameDataToArray(depthData);
 
-            int colorIndex = 0;
-            for (int depthIndex = 0; depthIndex < depthData.Length; ++depthIndex)
-            {
-                ushort depth = depthData[depthIndex];
-                //byte intensity = (byte)(depth >= minDepth && depth <= maxDepth ? 255 - ((depth - minDepth) * 256 / (maxDepth - minDepth)) : 0);
-                ushort intensity = (ushort)(depth >= minDepth && depth <= maxDepth ? depth % 256 : 0);
-
-                //pixelData[colorIndex++] = intensity; // Blue
-                //pixelData[colorIndex++] = intensity; // Green
-                //pixelData[colorIndex++] = intensity; // Red
-
-                pixelData[colorIndex++] = (byte)(intensity <= 127 ? intensity * 2 : 255 - intensity * 2); // Blue
-                pixelData[colorIndex++] = (byte)(intensity <= 127 ? 255 - intensity * 2 : intensity * 2); // Green
-                pixelData[colorIndex++] = (byte)(intensity <= 127 ? 255 - intensity * 2 : intensity * 2); // Red
-
-
-
-                ++colorIndex;
-            }
-
-            int stride = width * format.BitsPerPixel / 8;
-
-            return BitmapSource.Create(width, height, 96, 96, format, null, pixelData, stride);
+            return KinectExtensions.ToBitmap(depthData, width, height, reliable);
         }
 
         //InfraredFrame Stream to Image
-        public static BitmapSource ToBitmap(InfraredFrame frame)
+        public BitmapSource ToBitmap(InfraredFrame frame)
         {
             int width = frame.FrameDescription.Width;
             int height = frame.FrameDescription.Height;
-            PixelFormat format = PixelFormats.Bgr32;
 
             ushort[] frameData = new ushort[width * height];
-            byte[] pixels = new byte[width * height * (format.BitsPerPixel + 7) / 8];
-
             frame.CopyFrameDataToArray(frameData);
 
-            int colorIndex = 0;
-            for (int infraredIndex = 0; infraredIndex < frameData.Length; infraredIndex++)
-            {
-                ushort ir = frameData[infraredIndex];
-
-                byte intensity = (byte)(ir >> 7);
-
-                pixels[colorIndex++] = (byte)(intensity / 1); // Blue
-                pixels[colorIndex++] = (byte)(intensity / 1); // Green   
-                pixels[colorIndex++] = (byte)(intensity / 0.4); // Red
-
-                colorIndex++;
-            }
-
-            int stride = width * format.BitsPerPixel / 8;
-
-            return BitmapSource.Create(width, height, 96, 96, format, null, pixels, stride);
+            return KinectExtensions.ToBitmap(frameData, width, height);
         }
     }
 

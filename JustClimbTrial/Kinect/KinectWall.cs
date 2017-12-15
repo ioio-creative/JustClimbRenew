@@ -1,19 +1,32 @@
-﻿using JustClimbTrial.Kinect;
+﻿using JustClimbTrial.Helpers;
+using JustClimbTrial.Kinect;
 using Microsoft.Kinect;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace JustClimbTrial.Kinect
 {
     public class KinectWall
     {
+        private string wallID;
+
+        public string WallID
+        {
+            get { return wallID; }
+            set { wallID = value; }
+        }
+
+
         private Canvas wCanvas;
         private CoordinateMapper wallMapper;
         private DepthSpacePoint[] dCoordinatesInColorFrame { get; set; }
-        //private ColorFrame wallColorFrame;
-        //private DepthFrame wallDepthFrame;
+        private int width = 0;
+        private int height = 0;
+
         private ushort[] wallDepthData;
         private byte[] wallBitmap;
 
@@ -94,48 +107,93 @@ namespace JustClimbTrial.Kinect
         public bool SnapShotWallData(DepthSpacePoint[] colorSpaceMap, ushort[] dFrameData, byte[] colFrameData)
         {
             dCoordinatesInColorFrame = colorSpaceMap;
-            ExportDCoordinatesFile();
-            IsSnapshotTaken = ExportDCoordinatesFile();
-
             wallDepthData = dFrameData;
             wallBitmap = colFrameData;
+            IsSnapshotTaken = true;
 
             return IsSnapshotTaken;
         }
 
-        private bool ExportDCoordinatesFile()
+        public void SaveWallData()
+        {
+            if (IsSnapshotTaken)
+            {
+                // Set a variable to the My Documents path.
+                string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string wallLogPath = System.IO.Path.Combine(mydocpath, "JustClimb", "KinectWall Log", wallID);
+                if (!Directory.Exists(wallLogPath))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(wallLogPath);
+                    Console.WriteLine("Log directory created successfully at {0}.", Directory.GetCreationTime(wallLogPath));
+                }
+
+                width = (int)KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;
+                height = (int)KinectExtensions.FrameDimensions[SpaceMode.Color].Item2;
+                ExportDCoordinatesFile(wallLogPath);
+                ExportWallPNG(wallLogPath, wallBitmap, width, height, PixelFormats.Bgr32);
+            }
+        }
+
+        private bool ExportDCoordinatesFile(string folderPath)
         {
             bool exportMapperSuccess = false;
-            // Set a variable to the My Documents path.
-            string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string wallMapPath = mydocpath + "\\JustClimb\\KinectWall Log";
-            if (!Directory.Exists(wallMapPath))
-            {
-                DirectoryInfo di = Directory.CreateDirectory(wallMapPath);
-                Console.WriteLine("Log directory created successfully at {0}.", Directory.GetCreationTime(wallMapPath));
-            }
+            string filePath = System.IO.Path.Combine(folderPath, "Coordinate Map.txt");
+
             // Write the text to a new file named "WriteFile.txt".
-            File.WriteAllText(wallMapPath + "\\Coordinate Map.txt", "KinectWall Coordinates");
+            File.WriteAllLines(filePath, new string[] { $"KinectWall Coordinates [{width}][{height}]" });
             // Append text to an existing file named "WriteLines.txt".
-            using (StreamWriter outputFile = new StreamWriter(wallMapPath + "\\Coordinate Map.txt", true))
+            try
             {
-                int colorWidth = (int)KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;
-                int CPIndex = 0;
-                foreach (DepthSpacePoint dPoint in dCoordinatesInColorFrame)
+                using (StreamWriter outputFile = new StreamWriter(filePath, true))
                 {
-                    // Append new lines of text to the file
-                    outputFile.WriteLine($"Color[{CPIndex%colorWidth}][{CPIndex/colorWidth}] = Depth[{dPoint.X}][{dPoint.Y}]");
-                    CPIndex++;
+                    int colorWidth = (int)KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;
+                    int CPIndex = 0;
+                    foreach (DepthSpacePoint dPoint in dCoordinatesInColorFrame)
+                    {
+                        // Append new lines of text to the file
+                        outputFile.WriteLine($"Color[{CPIndex % colorWidth}][{CPIndex / colorWidth}] = Depth[{dPoint.X}][{dPoint.Y}]");
+                        CPIndex++;
+                    }
+                    exportMapperSuccess = true;
                 }
-                exportMapperSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR----Wall Coordinate Export Exception: " + ex.ToString() );
+                throw;
             }
             return exportMapperSuccess;
         }
 
-        //private bool ExportWallPNGFile()
-        //{
+        private bool ExportWallPNG(string folderPath, byte[] bitmapData, int width, int height, PixelFormat format)
+        {
+            bool isImgSaved = false;
 
-        //}
+            // create a bitmapsource object using byte[]
+            BitmapSource bitmapSrc = KinectExtensions.ToBitmap(bitmapData, width, height, PixelFormats.Bgr32);
+
+            // create a png bitmap encoder which knows how to save a .png file
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmapSrc));
+
+            string filePath = System.IO.Path.Combine(folderPath, wallID + ".png");
+            // write the new file to disk
+            try
+            { 
+                // FileStream is IDisposable
+                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                {
+                    encoder.Save(fs);
+                    isImgSaved = true;
+                }               
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine("ERROR----Wall Image Export Exception: " + ex.ToString());
+            }
+
+            return isImgSaved;
+        }
 
     }//class KinectWall
 }//namespace

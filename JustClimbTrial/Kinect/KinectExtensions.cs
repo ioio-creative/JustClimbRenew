@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -62,7 +63,7 @@ namespace JustClimbTrial.Kinect
 
         #region Body Draw
 
-        
+
         #region Skeleton with Body.Joint<CameraSpacePoints>
 
         public static void DrawSkeleton(this Canvas canvas, Body body)
@@ -170,7 +171,7 @@ namespace JustClimbTrial.Kinect
 
         public static void DrawSkeleton(this Canvas canvas, Body body, CoordinateMapper mapper, SpaceMode mode)
         {
-            if (body == null) return;            
+            if (body == null) return;
 
             foreach (Joint joint in body.Joints.Values)
             {
@@ -180,7 +181,7 @@ namespace JustClimbTrial.Kinect
             foreach (Tuple<JointType, JointType> standardJointLine in StandardJointLines)
             {
                 canvas.DrawLine(body.Joints[standardJointLine.Item1], body.Joints[standardJointLine.Item2], mapper, mode);
-            } 
+            }
         }
 
         public static void DrawPoint(this Canvas canvas, Joint joint, CoordinateMapper mapper, SpaceMode mode)
@@ -202,7 +203,7 @@ namespace JustClimbTrial.Kinect
                     // 1b) Convert Joint positions to Depth space coordinates.
                     DepthSpacePoint depSpacePoint = mapper.MapCameraPointToDepthSpace(joint.Position);
                     spPt = new SpacePointBase(depSpacePoint);
-                    
+
                     break;
             }
 
@@ -214,22 +215,22 @@ namespace JustClimbTrial.Kinect
             else if ((spPt.X < 0 || spPt.Y < 0 || spPt.X > FrameDimensions[mode].Item1 || spPt.Y > FrameDimensions[mode].Item2))
             {
                 //Console.WriteLine($"Joint Mapping Overflow: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
-            } 
+            }
             #endregion
 
 
             //-inf meaning Joint is not detected and no corresponding mapped space point
             if (spPt.IsValid)
-            {  
+            {
 
                 // 2) Scale the mapped coordinates to window dimensions.
                 spPt = spPt.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, mode);
                 //if (joint.JointType == 0) Console.WriteLine($"Head Position in Color Space = {spPt.X}, {spPt.Y}");
 
                 // 3) Draw the point on Canvas
-                spPt.DrawPoint(canvas); 
+                spPt.DrawPoint(canvas);
             }
-            
+
 
         }
 
@@ -256,28 +257,103 @@ namespace JustClimbTrial.Kinect
             }
 
             //Both points that the line joins must be mapped correctly
-            if ( 
-                (   !float.IsNegativeInfinity(myFirstPoint.X) &&
-                    !float.IsNegativeInfinity(myFirstPoint.Y)   )||
-                (   !float.IsNegativeInfinity(mySecondPoint.X) &&
-                    !float.IsNegativeInfinity(mySecondPoint.Y)  ) 
-               )
+            if (myFirstPoint.IsValid && mySecondPoint.IsValid)
             {
                 myFirstPoint = myFirstPoint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, mode);
                 mySecondPoint = mySecondPoint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, mode);
 
                 //call static DrawLine from class SpacePointBae
-                SpacePointBase.DrawLine(canvas, myFirstPoint, mySecondPoint); 
+                SpacePointBase.DrawLine(canvas, myFirstPoint, mySecondPoint);
             }
-        
+
         }
 
         #endregion
 
-        
+
         #endregion
 
         #region Image Functions
+        ///<summary>
+        ///recieves color pixel data in byte[] and frame dimensions, returns BitmapSource
+        /// </summary>
+        public static BitmapSource ToBitmap(byte[] pixels, int width, int height, PixelFormat format)
+        {
+            int stride = width * format.BitsPerPixel / 8;
+
+            return BitmapSource.Create(width, height, 96, 96, format, null, pixels, stride);
+        }
+
+        ///<summary>
+        ///recieves depth data in ushort[] and frame dimensions, returns color depth map as BitmapSource
+        ///bool reliable determines whether to use reliable range of kinect
+        /// </summary>
+        public static BitmapSource ToBitmap(ushort[] depthData, int width, int height, bool reliable)
+        {
+            ushort minDepth = 0;
+            ushort maxDepth = ushort.MaxValue;
+            if (reliable)
+            {
+                //minDepth = frame.DepthMinReliableDistance;
+                //maxDepth = frame.DepthMaxReliableDistance;
+                minDepth = 2000;//frame.DepthMinReliableDistance;
+                maxDepth = 5000;//frame.DepthMaxReliableDistance;
+                //Console.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
+            }
+
+            PixelFormat format = PixelFormats.Bgr32;
+            byte[] pixelData = new byte[width * height * (format.BitsPerPixel + 7) / 8];
+
+            int colorIndex = 0;
+            for (int depthIndex = 0; depthIndex < depthData.Length; ++depthIndex)
+            {
+                ushort depth = depthData[depthIndex];
+                //byte intensity = (byte)(depth >= minDepth && depth <= maxDepth ? 255 - ((depth - minDepth) * 256 / (maxDepth - minDepth)) : 0);
+                ushort intensity = (ushort)(depth >= minDepth && depth <= maxDepth ? depth % 256 : 0);
+
+                //pixelData[colorIndex++] = intensity; // Blue
+                //pixelData[colorIndex++] = intensity; // Green
+                //pixelData[colorIndex++] = intensity; // Red
+
+                pixelData[colorIndex++] = (byte)(intensity <= 127 ? intensity * 2 : 255 - intensity * 2); // Blue
+                pixelData[colorIndex++] = (byte)(intensity <= 127 ? 255 - intensity * 2 : intensity * 2); // Green
+                pixelData[colorIndex++] = (byte)(intensity <= 127 ? 255 - intensity * 2 : intensity * 2); // Red
+
+                //skip the empty memory location of each pixel 
+                ++colorIndex;
+            }
+
+            int stride = width * format.BitsPerPixel / 8;
+
+            return BitmapSource.Create(width, height, 96, 96, format, null, pixelData, stride);
+        }
+
+        ///<summary>
+        ///recieves infrared data in ushort[] and frame dimensions, returns color infrared map as BitmapSource
+        /// </summary>
+        public static BitmapSource ToBitmap(ushort[] infraredData, int width, int height)
+        {
+            PixelFormat format = PixelFormats.Bgr32;
+            byte[] pixels = new byte[width * height * (format.BitsPerPixel + 7) / 8];
+
+            int colorIndex = 0;
+            for (int infraredIndex = 0; infraredIndex < infraredData.Length; infraredIndex++)
+            {
+                ushort ir = infraredData[infraredIndex];
+
+                byte intensity = (byte)(ir >> 7);
+
+                pixels[colorIndex++] = (byte)(intensity / 1); // Blue
+                pixels[colorIndex++] = (byte)(intensity / 1); // Green   
+                pixels[colorIndex++] = (byte)(intensity / 0.4); // Red
+
+                colorIndex++;
+            }
+
+            int stride = width * format.BitsPerPixel / 8;
+
+            return BitmapSource.Create(width, height, 96, 96, format, null, pixels, stride);
+        }
 
         ///<summary>
         ///canvas extension function, get frame streams upon receiving frame source
@@ -474,32 +550,12 @@ namespace JustClimbTrial.Kinect
             {
                 Console.WriteLine("FrameExport Exception");
             }
-        }
 
+        }
 
         #endregion
 
-        //public static byte[] ReflectImage(byte[] bitMap, int width, int height)
-        //{
-        //    byte[] reflection = new byte[width*height];
-        //    int imagePosition = 0;
-        //    // repeat for each row
-        //    for (int row = 0; row < height; row++)
-        //    {
-        //          // read from the left edge
-        //          int fromPos = imagePosition + (row * width);
-        //          // write to the right edge
-        //          int toPos = fromPos + width - 1;
-        //          while (fromPos < width)
-        //          {
-        //              reflection[toPos] = bitMap[fromPos];
-        //              //copy the pixel
-        //              fromPos++; // move towards the middle
-        //              toPos--; // move back from the right edge
-        //          }
-        //    }            
-        //    return reflection;
-        //}
+
 
         #endregion
 
@@ -511,8 +567,68 @@ namespace JustClimbTrial.Kinect
             ColorSpacePoint colorSP = coorMap.MapCameraPointToColorSpace(camSP);
             double normedColorSPX = colorSP.X / FrameDimensions[spaceMode].Item1;
             double normedColorSPY = colorSP.Y / FrameDimensions[spaceMode].Item2;
-            return new Point(normedColorSPX * canvas.Width, normedColorSPY * canvas.Height);
-        }        
+            return new Point(normedColorSPX * canvas.ActualWidth, normedColorSPY * canvas.ActualHeight);
+        }
+
+        public static DepthSpacePoint[] ReadDepthCoordinatesInColorFrameFromTXT(string txtFilePath)
+        {
+            // Read each line of the file into a string array. Each element
+            // of the array is one line of the file.
+            string[] lines = System.IO.File.ReadAllLines(txtFilePath);
+            //length of wallDepthMap = number of color pixels
+            DepthSpacePoint[] wallDepthMap = new DepthSpacePoint[lines.Length-1];
+
+            if (lines.Length > 1)
+            {
+                int width = 0;
+                int height = 0;
+
+                Match firstLineMatch = Regex.Match(lines[0], @"KinectWall Coordinates \[([0-9]+)\]\[([0-9]+)\]");
+                if (firstLineMatch.Success)
+                {
+                    width = int.Parse(firstLineMatch.Groups[1].Value);
+                    height = int.Parse(firstLineMatch.Groups[2].Value);
+                }
+
+                // https://regex101.com/
+                // https://msdn.microsoft.com/en-us/library/twcw2f1c(v=vs.110).aspx
+                string pattern = @"Color\[([0-9]+)\]\[([0-9]+)\] = Depth\[([0-9.]+)\]\[([0-9.]+)\]";
+                string failOverPattern = @"Color\[([0-9]+)\]\[([0-9]+)\]";
+                Regex r = new Regex(pattern);
+                Regex failOverR = new Regex(failOverPattern);
+
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string line = lines[i];
+                    Match match = r.Match(line);
+                    if (match.Success)
+                    {
+                        int colorX = int.Parse(match.Groups[1].Value);                       
+                        int colorY = int.Parse(match.Groups[2].Value);
+                        float depthX = float.Parse(match.Groups[3].Value);
+                        float depthY = float.Parse(match.Groups[4].Value);
+
+                        int colorIndex = colorX + colorY * width;
+                        wallDepthMap[colorIndex] = new DepthSpacePoint { X = depthX, Y = depthY };
+                    }
+                    else
+                    {
+                        Match failOverMatch = failOverR.Match(line);
+                        if (failOverMatch.Success)
+                        {
+                            int colorX = int.Parse(failOverMatch.Groups[1].Value);
+                            int colorY = int.Parse(failOverMatch.Groups[2].Value);
+
+                            int colorIndex = colorX + colorY * width;
+                            wallDepthMap[colorIndex] = new DepthSpacePoint { X = float.NegativeInfinity, Y = float.NegativeInfinity };
+                        }
+                    }
+                }
+            }
+
+            return wallDepthMap;
+        }
+
 
         #endregion
     }

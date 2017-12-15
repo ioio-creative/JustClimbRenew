@@ -5,14 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JustClimbTrial.Views.Windows"
         mc:Ignorable="d"
-        Title="Playground" Height="720" Width="1280">
-    <Viewbox>
+        Title="Playground" Name="playgroundWindow"
+        Height="720" Width="1280" Background="Black">
+    <Viewbox Name="playgroundView" RenderTransformOrigin="0.5, 0.5"
+             Width="{Binding ActualWidth, ElementName=playgroundWindow}" Height="{Binding ActualHeight, ElementName=playgroundWindow}">
         <Grid>
-            <Image Name="playgroundCamera"></Image>
+            <Image Name="playgroundCamera" Stretch="Uniform"></Image>
             <Canvas Name="playgroundCanvas" Width= "{Binding ActualWidth, ElementName=playgroundCamera, Mode=OneWay}" Height = "{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"></Canvas>
             <MediaElement Name="playgroundPlayback" ScrubbingEnabled="True" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
                       Width="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualWidth}"
                       Height="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualHeight}" />
         </Grid>
+        <Viewbox.RenderTransform>
+            <ScaleTransform ScaleX="-1"/>
+        </Viewbox.RenderTransform>
     </Viewbox>
 </Window>

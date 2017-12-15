@@ -108,7 +108,7 @@
     <Compile Include="ViewModels\RockViewModel.cs" />
     <Compile Include="Kinect\KinectExtensions.cs" />
     <Compile Include="Kinect\SpacePointBase.cs" />
-    <Compile Include="Kinect\Wall.cs" />
+    <Compile Include="Kinect\KinectWall.cs" />
     <Compile Include="Mvvm\Infrastructure\GeneralFilter.cs" />
     <Compile Include="Mvvm\Infrastructure\CommandBase.cs" />
     <Compile Include="Mvvm\Infrastructure\DelegateCommand.cs" />

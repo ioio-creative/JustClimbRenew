@@ -158,8 +158,17 @@ namespace JustClimbTrial.Views.Pages
 
         private void SaveWall(object parameter = null)
         {
-            string newWallKey = rocksOnWallViewModel.SaveRocksOnWall(newWallNo.ToString());
-            AppGlobal.WallID = newWallKey;
+            if (isSnapShotTaken)
+            {
+                string newWallKey = rocksOnWallViewModel.SaveRocksOnWall(newWallNo.ToString());
+                jcWall.WallID = newWallKey;
+                jcWall.SaveWallData();
+                AppGlobal.WallID = newWallKey; 
+            }
+            else
+            {
+                UiHelper.NotifyUser("Please Take a Snapshot of the Wall Before Saving");
+            }
         }
 
         #endregion
@@ -326,7 +335,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 if (colorFrame != null)
                 {
-                    BitmapSource newWallColorBitmapSrc = KinectManager.ToBitmap(colorFrame);
+                    BitmapSource newWallColorBitmapSrc = kinectManagerClient.ToBitmap(colorFrame);
                     cameraIMG.Source = newWallColorBitmapSrc;
                     colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
                     myMainWindowParent.PlaygroundWindow.ShowImage(newWallColorBitmapSrc);

@@ -4,6 +4,7 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
+using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.UserControls;
@@ -137,7 +138,9 @@ namespace JustClimbTrial.Views.Pages
             if (!isAnyRocksOnWall)
             {
                 UiHelper.NotifyUser("No rocks registered with the wall!");
-            }            
+            }
+
+            //DepthSpacePoint[] points = KinectExtensions.ReadDepthCoordinatesInColorFrameFromTXT(@"C:\Users\User\Documents\JustClimb\KinectWall Log\WA2017121416029xmq7H\Coordinate Map.txt");
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)

@@ -22,7 +22,7 @@ namespace JustClimbTrial
             if (newestValidWall != null)
             {
                 //AppGlobal.WallID = newestValidWall.WallID;
-                AppGlobal.WallID = "WA201711211845000001";
+                AppGlobal.WallID = "WA2017121416029xmq7H";
             }
         }
     }

@@ -51,7 +51,7 @@
                                DockPanel.Dock="Right" TextAlignment="Right" RenderTransformOrigin="2.157,0.156" />
                 </DockPanel>
                 <Slider x:Name="boulderWidthSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5" 
-                        IsSnapToTickEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
+                        IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
                 <!-- end of wall slider -->
                 <!-- height slider -->
                 <DockPanel Margin="15 5 15 0">
@@ -59,8 +59,8 @@
                     <TextBlock Text="{Binding ElementName=boulderHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
                                DockPanel.Dock="Right" TextAlignment="Right" RenderTransformOrigin="2.157,0.156" />
                 </DockPanel>
-                <Slider x:Name="boulderHeightSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" 
-                        ValueChanged="boulderSizeSlider_ValueChanged" />
+                <Slider x:Name="boulderHeightSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5"
+                        IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
                 <!-- end of height slider -->
                 <Button Name="deselectRockBtn" Content="De-select Rock" FontSize="10" Height="50" Margin="50 10 50 10" />
                 <Button Name="removeRockBtn" Content="Remove Rock" FontSize="10" Height="50" Margin="50 10 50 10" />

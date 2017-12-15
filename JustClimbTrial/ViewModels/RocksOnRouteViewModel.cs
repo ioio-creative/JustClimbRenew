@@ -188,7 +188,7 @@ namespace JustClimbTrial.ViewModels
             {
                 Fill = Brushes.Transparent,
                 StrokeThickness = 4,
-                Stroke = Brushes.Yellow,
+                Stroke = Brushes.Blue,
                 Width = radius * 2,
                 Height = radius * 2
             };
@@ -213,7 +213,7 @@ namespace JustClimbTrial.ViewModels
             return new Ellipse
             {
                 Fill = Brushes.Red,
-                StrokeThickness = 0,
+                StrokeThickness = 4,
                 Stroke = Brushes.Red,
                 Width = radius * 2,
                 Height = radius * 2

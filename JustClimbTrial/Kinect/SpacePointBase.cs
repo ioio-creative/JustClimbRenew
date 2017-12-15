@@ -19,7 +19,7 @@ namespace JustClimbTrial.Kinect
             X = x;
             Y = y;
             _pointType = mode;
-            if (x == float.NegativeInfinity && y == float.NegativeInfinity)
+            if (x == float.NegativeInfinity || y == float.NegativeInfinity)
             {
                 IsValid = false;
             }

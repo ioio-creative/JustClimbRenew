@@ -267,7 +267,7 @@ namespace JustClimbTrial.ViewModels
         private bool LoadRocksOnWall(string wallId)
         {
             rocksOnWall = RockDataAccess.ValidRocksOnWall(wallId).Select(rock =>
-                new RockViewModel(rock, canvas)).ToList();
+                new RockViewModel(rock, canvas, coorMap)).ToList();
             return rocksOnWall.Any();
         }
 
