@@ -2,6 +2,7 @@
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
+using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,56 +155,25 @@ namespace JustClimbTrial.ViewModels
         #endregion
 
 
-        #region circles
+        #region draw helpers
 
-        private static Ellipse GetNewRockOnWallCircle(double radius)
+        private Shape DrawBoulderRockOnCanvas(RockOnRouteViewModel rockOnBoulderRoute)
         {
-            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            mySolidColorBrush.Color = Color.FromArgb(123, 255, 255, 0);
-            return new Ellipse
+            Shape shapeToReturn;
+            switch (rockOnBoulderRoute.BoulderStatus)
             {
-                Fill = mySolidColorBrush,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black,
-                Width = radius * 2,
-                Height = radius * 2
-            };
-        }
-
-        private static Ellipse GetNewStartRockCircle(double radius)
-        {
-            return new Ellipse
-            {
-                Fill = Brushes.Transparent,
-                StrokeThickness = 4,
-                Stroke = Brushes.Green,
-                Width = radius * 2,
-                Height = radius * 2
-            };
-        }
-
-        private static Ellipse GetNewIntermediateRockCircle(double radius)
-        {
-            return new Ellipse
-            {
-                Fill = Brushes.Transparent,
-                StrokeThickness = 4,
-                Stroke = Brushes.Blue,
-                Width = radius * 2,
-                Height = radius * 2
-            };
-        }
-
-        private static Ellipse GetNewEndRockCircle(double radius)
-        {
-            return new Ellipse
-            {
-                Fill = Brushes.Transparent,
-                StrokeThickness = 4,
-                Stroke = Brushes.Red,
-                Width = radius * 2,
-                Height = radius * 2
-            };
+                case RockOnBoulderStatus.Start:
+                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.DrawStartRockOnCanvas();
+                    break;
+                case RockOnBoulderStatus.End:
+                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.DrawEndRockOnCanvas();
+                    break;
+                case RockOnBoulderStatus.Int:
+                default:
+                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.DrawIntermediateRockOnCanvas();
+                    break;
+            }
+            return shapeToReturn;
         }
 
         private static Ellipse GetNewSelectedRockIndicatorCircle()
@@ -221,73 +191,6 @@ namespace JustClimbTrial.ViewModels
         }
 
         #endregion
-
-
-        #region draw helpers
-
-        private Shape DrawBoulderRockOnCanvas(RockOnRouteViewModel rockOnBoulderRoute)
-        {
-            Shape shapeToReturn;
-            switch (rockOnBoulderRoute.BoulderStatus)
-            {
-                case RockOnBoulderStatus.Start:
-                    shapeToReturn = DrawStartRockOnCanvas(rockOnBoulderRoute.MyRockViewModel.MyRock);
-                    break;
-                case RockOnBoulderStatus.End:
-                    shapeToReturn = DrawEndRockOnCanvas(rockOnBoulderRoute.MyRockViewModel.MyRock);
-                    break;
-                case RockOnBoulderStatus.Int:
-                default:
-                    shapeToReturn = DrawIntermediateRockOnCanvas(rockOnBoulderRoute.MyRockViewModel.MyRock);
-                    break;
-            }
-            return shapeToReturn;
-        }
-
-        private Shape DrawStartRockOnCanvas(Rock rock)
-        {
-            // TODO: change draw ellipse logic
-            double radius = Math.Max(rock.Width.GetValueOrDefault(0), rock.Height.GetValueOrDefault(0));
-            Ellipse startRockCircle = GetNewStartRockCircle(radius);
-            DrawCircleOnCanvas(startRockCircle, rock.CoorX.GetValueOrDefault(0), rock.CoorY.GetValueOrDefault(0));
-            return startRockCircle;
-        }
-
-        private Shape DrawIntermediateRockOnCanvas(Rock rock)
-        {
-            // TODO: change draw ellipse logic
-            double radius = Math.Max(rock.Width.GetValueOrDefault(0), rock.Height.GetValueOrDefault(0));
-            Ellipse intermediateRockCircle = GetNewIntermediateRockCircle(radius);
-            DrawCircleOnCanvas(intermediateRockCircle, rock.CoorX.GetValueOrDefault(0), rock.CoorY.GetValueOrDefault(0));
-            return intermediateRockCircle;
-        }
-
-        private Shape DrawEndRockOnCanvas(Rock rock)
-        {
-            // TODO: change draw ellipse logic
-            double radius = Math.Max(rock.Width.GetValueOrDefault(0), rock.Height.GetValueOrDefault(0));
-            Ellipse endRockCircle = GetNewEndRockCircle(radius);
-            DrawCircleOnCanvas(endRockCircle, rock.CoorX.GetValueOrDefault(0), rock.CoorY.GetValueOrDefault(0));
-            return endRockCircle;
-        }
-
-        private void DrawCircleOnCanvas(Ellipse circle, Point position)
-        {
-            DrawCircleOnCanvas(circle, position.X, position.Y);
-        }
-
-        private void DrawCircleOnCanvas(Ellipse circle, double x, double y)
-        {
-            double radius = circle.SemiMajorAxis();
-
-            Canvas.SetLeft(circle, x - radius);
-            Canvas.SetTop(circle, y - radius);
-
-            canvas.Children.Add(circle);
-        }
-
-        #endregion
-
 
         #region database
 

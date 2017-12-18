@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:JustClimbTrial.Views.Windows"
         mc:Ignorable="d"
         Title="Playground" Name="playgroundWindow"
-        Height="720" Width="1280" Background="Black">
+        Height="720" Width="1280" Background="White">
     <Viewbox Name="playgroundView" RenderTransformOrigin="0.5, 0.5"
              Width="{Binding ActualWidth, ElementName=playgroundWindow}" Height="{Binding ActualHeight, ElementName=playgroundWindow}">
         <Grid>
@@ -21,3 +21,4 @@
         </Viewbox.RenderTransform>
     </Viewbox>
 </Window>
+

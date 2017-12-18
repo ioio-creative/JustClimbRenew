@@ -222,6 +222,109 @@ namespace JustClimbTrial.ViewModels
             return boulderEllipse;
         }
 
-        #endregion        
+        #endregion
+
+
+        #region draw helpers       
+
+        public Shape DrawStartRockOnCanvas()
+        {
+            // TODO: change draw ellipse logic
+            Ellipse startRockCircle = GetNewStartRockEllipse(MyRock);
+            DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
+            return startRockCircle;
+        }
+
+        public Shape DrawIntermediateRockOnCanvas()
+        {
+            // TODO: change draw ellipse logic            
+            Ellipse intermediateRockCircle = GetNewIntermediateRockEllipse(MyRock);
+            DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
+            return intermediateRockCircle;
+        }
+
+        public Shape DrawEndRockOnCanvas()
+        {
+            // TODO: change draw ellipse logic            
+            Ellipse endRockCircle = GetNewEndRockEllipse(MyRock);
+            DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
+            return endRockCircle;
+        }
+
+        public void DrawEllipseOnCanvas(Ellipse ellipse, Point position)
+        {
+            DrawEllipseOnCanvas(ellipse, position.X, position.Y);
+        }
+
+        public void DrawEllipseOnCanvas(Ellipse ellipse, double x, double y)
+        {
+            Canvas.SetLeft(ellipse, x - ellipse.Width * 0.5);
+            Canvas.SetTop(ellipse, y - ellipse.Height * 0.5);
+
+            BCanvas.Children.Add(ellipse);
+        }
+
+        #endregion
+
+
+        #region ellipses
+
+        private Ellipse GetNewRockOnWallEllipse(Rock rock)
+        {
+            Ellipse boulderEllipse = new Ellipse
+            {
+                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Fill = null,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+
+            return boulderEllipse;
+        }
+
+        private Ellipse GetNewStartRockEllipse(Rock rock)
+        {
+            Ellipse boulderEllipse = new Ellipse
+            {
+                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Fill = Brushes.Transparent,
+                StrokeThickness = 4,
+                Stroke = Brushes.Green
+            };
+
+            return boulderEllipse;
+        }
+
+        private Ellipse GetNewIntermediateRockEllipse(Rock rock)
+        {
+            Ellipse boulderEllipse = new Ellipse
+            {
+                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Fill = Brushes.Transparent,
+                StrokeThickness = 4,
+                Stroke = Brushes.Yellow
+            };
+
+            return boulderEllipse;
+        }
+
+        private Ellipse GetNewEndRockEllipse(Rock rock)
+        {
+            Ellipse boulderEllipse = new Ellipse
+            {
+                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Fill = Brushes.Transparent,
+                StrokeThickness = 4,
+                Stroke = Brushes.Red
+            };
+
+            return boulderEllipse;
+        }        
+
+        #endregion
     }
 }

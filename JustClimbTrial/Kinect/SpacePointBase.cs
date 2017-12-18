@@ -58,12 +58,14 @@ namespace JustClimbTrial.Kinect
             return ScaleTo(width, height, dimensions.Item1, dimensions.Item2);
         }
 
-        public void DrawPoint(Canvas canvas)
+        public Shape DrawPoint(Canvas canvas)
         {
+            Shape ellipseToReturn = null;
+
             if (this.IsValid)
             {
                 // 1) Create a WPF ellipse.
-                Ellipse ellipse = new Ellipse
+                ellipseToReturn  = new Ellipse
                 {
                     Width = 20,
                     Height = 20,
@@ -73,24 +75,25 @@ namespace JustClimbTrial.Kinect
                 // 2) Position the ellipse according to the joint's coordinates.
                 if (X > 0 && Y > 0)
                 {
-                    Canvas.SetLeft(ellipse, X - ellipse.Width / 2);
-                    Canvas.SetTop(ellipse, Y - ellipse.Height / 2);
+                    Canvas.SetLeft(ellipseToReturn, X - ellipseToReturn.Width / 2);
+                    Canvas.SetTop(ellipseToReturn, Y - ellipseToReturn.Height / 2);
                 }
 
 
                 // 3) Add the ellipse to the canvas.
-                canvas.Children.Add(ellipse);
+                canvas.Children.Add(ellipseToReturn);
             }
-            else return;
+
+            return ellipseToReturn;
         }
     
 
-        public static void DrawLine(Canvas canvas, SpacePointBase first, SpacePointBase second)
+        public static Shape DrawLine(Canvas canvas, SpacePointBase first, SpacePointBase second)
         {
-
+            Shape lineToReturn = null;
             if (first.IsValid && second.IsValid)
             {
-                Line line = new Line
+                lineToReturn = new Line
                 {
                     X1 = first.X,
                     Y1 = first.Y,
@@ -100,9 +103,10 @@ namespace JustClimbTrial.Kinect
                     Stroke = new SolidColorBrush(Colors.LightBlue)
                 };
 
-                canvas.Children.Add(line);
+                canvas.Children.Add(lineToReturn);
             }
-            else return;
+
+            return lineToReturn;
         }
     }
 }

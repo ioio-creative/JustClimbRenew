@@ -169,25 +169,31 @@ namespace JustClimbTrial.Kinect
 
         #region Mapped Skeleton with <SpacePointBase> (CameraPoints Mapped to other point types)
 
-        public static void DrawSkeleton(this Canvas canvas, Body body, CoordinateMapper mapper, SpaceMode mode)
-        {
-            if (body == null) return;
+        public static IEnumerable<Shape> DrawSkeleton(this Canvas canvas, Body body, CoordinateMapper mapper, SpaceMode mode)
+        {  
+            if (body == null) return null;
+
+            IList<Shape> skeleton = new List<Shape>();
 
             foreach (Joint joint in body.Joints.Values)
             {
-                canvas.DrawPoint(joint, mapper, mode);
+                skeleton.Add(canvas.DrawPoint(joint, mapper, mode));
             }
 
             foreach (Tuple<JointType, JointType> standardJointLine in StandardJointLines)
             {
-                canvas.DrawLine(body.Joints[standardJointLine.Item1], body.Joints[standardJointLine.Item2], mapper, mode);
+                skeleton.Add(canvas.DrawLine(body.Joints[standardJointLine.Item1], body.Joints[standardJointLine.Item2], mapper, mode));
             }
+
+            return skeleton;
         }
 
-        public static void DrawPoint(this Canvas canvas, Joint joint, CoordinateMapper mapper, SpaceMode mode)
+        public static Shape DrawPoint(this Canvas canvas, Joint joint, CoordinateMapper mapper, SpaceMode mode)
         {
+            Shape shapeToReturn = null;
+
             // 0) Check whether the joint is tracked.
-            if (joint.TrackingState == TrackingState.NotTracked) return;
+            if (joint.TrackingState == TrackingState.NotTracked) return null;
 
             SpacePointBase spPt;
             switch (mode)
@@ -228,15 +234,17 @@ namespace JustClimbTrial.Kinect
                 //if (joint.JointType == 0) Console.WriteLine($"Head Position in Color Space = {spPt.X}, {spPt.Y}");
 
                 // 3) Draw the point on Canvas
-                spPt.DrawPoint(canvas);
+                shapeToReturn = spPt.DrawPoint(canvas);
             }
 
-
+            return shapeToReturn;
         }
 
-        public static void DrawLine(this Canvas canvas, Joint first, Joint second, CoordinateMapper mapper, SpaceMode mode)
+        public static Shape DrawLine(this Canvas canvas, Joint first, Joint second, CoordinateMapper mapper, SpaceMode mode)
         {
-            if (first.TrackingState == TrackingState.NotTracked || second.TrackingState == TrackingState.NotTracked) return;
+            Shape lineToReturn = null;
+
+            if (first.TrackingState == TrackingState.NotTracked || second.TrackingState == TrackingState.NotTracked) return null;
 
             SpacePointBase myFirstPoint;
             SpacePointBase mySecondPoint;
@@ -263,9 +271,10 @@ namespace JustClimbTrial.Kinect
                 mySecondPoint = mySecondPoint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, mode);
 
                 //call static DrawLine from class SpacePointBae
-                SpacePointBase.DrawLine(canvas, myFirstPoint, mySecondPoint);
+                lineToReturn = SpacePointBase.DrawLine(canvas, myFirstPoint, mySecondPoint);
             }
 
+            return lineToReturn;
         }
 
         #endregion

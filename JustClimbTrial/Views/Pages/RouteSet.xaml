@@ -54,14 +54,17 @@
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" 
-                   Stretch="UniformToFill" 
+            <Image Name="RouteSetImg" 
+                Grid.Column="0" 
+                   Stretch="Uniform" 
                    StretchDirection="Both"
-                   Source="/Resources/Images/JustClimbWall.png" />
+                   Source="C:\Users\User\Documents\JustClimb\KinectWall Log\WA2017121416029xmq7H\WA2017121416029xmq7H.png" />
             <Canvas x:Name="canvasWall"
                     Grid.Column="0" 
                     Background="Transparent" 
-                    MouseDown="canvasWall_MouseDown" />
+                    MouseDown="canvasWall_MouseDown" 
+                    Width="{Binding ActualWidth, ElementName=RouteSetImg}"
+                    Height="{Binding ActualHeight, ElementName=RouteSetImg}"/>
 
             <!-- grid 2 -->
             <Grid Grid.Column="1">

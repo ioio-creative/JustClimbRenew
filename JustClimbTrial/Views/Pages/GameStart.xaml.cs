@@ -13,6 +13,7 @@ using static JustClimbTrial.Kinect.KinectManager;
 using Microsoft.Kinect;
 using JustClimbTrial.Views.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -32,6 +33,8 @@ namespace JustClimbTrial.Views.Pages
         private KinectManager kinectManagerClient;
         private Playground playgroundWindow;
         private Canvas playgroundCanvas;
+
+        private IEnumerable<Shape> skeletonShapes;
 
 
         public GameStart(string aRouteId, ClimbMode aClimbMode)
@@ -81,7 +84,7 @@ namespace JustClimbTrial.Views.Pages
             playgroundWindow = (this.Parent as MainWindow).PlaygroundWindow;
             playgroundCanvas = playgroundWindow.playgroundCanvas;
             //kinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
-            playgroundCanvas.Background = Brushes.Black;
+            //playgroundCanvas.Background = Brushes.Black;
             kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
 
             string headerRowTitleFormat = "{0} Route {1} - Video Playback";
@@ -96,9 +99,15 @@ namespace JustClimbTrial.Views.Pages
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
                     rocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
-                    //startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
-                    //endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+                    startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                    endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+
+                    foreach (RockOnRouteViewModel rockOnRoute in rocksOnBoulderRoute)
+                    {
+                        rockOnRoute.MyRockViewModel.DrawBoulder();
+                    }
                     break;
+
             }
         }
 
@@ -122,15 +131,25 @@ namespace JustClimbTrial.Views.Pages
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
         {
-            playgroundCanvas.Children.Clear();
+            //playgroundCanvas.Children.Clear();
+
+            if (skeletonShapes != null)
+            {
+                foreach (Shape skeletonShape in skeletonShapes)
+                {
+                    playgroundCanvas.Children.Remove(skeletonShape);
+                } 
+            }
+
             IList<Body> bodies = e.GetBodyList();
+                        
             foreach (var body in bodies)
             {
                 if (body != null)
                 {
                     if (body.IsTracked)
                     {
-                        playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
+                        skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
                     }
                 }
 
