@@ -86,7 +86,7 @@ namespace JustClimbTrial.Views.Pages
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Boulder", newRouteNo);                            
                     rockStatusTemplateResourceKey = BoulderRockStatusTemplateResourceKey;
-                    break;                                    
+                    break;                                
             }
 
             WindowTitle = Title;            
@@ -105,17 +105,19 @@ namespace JustClimbTrial.Views.Pages
             switch (routeSetClimbMode)
             {
                 case ClimbMode.Training:
+                    TrainingRockStatus ucTrainingRockStatus = GetTrainingRockStatusUserControl();
+                    //ucTrainingRockStatus.btnTrainingSeqGoBack.Command = new RelayCommand();
                     break;
                 case ClimbMode.Boulder:
                 default:
-                    BoulderRockStatus ucboulderRockStatus = GetBoulderRockStatusUserControl();
-                    ucboulderRockStatus.btnStartStatus.Command =
+                    BoulderRockStatus ucBoulderRockStatus = GetBoulderRockStatusUserControl();
+                    ucBoulderRockStatus.btnStartStatus.Command =
                         new RelayCommand(SetSelectedBoulderRockToStart, CanSetSelectedBoulderRockToStart);
-                    ucboulderRockStatus.btnEndStatus.Command =
+                    ucBoulderRockStatus.btnEndStatus.Command =
                         new RelayCommand(SetSelectedBoulderRockToEnd, CanSetSelectedBoulderRockToEnd);
-                    ucboulderRockStatus.btnIntermediateStatus.Command =
+                    ucBoulderRockStatus.btnIntermediateStatus.Command =
                         new RelayCommand(SetSelectedBoulderRockToIntermediate, CanSetSelectedBoulderRockToIntermediate);
-                    ucboulderRockStatus.btnNoneStatus.Command =
+                    ucBoulderRockStatus.btnNoneStatus.Command =
                         new RelayCommand(RemoveSelectedBoulderRockFromRoute, CanRemoveSelectedBoulderRockFromRoute);
                     break;
             }
@@ -138,9 +140,7 @@ namespace JustClimbTrial.Views.Pages
             if (!isAnyRocksOnWall)
             {
                 UiHelper.NotifyUser("No rocks registered with the wall!");
-            }
-
-            //DepthSpacePoint[] points = KinectExtensions.ReadDepthCoordinatesInColorFrameFromTXT(@"C:\Users\User\Documents\JustClimb\KinectWall Log\WA2017121416029xmq7H\Coordinate Map.txt");
+            }            
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)
@@ -153,24 +153,26 @@ namespace JustClimbTrial.Views.Pages
                     rocksOnRouteViewModel.FindRockOnRouteViewModel(nearestRockOnWall);
                 bool isRockAlreadyOnTheRoute = !rocksOnRouteViewModel.IsSelectedRockOnRouteNull();
 
-                if (routeSetClimbMode == ClimbMode.Training)
+                if (!isRockAlreadyOnTheRoute)  // new rock on route
                 {
-
-                }
-                else if (routeSetClimbMode == ClimbMode.Boulder)
-                {
-                    if (!isRockAlreadyOnTheRoute)  // new rock on route
+                    rocksOnRouteViewModel.SelectedRockOnRoute = new RockOnRouteViewModel
                     {
-                        rocksOnRouteViewModel.SelectedRockOnRoute = new RockOnRouteViewModel
-                        {
-                            MyRockViewModel = nearestRockOnWall
-                        };
+                        MyRockViewModel = nearestRockOnWall
+                    };
 
-                        rocksOnRouteViewModel.AddSelectedRockToRoute();                            
-                        
+                    rocksOnRouteViewModel.AddSelectedRockToRoute();                    
+                }
+
+                switch (routeSetClimbMode)
+                {
+                    case ClimbMode.Training:
+                        SetSelectedTrainingRockSeqNo();
+                        break;
+                    case ClimbMode.Boulder:
+                    default:
                         SetSelectedBoulderRockToIntermediate();
-                    }
-                }                
+                        break;
+                }                                
             }
         }
 
@@ -219,6 +221,11 @@ namespace JustClimbTrial.Views.Pages
                 rocksOnRouteViewModel.IsRockOnTheRoute(rocksOnRouteViewModel.SelectedRockOnRoute.MyRockViewModel);
         }
 
+        private void SetSelectedTrainingRockSeqNo()
+        {
+            rocksOnRouteViewModel.SetSelectedTrainingRockSeqNo();
+        }
+
         private void SetSelectedBoulderRockToStart(object parameter = null)
         {
             SetSelectedBoulderRockStatus(RockOnBoulderStatus.Start);
@@ -262,7 +269,7 @@ namespace JustClimbTrial.Views.Pages
         // https://stackoverflow.com/questions/8126700/how-do-i-access-an-element-of-a-control-template-from-within-code-behind
         private BoulderRockStatus GetBoulderRockStatusUserControl()
         {
-            ControlTemplate template = ctrlRockStatus.Template;            
+            ControlTemplate template = ctrlRockStatus.Template;
             return template.FindName("ucBoulderRockStatus", ctrlRockStatus) as BoulderRockStatus;
         }
 

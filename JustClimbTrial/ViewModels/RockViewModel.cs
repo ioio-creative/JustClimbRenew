@@ -225,7 +225,21 @@ namespace JustClimbTrial.ViewModels
         #endregion
 
 
-        #region draw helpers       
+        #region draw helpers
+
+        public TextBlock DrawSequenceRockOnCanvas(int seqNo)
+        {
+            // https://www.codeproject.com/Questions/629557/write-text-onto-canvas-wpf
+            TextBlock textBlock = new TextBlock();
+            textBlock.Text = seqNo.ToString();
+            textBlock.Foreground = Brushes.Black;
+            //Canvas.SetLeft(textBlock, x);
+            //Canvas.SetTop(textBlock, y);
+            textBlock.RenderTransform = new RotateTransform(-90, 0, 0); // this line can rotate it but not in the axis i want
+            textBlock.Margin = new Thickness(100, 100, 0, 0);
+            BCanvas.Children.Add(textBlock);
+            return textBlock;
+        }
 
         public Shape DrawStartRockOnCanvas()
         {

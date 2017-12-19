@@ -134,6 +134,26 @@ namespace JustClimbTrial.ViewModels
             return SelectedRockOnRoute == null;
         }
 
+        public void SetSelectedTrainingRockSeqNo()
+        {
+            int seqNo = rocksOnRoute.Count + 1;
+
+            if (!IsSelectedRockOnRouteNull())
+            {
+                // if SelectedRockOnRoute not already in rocksOnRoute,
+                // add it into the rocksOnRoute list
+                AddRockToRoute(SelectedRockOnRoute);
+
+                if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
+                    SelectedRockOnRoute.TrainingSeq != seqNo)
+                {
+                    canvas.RemoveChild(SelectedRockOnRoute.MyRockViewModel.BoulderShape);
+                    SelectedRockOnRoute.TrainingSeq = seqNo;
+                    SelectedRockOnRoute.MyRockViewModel.DrawSequenceRockOnCanvas(seqNo);
+                }
+            }
+        }
+
         public void SetSelectedBoulderRockStatus(RockOnBoulderStatus status)
         {
             if (!IsSelectedRockOnRouteNull())
@@ -147,7 +167,7 @@ namespace JustClimbTrial.ViewModels
                 {
                     canvas.RemoveChild(SelectedRockOnRoute.MyRockViewModel.BoulderShape);
                     SelectedRockOnRoute.BoulderStatus = status;
-                    SelectedRockOnRoute.MyRockViewModel.BoulderShape = DrawBoulderRockOnCanvas(SelectedRockOnRoute);
+                    SelectedRockOnRoute.MyRockViewModel.BoulderShape = DrawBoulderRockOnCanvas(SelectedRockOnRoute);                    
                 }
             }            
         }
@@ -156,6 +176,14 @@ namespace JustClimbTrial.ViewModels
 
 
         #region draw helpers
+
+        private TextBlock DrawTrainingRockOnCanvas(RockOnRouteViewModel rockTrainingRoute)
+        {
+            TextBlock textBlockToReturn = null;
+
+
+            return textBlockToReturn;
+        }
 
         private Shape DrawBoulderRockOnCanvas(RockOnRouteViewModel rockOnBoulderRoute)
         {
