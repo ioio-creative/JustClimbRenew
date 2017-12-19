@@ -170,7 +170,7 @@ namespace JustClimbTrial.Kinect
             bool isImgSaved = false;
 
             // create a bitmapsource object using byte[]
-            BitmapSource bitmapSrc = KinectExtensions.ToBitmap(bitmapData, width, height, PixelFormats.Bgr32);
+            BitmapSource bitmapSrc = KinectExtensions.ToBitmapSrc(bitmapData, width, height, PixelFormats.Bgr32);
 
             // create a png bitmap encoder which knows how to save a .png file
             BitmapEncoder encoder = new PngBitmapEncoder();

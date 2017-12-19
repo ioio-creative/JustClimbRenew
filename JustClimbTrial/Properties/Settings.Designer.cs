@@ -25,17 +25,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=IOIO-PC;Initial Catalog=JustClimb;User ID=IoioSa;Password=Ioio0512")]
-        public string JustClimbConnectionString {
-            get {
-                return ((string)(this["JustClimbConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../AppFiles/Videos")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos")]
         public string VideoFileDirectory {
             get {
                 return ((string)(this["VideoFileDirectory"]));
@@ -54,11 +44,39 @@ namespace JustClimbTrial.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=IOIO-PC;Initial Catalog=JustClimb;User ID=IoioSa;Password=Ioio0512")]
+        public string JustClimbConnectionString {
+            get {
+                return ((string)(this["JustClimbConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=sing-mssql-1.chdc0elhkwnt.ap-southeast-1.rds.amazonaws.com;Initial Ca" +
             "talog=JustClimb;User ID=IoioSa;Password=Ioio0512;Persist Security Info=True;")]
         public string JustClimbConnectionString1 {
             get {
                 return ((string)(this["JustClimbConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFIles\\Videos\\VideoImgBuffer")]
+        public string VideoBufferDirectory {
+            get {
+                return ((string)(this["VideoBufferDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"00000000\"")]
+        public string VideoBufferIdxPadding {
+            get {
+                return ((string)(this["VideoBufferIdxPadding"]));
             }
         }
     }

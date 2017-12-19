@@ -1,5 +1,6 @@
 ﻿using JustClimbTrial.Properties;
 using JustClimbTrial.ViewModels;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -18,5 +19,13 @@ namespace JustClimbTrial.Helpers
             return Path.Combine(exeDirectory, settings.VideoFileDirectory,
                 video.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
+
+        public static string VideoBufferFolderPath()
+        {    
+            Console.WriteLine(Path.Combine(exeDirectory, settings.VideoBufferDirectory));
+            return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
+        }
+
+        public static string bufferIdxPadding = settings.VideoBufferIdxPadding;
     }
 }

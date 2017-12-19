@@ -30,7 +30,6 @@ namespace JustClimbTrial.Kinect
             { SpaceMode.Depth, new Tuple<float,float>(512f, 424f) }
         };
 
-
         //Joint pairings for drawing Lines
         private static Tuple<JointType, JointType>[] StandardJointLines = new Tuple<JointType, JointType>[]
         {
@@ -167,7 +166,7 @@ namespace JustClimbTrial.Kinect
         #endregion
 
 
-        #region Mapped Skeleton with <SpacePointBase> (CameraPoints Mapped to other point types)
+        #region Map Skeleton with <SpacePointBase> (CameraPoints Mapped to other point types)
 
         public static IEnumerable<Shape> DrawSkeleton(this Canvas canvas, Body body, CoordinateMapper mapper, SpaceMode mode)
         {  
@@ -286,7 +285,7 @@ namespace JustClimbTrial.Kinect
         ///<summary>
         ///recieves color pixel data in byte[] and frame dimensions, returns BitmapSource
         /// </summary>
-        public static BitmapSource ToBitmap(byte[] pixels, int width, int height, PixelFormat format)
+        public static BitmapSource ToBitmapSrc(byte[] pixels, int width, int height, PixelFormat format)
         {
             int stride = width * format.BitsPerPixel / 8;
 
@@ -297,7 +296,7 @@ namespace JustClimbTrial.Kinect
         ///recieves depth data in ushort[] and frame dimensions, returns color depth map as BitmapSource
         ///bool reliable determines whether to use reliable range of kinect
         /// </summary>
-        public static BitmapSource ToBitmap(ushort[] depthData, int width, int height, bool reliable)
+        public static BitmapSource ToBitmapSrc(ushort[] depthData, int width, int height, bool reliable)
         {
             ushort minDepth = 0;
             ushort maxDepth = ushort.MaxValue;
@@ -340,7 +339,7 @@ namespace JustClimbTrial.Kinect
         ///<summary>
         ///recieves infrared data in ushort[] and frame dimensions, returns color infrared map as BitmapSource
         /// </summary>
-        public static BitmapSource ToBitmap(ushort[] infraredData, int width, int height)
+        public static BitmapSource ToBitmapSrc(ushort[] infraredData, int width, int height)
         {
             PixelFormat format = PixelFormats.Bgr32;
             byte[] pixels = new byte[width * height * (format.BitsPerPixel + 7) / 8];
