@@ -181,7 +181,7 @@ namespace JustClimbTrial.ViewModels
         public void DrawBoulder()
         {
             SetBoulderTopLeftPositionOnCanvas();
-            BCanvas.Children.Add(BoulderShape);
+            BCanvas.AddChild(BoulderShape);
         }
 
         // TODO: need to change name as the function just changes width & height

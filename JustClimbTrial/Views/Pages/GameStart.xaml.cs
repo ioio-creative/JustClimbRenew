@@ -1,22 +1,19 @@
-﻿using JustClimbTrial.DataAccess;
-using JustClimbTrial.DataAccess.Entities;
+﻿using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
+using JustClimbTrial.Extensions;
+using JustClimbTrial.Helpers;
+using JustClimbTrial.Kinect;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
+using JustClimbTrial.Views.Windows;
+using Microsoft.Kinect;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Linq;
-using JustClimbTrial.Kinect;
-using static JustClimbTrial.Kinect.KinectManager;
-using Microsoft.Kinect;
-using JustClimbTrial.Views.Windows;
-using System.Windows.Media;
 using System.Windows.Shapes;
-using JustClimbTrial.Helpers;
-using System.IO;
-using JustClimbTrial.Extensions;
 
 namespace JustClimbTrial.Views.Pages
 {
