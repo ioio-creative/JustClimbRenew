@@ -107,11 +107,14 @@ namespace JustClimbTrial.Views.Pages
                     rocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
                     startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
                     endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
-                    rocksOnRouteCamSP = new CameraSpacePoint[rocksOnBoulderRoute.Count<RockOnRouteViewModel>()];
+                    rocksOnRouteCamSP = new CameraSpacePoint[rocksOnBoulderRoute.Count()];
 
-                    for (int i = 0; i < rocksOnBoulderRoute.Count<RockOnRouteViewModel>(); i++)
+                    for (int i = 0; i < rocksOnBoulderRoute.Count(); i++)
                     {
-                        RockViewModel rockViewModel = rocksOnBoulderRoute.ElementAt<RockOnRouteViewModel>(i).MyRockViewModel;
+                        RockOnRouteViewModel rockOnRouteViewModel = rocksOnBoulderRoute.ElementAt(i);
+                        rockOnRouteViewModel.SetRockShapeWrtStatus();
+
+                        RockViewModel rockViewModel = rocksOnBoulderRoute.ElementAt(i).MyRockViewModel;
                         rocksOnRouteCamSP[i] = rockViewModel.MyRock.GetCameraSpacePoint();
                         rockViewModel.DrawBoulder();
                     }

@@ -188,14 +188,14 @@ namespace JustClimbTrial.ViewModels
             switch (rockOnBoulderRoute.BoulderStatus)
             {
                 case RockOnBoulderStatus.Start:
-                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.DrawStartRockOnCanvas();
+                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.ChangeRockShapeToStart();
                     break;
                 case RockOnBoulderStatus.End:
-                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.DrawEndRockOnCanvas();
+                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.ChangeRockShapeToEnd();
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
-                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.DrawIntermediateRockOnCanvas();
+                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.ChangeRockShapeToIntermediate();
                     break;
             }
             return shapeToReturn;

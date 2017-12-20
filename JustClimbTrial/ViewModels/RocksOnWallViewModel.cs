@@ -208,6 +208,8 @@ namespace JustClimbTrial.ViewModels
             if (SelectedRock != null)
             {
                 SelectedRock.ChangeBWidth(newWidth);
+                selectedRockIndicator.Width = newWidth;
+                ResetIndicator(selectedRock);
             }
         }
 
@@ -216,6 +218,8 @@ namespace JustClimbTrial.ViewModels
             if (SelectedRock != null)
             {
                 SelectedRock.ChangeBHeight(newHeight);
+                selectedRockIndicator.Height = newHeight;
+                ResetIndicator(selectedRock);
             }
         }
 
@@ -235,6 +239,16 @@ namespace JustClimbTrial.ViewModels
                 Width = selectedRock.Width,
                 Height = selectedRock.Height
             };
+        }
+
+
+        private void ResetIndicator(RockViewModel selectedRock)
+        {
+            double canvasLeft = selectedRock.BCanvasPoint.X - selectedRockIndicator.Width * 0.5;
+            double canvasRight = selectedRock.BCanvasPoint.Y - selectedRockIndicator.Height * 0.5;
+
+            Canvas.SetLeft(selectedRockIndicator, canvasLeft);
+            Canvas.SetTop(selectedRockIndicator, canvasRight);
         }
 
         #endregion

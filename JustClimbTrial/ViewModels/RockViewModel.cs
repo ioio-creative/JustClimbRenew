@@ -124,7 +124,7 @@ namespace JustClimbTrial.ViewModels
         {
             MyRock = aRock;
             BCanvas = canvas;            
-            BoulderShape = CreateBoulderShape();
+            BoulderShape = GetNewRockOnWallEllipse();
 
             CameraSpacePoint csp = new CameraSpacePoint();
             csp.X = (float)aRock.CoorX.GetValueOrDefault(0);
@@ -184,6 +184,7 @@ namespace JustClimbTrial.ViewModels
             BCanvas.Children.Add(BoulderShape);
         }
 
+        // TODO: need to change name as the function just changes width & height
         private void RedrawBoulder()
         {
             BoulderShape.Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0));
@@ -204,20 +205,6 @@ namespace JustClimbTrial.ViewModels
 
             Canvas.SetLeft(BoulderShape, BCanvas.GetActualLengthWrtWidth(normedLeft));
             Canvas.SetTop(BoulderShape, BCanvas.GetActualLengthWrtHeight(normedTop));
-        }
-
-        private Shape CreateBoulderShape()
-        {
-            Ellipse boulderEllipse = new Ellipse
-            {
-                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
-                Fill = null,
-                StrokeThickness = 7,
-                Stroke = new SolidColorBrush(Colors.DarkRed)
-            };
-
-            return boulderEllipse;
         }
 
         #endregion
@@ -241,27 +228,27 @@ namespace JustClimbTrial.ViewModels
             return textBlock;
         }
 
-        public Shape DrawStartRockOnCanvas()
+        public Shape ChangeRockShapeToStart()
         {
-            // TODO: change draw ellipse logic
-            Ellipse startRockCircle = GetNewStartRockEllipse(MyRock);
+            Ellipse startRockCircle = GetNewStartRockEllipse();
             DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
+            BoulderShape = startRockCircle;
             return startRockCircle;
         }
 
-        public Shape DrawIntermediateRockOnCanvas()
-        {
-            // TODO: change draw ellipse logic            
-            Ellipse intermediateRockCircle = GetNewIntermediateRockEllipse(MyRock);
+        public Shape ChangeRockShapeToIntermediate()
+        {           
+            Ellipse intermediateRockCircle = GetNewIntermediateRockEllipse();
             DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
+            BoulderShape = intermediateRockCircle;
             return intermediateRockCircle;
         }
 
-        public Shape DrawEndRockOnCanvas()
-        {
-            // TODO: change draw ellipse logic            
-            Ellipse endRockCircle = GetNewEndRockEllipse(MyRock);
+        public Shape ChangeRockShapeToEnd()
+        {           
+            Ellipse endRockCircle = GetNewEndRockEllipse();
             DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
+            BoulderShape = endRockCircle;
             return endRockCircle;
         }
 
@@ -280,26 +267,26 @@ namespace JustClimbTrial.ViewModels
 
         #region ellipses
 
-        private Ellipse GetNewRockOnWallEllipse(Rock rock)
+        private Ellipse GetNewRockOnWallEllipse()
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = null,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
+                StrokeThickness = 5,
+                Stroke = new SolidColorBrush(Colors.DarkRed)
             };
 
             return boulderEllipse;
         }
 
-        private Ellipse GetNewStartRockEllipse(Rock rock)
+        private Ellipse GetNewStartRockEllipse()
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
                 StrokeThickness = 4,
                 Stroke = Brushes.Green
@@ -308,12 +295,12 @@ namespace JustClimbTrial.ViewModels
             return boulderEllipse;
         }
 
-        private Ellipse GetNewIntermediateRockEllipse(Rock rock)
+        private Ellipse GetNewIntermediateRockEllipse()
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
                 StrokeThickness = 4,
                 Stroke = Brushes.Yellow
@@ -322,12 +309,12 @@ namespace JustClimbTrial.ViewModels
             return boulderEllipse;
         }
 
-        private Ellipse GetNewEndRockEllipse(Rock rock)
+        private Ellipse GetNewEndRockEllipse()
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(rock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(rock.Height.GetValueOrDefault(0)),
+                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
+                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
                 StrokeThickness = 4,
                 Stroke = Brushes.Red
