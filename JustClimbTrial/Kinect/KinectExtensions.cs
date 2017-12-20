@@ -638,7 +638,7 @@ namespace JustClimbTrial.Kinect
         }
 
         public static float GetCameraSpacePointDistance(CameraSpacePoint A, CameraSpacePoint B)
-        {
+        {            
             return (float)Math.Sqrt( Math.Pow((A.X-B.X),2) + Math.Pow((A.Y - B.Y), 2) + Math.Pow((A.Z - B.Z), 2) );
         }
         #endregion
