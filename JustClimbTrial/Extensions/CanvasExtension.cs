@@ -50,6 +50,17 @@ namespace JustClimbTrial.Extensions
             canvas.Children.Remove(uiElement);
         }
 
+        public static void SetLeftAndTopForShape(this Canvas canvas, Shape shape, Point position)
+        {
+            canvas.SetLeftAndTopForShape(shape, position.X, position.Y);
+        }
+
+        public static void SetLeftAndTopForShape(this Canvas canvas, Shape shape, double x, double y)
+        {
+            Canvas.SetLeft(shape, x - shape.Width * 0.5);
+            Canvas.SetTop(shape, y - shape.Height * 0.5);
+        }
+
         public static void DrawShape(this Canvas canvas, Shape shape, Point position)
         {
             DrawShape(canvas, shape, position.X, position.Y);
@@ -57,10 +68,9 @@ namespace JustClimbTrial.Extensions
 
         public static void DrawShape(this Canvas canvas, Shape shape, double x, double y)
         {
-            Canvas.SetLeft(shape, x - shape.Width * 0.5);
-            Canvas.SetTop(shape, y - shape.Height * 0.5);
+            canvas.SetLeftAndTopForShape(shape, x, y);
 
-            canvas.Children.Add(shape);
+            canvas.AddChild(shape);
         }
     }
 }

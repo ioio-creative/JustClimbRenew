@@ -199,8 +199,6 @@ namespace JustClimbTrial.ViewModels
 
         private void SetBoulderTopLeftPositionOnCanvas()
         {
-            //Point canvasRockPt = coorMap.MapCameraSpacePointToPointOnCanvas(MyRock.GetCameraSpacePoint(), bCanvas, SpaceMode.Color);
-
             double normedLeft = bPoint.X - MyRock.Width.GetValueOrDefault(0) * 0.5;
             double normedTop = bPoint.Y - MyRock.Height.GetValueOrDefault(0) * 0.5;
 
@@ -232,11 +230,13 @@ namespace JustClimbTrial.ViewModels
             // https://www.codeproject.com/Questions/629557/write-text-onto-canvas-wpf
             TextBlock textBlock = new TextBlock();
             textBlock.Text = seqNo.ToString();
-            textBlock.Foreground = Brushes.Black;
-            //Canvas.SetLeft(textBlock, x);
-            //Canvas.SetTop(textBlock, y);
-            textBlock.RenderTransform = new RotateTransform(-90, 0, 0); // this line can rotate it but not in the axis i want
-            textBlock.Margin = new Thickness(100, 100, 0, 0);
+            textBlock.Foreground = Brushes.Blue;
+            textBlock.FontSize = 36;
+            textBlock.FontWeight = FontWeight.FromOpenTypeWeight(10);
+            Canvas.SetLeft(textBlock, bCanvasPoint.X);
+            Canvas.SetTop(textBlock, bCanvasPoint.Y);
+            //textBlock.RenderTransform = new RotateTransform(90, 0, 0); // this line can rotate it but not in the axis i want
+            textBlock.Margin = new Thickness(0, 0, 0, 0);
             BCanvas.Children.Add(textBlock);
             return textBlock;
         }
@@ -272,10 +272,7 @@ namespace JustClimbTrial.ViewModels
 
         public void DrawEllipseOnCanvas(Ellipse ellipse, double x, double y)
         {
-            Canvas.SetLeft(ellipse, x - ellipse.Width * 0.5);
-            Canvas.SetTop(ellipse, y - ellipse.Height * 0.5);
-
-            BCanvas.Children.Add(ellipse);
+            BCanvas.DrawShape(ellipse, x, y);
         }
 
         #endregion

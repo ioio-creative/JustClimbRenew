@@ -2,11 +2,8 @@
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
-using Microsoft.Kinect;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -136,7 +133,7 @@ namespace JustClimbTrial.ViewModels
 
         public void SetSelectedTrainingRockSeqNo()
         {
-            int seqNo = rocksOnRoute.Count + 1;
+            int seqNo = rocksOnRoute.Count;
 
             if (!IsSelectedRockOnRouteNull())
             {

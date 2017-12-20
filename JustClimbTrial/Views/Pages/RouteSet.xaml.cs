@@ -51,7 +51,7 @@ namespace JustClimbTrial.Views.Pages
         #endregion
 
 
-        public RouteSet() : this(ClimbMode.Boulder) { }
+        public RouteSet() : this(ClimbMode.Training) { }
 
         public RouteSet(ClimbMode aClimbMode)
         {

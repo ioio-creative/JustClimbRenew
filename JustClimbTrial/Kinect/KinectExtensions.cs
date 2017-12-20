@@ -573,6 +573,13 @@ namespace JustClimbTrial.Kinect
         public static Point MapCameraSpacePointToPointOnCanvas(this CoordinateMapper coorMap, CameraSpacePoint camSP, Canvas canvas, SpaceMode spaceMode)
         {
             ColorSpacePoint colorSP = coorMap.MapCameraPointToColorSpace(camSP);
+
+            if (float.IsInfinity(colorSP.X) || float.IsInfinity(colorSP.Y))
+            {
+                throw new Exception("Error when calling MapCameraSpacePointToPointOnCanvas(): " + Environment.NewLine + 
+                    "Resultant ColorSpacePoint at negative infinity.");
+            }
+
             double normedColorSPX = colorSP.X / FrameDimensions[spaceMode].Item1;
             double normedColorSPY = colorSP.Y / FrameDimensions[spaceMode].Item2;
             return new Point(normedColorSPX * canvas.ActualWidth, normedColorSPY * canvas.ActualHeight);
