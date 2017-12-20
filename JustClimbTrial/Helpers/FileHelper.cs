@@ -26,5 +26,7 @@ namespace JustClimbTrial.Helpers
             return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
         }
 
+        public static string BufferIdxPadding = settings.VideoBufferIdxPadding;
+
     }
 }

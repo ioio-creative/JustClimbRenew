@@ -58,7 +58,7 @@
                 Grid.Column="0" 
                    Stretch="Uniform" 
                    StretchDirection="Both"
-                   Source="C:\Users\User\Documents\JustClimb\KinectWall Log\WA2017121416029xmq7H\WA2017121416029xmq7H.png" />
+                   Source="/Resources/Images/JustClimbWall.png" />
             <Canvas x:Name="canvasWall"
                     Grid.Column="0" 
                     Background="Transparent" 

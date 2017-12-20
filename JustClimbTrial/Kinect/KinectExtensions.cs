@@ -578,7 +578,7 @@ namespace JustClimbTrial.Kinect
             return new Point(normedColorSPX * canvas.ActualWidth, normedColorSPY * canvas.ActualHeight);
         }
 
-        public static DepthSpacePoint[] ReadDepthCoordinatesInColorFrameFromTXT(string txtFilePath)
+        public static DepthSpacePoint[] ReadDepthCoordinatesInColorFrameFromTxt(string txtFilePath)
         {
             // Read each line of the file into a string array. Each element
             // of the array is one line of the file.
