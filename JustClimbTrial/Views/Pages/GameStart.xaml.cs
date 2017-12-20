@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using JustClimbTrial.Helpers;
 using System.IO;
+using JustClimbTrial.Extensions;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -31,6 +32,7 @@ namespace JustClimbTrial.Views.Pages
         private IEnumerable<RockOnRouteViewModel> rocksOnBoulderRoute;
         private RockOnRouteViewModel startRockOnBoulderRoute;
         private RockOnRouteViewModel endRockOnBoulderRoute;
+        private CameraSpacePoint[] rocksOnRouteCamSP;
 
         private KinectManager kinectManagerClient;
         private Playground playgroundWindow;
@@ -105,10 +107,13 @@ namespace JustClimbTrial.Views.Pages
                     rocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
                     startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
                     endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+                    rocksOnRouteCamSP = new CameraSpacePoint[rocksOnBoulderRoute.Count<RockOnRouteViewModel>()];
 
-                    foreach (RockOnRouteViewModel rockOnRoute in rocksOnBoulderRoute)
+                    for (int i = 0; i < rocksOnBoulderRoute.Count<RockOnRouteViewModel>(); i++)
                     {
-                        rockOnRoute.MyRockViewModel.DrawBoulder();
+                        RockViewModel rockViewModel = rocksOnBoulderRoute.ElementAt<RockOnRouteViewModel>(i).MyRockViewModel;
+                        rocksOnRouteCamSP[i] = rockViewModel.MyRock.GetCameraSpacePoint();
+                        rockViewModel.DrawBoulder();
                     }
                     break;
 

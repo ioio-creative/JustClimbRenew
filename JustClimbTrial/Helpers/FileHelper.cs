@@ -13,7 +13,6 @@ namespace JustClimbTrial.Helpers
 
         private static Settings settings = new Settings();
 
-
         // Path: exeLocation/videoFileDirectory/RouteNo/VideoNo.extension
         public static string VideoFullPath(RouteVideoViewModel video)
         {
@@ -28,5 +27,6 @@ namespace JustClimbTrial.Helpers
         }
 
         public static string BufferIdxPadding = settings.VideoBufferIdxPadding;
+
     }
 }

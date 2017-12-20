@@ -70,14 +70,5 @@ namespace JustClimbTrial.Properties {
                 return ((string)(this["VideoBufferDirectory"]));
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"00000000\"")]
-        public string VideoBufferIdxPadding {
-            get {
-                return ((string)(this["VideoBufferIdxPadding"]));
-            }
-        }
     }
 }

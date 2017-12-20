@@ -27,8 +27,5 @@
     <Setting Name="VideoBufferDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFIles\Videos\VideoImgBuffer</Value>
     </Setting>
-    <Setting Name="VideoBufferIdxPadding" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">"00000000"</Value>
-    </Setting>
   </Settings>
 </SettingsFile>
