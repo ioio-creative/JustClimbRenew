@@ -230,26 +230,23 @@ namespace JustClimbTrial.ViewModels
 
         public Shape ChangeRockShapeToStart()
         {
-            Ellipse startRockCircle = GetNewStartRockEllipse();
-            DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
-            BoulderShape = startRockCircle;
-            return startRockCircle;
+            BoulderShape = GetNewStartRockEllipse();
+            //DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
+            return BoulderShape;
         }
 
         public Shape ChangeRockShapeToIntermediate()
         {           
-            Ellipse intermediateRockCircle = GetNewIntermediateRockEllipse();
-            DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
-            BoulderShape = intermediateRockCircle;
-            return intermediateRockCircle;
+            BoulderShape = GetNewIntermediateRockEllipse();
+            //DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
+            return BoulderShape;
         }
 
         public Shape ChangeRockShapeToEnd()
-        {           
-            Ellipse endRockCircle = GetNewEndRockEllipse();
-            DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
-            BoulderShape = endRockCircle;
-            return endRockCircle;
+        {
+            BoulderShape = GetNewEndRockEllipse();
+            //DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
+            return BoulderShape;
         }
 
         public void DrawEllipseOnCanvas(Ellipse ellipse, Point position)
@@ -288,7 +285,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 4,
+                StrokeThickness = 5,
                 Stroke = Brushes.Green
             };
 
@@ -302,7 +299,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 4,
+                StrokeThickness = 5,
                 Stroke = Brushes.Yellow
             };
 
@@ -316,7 +313,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 4,
+                StrokeThickness = 5,
                 Stroke = Brushes.Red
             };
 

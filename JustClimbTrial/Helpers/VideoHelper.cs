@@ -11,6 +11,8 @@ namespace JustClimbTrial.Helpers
     public class VideoHelper
     {
         private string folderPath;
+        private int frameCnt = 0;
+        private bool recOn = false;
 
         public BlockingCollection<ImageToSave> Queue { get; set; }
 
@@ -29,11 +31,15 @@ namespace JustClimbTrial.Helpers
         {
             Task.Factory.StartNew(async () =>
             {
-                int frameCnt = 0;
+                recOn = true;
                 while (true)
                 {
-                    ImageToSave imageToSave = null;
-                    
+                    if (!recOn)
+                    {
+                        break;
+                    }
+
+                    ImageToSave imageToSave = null;     
                     if (Queue.TryTake(out imageToSave))
                     {
                         string filePath = System.IO.Path.Combine(imageToSave.FolderPath, frameCnt.ToString().PadLeft(8, '0') + ".png");
@@ -52,6 +58,11 @@ namespace JustClimbTrial.Helpers
                     }
                 }
             });
+        }
+        public void StopQueue()
+        {
+            recOn = false;
+            frameCnt = 0;
         }
 
         public void SaveImageToQueue(string filePath, Bitmap bitmap)

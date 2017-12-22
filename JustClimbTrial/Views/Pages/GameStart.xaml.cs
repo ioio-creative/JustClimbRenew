@@ -102,18 +102,25 @@ namespace JustClimbTrial.Views.Pages
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
                     rocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
-                    startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
-                    endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+                    //startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                    //endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
                     rocksOnRouteCamSP = new CameraSpacePoint[rocksOnBoulderRoute.Count()];
 
-                    for (int i = 0; i < rocksOnBoulderRoute.Count(); i++)
-                    {
-                        RockOnRouteViewModel rockOnRouteViewModel = rocksOnBoulderRoute.ElementAt(i);
-                        rockOnRouteViewModel.SetRockShapeWrtStatus();
+                    //for (int i = 0; i < rocksOnBoulderRoute.Count(); i++)
+                    //{
+                    //    RockOnRouteViewModel rockOnRouteViewModel = rocksOnBoulderRoute.ElementAt(i);
+                    //    rockOnRouteViewModel.SetRockShapeWrtStatus();
 
-                        RockViewModel rockViewModel = rocksOnBoulderRoute.ElementAt(i).MyRockViewModel;
-                        rocksOnRouteCamSP[i] = rockViewModel.MyRock.GetCameraSpacePoint();
-                        rockViewModel.DrawBoulder();
+                    //    rocksOnRouteCamSP[i] = rocksOnBoulderRoute.ElementAt(i).MyRockViewModel.MyRock.GetCameraSpacePoint();
+                    //    rocksOnBoulderRoute.ElementAt(i).MyRockViewModel.DrawBoulder();
+                    //}
+                    int i = 0;
+                    foreach (var rockOnBoulderRoute in rocksOnBoulderRoute)
+                    {
+                        rockOnBoulderRoute.SetRockShapeWrtStatus();
+
+                        rocksOnRouteCamSP[i++] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                        rockOnBoulderRoute.MyRockViewModel.DrawBoulder();
                     }
                     break;
 
