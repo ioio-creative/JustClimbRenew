@@ -144,9 +144,7 @@ namespace JustClimbTrial.ViewModels
                 if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
                     SelectedRockOnRoute.TrainingSeq != seqNo)
                 {
-                    canvas.RemoveChild(SelectedRockOnRoute.MyRockViewModel.BoulderShape);
-                    SelectedRockOnRoute.TrainingSeq = seqNo;
-                    SelectedRockOnRoute.MyRockViewModel.DrawSequenceRockOnCanvas(seqNo);
+                    SelectedRockOnRoute.SetRockTrainingSeqAndDraw(seqNo);                    
                 }
             }
         }
@@ -162,9 +160,7 @@ namespace JustClimbTrial.ViewModels
                 if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
                     SelectedRockOnRoute.BoulderStatus != status)
                 {
-                    canvas.RemoveChild(SelectedRockOnRoute.MyRockViewModel.BoulderShape);
-                    SelectedRockOnRoute.BoulderStatus = status;
-                    SelectedRockOnRoute.MyRockViewModel.BoulderShape = DrawBoulderRockOnCanvas(SelectedRockOnRoute);                    
+                    SelectedRockOnRoute.SetRockStatusAndDraw(status);             
                 }
             }            
         }

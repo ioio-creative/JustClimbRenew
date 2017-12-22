@@ -8,7 +8,20 @@ namespace JustClimbTrial.ViewModels
         public RockOnBoulderStatus BoulderStatus { get; set; }
         public int TrainingSeq { get; set; }
         
-        public void SetRockShapeWrtStatus()
+
+        public void SetRockTrainingSeqAndDraw(int seqNo)
+        {
+            TrainingSeq = seqNo;
+            MyRockViewModel.DrawSequenceRockOnCanvas(seqNo);
+        }
+
+        public void SetRockStatusAndDraw(RockOnBoulderStatus status)
+        {
+            BoulderStatus = status;
+            SetRockShapeWrtStatus();
+        }
+
+        private void SetRockShapeWrtStatus()
         {
             switch (BoulderStatus)
             {
