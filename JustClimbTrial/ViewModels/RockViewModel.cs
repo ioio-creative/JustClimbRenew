@@ -231,7 +231,7 @@ namespace JustClimbTrial.ViewModels
         public Shape ChangeRockShapeToStart()
         {
             Ellipse startRockCircle = GetNewStartRockEllipse();
-            DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
+            BCanvas.DrawShape(startRockCircle, bCanvasPoint);
             BoulderShape = startRockCircle;
             return startRockCircle;
         }
@@ -239,7 +239,7 @@ namespace JustClimbTrial.ViewModels
         public Shape ChangeRockShapeToIntermediate()
         {           
             Ellipse intermediateRockCircle = GetNewIntermediateRockEllipse();
-            DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
+            BCanvas.DrawShape(intermediateRockCircle, bCanvasPoint);
             BoulderShape = intermediateRockCircle;
             return intermediateRockCircle;
         }
@@ -247,19 +247,9 @@ namespace JustClimbTrial.ViewModels
         public Shape ChangeRockShapeToEnd()
         {           
             Ellipse endRockCircle = GetNewEndRockEllipse();
-            DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
+            BCanvas.DrawShape(endRockCircle, bCanvasPoint);
             BoulderShape = endRockCircle;
             return endRockCircle;
-        }
-
-        public void DrawEllipseOnCanvas(Ellipse ellipse, Point position)
-        {
-            DrawEllipseOnCanvas(ellipse, position.X, position.Y);
-        }
-
-        public void DrawEllipseOnCanvas(Ellipse ellipse, double x, double y)
-        {
-            BCanvas.DrawShape(ellipse, x, y);
         }
 
         #endregion

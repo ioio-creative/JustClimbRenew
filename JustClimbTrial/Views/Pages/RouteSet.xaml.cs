@@ -1,22 +1,15 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
-using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
-using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.UserControls;
 using Microsoft.Kinect;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -172,7 +165,7 @@ namespace JustClimbTrial.Views.Pages
                     default:
                         SetSelectedBoulderRockToIntermediate();
                         break;
-                }                                
+                }
             }
         }
 
@@ -184,14 +177,16 @@ namespace JustClimbTrial.Views.Pages
         private void btnDemoDone_Click(object sender, RoutedEventArgs e)
         {
             SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
-            
-            if (routeSetClimbMode == ClimbMode.Boulder)
+                        
+            if (rocksOnRouteViewModel.AnyRocksInRoute())
             {
-                if (rocksOnRouteViewModel.AnyRocksInRoute())
+                switch (routeSetClimbMode)
                 {
-                    BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
-                    rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
-                }
+                    case ClimbMode.Boulder:
+                        BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
+                        rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
+                        break;
+                }                
             }
         }
 
