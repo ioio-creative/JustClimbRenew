@@ -120,7 +120,7 @@ namespace JustClimbTrial.Kinect
             {
                 // Set a variable to the My Documents path.
                 string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                string wallLogPath = System.IO.Path.Combine(mydocpath, "JustClimb", "KinectWall Log", wallID);
+                string wallLogPath = Path.Combine(FileHelper.WallLogFolderPath(), wallID);
                 if (!Directory.Exists(wallLogPath))
                 {
                     DirectoryInfo di = Directory.CreateDirectory(wallLogPath);
@@ -137,7 +137,7 @@ namespace JustClimbTrial.Kinect
         private bool ExportDCoordinatesFile(string folderPath)
         {
             bool exportMapperSuccess = false;
-            string filePath = System.IO.Path.Combine(folderPath, "Coordinate Map.txt");
+            string filePath = Path.Combine(folderPath, "Coordinate Map.txt");
 
             // Write the text to a new file named "WriteFile.txt".
             File.WriteAllLines(filePath, new string[] { $"KinectWall Coordinates [{width}][{height}]" });

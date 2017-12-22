@@ -27,5 +27,8 @@
     <Setting Name="VideoBufferDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFIles\Videos\VideoImgBuffer</Value>
     </Setting>
+    <Setting Name="WallLogDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\AppFiles\WallLog</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -22,9 +22,13 @@ namespace JustClimbTrial.Helpers
 
         public static string VideoBufferFolderPath()
         {    
-            Console.WriteLine(Path.Combine(exeDirectory, settings.VideoBufferDirectory));
+            //Console.WriteLine(Path.Combine(exeDirectory, settings.VideoBufferDirectory));
             return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
         }
 
+        public static string WallLogFolderPath()
+        {
+            return Path.Combine(exeDirectory, settings.WallLogDirectory);
+        }
     }
 }
