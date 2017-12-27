@@ -1,22 +1,11 @@
-﻿using JustClimbTrial.Kinect;
+﻿using JustClimbTrial.Helpers;
+using JustClimbTrial.Kinect;
 using JustClimbTrial.Views.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Kinect;
-using JustClimbTrial.Helpers;
-using JustClimbTrial.Properties;
 
 namespace JustClimbTrial
 {
@@ -35,6 +24,14 @@ namespace JustClimbTrial
 
         public VideoHelper MainVideoHelper;
         private FileHelper mainFileHelper;
+        private MediaElement playgroundMedia;
+                
+        public MediaElement PlaygroundMedia
+        {
+            get { return playgroundMedia; }
+            set { playgroundMedia = value; }
+        }
+
 
         public MainWindow()
         {
@@ -46,13 +43,16 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            MainVideoHelper = new VideoHelper();
+            mainFileHelper = new FileHelper();
+            playgroundMedia = playgroundWindow.PlaygroundMedia;
+            playgroundWindow.SetPlaygroundMediaSource(new Uri( Path.Combine(FileHelper.VideoResourcesFolderPath(),"ScreenSaver.mp4") ) );
+
             KinectManagerClient = new KinectManager();
             //activate sensor in Main Window only once
             KinectManagerClient.OpenKinect();
-            KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
+            //KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
 
-            MainVideoHelper = new VideoHelper();
-            mainFileHelper = new FileHelper();
         }
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
@@ -65,6 +65,11 @@ namespace JustClimbTrial
         public void HandleColorImageSourceArrived(object sender, ColorBitmapSrcEventArgs e)
         {
             playgroundWindow.ShowImage( e.GetColorBitmapSrc() );
+        }
+
+        public void SetPlaygroundMediaElementSource(Uri sourceUri)
+        {
+            playgroundWindow.SetPlaygroundMediaSource(sourceUri);
         }
     }
 }

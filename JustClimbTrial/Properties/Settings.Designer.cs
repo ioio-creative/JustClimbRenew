@@ -64,7 +64,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFIles\\Videos\\VideoImgBuffer")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos\\VideoImgBuffer")]
         public string VideoBufferDirectory {
             get {
                 return ((string)(this["VideoBufferDirectory"]));
@@ -77,6 +77,15 @@ namespace JustClimbTrial.Properties {
         public string WallLogDirectory {
             get {
                 return ((string)(this["WallLogDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos\\VideoResources")]
+        public string VideoResourcesDirectory {
+            get {
+                return ((string)(this["VideoResourcesDirectory"]));
             }
         }
     }

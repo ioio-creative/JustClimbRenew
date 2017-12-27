@@ -85,7 +85,7 @@ namespace JustClimbTrial.Views.Pages
 
             kinectManagerClient = (this.Parent as MainWindow).KinectManagerClient;
             playgroundWindow = (this.Parent as MainWindow).PlaygroundWindow;
-            playgroundCanvas = playgroundWindow.playgroundCanvas;
+            playgroundCanvas = playgroundWindow.PlaygroundCanvas;
             //kinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
             //playgroundCanvas.Background = Brushes.Black;
             kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
@@ -153,9 +153,14 @@ namespace JustClimbTrial.Views.Pages
 
         private void btnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
         {
-            MediaElement playgroundMonitor = (this.Parent as MainWindow).PlaygroundWindow.playgroundPlayback;
-            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMonitor);
-            videoPlaybackDialog.ShowDialog();
+            kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
+
+            (this.Parent as MainWindow).KinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
+            (this.Parent as MainWindow).PlaygroundWindow.PlaygroundCamera.Opacity = 0;
+
+            //MediaElement playbackMonitor = (this.Parent as MainWindow).PlaygroundWindow.PlaybackMedia;
+            //VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playbackMonitor);
+            //videoPlaybackDialog.ShowDialog();
         }
 
         private void btnRestartGame_Click(object sender, RoutedEventArgs e)

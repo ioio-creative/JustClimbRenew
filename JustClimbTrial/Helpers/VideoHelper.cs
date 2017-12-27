@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace JustClimbTrial.Helpers
@@ -42,7 +43,7 @@ namespace JustClimbTrial.Helpers
                     ImageToSave imageToSave = null;     
                     if (Queue.TryTake(out imageToSave))
                     {
-                        string filePath = System.IO.Path.Combine(imageToSave.FolderPath, frameCnt.ToString().PadLeft(8, '0') + ".png");
+                        string filePath = Path.Combine(imageToSave.FolderPath, frameCnt.ToString().PadLeft(8, '0') + ".png");
                         Console.WriteLine("1: Saving image from queue to {0}", filePath);
                         try
                         {

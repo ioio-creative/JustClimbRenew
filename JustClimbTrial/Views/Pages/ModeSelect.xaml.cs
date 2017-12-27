@@ -15,12 +15,12 @@ namespace JustClimbTrial.Views.Pages
             InitializeComponent();
         }
 
-        private void btnBoulder_Click(object sender, RoutedEventArgs e)
+        private void BtnBoulder_Click(object sender, RoutedEventArgs e)
         {
             GoToRoutesPage(ClimbMode.Boulder);
         }
 
-        private void btnTraining_Click(object sender, RoutedEventArgs e)
+        private void BtnTraining_Click(object sender, RoutedEventArgs e)
         {
             GoToRoutesPage(ClimbMode.Training);
         }
@@ -30,5 +30,6 @@ namespace JustClimbTrial.Views.Pages
             Routes routesPage = new Routes(climbMode);
             NavigationService.Navigate(routesPage);
         }
+
     }
 }

@@ -290,19 +290,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Cancel.jpg" />
     <Resource Include="Resources\Images\Home.jpg" />
     <Resource Include="Resources\Images\JustClimbLogo.png" />
     <Resource Include="Resources\Images\JustClimbSquareLogo.jpg" />
     <Resource Include="Resources\Images\JustClimbWall.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Images\Tick.jpg" />
     <Resource Include="Resources\Images\TrainingSeqGoBack.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Tick.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Cancel.jpg" />
+    <Content Include="Resources\Videos\Countdown.mp4" />
+    <Content Include="Resources\Videos\ScreenSaver.mp4" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

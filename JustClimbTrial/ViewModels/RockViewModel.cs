@@ -231,7 +231,7 @@ namespace JustClimbTrial.ViewModels
         public Shape ChangeRockShapeToStart()
         {
             BoulderShape = GetNewStartRockEllipse();
-            return BoulderShape;            
+            return BoulderShape;      
         }
 
         public Shape ChangeRockShapeToIntermediate()
@@ -242,8 +242,8 @@ namespace JustClimbTrial.ViewModels
 
         public Shape ChangeRockShapeToEnd()
         {
-            BoulderShape = GetNewEndRockEllipse();            
-            return BoulderShape;            
+            BoulderShape = GetNewEndRockEllipse();
+            return BoulderShape;
         }
         
         public Shape ChangeRockShapeToDefault()

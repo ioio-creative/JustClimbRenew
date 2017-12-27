@@ -25,16 +25,16 @@
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnBoulder"
+        <Button x:Name="BtnBoulder"
             Grid.Row="3" Grid.Column="1" 
             HorizontalAlignment="Stretch"
-            Click="btnBoulder_Click">
+            Click="BtnBoulder_Click">
             Boulder
         </Button>
-        <Button x:Name="btnTraining"
+        <Button x:Name="BtnTraining"
             Grid.Row="3" Grid.Column="3" 
             HorizontalAlignment="Stretch"
-            Click="btnTraining_Click">
+            Click="BtnTraining_Click">
             Training
         </Button>
     </Grid>
