@@ -264,9 +264,9 @@ namespace JustClimbTrial.ViewModels
             {
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
-                Fill = null,
+                Fill = Brushes.Transparent,
                 StrokeThickness = 5,
-                Stroke = new SolidColorBrush(Colors.DarkRed)
+                Stroke = Brushes.DarkRed
             };
 
             return boulderEllipse;

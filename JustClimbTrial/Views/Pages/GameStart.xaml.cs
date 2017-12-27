@@ -1,18 +1,22 @@
 ﻿using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.Windows;
 using Microsoft.Kinect;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace JustClimbTrial.Views.Pages
@@ -85,9 +89,14 @@ namespace JustClimbTrial.Views.Pages
 
             kinectManagerClient = (this.Parent as MainWindow).KinectManagerClient;
             playgroundWindow = (this.Parent as MainWindow).PlaygroundWindow;
+
+            if ((this.Parent as MainWindow).DebugMode)
+            {
+                kinectManagerClient.ColorImageSourceArrived += (this.Parent as MainWindow).HandleColorImageSourceArrived;
+            }
+
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
-            //kinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
-            //playgroundCanvas.Background = Brushes.Black;
+
             kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
 
             string headerRowTitleFormat = "{0} Route {1} - Video Playback";

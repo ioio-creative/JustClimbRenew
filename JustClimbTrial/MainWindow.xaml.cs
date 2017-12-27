@@ -1,10 +1,12 @@
-﻿using JustClimbTrial.Helpers;
+﻿using JustClimbTrial.Globals;
+using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Views.Windows;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 namespace JustClimbTrial
@@ -14,23 +16,25 @@ namespace JustClimbTrial
     /// </summary>
     public partial class MainWindow : NavigationWindow
     {
-        private Playground playgroundWindow;
-        public Playground PlaygroundWindow
-        {
-            get { return playgroundWindow; }            
-        }
+        //in Debug Mode we display the live camera image from Kinect at all times
+        public bool DebugMode = false;
 
         public KinectManager KinectManagerClient;
 
-        public VideoHelper MainVideoHelper;
-        private FileHelper mainFileHelper;
-        private MediaElement playgroundMedia;
-                
+        private Playground playgroundWindow;
+        public Playground PlaygroundWindow
+        {
+            get { return playgroundWindow; }
+        }
+
+        private MediaElement playgroundMedia;                
         public MediaElement PlaygroundMedia
         {
             get { return playgroundMedia; }
             set { playgroundMedia = value; }
         }
+
+        public VideoHelper MainVideoHelper;
 
 
         public MainWindow()
@@ -43,16 +47,26 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            MainVideoHelper = new VideoHelper();
-            mainFileHelper = new FileHelper();
+            //by default play ScreenSaver.mp4 in Playground Window
             playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundWindow.SetPlaygroundMediaSource(new Uri( Path.Combine(FileHelper.VideoResourcesFolderPath(),"ScreenSaver.mp4") ) );
+
+            MainVideoHelper = new VideoHelper();
 
             KinectManagerClient = new KinectManager();
             //activate sensor in Main Window only once
             KinectManagerClient.OpenKinect();
-            //KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
 
+            if (DebugMode)
+            {
+                KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
+            }
+            else
+            {
+                Image playgroundImage = playgroundWindow.PlaygroundCamera;
+                playgroundImage.Source = new BitmapImage(new Uri(Path.Combine(FileHelper.WallLogFolderPath(), AppGlobal.WallID, AppGlobal.WallID + ".png")));
+                playgroundImage.Opacity = 0.5; 
+            }
         }
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
@@ -64,7 +78,7 @@ namespace JustClimbTrial
 
         public void HandleColorImageSourceArrived(object sender, ColorBitmapSrcEventArgs e)
         {
-            playgroundWindow.ShowImage( e.GetColorBitmapSrc() );
+                playgroundWindow.ShowImage(e.GetColorBitmapSrc());
         }
 
         public void SetPlaygroundMediaElementSource(Uri sourceUri)

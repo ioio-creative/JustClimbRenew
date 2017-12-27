@@ -28,6 +28,15 @@ namespace JustClimbTrial.Views.Windows
         {
             PlaygroundCamera.Source = source;
         }
+        public void SetImageDimensions(BitmapSource source)
+        {
+            SetImageDimensions(source.Width, source.Height);
+        }
+        public void SetImageDimensions(double width, double height)
+        {
+            PlaygroundCamera.Width = width;
+            PlaygroundCamera.Height = height;
+        }
 
         public void SetPlaygroundMediaSource(Uri sourceUri)
         {
