@@ -83,6 +83,7 @@
     <Compile Include="DataAccess\Entities\RockDataAccess.cs" />
     <Compile Include="DataAccess\Entities\RockOnBoulderRouteDataAccess.cs" />
     <Compile Include="DataAccess\Entities\RockOnTrainingRouteDataAccess.cs" />
+    <Compile Include="DataAccess\Entities\TrainingRouteAndRocksDataAccess.cs" />
     <Compile Include="DataAccess\Entities\WallAndRocksDataAccess.cs" />
     <Compile Include="DataAccess\Entities\WallDataAccess.cs" />
     <Compile Include="DataAccess\JustClimbApp.designer.cs">

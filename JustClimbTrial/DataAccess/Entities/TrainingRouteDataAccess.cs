@@ -45,9 +45,12 @@ namespace JustClimbTrial.DataAccess.Entities
             proposedRoute.IsDeleted = false;
             proposedRoute.CreateDT = createDT;
 
-            Tuple<string, string> routeIdAndNo = KeyGenerator.GenerateNewKeyAndNo(myEntityType, createDT);
-            proposedRoute.RouteID = routeIdAndNo.Item1;
-            proposedRoute.RouteNo = routeIdAndNo.Item2;
+            //Tuple<string, string> routeIdAndNo = KeyGenerator.GenerateNewKeyAndNo(myEntityType, createDT);
+            //proposedRoute.RouteID = routeIdAndNo.Item1;
+            //proposedRoute.RouteNo = routeIdAndNo.Item2;
+
+            // routeNo set in the view, stored in the passed-in proposedRoute
+            proposedRoute.RouteID = KeyGenerator.GenerateNewKey(myEntityType, createDT);
 
             database.TrainingRoutes.InsertOnSubmit(proposedRoute);
 
@@ -80,7 +83,7 @@ namespace JustClimbTrial.DataAccess.Entities
         {
             get
             {
-                return TrainingRoutes.Select(x => Convert.ToInt32(x.RouteNo)).Max();
+                return TrainingRoutes.Select(x => int.Parse(x.RouteNo)).Max();
             }
         }
 
@@ -88,8 +91,13 @@ namespace JustClimbTrial.DataAccess.Entities
         {
             get
             {
-                return ValidTrainingRoutes.Select(x => Convert.ToInt32(x.RouteNo)).Max();
+                return ValidTrainingRoutes.Select(x => int.Parse(x.RouteNo)).Max();
             }
+        }
+
+        public static int LargestTrainingRouteNoByWall(string wallId)
+        {
+            return TrainingRoutes.Where(x => x.Wall == wallId).Select(x => int.Parse(x.RouteNo)).Max();
         }
     }
 }

@@ -63,7 +63,7 @@ namespace JustClimbTrial.Kinect
         {
             Shape ellipseToReturn = null;
 
-            if (this.IsValid)
+            if (IsValid)
             {
                 // 1) Create a WPF ellipse.
                 ellipseToReturn  = new Ellipse
@@ -76,8 +76,7 @@ namespace JustClimbTrial.Kinect
                 // 2) Position the ellipse according to the joint's coordinates.
                 //if (X > 0 && Y > 0)
                 //{
-                //    Canvas.SetLeft(ellipseToReturn, X - ellipseToReturn.Width / 2);
-                //    Canvas.SetTop(ellipseToReturn, Y - ellipseToReturn.Height / 2);
+                //canvas.SetLeftAndTopForShape(ellipseToReturn, X, Y);                
                 //}
 
                 // 3) Add the ellipse to the canvas.
@@ -103,7 +102,7 @@ namespace JustClimbTrial.Kinect
                     Stroke = new SolidColorBrush(Colors.LightBlue)
                 };
 
-                canvas.Children.Add(lineToReturn);
+                canvas.AddChild(lineToReturn);
             }
 
             return lineToReturn;

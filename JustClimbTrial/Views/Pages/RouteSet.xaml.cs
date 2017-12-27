@@ -66,7 +66,7 @@ namespace JustClimbTrial.Views.Pages
             switch (aClimbMode)
             {
                 case ClimbMode.Training:
-                    newRouteNo = TrainingRouteDataAccess.LargestTrainingRouteNo + 1;
+                    newRouteNo = TrainingRouteDataAccess.LargestTrainingRouteNoByWall(AppGlobal.WallID) + 1;
                     Title = string.Format(titleFormat, "Training");
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Training", newRouteNo);
@@ -74,7 +74,7 @@ namespace JustClimbTrial.Views.Pages
                     break;
                 case ClimbMode.Boulder:
                 default:
-                    newRouteNo = BoulderRouteDataAccess.LargestBoulderRouteNo + 1;
+                    newRouteNo = BoulderRouteDataAccess.LargestBoulderRouteNoByWall(AppGlobal.WallID) + 1;
                     Title = string.Format(titleFormat, "Boulder");
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Boulder", newRouteNo);                            
@@ -184,6 +184,8 @@ namespace JustClimbTrial.Views.Pages
                 switch (routeSetClimbMode)
                 {
                     case ClimbMode.Training:
+                        TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
+                        rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
                         break;
                     case ClimbMode.Boulder:
                     default:

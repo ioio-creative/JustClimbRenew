@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect;
+﻿using JustClimbTrial.Extensions;
+using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -100,13 +101,11 @@ namespace JustClimbTrial.Kinect
                 Fill = new SolidColorBrush(Colors.LightBlue)
             };
 
-            // 4) Position the ellipse according to the joint's coordinates.       
-            Canvas.SetLeft(ellipse, joint.Position.X - ellipse.Width / 2);
-            Canvas.SetTop(ellipse, joint.Position.Y - ellipse.Height / 2);
-
+            // 4) Position the ellipse according to the joint's coordinates.   
+            canvas.SetLeftAndTopForShape(ellipse, joint.Position.X, joint.Position.Y);            
 
             // 5) Add the ellipse to the canvas.
-            canvas.Children.Add(ellipse);
+            canvas.AddChild(ellipse);
         }
 
         public static void DrawLine(this Canvas canvas, Joint first, Joint second)
@@ -126,7 +125,7 @@ namespace JustClimbTrial.Kinect
                 Stroke = new SolidColorBrush(Colors.LightBlue)
             };
 
-            canvas.Children.Add(line);
+            canvas.AddChild(line);
         }
 
         public static Joint ScaleTo(this Joint joint, double width, double height, float skeletonMaxX, float skeletonMaxY)

@@ -244,11 +244,7 @@ namespace JustClimbTrial.ViewModels
 
         private void ResetIndicator()
         {
-            double canvasLeft = selectedRock.BCanvasPoint.X - selectedRockIndicator.Width * 0.5;
-            double canvasTop = selectedRock.BCanvasPoint.Y - selectedRockIndicator.Height * 0.5;
-
-            Canvas.SetLeft(selectedRockIndicator, canvasLeft);
-            Canvas.SetTop(selectedRockIndicator, canvasTop);
+            canvas.SetLeftAndTopForShape(selectedRockIndicator, selectedRock.BCanvasPoint);            
         }
 
         #endregion

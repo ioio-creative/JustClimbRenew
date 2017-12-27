@@ -185,7 +185,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 foreach (Shape skeletonShape in skeletonShapes)
                 {
-                    playgroundCanvas.Children.Remove(skeletonShape);
+                    playgroundCanvas.RemoveChild(skeletonShape);
                 } 
             }
 

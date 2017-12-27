@@ -29,21 +29,23 @@ namespace JustClimbTrial.DataAccess.Entities
 
         public static string InsertRouteAndRocksOnRoute(
             BoulderRoute aRoute,
-            ICollection<RockOnBoulderRoute> someRocksonBoulderRoute,
+            ICollection<RockOnBoulderRoute> someRocksOnBoulderRoute,
             bool isSubmitChanges = true)
         {
-            string newRouteKey = BoulderRouteDataAccess.Insert(aRoute, false);
+            string newRouteKey = null;
 
-            if (someRocksonBoulderRoute.Any())
+            if (someRocksOnBoulderRoute.Any())
             {
-                RockOnBoulderRouteDataAccess.InsertAll(someRocksonBoulderRoute,
+                newRouteKey = BoulderRouteDataAccess.Insert(aRoute, false);
+
+                RockOnBoulderRouteDataAccess.InsertAll(someRocksOnBoulderRoute,
                     newRouteKey, false);
-            }
 
-            // submit changes altogether
-            if (isSubmitChanges)
-            {
-                database.SubmitChanges();
+                // submit changes altogether
+                if (isSubmitChanges)
+                {
+                    database.SubmitChanges();
+                }  
             }
 
             return newRouteKey;
@@ -51,23 +53,24 @@ namespace JustClimbTrial.DataAccess.Entities
 
         public static string InsertRouteAndRocksOnRoute(
             BoulderRoute aRoute, 
-            ICollection<RockOnRouteViewModel> someRocksonRoute, 
+            ICollection<RockOnRouteViewModel> someRocksOnRoute, 
             bool isSubmitChanges = true)
         {
-            string newRouteKey = BoulderRouteDataAccess.Insert(aRoute, false);
+            string newRouteKey = null;
 
-            if (someRocksonRoute.Any())
+            if (someRocksOnRoute.Any())
             {
-                RockOnBoulderRouteDataAccess.InsertAll(someRocksonRoute,
-                    newRouteKey, false);
-            }
+                RockOnBoulderRoute[] rocksOnBoulderRoute =
+                    someRocksOnRoute.Select(x => new RockOnBoulderRoute
+                    {
+                        BoulderRockRole = x.BoulderStatus.ToString(),
+                        Rock = x.MyRockViewModel.MyRock.RockID
+                    }).ToArray();
 
-            // submit changes altogether
-            if (isSubmitChanges)
-            {
-                database.SubmitChanges();
+                newRouteKey = InsertRouteAndRocksOnRoute(aRoute, 
+                    rocksOnBoulderRoute, isSubmitChanges);
             }
-
+            
             return newRouteKey;
         }        
     }

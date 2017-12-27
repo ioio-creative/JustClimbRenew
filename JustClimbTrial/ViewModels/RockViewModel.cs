@@ -41,6 +41,8 @@ namespace JustClimbTrial.ViewModels
 
         public Canvas BCanvas { get; set; }
 
+        private TextBlock TrainingRockSeqNoText;
+
 
         // derived quantities
         // normalised
@@ -74,7 +76,7 @@ namespace JustClimbTrial.ViewModels
             {
                 return BPoint.Y + MyRock.Height.GetValueOrDefault(0) * 0.5;
             }
-        }        
+        }
 
         #endregion
         
@@ -194,7 +196,7 @@ namespace JustClimbTrial.ViewModels
 
         public void UndrawBoulder()
         {
-            BCanvas.Children.Remove(BoulderShape);
+            BCanvas.RemoveChild(BoulderShape);
             BoulderShape = null;
         }
 
@@ -203,30 +205,40 @@ namespace JustClimbTrial.ViewModels
             double normedLeft = bPoint.X - MyRock.Width.GetValueOrDefault(0) * 0.5;
             double normedTop = bPoint.Y - MyRock.Height.GetValueOrDefault(0) * 0.5;
 
-            Canvas.SetLeft(BoulderShape, BCanvas.GetActualLengthWrtWidth(normedLeft));
-            Canvas.SetTop(BoulderShape, BCanvas.GetActualLengthWrtHeight(normedTop));
+            BCanvas.SetLeftAndTop(BoulderShape, BCanvas.GetActualLengthWrtWidth(normedLeft), 
+                BCanvas.GetActualLengthWrtHeight(normedTop));
+        }
+
+        public TextBlock DrawSequenceRockOnCanvas(int seqNo)
+        {
+            // https://www.codeproject.com/Questions/629557/write-text-onto-canvas-wpf
+            TrainingRockSeqNoText = new TextBlock()
+            {
+                Text = seqNo.ToString(),
+                Foreground = Brushes.Blue,
+                FontSize = 36,
+                FontWeight = FontWeight.FromOpenTypeWeight(10),
+                Margin = new Thickness(0, 0, 0, 0)
+            };
+            BCanvas.SetLeftAndTop(TrainingRockSeqNoText, bCanvasPoint);            
+            //TrainingRockSeqNoText.RenderTransform = new RotateTransform(90, 0, 0); // this line can rotate it but not in the axis i want
+            BCanvas.AddChild(TrainingRockSeqNoText);
+            return TrainingRockSeqNoText;
+        }
+
+        public void UndrawSequenceRockOnCanvas()
+        {
+            if (TrainingRockSeqNoText != null)
+            {
+                BCanvas.RemoveChild(TrainingRockSeqNoText);
+                TrainingRockSeqNoText = null;
+            }
         }
 
         #endregion
 
 
-        #region draw helpers
-
-        public TextBlock DrawSequenceRockOnCanvas(int seqNo)
-        {
-            // https://www.codeproject.com/Questions/629557/write-text-onto-canvas-wpf
-            TextBlock textBlock = new TextBlock();
-            textBlock.Text = seqNo.ToString();
-            textBlock.Foreground = Brushes.Blue;
-            textBlock.FontSize = 36;
-            textBlock.FontWeight = FontWeight.FromOpenTypeWeight(10);
-            Canvas.SetLeft(textBlock, bCanvasPoint.X);
-            Canvas.SetTop(textBlock, bCanvasPoint.Y);
-            //textBlock.RenderTransform = new RotateTransform(90, 0, 0); // this line can rotate it but not in the axis i want
-            textBlock.Margin = new Thickness(0, 0, 0, 0);
-            BCanvas.Children.Add(textBlock);
-            return textBlock;
-        }
+        #region rock shapes        
 
         public Shape ChangeRockShapeToStart()
         {

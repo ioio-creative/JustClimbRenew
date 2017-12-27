@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JustClimbTrial.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,6 +46,32 @@ namespace JustClimbTrial.DataAccess.Entities
             }
 
             return proposedRockOnTraining.RockOnTrainingID;
+        }
+
+        public static void InsertAll(ICollection<RockOnTrainingRoute> rocksOnTrainingRoute, 
+            string trainingRouteId, bool isSubmitChanges = true)
+        {
+            if (rocksOnTrainingRoute.Any())
+            {
+                foreach (RockOnTrainingRoute rockOnTrainingRoute in rocksOnTrainingRoute)
+                {
+                    DateTime createDT = DateTime.Now;
+                    rockOnTrainingRoute.IsDeleted = false;
+                    rockOnTrainingRoute.CreateDT = createDT;
+
+                    rockOnTrainingRoute.RockOnTrainingID =
+                        KeyGenerator.GenerateNewKey(EntityType.RT);
+
+                    rockOnTrainingRoute.TrainingRoute = trainingRouteId;                    
+                }
+
+                database.RockOnTrainingRoutes.InsertAllOnSubmit(rocksOnTrainingRoute);
+
+                if (isSubmitChanges)
+                {
+                    database.SubmitChanges();
+                }
+            }
         }
 
         public static void SetIsDeletedToTrue(string anId, bool isSubmitChanges = true)

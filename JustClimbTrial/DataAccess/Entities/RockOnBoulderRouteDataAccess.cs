@@ -49,7 +49,7 @@ namespace JustClimbTrial.DataAccess.Entities
         }
 
         public static void InsertAll(ICollection<RockOnBoulderRoute> rocksOnBoulderRoute, 
-            string boulderRouteId = null, bool isSubmitChanges = true)
+            string boulderRouteId, bool isSubmitChanges = true)
         {
             if (rocksOnBoulderRoute.Any())
             {
@@ -62,10 +62,7 @@ namespace JustClimbTrial.DataAccess.Entities
                     rockOnBoulderRoute.RockOnBoulderID =
                         KeyGenerator.GenerateNewKey(EntityType.RB, createDT);
 
-                    if (!string.IsNullOrEmpty(boulderRouteId))
-                    {
-                        rockOnBoulderRoute.BoulderRoute = boulderRouteId;
-                    }
+                    rockOnBoulderRoute.BoulderRoute = boulderRouteId;                    
                 }
 
                 database.RockOnBoulderRoutes.InsertAllOnSubmit(rocksOnBoulderRoute);
@@ -77,23 +74,6 @@ namespace JustClimbTrial.DataAccess.Entities
             }
         }
 
-        public static void InsertAll(IEnumerable<RockOnRouteViewModel> rockOnRouteViewModels,
-            string boulderRouteId, bool isSubmitChanges = true)
-        {
-            if (rockOnRouteViewModels.Any())
-            {
-                RockOnBoulderRoute[] rocksOnBoulderRoute =
-                    rockOnRouteViewModels.Select(x => new RockOnBoulderRoute
-                    {
-                        BoulderRockRole = x.BoulderStatus.ToString(),
-                        BoulderRoute = boulderRouteId,
-                        Rock = x.MyRockViewModel.MyRock.RockID
-                    }).ToArray();
-
-                InsertAll(rocksOnBoulderRoute: rocksOnBoulderRoute, isSubmitChanges: isSubmitChanges);
-            }            
-        }        
-
         public static void SetIsDeletedToTrue(string anId, bool isSubmitChanges = true)
         {
             RockOnBoulderRoute rockOnBoulderToDelete = RockOnBoulderRouteById(anId);
@@ -104,11 +84,6 @@ namespace JustClimbTrial.DataAccess.Entities
             {
                 database.SubmitChanges();
             }
-        }
-
-        public static void InsertAll(ICollection<RockOnRouteViewModel> rockOnRouteViewModels)
-        {
-
         }
     }
 }

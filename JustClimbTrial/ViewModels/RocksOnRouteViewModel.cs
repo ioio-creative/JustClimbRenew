@@ -123,10 +123,14 @@ namespace JustClimbTrial.ViewModels
 
         public void UndoSelectedTrainingRock()
         {
+            SelectedRockOnRoute.UndrawRockTrainingSeq();
+
             RemoveSelectedRockFromRoute();
+
+            // set the next last rock in the sequence to be the selected rock
             if (rocksOnRoute.Any())
             {
-                SelectedRockOnRoute = rocksOnRoute.Last();
+                SelectedRockOnRoute = rocksOnRoute[rocksOnRoute.Count - 1];
             }
         }
 
@@ -179,33 +183,6 @@ namespace JustClimbTrial.ViewModels
 
         #region draw helpers
 
-        private TextBlock DrawTrainingRockOnCanvas(RockOnRouteViewModel rockTrainingRoute)
-        {
-            TextBlock textBlockToReturn = null;
-
-
-            return textBlockToReturn;
-        }
-
-        private Shape DrawBoulderRockOnCanvas(RockOnRouteViewModel rockOnBoulderRoute)
-        {
-            Shape shapeToReturn;
-            switch (rockOnBoulderRoute.BoulderStatus)
-            {
-                case RockOnBoulderStatus.Start:
-                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.ChangeRockShapeToStart();
-                    break;
-                case RockOnBoulderStatus.End:
-                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.ChangeRockShapeToEnd();
-                    break;
-                case RockOnBoulderStatus.Int:
-                default:
-                    shapeToReturn = rockOnBoulderRoute.MyRockViewModel.ChangeRockShapeToIntermediate();
-                    break;
-            }
-            return shapeToReturn;
-        }
-
         private static Ellipse GetNewSelectedRockIndicatorCircle()
         {
             double radius = 2;
@@ -223,6 +200,12 @@ namespace JustClimbTrial.ViewModels
         #endregion
 
         #region database
+
+        public void SaveRocksOnTrainingRoute(TrainingRoute trainingRoute)
+        {
+            TrainingRouteAndRocksDataAccess.InsertRouteAndRocksOnRoute(
+                trainingRoute, rocksOnRoute, true);
+        }
 
         public void SaveRocksOnBoulderRoute(BoulderRoute boulderRoute)
         {
