@@ -20,8 +20,8 @@
 x64/
 x86/
 bld/
-[Bb]in/
-![Bb]in/AppFiles/
+#[Bb]in/
+#![Bb]in/AppFiles/
 [Oo]bj/
 [Ll]og/
 
