@@ -99,7 +99,8 @@ namespace JustClimbTrial.Views.Pages
             {
                 case ClimbMode.Training:
                     TrainingRockStatus ucTrainingRockStatus = GetTrainingRockStatusUserControl();
-                    //ucTrainingRockStatus.btnTrainingSeqGoBack.Command = new RelayCommand();
+                    ucTrainingRockStatus.btnTrainingSeqGoBack.Command = 
+                        new RelayCommand(UndoSelectedTrainingRock, CanUndoSelectedTrainingRock);
                     break;
                 case ClimbMode.Boulder:
                 default:
@@ -182,12 +183,31 @@ namespace JustClimbTrial.Views.Pages
             {
                 switch (routeSetClimbMode)
                 {
+                    case ClimbMode.Training:
+                        break;
                     case ClimbMode.Boulder:
+                    default:
                         BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
                         rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
                         break;
                 }                
             }
+        }
+
+        #endregion
+
+
+        #region command methods for TrainingRockStatus UserControl
+
+        private bool CanUndoSelectedTrainingRock(object parameter = null)
+        {
+            return !rocksOnRouteViewModel.IsSelectedRockOnRouteNull() &&
+                rocksOnRouteViewModel.IsRockOnTheRoute(rocksOnRouteViewModel.SelectedRockOnRoute.MyRockViewModel);
+        }
+
+        private void UndoSelectedTrainingRock(object parameter = null)
+        {
+            rocksOnRouteViewModel.UndoSelectedTrainingRock();
         }
 
         #endregion

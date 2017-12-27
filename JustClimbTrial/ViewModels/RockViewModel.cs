@@ -230,52 +230,34 @@ namespace JustClimbTrial.ViewModels
 
         public Shape ChangeRockShapeToStart()
         {
-
             BoulderShape = GetNewStartRockEllipse();
-            //DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
-            return BoulderShape;
-
-            Ellipse startRockCircle = GetNewStartRockEllipse();
-            BCanvas.DrawShape(startRockCircle, bCanvasPoint);
-            BoulderShape = startRockCircle;
-            return startRockCircle;
-
+            return BoulderShape;            
         }
 
         public Shape ChangeRockShapeToIntermediate()
         {           
-
-            BoulderShape = GetNewIntermediateRockEllipse();
-            //DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
+            BoulderShape = GetNewIntermediateRockEllipse();            
             return BoulderShape;
         }
 
         public Shape ChangeRockShapeToEnd()
         {
-            BoulderShape = GetNewEndRockEllipse();
-            //DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
+            BoulderShape = GetNewEndRockEllipse();            
+            return BoulderShape;            
+        }
+        
+        public Shape ChangeRockShapeToDefault()
+        {
+            BoulderShape = GetNewRockOnWallEllipse();
             return BoulderShape;
-
-            Ellipse intermediateRockCircle = GetNewIntermediateRockEllipse();
-            BCanvas.DrawShape(intermediateRockCircle, bCanvasPoint);
-            BoulderShape = intermediateRockCircle;
-            return intermediateRockCircle;
         }
-
-        public Shape ChangeRockShapeToEnd()
-        {           
-            Ellipse endRockCircle = GetNewEndRockEllipse();
-            BCanvas.DrawShape(endRockCircle, bCanvasPoint);
-            BoulderShape = endRockCircle;
-            return endRockCircle;
-
-        }
-
+        
         #endregion
 
 
         #region ellipses
 
+        // default for any rocks on wall
         private Ellipse GetNewRockOnWallEllipse()
         {
             Ellipse boulderEllipse = new Ellipse
