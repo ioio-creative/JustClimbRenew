@@ -180,8 +180,13 @@ namespace JustClimbTrial.Kinect
 
                             if (ColorBitmapArrived != null)
                             {
-                                Bitmap colorBitmap = ToBitmap(colorFrame);
-                                ColorBitmapArrived(sender, new ColorBitmapEventArgs(ResizeBitmap(colorBitmap, 640, 360))); 
+                                using (Bitmap colorBitmap = ToBitmap(colorFrame))
+                                {
+                                    using (Bitmap resizedBitmap = ResizeBitmap(colorBitmap, 640, 360))
+                                    {
+                                        ColorBitmapArrived(sender, new ColorBitmapEventArgs(resizedBitmap));
+                                    }
+                                }
                             }
                         }
                     }
@@ -305,19 +310,7 @@ namespace JustClimbTrial.Kinect
             return result;
         }
 
-        public async static Task<Bitmap> ResizeBitmapAsync(Bitmap srcBitmap, int width, int height)
-        {
-            Bitmap result = new Bitmap(width, height);
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                g.DrawImage(srcBitmap, 0, 0, width, height);
-            }
-            return result;
-        }
     }
-
 
 
 }

@@ -10,7 +10,8 @@
         ResizeMode="CanResize"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
-        Source="/Views/Pages/VideoPlaybackDialogConfirm.xaml">
+        Source="/Views/Pages/VideoPlaybackDialogConfirm.xaml"
+        >
 
     
 </NavigationWindow>

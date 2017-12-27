@@ -21,7 +21,7 @@ namespace JustClimbTrial.ViewModels
             SetRockShapeWrtStatus();
         }
 
-        private void SetRockShapeWrtStatus()
+        public void SetRockShapeWrtStatus()
         {
             switch (BoulderStatus)
             {

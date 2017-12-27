@@ -21,7 +21,7 @@ namespace JustClimbTrial.Views.Pages
             InitializeComponent();
         }
 
-        private void btnStart_Click(object sender, RoutedEventArgs e)
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             ModeSelect modeSelectPage = new ModeSelect();
             this.NavigationService.Navigate(modeSelectPage);

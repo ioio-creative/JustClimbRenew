@@ -26,12 +26,40 @@ namespace JustClimbTrial.Views.Windows
 
         public void ShowImage(BitmapSource source)
         {
-            playgroundCamera.Source = source;
+            PlaygroundCamera.Source = source;
         }
 
-        public void ShowMediaSource(Uri sourceUri)
+        public void SetPlaygroundMediaSource(Uri sourceUri)
         {
-            playgroundPlayback.Source = sourceUri;
+            PlaygroundMedia.Source = sourceUri;
         }
+        private void PlaygroundMedia_Loaded(object sender, RoutedEventArgs e)
+        {
+            PlaygroundMedia.Play();
+        }
+        private void PlaygroundMedia_MediaOpened(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void PlaygroundMedia_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            PlaygroundMedia.Position = TimeSpan.FromSeconds(0);
+        }
+
+
+        public void SetPlaybackMediaSource(Uri sourceUri)
+        {
+            PlaybackMedia.Source = sourceUri;
+        }
+        private void PlaybackMedia_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void PlaybackMedia_MediaOpened(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+
     }
 }
