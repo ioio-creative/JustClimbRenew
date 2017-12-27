@@ -69,7 +69,6 @@ namespace JustClimbTrial.Extensions
         public static void DrawShape(this Canvas canvas, Shape shape, double x, double y)
         {
             canvas.SetLeftAndTopForShape(shape, x, y);
-
             canvas.AddChild(shape);
         }
     }

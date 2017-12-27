@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect;
+﻿using JustClimbTrial.Extensions;
+using Microsoft.Kinect;
 using System;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -73,15 +74,14 @@ namespace JustClimbTrial.Kinect
                 };
 
                 // 2) Position the ellipse according to the joint's coordinates.
-                if (X > 0 && Y > 0)
-                {
-                    Canvas.SetLeft(ellipseToReturn, X - ellipseToReturn.Width / 2);
-                    Canvas.SetTop(ellipseToReturn, Y - ellipseToReturn.Height / 2);
-                }
-
+                //if (X > 0 && Y > 0)
+                //{
+                //    Canvas.SetLeft(ellipseToReturn, X - ellipseToReturn.Width / 2);
+                //    Canvas.SetTop(ellipseToReturn, Y - ellipseToReturn.Height / 2);
+                //}
 
                 // 3) Add the ellipse to the canvas.
-                canvas.Children.Add(ellipseToReturn);
+                canvas.DrawShape(ellipseToReturn, X, Y);
             }
 
             return ellipseToReturn;

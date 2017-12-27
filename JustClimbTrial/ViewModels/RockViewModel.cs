@@ -230,35 +230,34 @@ namespace JustClimbTrial.ViewModels
 
         public Shape ChangeRockShapeToStart()
         {
-
             BoulderShape = GetNewStartRockEllipse();
-            //DrawEllipseOnCanvas(startRockCircle, bCanvasPoint);
-            return BoulderShape;
-
+            return BoulderShape;      
         }
 
         public Shape ChangeRockShapeToIntermediate()
         {           
-
-            BoulderShape = GetNewIntermediateRockEllipse();
-            //DrawEllipseOnCanvas(intermediateRockCircle, bCanvasPoint);
+            BoulderShape = GetNewIntermediateRockEllipse();            
             return BoulderShape;
         }
 
         public Shape ChangeRockShapeToEnd()
         {
             BoulderShape = GetNewEndRockEllipse();
-            //DrawEllipseOnCanvas(endRockCircle, bCanvasPoint);
             return BoulderShape;
-
         }
-
-
+        
+        public Shape ChangeRockShapeToDefault()
+        {
+            BoulderShape = GetNewRockOnWallEllipse();
+            return BoulderShape;
+        }
+        
         #endregion
 
 
         #region ellipses
 
+        // default for any rocks on wall
         private Ellipse GetNewRockOnWallEllipse()
         {
             Ellipse boulderEllipse = new Ellipse

@@ -111,7 +111,7 @@ namespace JustClimbTrial.ViewModels
             if (rockOnRouteVM != null)
             {
                 rocksOnRoute.Remove(rockOnRouteVM);
-                canvas.RemoveChild(rockOnRouteVM.MyRockViewModel.BoulderShape);
+                rockOnRouteVM.MyRockViewModel.ChangeRockShapeToDefault();
             }
         }
 
@@ -119,6 +119,15 @@ namespace JustClimbTrial.ViewModels
         {
             RemoveRockFromRoute(SelectedRockOnRoute);
             SelectedRockOnRoute = null;
+        }
+
+        public void UndoSelectedTrainingRock()
+        {
+            RemoveSelectedRockFromRoute();
+            if (rocksOnRoute.Any())
+            {
+                SelectedRockOnRoute = rocksOnRoute.Last();
+            }
         }
 
         #endregion
