@@ -21,8 +21,9 @@
             </MediaElement>
             <Image Name="PlaygroundCamera" Stretch="Uniform">
             </Image>
-            <Canvas Name="PlaygroundCanvas" Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
-                        Background="Transparent">
+            <Canvas Name="PlaygroundCanvas" Background="Transparent"
+                    Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
+                    >
             </Canvas>
             <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
                               LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
