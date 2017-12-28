@@ -21,9 +21,9 @@
             </MediaElement>
             <Image Name="PlaygroundCamera" Stretch="Uniform">
             </Image>
-            <Canvas Name="PlaygroundCanvas" Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
-                        Background="Transparent">
-<<<<<<< HEAD
+            <Canvas Name="PlaygroundCanvas" Background="Transparent"
+                    Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
+                    >
             </Canvas>
             <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
                               LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
@@ -33,26 +33,5 @@
             <ScaleTransform ScaleX="-1"/>
         </Viewbox.RenderTransform>
     </Viewbox>
-
-                </Canvas>
-                <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
-                              LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
-                              MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
-            </Grid>
-            <Viewbox.RenderTransform>
-                <ScaleTransform ScaleX="-1"/>
-            </Viewbox.RenderTransform>
-        </Viewbox>
-        
-        <!--<Viewbox>
-            <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
-                          LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
-                          Width="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualWidth}" Height="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualHeight}"
-                          MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
-        </Viewbox>-->
-
-
-
-
 </Window>
 
