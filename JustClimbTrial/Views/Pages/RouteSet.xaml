@@ -54,18 +54,19 @@
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
-            <Image Name="RouteSetImg" 
-                Grid.Column="0" 
-                   Stretch="Uniform" 
-                   StretchDirection="Both"
-                   Source="/Resources/Images/JustClimbWall.png" />
-            <Canvas x:Name="canvasWall"
-                    Grid.Column="0" 
-                    Background="Transparent" 
-                    MouseDown="canvasWall_MouseDown" 
-                    Width="{Binding ActualWidth, ElementName=RouteSetImg}"
-                    Height="{Binding ActualHeight, ElementName=RouteSetImg}"/>
-
+            <Viewbox Grid.Column="0">
+                <Grid>
+                    <Image Name="RouteSetImg"                 
+                       Stretch="Uniform" 
+                       StretchDirection="Both"
+                       Source="/Resources/Images/JustClimbWall.png" />
+                    <Canvas x:Name="canvasWall"                    
+                        Background="Transparent" 
+                        MouseDown="canvasWall_MouseDown" 
+                        Width="{Binding ActualWidth, ElementName=RouteSetImg}"
+                        Height="{Binding ActualHeight, ElementName=RouteSetImg}"/>
+                </Grid>
+            </Viewbox>
             <!-- grid 2 -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>

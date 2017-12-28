@@ -1,7 +1,6 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
-using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Mvvm.Infrastructure;
@@ -133,7 +132,7 @@ namespace JustClimbTrial.Views.Pages
 
             SetUpBtnCommandsInRockStatusUserControls();
 
-            RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
+            //RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
             
             if (!isAnyRocksOnWall)
             {

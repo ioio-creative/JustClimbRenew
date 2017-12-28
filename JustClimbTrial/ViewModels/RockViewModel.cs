@@ -12,6 +12,9 @@ namespace JustClimbTrial.ViewModels
 {
     public class RockViewModel
     {
+        private const double DefaultBoulderShapeStrokeThickness = 1.5;
+
+
         #region properties
 
         // CoorX, CoorY, CoorZ are exact copies from CameraSpacePoint
@@ -95,7 +98,7 @@ namespace JustClimbTrial.ViewModels
             };
 
             bCanvasPoint = pointOnCanvas;
-            bPoint = canvas.GetActualPoint(bCanvasPoint);
+            bPoint = canvas.GetNormalisedPoint(bCanvasPoint);
             BCanvas = canvas;
         }
 
@@ -217,7 +220,7 @@ namespace JustClimbTrial.ViewModels
             {
                 Text = seqNo.ToString(),
                 Foreground = Brushes.Blue,
-                FontSize = 36,
+                FontSize = 28,
                 FontWeight = FontWeight.FromOpenTypeWeight(10),
                 Margin = new Thickness(0, 0, 0, 0)
             };
@@ -282,7 +285,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 5,
+                StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.DarkRed
             };
 
@@ -296,7 +299,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 5,
+                StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Green
             };
 
@@ -310,7 +313,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 5,
+                StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Yellow
             };
 
@@ -324,7 +327,7 @@ namespace JustClimbTrial.ViewModels
                 Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Fill = Brushes.Transparent,
-                StrokeThickness = 5,
+                StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Red
             };
 

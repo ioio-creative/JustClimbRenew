@@ -221,25 +221,20 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Unloaded(object sender, EventArgs e)
         {
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
-
-            //myMainWindowParent.KinectManagerClient.ColorImageSourceArrived += myMainWindowParent.HandleColorImageSourceArrived;
-
-
+    
             if (kinectManagerClient.multiSourceReader != null)
             {
                 // MultiSourceFrameReder is IDisposable
                 kinectManagerClient.multiSourceReader.Dispose();
                 kinectManagerClient.multiSourceReader = null;
             }
-
         }        
        
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (isSnapShotTaken)
             {
-                Point mouseClickPt = e.GetPosition(cameraIMG);
-                //ColorSpacePoint _boulderCSP = new ColorSpacePoint { X = (float)mouseClickPt.X, Y = (float)mouseClickPt.Y };
+                Point mouseClickPt = e.GetPosition(cameraIMG);                
 
                 RockViewModel rockCorrespondsToCanvasPt =
                     rocksOnWallViewModel.GetRockInListByCanvasPoint(mouseClickPt);

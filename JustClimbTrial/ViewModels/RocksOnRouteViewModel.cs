@@ -35,7 +35,8 @@ namespace JustClimbTrial.ViewModels
                     if (selectedRockOnRoute != null)
                     {
                         // draw selected rock indicator
-                        selectedRockIndicator = GetNewSelectedRockIndicatorCircle();
+                        selectedRockIndicator = GetNewSelectedRockIndicatorCircle(
+                            selectedRockOnRoute.MyRockViewModel.BoulderShape);
                         canvas.DrawShape(selectedRockIndicator,
                             selectedRockOnRoute.MyRockViewModel.BCanvasPoint);
                     }
@@ -189,21 +190,21 @@ namespace JustClimbTrial.ViewModels
 
         #region draw helpers
 
-        private static Ellipse GetNewSelectedRockIndicatorCircle()
+        private static Ellipse GetNewSelectedRockIndicatorCircle(Shape selectedRock)
         {
-            double radius = 2;
-
+            SolidColorBrush indicatorFill = new SolidColorBrush(Color.FromArgb(100, 255, 255, 0));
             return new Ellipse
             {
-                Fill = Brushes.Red,
-                StrokeThickness = 4,
+                Fill = indicatorFill,
+                StrokeThickness = 0,
                 Stroke = Brushes.Red,
-                Width = radius * 2,
-                Height = radius * 2
+                Width = selectedRock.Width,
+                Height = selectedRock.Height
             };
         }
 
         #endregion
+
 
         #region database
 

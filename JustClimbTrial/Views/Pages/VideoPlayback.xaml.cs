@@ -113,8 +113,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void ChangeMediaSpeedRatio(object sender, MouseButtonEventArgs e)
         {
-            mediaPlayback.SpeedRatio = (double)speedRatioSlider.Value/100;
-            playbackMonitor.SpeedRatio = (double)speedRatioSlider.Value/100;
+            mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
+            playbackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
 
             timer.Interval = TimeSpan.FromMilliseconds((int)(defaultTick / speedRatioSlider.Value));
         }
