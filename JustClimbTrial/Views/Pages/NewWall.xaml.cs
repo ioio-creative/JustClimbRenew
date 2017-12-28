@@ -4,6 +4,7 @@ using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
+using JustClimbTrial.Views.Dialogs;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -137,8 +138,18 @@ namespace JustClimbTrial.Views.Pages
 
         private void SnapShotWall(object parameter = null)
         {
+            if (rocksOnWallViewModel.AnyRocksInList())
+            {
+                rocksOnWallViewModel.RemoveAllRocks();
+            }
+
             isSnapShotTaken = jcWall.SnapShotWallData(
                 colorMappedToDepthSpace, lastNotNullDepthData, lastNotNullColorData);
+
+            if (isSnapShotTaken)
+            {
+                UiHelper.NotifyUser("Snap shot taken.");
+            }
         }
 
         private void DeselectRock(object parameter = null)
@@ -163,7 +174,16 @@ namespace JustClimbTrial.Views.Pages
                 string newWallKey = rocksOnWallViewModel.SaveRocksOnWall(newWallNo.ToString());
                 jcWall.WallID = newWallKey;
                 jcWall.SaveWallData();
-                AppGlobal.WallID = newWallKey; 
+                AppGlobal.WallID = newWallKey;
+
+                RouteSetModeSelectDialog routeSetModeSelect = new RouteSetModeSelectDialog();
+                bool dialogResult = routeSetModeSelect.ShowDialog().GetValueOrDefault(false);
+
+                if (dialogResult)
+                {
+                    RouteSet routeSetPage = new RouteSet(routeSetModeSelect.ClimbModeSelected);
+                    this.NavigationService.Navigate(routeSetPage);
+                }
             }
             else
             {

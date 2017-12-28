@@ -22,7 +22,7 @@ namespace JustClimbTrial.Helpers
         /// </summary>
         public VideoHelper()
         {
-            Queue = new BlockingCollection<ImageToSave>();
+            Queue = new BlockingCollection<ImageToSave>();            
         }
 
         /// <summary>

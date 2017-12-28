@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
+using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Mvvm.Infrastructure;
@@ -87,7 +88,9 @@ namespace JustClimbTrial.Views.Pages
             SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
             SetTemplateOfControlFromResource(ctrlRockStatus, rockStatusTemplateResourceKey);            
 
-            navHead.ParentPage = this;                              
+            navHead.ParentPage = this;
+
+            RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
         }
 
         // !!! Important !!!
@@ -130,9 +133,7 @@ namespace JustClimbTrial.Views.Pages
                 LoadAndDrawRocksOnWall(AppGlobal.WallID);
             rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
 
-            SetUpBtnCommandsInRockStatusUserControls();
-
-            //RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
+            SetUpBtnCommandsInRockStatusUserControls();            
             
             if (!isAnyRocksOnWall)
             {

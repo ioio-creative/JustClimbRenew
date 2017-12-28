@@ -102,7 +102,7 @@ namespace JustClimbTrial.Views.Pages
 
             if (mainWindowClient.DebugMode)
             {
-                kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
+                //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
             }
 
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
@@ -137,7 +137,7 @@ namespace JustClimbTrial.Views.Pages
                         rockOnBoulderRoute.SetRockShapeWrtStatus();
 
                         rocksOnRouteCamSP[i++] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                        rockOnBoulderRoute.MyRockViewModel.DrawBoulder();
+                        //rockOnBoulderRoute.MyRockViewModel.DrawBoulder();
                     }
                     break;
 

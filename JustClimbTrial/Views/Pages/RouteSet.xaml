@@ -62,7 +62,7 @@
                        Source="/Resources/Images/JustClimbWall.png" />
                     <Canvas x:Name="canvasWall"                    
                         Background="Transparent" 
-                        MouseDown="canvasWall_MouseDown" 
+                        MouseDown="canvasWall_MouseDown"
                         Width="{Binding ActualWidth, ElementName=RouteSetImg}"
                         Height="{Binding ActualHeight, ElementName=RouteSetImg}"/>
                 </Grid>

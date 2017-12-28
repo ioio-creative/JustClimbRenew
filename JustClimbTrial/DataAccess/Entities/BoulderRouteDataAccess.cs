@@ -78,26 +78,18 @@ namespace JustClimbTrial.DataAccess.Entities
         {
             return BoulderRouteById(routeId).RouteNo;
         }
-
-        public static int LargestBoulderRouteNo
-        {
-            get
-            {
-                return BoulderRoutes.Select(x => Convert.ToInt32(x.RouteNo)).Max();
-            }
-        }
-
-        public static int LargestValidBoulderRouteNo
-        {
-            get
-            {
-                return ValidBoulderRoutes.Select(x => Convert.ToInt32(x.RouteNo)).Max();
-            }
-        }
-
+        
         public static int LargestBoulderRouteNoByWall(string wallId)
         {
-            return BoulderRoutes.Where(x => x.Wall == wallId).Select(x => int.Parse(x.RouteNo)).Max();
+            IEnumerable<BoulderRoute> boulderRoutesOfTheWall = BoulderRoutes.Where(x => x.Wall == wallId);
+            if (boulderRoutesOfTheWall.Any())
+            {
+                return boulderRoutesOfTheWall.Select(x => int.Parse(x.RouteNo)).Max();
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
