@@ -90,6 +90,10 @@ namespace JustClimbTrial.Views.Pages
 
             navHead.ParentPage = this;
 
+            // !!! Important !!!
+            // somehow if the following is called in Page_Loaded event handler,
+            // the drawn rocks will be "covered" by the wall log image
+            // hence, it is called here
             RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
         }
 

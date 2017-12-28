@@ -134,10 +134,9 @@ namespace JustClimbTrial.Views.Pages
                     int i = 0;
                     foreach (var rockOnBoulderRoute in rocksOnBoulderRoute)
                     {
-                        rockOnBoulderRoute.SetRockShapeWrtStatus();
-
-                        rocksOnRouteCamSP[i++] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                        //rockOnBoulderRoute.MyRockViewModel.DrawBoulder();
+                        rockOnBoulderRoute.DrawRockShapeWrtStatus();
+                        rocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                        i++;
                     }
                     break;
 

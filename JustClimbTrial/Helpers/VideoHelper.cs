@@ -30,7 +30,7 @@ namespace JustClimbTrial.Helpers
         /// </summary>
         public void StartQueue()
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 recOn = true;
                 while (true)

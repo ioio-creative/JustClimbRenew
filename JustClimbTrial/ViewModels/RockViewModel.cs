@@ -132,10 +132,7 @@ namespace JustClimbTrial.ViewModels
             BCanvas = canvas;            
             BoulderShape = GetNewRockOnWallEllipse();
 
-            CameraSpacePoint csp = new CameraSpacePoint();
-            csp.X = (float)aRock.CoorX.GetValueOrDefault(0);
-            csp.Y = (float)aRock.CoorY.GetValueOrDefault(0);
-            csp.Z = (float)aRock.CoorZ.GetValueOrDefault(0);
+            CameraSpacePoint csp = aRock.GetCameraSpacePoint();
 
             if (coorMap != null)
             {

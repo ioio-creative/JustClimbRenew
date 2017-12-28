@@ -34,10 +34,10 @@ namespace JustClimbTrial.ViewModels
         public void SetRockStatusAndDraw(RockOnBoulderStatus status)
         {
             BoulderStatus = status;
-            SetRockShapeWrtStatus();
+            DrawRockShapeWrtStatus();
         }
 
-        public void SetRockShapeWrtStatus()
+        public void DrawRockShapeWrtStatus()
         {
             switch (BoulderStatus)
             {
