@@ -1,12 +1,14 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
+using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.UserControls;
 using Microsoft.Kinect;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -100,7 +102,7 @@ namespace JustClimbTrial.Views.Pages
                 case ClimbMode.Training:
                     TrainingRockStatus ucTrainingRockStatus = GetTrainingRockStatusUserControl();
                     ucTrainingRockStatus.btnTrainingSeqGoBack.Command = 
-                        new RelayCommand(UndoSelectedTrainingRock, CanUndoSelectedTrainingRock);
+                        new RelayCommand(UndoLastTrainingRock, CanLastSelectedTrainingRock);
                     break;
                 case ClimbMode.Boulder:
                 default:
@@ -131,10 +133,12 @@ namespace JustClimbTrial.Views.Pages
 
             SetUpBtnCommandsInRockStatusUserControls();
 
+            RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
+            
             if (!isAnyRocksOnWall)
             {
                 UiHelper.NotifyUser("No rocks registered with the wall!");
-            }            
+            }        
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)
@@ -154,19 +158,19 @@ namespace JustClimbTrial.Views.Pages
                         MyRockViewModel = nearestRockOnWall
                     };
 
-                    rocksOnRouteViewModel.AddSelectedRockToRoute();                    
-                }
+                    rocksOnRouteViewModel.AddSelectedRockToRoute();
 
-                switch (routeSetClimbMode)
-                {
-                    case ClimbMode.Training:
-                        SetSelectedTrainingRockSeqNo();
-                        break;
-                    case ClimbMode.Boulder:
-                    default:
-                        SetSelectedBoulderRockToIntermediate();
-                        break;
-                }
+                    switch (routeSetClimbMode)
+                    {
+                        case ClimbMode.Training:
+                            SetSelectedTrainingRockSeqNo();
+                            break;
+                        case ClimbMode.Boulder:
+                        default:
+                            SetSelectedBoulderRockToIntermediate();
+                            break;
+                    }
+                } 
             }
         }
 
@@ -177,23 +181,48 @@ namespace JustClimbTrial.Views.Pages
 
         private void btnDemoDone_Click(object sender, RoutedEventArgs e)
         {
-            SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
-                        
-            if (rocksOnRouteViewModel.AnyRocksInRoute())
+            string errMsg = ValidateRouteParams();
+            
+            if (!string.IsNullOrEmpty(errMsg))
             {
-                switch (routeSetClimbMode)
-                {
-                    case ClimbMode.Training:
-                        TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
-                        rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
-                        break;
-                    case ClimbMode.Boulder:
-                    default:
-                        BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
-                        rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
-                        break;
-                }                
+                UiHelper.NotifyUser(errMsg);
             }
+            else
+            {
+                if (rocksOnRouteViewModel.AnyRocksInRoute())
+                {
+                    switch (routeSetClimbMode)
+                    {
+                        case ClimbMode.Training:
+                            errMsg = rocksOnRouteViewModel.ValidateRocksOnTrainingRoute();
+                            if (!string.IsNullOrEmpty(errMsg))
+                            {
+                                UiHelper.NotifyUser(errMsg);
+                            }
+                            else
+                            {
+                                TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
+                                rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
+                            }                            
+                            break;
+                        case ClimbMode.Boulder:
+                        default:
+                            errMsg = rocksOnRouteViewModel.ValidateRocksOnBoulderRoute();
+                            if (!string.IsNullOrEmpty(errMsg))
+                            {
+                                UiHelper.NotifyUser(errMsg);
+                            }
+                            else
+                            {
+                                BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
+                                rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
         }
 
         #endregion
@@ -201,15 +230,15 @@ namespace JustClimbTrial.Views.Pages
 
         #region command methods for TrainingRockStatus UserControl
 
-        private bool CanUndoSelectedTrainingRock(object parameter = null)
+        private bool CanLastSelectedTrainingRock(object parameter = null)
         {
             return !rocksOnRouteViewModel.IsSelectedRockOnRouteNull() &&
                 rocksOnRouteViewModel.IsRockOnTheRoute(rocksOnRouteViewModel.SelectedRockOnRoute.MyRockViewModel);
         }
 
-        private void UndoSelectedTrainingRock(object parameter = null)
+        private void UndoLastTrainingRock(object parameter = null)
         {
-            rocksOnRouteViewModel.UndoSelectedTrainingRock();
+            rocksOnRouteViewModel.UndoLastTrainingRock();
         }
 
         #endregion
@@ -296,7 +325,33 @@ namespace JustClimbTrial.Views.Pages
             return template.FindName("ucTrainingRockStatus", ctrlRockStatus) as TrainingRockStatus;
         }
 
-        #endregion                
+        #endregion
+
+
+        #region validations
+
+        private string ValidateRouteParams()
+        {
+            string errMsg = null;
+
+            string selectedAgeGroupId = (ddlAge.SelectedItem as AgeGroup).AgeGroupID;
+            if (!routeSetViewModel.AgeGroups.Where(x => x.AgeGroupID == selectedAgeGroupId).Any())
+            {
+                errMsg = "Age group selected is not valid!";
+                return errMsg;
+            }
+
+            string selectedDifficultyId = (ddlDifficulty.SelectedItem as RouteDifficulty).RouteDifficultyID;
+            if (!routeSetViewModel.RouteDifficulties.Where(x => x.RouteDifficultyID == selectedDifficultyId).Any())
+            {
+                errMsg = "Difficulty selected is not valid!";
+                return errMsg;
+            }
+
+            return errMsg;
+        }
+
+        #endregion
 
 
         #region retrieve data from UI helpers

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using JustClimbTrial.Extensions;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace JustClimbTrial.Views.Windows
 {
@@ -26,9 +17,15 @@ namespace JustClimbTrial.Views.Windows
             InitializeComponent();
         }
 
-        public void ShowImage(BitmapSource source)
+        public void ShowImage(string sourcePath, double opacity = 0)
         {
+            PlaygroundCamera.SetSourceByPath(sourcePath);
+            PlaygroundCamera.Opacity = opacity;
+        }
+        public void ShowImage(BitmapSource source, double opacity = 0)
+        {            
             PlaygroundCamera.Source = source;
+            PlaygroundCamera.Opacity = opacity;
         }
         public void SetImageDimensions(BitmapSource source)
         {

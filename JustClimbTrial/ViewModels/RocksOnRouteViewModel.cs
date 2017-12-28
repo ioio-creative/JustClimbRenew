@@ -93,7 +93,7 @@ namespace JustClimbTrial.ViewModels
 
         #region manipulate rock on route list
         
-        public void AddRockToRoute(RockOnRouteViewModel rockOnRouteVM)
+        private void AddRockToRoute(RockOnRouteViewModel rockOnRouteVM)
         {
             if (rockOnRouteVM != null && !rocksOnRoute.Contains(rockOnRouteVM))
             {
@@ -106,7 +106,7 @@ namespace JustClimbTrial.ViewModels
             AddRockToRoute(SelectedRockOnRoute);
         }
 
-        public void RemoveRockFromRoute(RockOnRouteViewModel rockOnRouteVM)
+        private void RemoveRockFromRoute(RockOnRouteViewModel rockOnRouteVM)
         {
             if (rockOnRouteVM != null)
             {
@@ -121,16 +121,22 @@ namespace JustClimbTrial.ViewModels
             SelectedRockOnRoute = null;
         }
 
-        public void UndoSelectedTrainingRock()
+        public void UndoLastTrainingRock()
         {
-            SelectedRockOnRoute.UndrawRockTrainingSeq();
-
-            RemoveSelectedRockFromRoute();
-
-            // set the next last rock in the sequence to be the selected rock
             if (rocksOnRoute.Any())
             {
-                SelectedRockOnRoute = rocksOnRoute[rocksOnRoute.Count - 1];
+                RockOnRouteViewModel lastRockOnRoute = rocksOnRoute[rocksOnRoute.Count - 1];
+
+                lastRockOnRoute.UndrawRockTrainingSeq();
+
+                RemoveRockFromRoute(lastRockOnRoute);
+
+                // if the last rock is the selected rock
+                if (SelectedRockOnRoute.Equals(lastRockOnRoute))
+                {
+                    // the result may be null
+                    SelectedRockOnRoute = rocksOnRoute.LastOrDefault();
+                }
             }
         }
 
@@ -211,6 +217,88 @@ namespace JustClimbTrial.ViewModels
         {
             BoulderRouteAndRocksDataAccess.InsertRouteAndRocksOnRoute(
                 boulderRoute, rocksOnRoute, true);
+        }
+
+        #endregion
+
+
+        #region validations before saving into db
+
+        public string ValidateRocksOnTrainingRoute()
+        {
+            string errMsg = null;
+
+            if (!IsRocksInTrainingRouteInSequence())
+            {
+                errMsg = "Rocks in training route not in sequence!";
+                return errMsg;
+            }
+
+            if (IsTooFewRocksOnRoute())
+            {
+                errMsg = "Too few rocks in the route!";
+                return errMsg;
+            }
+
+            return errMsg;
+        }
+
+        public string ValidateRocksOnBoulderRoute()
+        {
+            string errMsg = null;
+
+            if (!IsBoulderRouteContainsSingleStartRock())
+            {
+                errMsg = "Please select one single start rock!";
+                return errMsg;
+            }
+
+            if (!IsBoulderRouteContainsSingelEndRock())
+            {
+                errMsg = "Please select one single end rock!";
+                return errMsg;
+            }
+
+            if (IsTooFewRocksOnRoute())
+            {
+                errMsg = "Too few rocks in the route!";
+                return errMsg;
+            }
+
+            return errMsg;
+        }
+
+        private bool IsBoulderRouteContainsSingleStartRock()
+        {
+            return rocksOnRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Start).Count() == 1;
+        }
+
+        private bool IsBoulderRouteContainsSingelEndRock()
+        {
+            return rocksOnRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.End).Count() == 1;
+        }
+
+        private bool IsRocksInTrainingRouteInSequence()
+        {
+            bool isInSeq = true;
+
+            int i = 1;
+            foreach (RockOnRouteViewModel rockOnRoute in rocksOnRoute)
+            {
+                if (rockOnRoute.TrainingSeq != i)
+                {
+                    isInSeq = false;
+                    break;
+                }
+                i++;
+            }
+
+            return isInSeq;
+        }
+
+        private bool IsTooFewRocksOnRoute()
+        {
+            return rocksOnRoute.Count < 3;
         }
 
         #endregion

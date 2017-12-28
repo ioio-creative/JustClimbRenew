@@ -2,6 +2,7 @@
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Kinect;
 using Microsoft.Kinect;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -241,26 +242,30 @@ namespace JustClimbTrial.ViewModels
         #region rock shapes        
 
         public Shape ChangeRockShapeToStart()
-        {
-            BoulderShape = GetNewStartRockEllipse();
-            return BoulderShape;      
+        {            
+            return ChangeRockShape(GetNewStartRockEllipse);      
         }
 
         public Shape ChangeRockShapeToIntermediate()
-        {           
-            BoulderShape = GetNewIntermediateRockEllipse();            
-            return BoulderShape;
+        {                  
+            return ChangeRockShape(GetNewIntermediateRockEllipse);
         }
 
         public Shape ChangeRockShapeToEnd()
         {
-            BoulderShape = GetNewEndRockEllipse();
-            return BoulderShape;
+            return ChangeRockShape(GetNewEndRockEllipse);
         }
         
         public Shape ChangeRockShapeToDefault()
         {
-            BoulderShape = GetNewRockOnWallEllipse();
+            return ChangeRockShape(GetNewRockOnWallEllipse);
+        }
+
+        private Shape ChangeRockShape(Func<Shape> shapeFactory)
+        {
+            UndrawBoulder();
+            BoulderShape = shapeFactory();
+            DrawBoulder();
             return BoulderShape;
         }
         
