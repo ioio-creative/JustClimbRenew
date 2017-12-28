@@ -35,12 +35,17 @@ namespace JustClimbTrial.Views.Pages
         private RockOnRouteViewModel endRockOnBoulderRoute;
         private CameraSpacePoint[] rocksOnRouteCamSP;
 
+        private ulong playerBodyID;
+
+        private MainWindow mainWindowClient;
         private KinectManager kinectManagerClient;
         private Playground playgroundWindow;
         private Canvas playgroundCanvas;
+        private MediaElement playgroundMedia;
 
-        private IEnumerable<Shape> skeletonShapes;
-        private VideoHelper gameplayVideoClient;
+        //private IEnumerable<Shape> skeletonShapes;
+        private IList<IEnumerable<Shape>> skeletonBodies = new List<IEnumerable<Shape>>();
+        private VideoHelper gameplayVideoRecClient;
         public bool IsRecording = false;
 
 
@@ -87,12 +92,17 @@ namespace JustClimbTrial.Views.Pages
         {
             viewModel.LoadData();
 
-            kinectManagerClient = (this.Parent as MainWindow).KinectManagerClient;
-            playgroundWindow = (this.Parent as MainWindow).PlaygroundWindow;
+            mainWindowClient = this.Parent as MainWindow;
+            kinectManagerClient = mainWindowClient.KinectManagerClient;
+            playgroundWindow = mainWindowClient.PlaygroundWindow;
+            playgroundWindow.LoopSrcnSvr = false;
+            playgroundMedia = playgroundWindow.PlaygroundMedia;
+            playgroundMedia.Stop();
+            playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(),"Countdown.mp4")));
 
-            if ((this.Parent as MainWindow).DebugMode)
+            if (mainWindowClient.DebugMode)
             {
-                kinectManagerClient.ColorImageSourceArrived += (this.Parent as MainWindow).HandleColorImageSourceArrived;
+                kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
             }
 
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
@@ -100,6 +110,8 @@ namespace JustClimbTrial.Views.Pages
             kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
 
             string headerRowTitleFormat = "{0} Route {1} - Video Playback";
+
+            //methods to access rocks on route from data base
             switch (climbMode)
             {
                 case ClimbMode.Training:
@@ -111,18 +123,14 @@ namespace JustClimbTrial.Views.Pages
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
                     rocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
-                    //startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                    startRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+
+                    CameraSpacePoint startCamSp = startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                    Console.WriteLine($"{{ {startCamSp.X},{startCamSp.Y},{startCamSp.Z} }}");
+                    
                     //endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
                     rocksOnRouteCamSP = new CameraSpacePoint[rocksOnBoulderRoute.Count()];
 
-                    //for (int i = 0; i < rocksOnBoulderRoute.Count(); i++)
-                    //{
-                    //    RockOnRouteViewModel rockOnRouteViewModel = rocksOnBoulderRoute.ElementAt(i);
-                    //    rockOnRouteViewModel.SetRockShapeWrtStatus();
-
-                    //    rocksOnRouteCamSP[i] = rocksOnBoulderRoute.ElementAt(i).MyRockViewModel.MyRock.GetCameraSpacePoint();
-                    //    rocksOnBoulderRoute.ElementAt(i).MyRockViewModel.DrawBoulder();
-                    //}
                     int i = 0;
                     foreach (var rockOnBoulderRoute in rocksOnBoulderRoute)
                     {
@@ -133,14 +141,16 @@ namespace JustClimbTrial.Views.Pages
                     }
                     break;
 
+
             }
 
+            //methods relating to video recording
             kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
-            gameplayVideoClient = (this.Parent as MainWindow).MainVideoHelper;
+            gameplayVideoRecClient = mainWindowClient.MainVideoHelper;
             Directory.CreateDirectory(FileHelper.VideoBufferFolderPath());
         }
 
-        private void btnDemo_Click(object sender, RoutedEventArgs e)
+        private void BtnDemo_Click(object sender, RoutedEventArgs e)
         {
             //RouteVideoViewModel model = dgridRouteVideos.SelectedItem as RouteVideoViewModel;
             //string abx = FileHelper.VideoFullPath(model);
@@ -149,30 +159,30 @@ namespace JustClimbTrial.Views.Pages
             if (!IsRecording)
             {
                 IsRecording = true;
-                gameplayVideoClient.StartQueue();
-                btnDemo.Content = "Stop Rec";
+                gameplayVideoRecClient.StartQueue();
+                BtnDemo.Content = "Stop Rec";
             }
             else
             {
                 IsRecording = false;
                 
-                btnDemo.Content = "DEMO";
+                BtnDemo.Content = "DEMO";
             }
         }
 
-        private void btnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
+        private void BtnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
         {
             kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
 
-            (this.Parent as MainWindow).KinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
-            (this.Parent as MainWindow).PlaygroundWindow.PlaygroundCamera.Opacity = 0;
+            if(mainWindowClient.DebugMode) kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
+            //mainWindowClient.PlaygroundWindow.PlaygroundCamera.Opacity = 0;
 
-            //MediaElement playbackMonitor = (this.Parent as MainWindow).PlaygroundWindow.PlaybackMedia;
-            //VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playbackMonitor);
-            //videoPlaybackDialog.ShowDialog();
+            MediaElement playbackMonitor = mainWindowClient.PlaygroundWindow.PlaybackMedia;
+            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playbackMonitor);
+            videoPlaybackDialog.ShowDialog();
         }
 
-        private void btnRestartGame_Click(object sender, RoutedEventArgs e)
+        private void BtnRestartGame_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -181,15 +191,19 @@ namespace JustClimbTrial.Views.Pages
         {
             //playgroundCanvas.Children.Clear();
 
-            if (skeletonShapes != null)
+            foreach (IEnumerable<Shape> skeletonShapes in skeletonBodies)
             {
                 foreach (Shape skeletonShape in skeletonShapes)
                 {
                     playgroundCanvas.RemoveChild(skeletonShape);
-                } 
+                }
+
             }
+            skeletonBodies = new List<IEnumerable<Shape>>();
+                       
 
             IList<Body> bodies = e.GetBodyList();
+            
                         
             foreach (var body in bodies)
             {
@@ -197,7 +211,34 @@ namespace JustClimbTrial.Views.Pages
                 {
                     if (body.IsTracked)
                     {
-                        skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
+                        IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
+                        skeletonBodies.Add(skeletonShapes);
+
+                        List<Joint> relevantJoints = new List<Joint>();
+                        foreach (Joint bodyJoint in body.Joints.Values)
+                        {
+                            foreach (JointType limbJointType in KinectExtensions.LimbJoints)
+                            {
+                                if (limbJointType.Equals(bodyJoint.JointType))
+                                {
+                                    relevantJoints.Add(bodyJoint);
+                                    break;
+                                } 
+                            }                
+                        }
+
+                        foreach (Joint relevantJoint in relevantJoints)
+                        {
+                            float distance = KinectExtensions.GetCameraSpacePointDistance(relevantJoint.Position, startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint());
+                            Console.WriteLine("Distance = "+distance);
+                            if (distance < 0.1)
+                            {
+                                ///DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
+                                playerBodyID = body.TrackingId;
+                                //Console.WriteLine("Player Tracking ID: "+playerBodyID);
+                                playgroundMedia.Play();
+                            }
+                        }
                     }
                 }
 
@@ -208,7 +249,7 @@ namespace JustClimbTrial.Views.Pages
         {
             if (IsRecording)
             {
-                gameplayVideoClient.SaveImageToQueue(FileHelper.VideoBufferFolderPath(), e.GetColorBitmap());
+                gameplayVideoRecClient.SaveImageToQueue(FileHelper.VideoBufferFolderPath(), e.GetColorBitmap());
             }
         }
 

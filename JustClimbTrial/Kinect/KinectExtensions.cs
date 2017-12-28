@@ -23,7 +23,7 @@ namespace JustClimbTrial.Kinect
     public static class KinectExtensions
     {
         //Frame Dimensions of different Frame Sources
-        public static Dictionary<SpaceMode, Tuple<float, float>> FrameDimensions = new Dictionary<SpaceMode, Tuple<float, float>>
+        public static IReadOnlyDictionary<SpaceMode, Tuple<float, float>> FrameDimensions = new Dictionary<SpaceMode, Tuple<float, float>>
         {
             //Kinect V2.0 Color Space Dimension: 1920x1080 FullHD
             { SpaceMode.Color, new Tuple<float,float>(1920f, 1080f) },
@@ -60,6 +60,20 @@ namespace JustClimbTrial.Kinect
             new Tuple<JointType, JointType>( JointType.AnkleRight, JointType.FootRight )
         };
 
+        //Joint Types to validate boulder checkpoints
+        public static IEnumerable<JointType> LimbJoints = new JointType[] 
+        {
+            JointType.AnkleLeft,
+            JointType.AnkleRight,
+            JointType.FootLeft,
+            JointType.FootRight,
+            JointType.HandLeft,
+            JointType.HandRight,
+            JointType.ThumbLeft,
+            JointType.ThumbRight,
+            JointType.WristLeft,
+            JointType.WristRight
+        };
 
         #region Body Draw
 

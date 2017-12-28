@@ -7,34 +7,31 @@
         mc:Ignorable="d"
         Title="Playground" Name="PlaygroundWindow"
         Height="720" Width="1280" Background="White">
- 
-        <Viewbox Name="PlaygroundView" RenderTransformOrigin="0.5, 0.5" Stretch="Uniform"
+
+    <Viewbox Name="PlaygroundView" RenderTransformOrigin="0.5, 0.5" Stretch="Uniform"
               Margin="0,0,-8,-31">
-            <Grid>
-                <MediaElement x:Name="PlaygroundMedia" ScrubbingEnabled="False" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="None"                
+        <Grid>
+            <MediaElement x:Name="PlaygroundMedia" ScrubbingEnabled="False" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="None"                
                               Loaded="PlaygroundMedia_Loaded"
                       MediaOpened="PlaygroundMedia_MediaOpened" 
-                      MediaEnded="PlaygroundMedia_MediaEnded"/>
-                <Image Name="PlaygroundCamera" Stretch="Uniform">
-                </Image>
-                <Canvas Name="PlaygroundCanvas" Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
+                      MediaEnded="PlaygroundMedia_MediaEnded">
+                <MediaElement.LayoutTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </MediaElement.LayoutTransform>
+            </MediaElement>
+            <Image Name="PlaygroundCamera" Stretch="Uniform">
+            </Image>
+            <Canvas Name="PlaygroundCanvas" Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
                         Background="Transparent">
-                </Canvas>
+            </Canvas>
             <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
                               LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
                               MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
         </Grid>
-            <Viewbox.RenderTransform>
-                <ScaleTransform ScaleX="-1"/>
-            </Viewbox.RenderTransform>
-        </Viewbox>
-        
-        <!--<Viewbox>
-            <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
-                          LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
-                          Width="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualWidth}" Height="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualHeight}"
-                          MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
-        </Viewbox>-->
+        <Viewbox.RenderTransform>
+            <ScaleTransform ScaleX="-1"/>
+        </Viewbox.RenderTransform>
+    </Viewbox>
 
 
 

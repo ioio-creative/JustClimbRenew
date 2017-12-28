@@ -14,7 +14,6 @@ namespace JustClimbTrial.Views.Pages
     public partial class JustClimbHome : Page
     {
        
-
         public JustClimbHome()
         {
 
