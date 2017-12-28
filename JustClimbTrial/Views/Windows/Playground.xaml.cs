@@ -10,6 +10,8 @@ namespace JustClimbTrial.Views.Windows
     /// </summary>
     public partial class Playground : Window
     {
+        public bool LoopSrcnSvr = true;
+
         public Playground()
         {
             InitializeComponent();
@@ -41,7 +43,7 @@ namespace JustClimbTrial.Views.Windows
         }
         private void PlaygroundMedia_Loaded(object sender, RoutedEventArgs e)
         {
-            PlaygroundMedia.Play();
+            if(LoopSrcnSvr)PlaygroundMedia.Play();
         }
         private void PlaygroundMedia_MediaOpened(object sender, RoutedEventArgs e)
         {
@@ -49,7 +51,7 @@ namespace JustClimbTrial.Views.Windows
         }
         private void PlaygroundMedia_MediaEnded(object sender, RoutedEventArgs e)
         {
-            PlaygroundMedia.Position = TimeSpan.FromSeconds(0);
+            if(LoopSrcnSvr)PlaygroundMedia.Position = TimeSpan.FromSeconds(0);
         }
 
 

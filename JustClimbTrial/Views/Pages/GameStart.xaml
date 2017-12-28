@@ -90,7 +90,7 @@
         <!-- end of row 1 -->
         
         <!-- row 2 -->
-        <DataGrid x:Name="dgridRouteVideos"
+        <DataGrid x:Name="DgridRouteVideos"
                   SelectionUnit="FullRow" 
                   SelectionMode="Single" 
                   AutoGenerateColumns="false" 
@@ -103,31 +103,31 @@
                   Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" 
                   RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="routeNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto" />
-                <DataGridTextColumn x:Name="creatDTColumn" Binding="{Binding CreateDTString}" Header="Date" Width="Auto" />
+                <DataGridTextColumn x:Name="RouteNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto" />
+                <DataGridTextColumn x:Name="CreatDTColumn" Binding="{Binding CreateDTString}" Header="Date" Width="Auto" />
             </DataGrid.Columns>
         </DataGrid>
         <!-- end of row 2 -->
         
         <!-- row 3 -->
-        <Button x:Name="btnDemo" 
+        <Button x:Name="BtnDemo" 
             Grid.Row="3" Grid.Column="0"                
-            Click="btnDemo_Click">
+            Click="BtnDemo_Click">
             DEMO
         </Button>
-        <Button x:Name="btnPlaySelectedVideo" 
+        <Button x:Name="BtnPlaySelectedVideo" 
             Grid.Row="3" Grid.Column="1" 
-            Click="btnPlaySelectedVideo_Click">
+            Click="BtnPlaySelectedVideo_Click">
             PLAY SELECTED VIDEO
         </Button>
         <TextBlock Grid.Row="3" Grid.Column="2">
             Game status:
         </TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="3" 
-            x:Name="lbGameStatusDet" Text="Idling" />
+            x:Name="LbGameStatusDet" Text="Idling" />
         <Button Grid.Row="3" Grid.Column="4" 
-            x:Name="btnRestartGame" 
-            Click="btnRestartGame_Click">
+            x:Name="BtnRestartGame" 
+            Click="BtnRestartGame_Click">
             RESTART
         </Button>
         <!-- end of row 3 -->
