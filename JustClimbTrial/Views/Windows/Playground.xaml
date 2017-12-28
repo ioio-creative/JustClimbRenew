@@ -20,10 +20,10 @@
                 <Canvas Name="PlaygroundCanvas" Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=playgroundCamera, Mode=OneWay}"
                         Background="Transparent">
                 </Canvas>
-            <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
+                <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
                               LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
                               MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
-        </Grid>
+            </Grid>
             <Viewbox.RenderTransform>
                 <ScaleTransform ScaleX="-1"/>
             </Viewbox.RenderTransform>

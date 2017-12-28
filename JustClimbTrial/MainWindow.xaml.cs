@@ -63,9 +63,9 @@ namespace JustClimbTrial
             }
             else
             {
-                Image playgroundImage = playgroundWindow.PlaygroundCamera;
-                playgroundImage.Source = new BitmapImage(new Uri(Path.Combine(FileHelper.WallLogFolderPath(), AppGlobal.WallID, AppGlobal.WallID + ".png")));
-                playgroundImage.Opacity = 0.5; 
+                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
+                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+                playgroundWindow.ShowImage(wallLogImg, 0.5);                
             }
         }
 

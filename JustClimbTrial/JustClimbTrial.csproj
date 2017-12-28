@@ -100,6 +100,7 @@
     <Compile Include="Enums\ClimbMode.cs" />
     <Compile Include="Extensions\CanvasExtension.cs" />
     <Compile Include="Extensions\EllipseExtension.cs" />
+    <Compile Include="Extensions\ImageControlExtension.cs" />
     <Compile Include="Extensions\RockExtension.cs" />
     <Compile Include="Globals\AppGlobal.cs" />
     <Compile Include="Helpers\DateTimeHelper.cs" />

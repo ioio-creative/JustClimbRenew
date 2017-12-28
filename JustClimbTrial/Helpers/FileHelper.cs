@@ -1,6 +1,5 @@
 ﻿using JustClimbTrial.Properties;
 using JustClimbTrial.ViewModels;
-using System;
 using System.IO;
 using System.Reflection;
 
@@ -12,6 +11,7 @@ namespace JustClimbTrial.Helpers
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         private static Settings settings = new Settings();
+
 
         // Path: exeLocation/videoFileDirectory/RouteNo/VideoNo.extension
         public static string VideoFullPath(RouteVideoViewModel video)
@@ -38,6 +38,10 @@ namespace JustClimbTrial.Helpers
         {
             return Path.Combine(exeDirectory, settings.WallLogDirectory);
         }
- 
+
+        public static string WallLogImagePath(string wallId)
+        {
+            return Path.Combine(WallLogFolderPath(), wallId, wallId + ".png");
+        }
     }
 }
