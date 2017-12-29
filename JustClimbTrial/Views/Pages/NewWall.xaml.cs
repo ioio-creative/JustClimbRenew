@@ -254,7 +254,7 @@ namespace JustClimbTrial.Views.Pages
         {
             if (isSnapShotTaken)
             {
-                Point mouseClickPt = e.GetPosition(cameraIMG);                
+                Point mouseClickPt = e.GetPosition(cameraIMG);
 
                 RockViewModel rockCorrespondsToCanvasPt =
                     rocksOnWallViewModel.GetRockInListByCanvasPoint(mouseClickPt);

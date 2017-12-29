@@ -102,7 +102,7 @@ namespace JustClimbTrial.Views.Pages
 
             if (mainWindowClient.DebugMode)
             {
-                //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
+                kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
             }
 
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
@@ -128,7 +128,7 @@ namespace JustClimbTrial.Views.Pages
                     CameraSpacePoint startCamSp = startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                     Console.WriteLine($"{{ {startCamSp.X},{startCamSp.Y},{startCamSp.Z} }}");
                     
-                    //endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+                    endRockOnBoulderRoute = rocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
                     rocksOnRouteCamSP = new CameraSpacePoint[rocksOnBoulderRoute.Count()];
 
                     int i = 0;
@@ -229,14 +229,18 @@ namespace JustClimbTrial.Views.Pages
                         foreach (Joint relevantJoint in relevantJoints)
                         {
                             float distance = KinectExtensions.GetCameraSpacePointDistance(relevantJoint.Position, startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint());
-                            Console.WriteLine("Distance = "+distance);
-                            if (distance < 0.1)
+                            float distanceEnd = KinectExtensions.GetCameraSpacePointDistance(relevantJoint.Position, endRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint());
+
+                            //Console.WriteLine("Distance = "+distance);
+                            if (distance < 0.1 || distanceEnd < 0.1)
                             {
                                 ///DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
                                 playerBodyID = body.TrackingId;
                                 //Console.WriteLine("Player Tracking ID: "+playerBodyID);
                                 playgroundMedia.Play();
                             }
+
+
                         }
                     }
                 }

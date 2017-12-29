@@ -32,13 +32,16 @@
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
-            <Viewbox Name="viewBox" Grid.Column="0">
+            <Viewbox Name="viewBox" Grid.Column="0" RenderTransformOrigin="0.5, 0.5">
                 <Grid>
                     <Image Name="cameraIMG" />
                     <Canvas x:Name="canvas" Background="Transparent" MouseDown="canvas_MouseDown" 
                             Width="{Binding ActualWidth, ElementName=cameraIMG, Mode=OneWay}" 
                             Height="{Binding ActualHeight, ElementName=cameraIMG, Mode=OneWay}" />
                 </Grid>
+                <Viewbox.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Viewbox.RenderTransform>
             </Viewbox>
 
             <StackPanel Grid.Column="1">

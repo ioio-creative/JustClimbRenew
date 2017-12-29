@@ -52,6 +52,10 @@ namespace JustClimbTrial.Views.Windows
         private void PlaygroundMedia_MediaEnded(object sender, RoutedEventArgs e)
         {
             if(LoopSrcnSvr)PlaygroundMedia.Position = TimeSpan.FromSeconds(0);
+            else
+            {
+                PlaygroundMedia.Stop();
+            }
         }
 
 

@@ -12,7 +12,7 @@ namespace JustClimbTrial.ViewModels
 {
     public class RockViewModel
     {
-        private const double DefaultBoulderShapeStrokeThickness = 1.5;
+        private const double DefaultBoulderShapeStrokeThickness = 5;
 
 
         #region properties

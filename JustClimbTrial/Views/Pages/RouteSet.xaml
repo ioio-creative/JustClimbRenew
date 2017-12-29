@@ -54,7 +54,7 @@
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
-            <Viewbox Grid.Column="0">
+            <Viewbox Name="viewBox" Grid.Column="0" RenderTransformOrigin="0.5, 0.5">
                 <Grid>
                     <Image Name="RouteSetImg"                 
                        Stretch="Uniform" 
@@ -66,6 +66,9 @@
                         Width="{Binding ActualWidth, ElementName=RouteSetImg}"
                         Height="{Binding ActualHeight, ElementName=RouteSetImg}"/>
                 </Grid>
+                <Viewbox.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Viewbox.RenderTransform>
             </Viewbox>
             <!-- grid 2 -->
             <Grid Grid.Column="1">
