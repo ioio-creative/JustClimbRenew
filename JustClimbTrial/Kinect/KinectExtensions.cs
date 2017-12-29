@@ -129,17 +129,11 @@ namespace JustClimbTrial.Kinect
             first = first.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
             second = second.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
-            Line line = new Line
-            {
-                X1 = first.Position.X,
-                Y1 = first.Position.Y,
-                X2 = second.Position.X,
-                Y2 = second.Position.Y,
-                StrokeThickness = 8,
-                Stroke = new SolidColorBrush(Colors.LightBlue)
-            };
-
-            canvas.AddChild(line);
+            canvas.DrawLine(
+                new Point(first.Position.X, first.Position.Y),
+                new Point(second.Position.X, second.Position.Y),
+                8,
+                new SolidColorBrush(Colors.LightBlue));            
         }
 
         public static Joint ScaleTo(this Joint joint, double width, double height, float skeletonMaxX, float skeletonMaxY)

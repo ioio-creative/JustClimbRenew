@@ -164,7 +164,21 @@ namespace JustClimbTrial.Views.Pages
 
         private void RemoveAllRocks(object parameter = null)
         {
-            rocksOnWallViewModel.RemoveAllRocks();
+            // Display message box
+            string messageBoxText = "Do you want to remove all rocks?";
+            string caption = "Remove All Rocks Confirmation";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button);
+
+            // Process message box results
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    rocksOnWallViewModel.RemoveAllRocks();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }
         }
 
         private void SaveWall(object parameter = null)

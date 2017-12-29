@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace JustClimbTrial.Extensions
@@ -80,6 +81,22 @@ namespace JustClimbTrial.Extensions
         {
             canvas.SetLeftAndTopForShape(shape, x, y);
             canvas.AddChild(shape);
+        }
+
+        public static Line DrawLine(this Canvas canvas, Point pt1, Point pt2, double thickness, Brush aBrush)
+        {
+            Line line = new Line
+            {
+                X1 = pt1.X,
+                Y1 = pt1.Y,
+                X2 = pt2.X,
+                Y2 = pt2.Y,
+                StrokeThickness = thickness,
+                Stroke = aBrush
+            };
+
+            canvas.AddChild(line);
+            return line;
         }
     }
 }

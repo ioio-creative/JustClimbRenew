@@ -78,7 +78,7 @@ namespace JustClimbTrial
 
         public void HandleColorImageSourceArrived(object sender, ColorBitmapSrcEventArgs e)
         {
-                playgroundWindow.ShowImage(e.GetColorBitmapSrc());
+            playgroundWindow.ShowImage(e.GetColorBitmapSrc());
         }
 
         public void SetPlaygroundMediaElementSource(Uri sourceUri)

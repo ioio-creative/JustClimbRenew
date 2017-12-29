@@ -15,6 +15,7 @@ namespace JustClimbTrial.ViewModels
         private IList<RockOnRouteViewModel> rocksOnRoute = new List<RockOnRouteViewModel>();
         private RockOnRouteViewModel selectedRockOnRoute;
         private Shape selectedRockIndicator;
+        private IList<Line> linesLinkingTrainingRocks = new List<Line>();
         private Canvas canvas;
 
         public RockOnRouteViewModel SelectedRockOnRoute
@@ -129,6 +130,7 @@ namespace JustClimbTrial.ViewModels
                 RockOnRouteViewModel lastRockOnRoute = rocksOnRoute[rocksOnRoute.Count - 1];
 
                 lastRockOnRoute.UndrawRockTrainingSeq();
+                RemoveLineAttachedToLastTrainingRock();
 
                 RemoveRockFromRoute(lastRockOnRoute);
 
@@ -166,6 +168,8 @@ namespace JustClimbTrial.ViewModels
                 {
                     SelectedRockOnRoute.SetRockTrainingSeqAndDraw(seqNo);                    
                 }
+
+                AttachLineToLastTrainingRockOnCanvas();
             }
         }
 
@@ -189,6 +193,31 @@ namespace JustClimbTrial.ViewModels
 
 
         #region draw helpers
+
+        private void RemoveLineAttachedToLastTrainingRock()
+        {
+            if (linesLinkingTrainingRocks.Any())
+            {
+                Line lineAttachedToLastTrainingRock = linesLinkingTrainingRocks[linesLinkingTrainingRocks.Count - 1];
+                linesLinkingTrainingRocks.Remove(lineAttachedToLastTrainingRock);
+                canvas.RemoveChild(lineAttachedToLastTrainingRock);
+            }
+        }
+
+        private void AttachLineToLastTrainingRockOnCanvas()
+        {
+            if (rocksOnRoute.Count > 1)
+            {
+                RockOnRouteViewModel lastRockOnRouteVM = rocksOnRoute[rocksOnRoute.Count - 1];
+                RockOnRouteViewModel secLastRockOnRouteVM = rocksOnRoute[rocksOnRoute.Count - 2];
+                Line lineAttachedToLastTrainingRock = canvas.DrawLine(
+                    secLastRockOnRouteVM.MyRockViewModel.BCanvasPoint, 
+                    lastRockOnRouteVM.MyRockViewModel.BCanvasPoint,
+                    8,
+                    new SolidColorBrush(Colors.LightBlue));
+                linesLinkingTrainingRocks.Add(lineAttachedToLastTrainingRock);
+            }
+        }
 
         private static Ellipse GetNewSelectedRockIndicatorCircle(Shape selectedRock)
         {

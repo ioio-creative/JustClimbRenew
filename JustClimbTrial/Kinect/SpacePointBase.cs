@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.Extensions;
 using Microsoft.Kinect;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -92,17 +93,11 @@ namespace JustClimbTrial.Kinect
             Shape lineToReturn = null;
             if (first.IsValid && second.IsValid)
             {
-                lineToReturn = new Line
-                {
-                    X1 = first.X,
-                    Y1 = first.Y,
-                    X2 = second.X,
-                    Y2 = second.Y,
-                    StrokeThickness = 8,
-                    Stroke = new SolidColorBrush(Colors.LightBlue)
-                };
-
-                canvas.AddChild(lineToReturn);
+                lineToReturn = canvas.DrawLine(
+                    new Point(first.X, first.Y),
+                    new Point(second.X, second.Y),
+                    8,
+                    new SolidColorBrush(Colors.LightBlue));                
             }
 
             return lineToReturn;

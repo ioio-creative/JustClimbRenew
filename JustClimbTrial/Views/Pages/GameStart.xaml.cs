@@ -1,7 +1,6 @@
 ﻿using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
-using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.ViewModels;
@@ -15,8 +14,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace JustClimbTrial.Views.Pages
