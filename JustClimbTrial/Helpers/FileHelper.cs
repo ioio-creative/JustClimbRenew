@@ -1,24 +1,30 @@
-﻿using JustClimbTrial.Properties;
+﻿using JustClimbTrial.DataAccess;
+using JustClimbTrial.Globals;
+using JustClimbTrial.Properties;
 using JustClimbTrial.ViewModels;
 using System.IO;
-using System.Reflection;
 
 namespace JustClimbTrial.Helpers
 {
     public class FileHelper
-    {       
-        private static string exeDirectory =  
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
+    {
+        private static string exeDirectory = AppGlobal.ExeDirectory;
         private static Settings settings = new Settings();
 
-
-        // Path: exeLocation/videoFileDirectory/RouteNo/VideoNo.extension
-        public static string VideoFullPath(RouteVideoViewModel video)
+        // Path: exeLocation/VideoTempFileDirectory/RandomString.extension
+        public static string VideoTempFullPath(EntityType entityType)
         {
-            return Path.Combine(exeDirectory, settings.VideoFileDirectory,
-                video.RouteNo, video.VideoNo + settings.VideoFileExtension);
+            string tmpVideoKey = KeyGenerator.GenerateNewKey(entityType);
+            return Path.Combine(settings.VideoTempFileDirectory, 
+                tmpVideoKey + settings.VideoFileExtension);
         }
+
+        // Path: exeLocation/VideoFileDirectory/RouteNo/VideoNo.extension
+        public static string VideoRecordedFullPath(RouteVideoViewModel video)
+        {
+            return Path.Combine(exeDirectory, settings.VideoRecordedFileDirectory,
+                video.RouteNo, video.VideoNo + settings.VideoFileExtension);
+        }       
 
         // Path: exeLocation/VideoResourcesDirectory/
         public static string VideoResourcesFolderPath()
@@ -30,7 +36,7 @@ namespace JustClimbTrial.Helpers
         public static string VideoBufferFolderPath()
         {    
             //Console.WriteLine(Path.Combine(exeDirectory, settings.VideoBufferDirectory));
-            return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
+            return Path.Combine(exeDirectory, settings.VideoBufferDirectoryUnderAppVideo);
         }
 
         // Path: exeLocation/WallLogDirectory/

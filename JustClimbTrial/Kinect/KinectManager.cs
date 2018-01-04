@@ -102,11 +102,8 @@ namespace JustClimbTrial.Kinect
         //!!! we create another event specifically to handle color bitmap as System.Drawing.Bitmap
         //This is only for saving img and video files
         public event EventHandler<ColorBitmapEventArgs> ColorBitmapArrived;
-
         public event EventHandler<DepthImgSrcEventArgs> DepthImageSourceArrived;    
-
-        public event EventHandler<InfraredImgSrcEventArgs> InfraredImageSourceArrived;   
-
+        public event EventHandler<InfraredImgSrcEventArgs> InfraredImageSourceArrived;
         public event EventHandler<BodyListArrEventArgs> BodyFrameArrived;
         
 

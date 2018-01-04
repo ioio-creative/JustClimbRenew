@@ -12,7 +12,7 @@ namespace JustClimbTrial.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,10 +25,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos")]
-        public string VideoFileDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\RecordedVideos")]
+        public string VideoRecordedFileDirectory {
             get {
-                return ((string)(this["VideoFileDirectory"]));
+                return ((string)(this["VideoRecordedFileDirectory"]));
             }
         }
         
@@ -64,10 +64,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos\\VideoImgBuffer")]
-        public string VideoBufferDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\AppVideos\\VideoImgBuffer")]
+        public string VideoBufferDirectoryUnderAppVideo {
             get {
-                return ((string)(this["VideoBufferDirectory"]));
+                return ((string)(this["VideoBufferDirectoryUnderAppVideo"]));
             }
         }
         
@@ -82,10 +82,28 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos\\VideoResources")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\AppVideos\\VideoResources")]
         public string VideoResourcesDirectory {
             get {
                 return ((string)(this["VideoResourcesDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ffmpeg.exe")]
+        public string FfmpegExePath {
+            get {
+                return ((string)(this["FfmpegExePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\AppVideos\\VideosTemp")]
+        public string VideoTempFileDirectory {
+            get {
+                return ((string)(this["VideoTempFileDirectory"]));
             }
         }
     }

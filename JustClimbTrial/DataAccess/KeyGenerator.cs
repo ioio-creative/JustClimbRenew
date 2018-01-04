@@ -135,7 +135,7 @@ namespace JustClimbTrial.DataAccess
 
         private static string DateTimeString(DateTime aDT)
         {
-            return String.Format(ShortTimeStampFormat, aDT);
+            return string.Format(ShortTimeStampFormat, aDT);
         }
 
         private static string DateTimeString(out DateTime aDT)

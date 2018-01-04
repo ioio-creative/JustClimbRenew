@@ -52,6 +52,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Kinect, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ProcessHelperDLL">
+      <HintPath>..\..\..\C#.NET\ProcessHelperDLL\ProcessHelperDLL\bin\Debug\ProcessHelperDLL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -98,6 +101,7 @@
     <Compile Include="DataAccess\Entities\TrainingRouteVideoDataAccess.cs" />
     <Compile Include="Enums\RockOnBoulderStatus.cs" />
     <Compile Include="Enums\ClimbMode.cs" />
+    <Compile Include="Enums\VideoRecordType.cs" />
     <Compile Include="Extensions\CanvasExtension.cs" />
     <Compile Include="Extensions\EllipseExtension.cs" />
     <Compile Include="Extensions\ImageControlExtension.cs" />
@@ -133,6 +137,9 @@
     <Compile Include="Views\Dialogs\VideoPlaybackDialog.xaml.cs">
       <DependentUpon>VideoPlaybackDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\VideoRecordDialog.xaml.cs">
+      <DependentUpon>VideoRecordDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Pages\NewWall.xaml.cs">
       <DependentUpon>NewWall.xaml</DependentUpon>
     </Compile>
@@ -156,6 +163,9 @@
     </Compile>
     <Compile Include="Views\Pages\VideoPlaybackDialogConfirm.xaml.cs">
       <DependentUpon>VideoPlaybackDialogConfirm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\VideoRecord.xaml.cs">
+      <DependentUpon>VideoRecord.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\BoulderRockStatus.xaml.cs">
       <DependentUpon>BoulderRockStatus.xaml</DependentUpon>
@@ -189,6 +199,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Dialogs\VideoRecordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Pages\NewWall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -218,6 +232,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\VideoPlaybackDialogConfirm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\VideoRecord.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

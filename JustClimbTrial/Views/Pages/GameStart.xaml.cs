@@ -9,7 +9,6 @@ using JustClimbTrial.Views.Windows;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,12 +42,12 @@ namespace JustClimbTrial.Views.Pages
         //private IEnumerable<Shape> skeletonShapes;
         private IList<IEnumerable<Shape>> skeletonBodies = new List<IEnumerable<Shape>>();
         private VideoHelper gameplayVideoRecClient;
-        public bool IsRecording = false;
+
+        private bool isRecording = false;
 
 
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
-
             routeId = aRouteId;
             climbMode = aClimbMode;
 
@@ -78,8 +77,6 @@ namespace JustClimbTrial.Views.Pages
             // set titles
             Title = "Just Climb - Game Start";
             WindowTitle = Title;
-            
-            
         }
 
 
@@ -97,6 +94,8 @@ namespace JustClimbTrial.Views.Pages
             playgroundMedia.Stop();
             playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(),"Countdown.mp4")));
 
+            gameplayVideoRecClient = new VideoHelper(kinectManagerClient);
+
             if (mainWindowClient.DebugMode)
             {
                 kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
@@ -108,7 +107,7 @@ namespace JustClimbTrial.Views.Pages
 
             string headerRowTitleFormat = "{0} Route {1} - Video Playback";
 
-            //methods to access rocks on route from data base
+            //methods to access rocks on route from database
             switch (climbMode)
             {
                 case ClimbMode.Training:
@@ -136,14 +135,7 @@ namespace JustClimbTrial.Views.Pages
                         i++;
                     }
                     break;
-
-
-            }
-
-            //methods relating to video recording
-            kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
-            gameplayVideoRecClient = mainWindowClient.MainVideoHelper;
-            Directory.CreateDirectory(FileHelper.VideoBufferFolderPath());
+            }         
         }
 
         private void BtnDemo_Click(object sender, RoutedEventArgs e)
@@ -152,25 +144,25 @@ namespace JustClimbTrial.Views.Pages
             //string abx = FileHelper.VideoFullPath(model);
 
             //We temporary use this as video rec btn
-            if (!IsRecording)
-            {
-                IsRecording = true;
-                gameplayVideoRecClient.StartQueue();
+            if (!isRecording)
+            {                                
                 BtnDemo.Content = "Stop Rec";
             }
             else
-            {
-                IsRecording = false;
-                
+            {                
                 BtnDemo.Content = "DEMO";
             }
+
+            isRecording = !isRecording;
         }
 
         private void BtnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
         {
-            kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
-
-            if(mainWindowClient.DebugMode) kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
+            if (mainWindowClient.DebugMode)
+            {
+                kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
+            }
+            
             //mainWindowClient.PlaygroundWindow.PlaygroundCamera.Opacity = 0;
 
             MediaElement playbackMonitor = mainWindowClient.PlaygroundWindow.PlaybackMedia;
@@ -193,7 +185,6 @@ namespace JustClimbTrial.Views.Pages
                 {
                     playgroundCanvas.RemoveChild(skeletonShape);
                 }
-
             }
             skeletonBodies = new List<IEnumerable<Shape>>();
                        
@@ -242,14 +233,6 @@ namespace JustClimbTrial.Views.Pages
                     }
                 }
 
-            }
-        }
-
-        public void HandleColorBitmapArrived(object sender, ColorBitmapEventArgs e)
-        {
-            if (IsRecording)
-            {
-                gameplayVideoRecClient.SaveImageToQueue(FileHelper.VideoBufferFolderPath(), e.GetColorBitmap());
             }
         }
 

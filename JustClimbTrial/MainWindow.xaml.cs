@@ -34,8 +34,6 @@ namespace JustClimbTrial
             set { playgroundMedia = value; }
         }
 
-        public VideoHelper MainVideoHelper;
-
 
         public MainWindow()
         {
@@ -50,8 +48,6 @@ namespace JustClimbTrial
             //by default play ScreenSaver.mp4 in Playground Window
             playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundWindow.SetPlaygroundMediaSource(new Uri( Path.Combine(FileHelper.VideoResourcesFolderPath(),"ScreenSaver.mp4") ) );
-
-            MainVideoHelper = new VideoHelper();
 
             KinectManagerClient = new KinectManager();
             //activate sensor in Main Window only once
