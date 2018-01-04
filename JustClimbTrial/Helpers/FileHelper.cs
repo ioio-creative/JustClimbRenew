@@ -16,21 +16,26 @@ namespace JustClimbTrial.Helpers
         // Path: exeLocation/videoFileDirectory/RouteNo/VideoNo.extension
         public static string VideoFullPath(RouteVideoViewModel video)
         {
-            return Path.Combine(exeDirectory, settings.VideoFileDirectory,
+            return Path.Combine(exeDirectory, settings.VideoDirectory,
                 video.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
 
-        // Path: exeLocation/VideoResourcesDirectory/
+        // Path: exeLocation/VideoDirectory/VideoResourcesDirectory/
         public static string VideoResourcesFolderPath()
         {
-            return Path.Combine(exeDirectory, settings.VideoResourcesDirectory);
+            return Path.Combine(exeDirectory, settings.VideoDirectory, settings.VideoResourcesDirectory);
         }
 
-        // Path: exeLocation/VideoBufferDirectory/
+        // Path: exeLocation/VideoDirectory/VideoBufferDirectory/
         public static string VideoBufferFolderPath()
         {    
-            //Console.WriteLine(Path.Combine(exeDirectory, settings.VideoBufferDirectory));
-            return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
+            return Path.Combine(exeDirectory, settings.VideoDirectory, settings.VideoBufferDirectory);
+        }
+
+        //Path: exeLocation/VideoDirectory/PngSequenceDirectory/
+        public static string PngSequencesFolderPath()
+        {
+            return Path.Combine(exeDirectory, settings.VideoDirectory, settings.PngSequenceDirectory);
         }
 
         // Path: exeLocation/WallLogDirectory/

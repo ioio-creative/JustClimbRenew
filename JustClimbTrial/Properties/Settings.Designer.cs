@@ -26,9 +26,9 @@ namespace JustClimbTrial.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos")]
-        public string VideoFileDirectory {
+        public string VideoDirectory {
             get {
-                return ((string)(this["VideoFileDirectory"]));
+                return ((string)(this["VideoDirectory"]));
             }
         }
         
@@ -64,7 +64,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos\\VideoImgBuffer")]
+        [global::System.Configuration.DefaultSettingValueAttribute("VideoImgBuffer")]
         public string VideoBufferDirectory {
             get {
                 return ((string)(this["VideoBufferDirectory"]));
@@ -82,10 +82,19 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Videos\\VideoResources")]
+        [global::System.Configuration.DefaultSettingValueAttribute("VideoResources")]
         public string VideoResourcesDirectory {
             get {
                 return ((string)(this["VideoResourcesDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PngSequences")]
+        public string PngSequenceDirectory {
+            get {
+                return ((string)(this["PngSequenceDirectory"]));
             }
         }
     }

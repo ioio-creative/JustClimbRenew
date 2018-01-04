@@ -43,13 +43,16 @@ namespace JustClimbTrial.ViewModels
             {
                 case RockOnBoulderStatus.Start:
                     MyRockViewModel.ChangeRockShapeToStart();
+                    MyRockViewModel.CreateRockImage();
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
                     MyRockViewModel.ChangeRockShapeToIntermediate();
+                    MyRockViewModel.CreateRockImage();
                     break;
                 case RockOnBoulderStatus.End:
                     MyRockViewModel.ChangeRockShapeToEnd();
+                    MyRockViewModel.CreateRockImage();
                     break;
             }
         }

@@ -47,7 +47,7 @@ namespace JustClimbTrial.Views.Windows
         }
         private void PlaygroundMedia_MediaOpened(object sender, RoutedEventArgs e)
         {
-
+            //triggered when Meida Element is Played
         }
         private void PlaygroundMedia_MediaEnded(object sender, RoutedEventArgs e)
         {

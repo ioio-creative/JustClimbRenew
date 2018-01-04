@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Globals;
+using System;
 using System.Windows;
 
 namespace JustClimbTrial
@@ -15,8 +16,9 @@ namespace JustClimbTrial
             Wall newestValidWall = WallDataAccess.NewestValidWall;
             if (newestValidWall != null)
             {
-                AppGlobal.WallID = newestValidWall.WallID;
-                //AppGlobal.WallID = "WA2017121416029xmq7H";
+                //AppGlobal.WallID = newestValidWall.WallID;
+                //Console.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
+                AppGlobal.WallID = "WA2017122912011l7oBf";
             }
         }
     }
