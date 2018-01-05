@@ -46,6 +46,12 @@ namespace JustClimbTrial.Views.Pages
         private bool isRecording = false;
 
 
+        #region Gameplay Flags
+
+        private bool gameStarted = false;
+
+        #endregion
+
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
             routeId = aRouteId;
@@ -89,10 +95,10 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient = this.Parent as MainWindow;
             kinectManagerClient = mainWindowClient.KinectManagerClient;
             playgroundWindow = mainWindowClient.PlaygroundWindow;
-            playgroundWindow.LoopSrcnSvr = false;
             playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundMedia.Stop();
-            playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(),"Countdown.mp4")));
+            playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(),"Ready.mp4")));
+            playgroundMedia.Play();
 
             gameplayVideoRecClient = new VideoHelper(kinectManagerClient);
 
@@ -132,6 +138,7 @@ namespace JustClimbTrial.Views.Pages
                     {
                         rockOnBoulderRoute.DrawRockShapeWrtStatus();
                         rocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                        rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
                         i++;
                     }
                     break;
@@ -216,16 +223,25 @@ namespace JustClimbTrial.Views.Pages
 
                         foreach (Joint relevantJoint in relevantJoints)
                         {
-                            float distance = KinectExtensions.GetCameraSpacePointDistance(relevantJoint.Position, startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint());
+                            float distanceStart = KinectExtensions.GetCameraSpacePointDistance(relevantJoint.Position, startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint());
                             float distanceEnd = KinectExtensions.GetCameraSpacePointDistance(relevantJoint.Position, endRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint());
 
                             //Console.WriteLine("Distance = "+distance);
-                            if (distance < 0.1 || distanceEnd < 0.1)
+                            if (!gameStarted)
                             {
-                                ///DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
-                                playerBodyID = body.TrackingId;
-                                //Console.WriteLine("Player Tracking ID: "+playerBodyID);
-                                playgroundMedia.Play();
+                                if (distanceStart < 0.1 )
+                                {
+                                    ///DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
+                                    playerBodyID = body.TrackingId;
+                                    //Console.WriteLine("Player Tracking ID: "+playerBodyID);
+
+                                    playgroundWindow.LoopSrcnSvr = false;
+                                    playgroundMedia.Stop();
+                                    playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Countdown.mp4")));
+                                    playgroundMedia.Play();
+                                    gameStarted = true;
+
+                                } 
                             }
 
 

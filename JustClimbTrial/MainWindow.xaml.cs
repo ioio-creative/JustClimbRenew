@@ -17,7 +17,7 @@ namespace JustClimbTrial
     public partial class MainWindow : NavigationWindow
     {
         //in Debug Mode we display the live camera image from Kinect at all times
-        public bool DebugMode = true;
+        public bool DebugMode = false;
 
         public KinectManager KinectManagerClient;
 

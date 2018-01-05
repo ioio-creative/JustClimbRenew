@@ -25,10 +25,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\RecordedVideos")]
-        public string VideoRecordedFileDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles")]
+        public string AppFilesDirectory {
             get {
-                return ((string)(this["VideoRecordedFileDirectory"]));
+                return ((string)(this["AppFilesDirectory"]));
             }
         }
         
@@ -64,16 +64,16 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\AppVideos\\VideoImgBuffer")]
-        public string VideoBufferDirectoryUnderAppVideo {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\temp\\VideoImgBuffer")]
+        public string VideoBufferDirectory {
             get {
-                return ((string)(this["VideoBufferDirectoryUnderAppVideo"]));
+                return ((string)(this["VideoBufferDirectory"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\WallLog")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\WallLog")]
         public string WallLogDirectory {
             get {
                 return ((string)(this["WallLogDirectory"]));
@@ -82,7 +82,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\AppVideos\\VideoResources")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\Videos")]
         public string VideoResourcesDirectory {
             get {
                 return ((string)(this["VideoResourcesDirectory"]));
@@ -91,19 +91,28 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ffmpeg.exe")]
-        public string FfmpegExePath {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences")]
+        public string ImgSequenceDirectory {
             get {
-                return ((string)(this["FfmpegExePath"]));
+                return ((string)(this["ImgSequenceDirectory"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\AppVideos\\VideosTemp")]
-        public string VideoTempFileDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\temp\\TempRecording")]
+        public string VideoTempDirectory {
             get {
-                return ((string)(this["VideoTempFileDirectory"]));
+                return ((string)(this["VideoTempDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos")]
+        public string VideoRecordedDirectory {
+            get {
+                return ((string)(this["VideoRecordedDirectory"]));
             }
         }
     }

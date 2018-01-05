@@ -11,20 +11,20 @@ namespace JustClimbTrial.Helpers
         private static string exeDirectory = AppGlobal.ExeDirectory;
         private static Settings settings = new Settings();
 
-        // Path: exeLocation/VideoTempFileDirectory/RandomString.extension
-        public static string VideoTempFullPath(EntityType entityType)
+        // Path: exeLocation/VideoTempDirectory/RandomString.extension
+        public static string VideoTempFileFullPath(EntityType entityType)
         {
             string tmpVideoKey = KeyGenerator.GenerateNewKey(entityType);
-            return Path.Combine(settings.VideoTempFileDirectory, 
+            return Path.Combine(settings.VideoTempDirectory, 
                 tmpVideoKey + settings.VideoFileExtension);
         }
 
         // Path: exeLocation/VideoFileDirectory/RouteNo/VideoNo.extension
         public static string VideoRecordedFullPath(RouteVideoViewModel video)
-        {
-            return Path.Combine(exeDirectory, settings.VideoRecordedFileDirectory,
+        {       
+            return Path.Combine(exeDirectory, settings.VideoRecordedDirectory,
                 video.RouteNo, video.VideoNo + settings.VideoFileExtension);
-        }       
+        }
 
         // Path: exeLocation/VideoResourcesDirectory/
         public static string VideoResourcesFolderPath()
@@ -34,9 +34,14 @@ namespace JustClimbTrial.Helpers
 
         // Path: exeLocation/VideoBufferDirectory/
         public static string VideoBufferFolderPath()
-        {    
-            //Console.WriteLine(Path.Combine(exeDirectory, settings.VideoBufferDirectory));
-            return Path.Combine(exeDirectory, settings.VideoBufferDirectoryUnderAppVideo);
+        {                
+            return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
+        }
+
+        // Path: exeLocation/VideoDirectory/ImgSequenceDirectory/
+        public static string ImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.ImgSequenceDirectory);
         }
 
         // Path: exeLocation/WallLogDirectory/
