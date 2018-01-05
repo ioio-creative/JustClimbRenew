@@ -352,7 +352,7 @@ namespace JustClimbTrial.ViewModels
             BCanvas.SetLeftAndTop(BoulderImage, new Point { X = bCanvasPoint.X - BoulderImage.Width * 0.5, Y = bCanvasPoint.Y - BoulderImage.Height * 0.5 });
             BCanvas.AddChild(BoulderImage);
 
-            BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, 25);
+            BoulderButtonSequence = new ImageSequenceHelper(BoulderImage);
             BoulderButtonSequence.LoadSequenceFolder();
 
         }

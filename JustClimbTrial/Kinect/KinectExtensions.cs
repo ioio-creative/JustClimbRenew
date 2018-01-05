@@ -116,7 +116,7 @@ namespace JustClimbTrial.Kinect
             };
 
             // 4) Position the ellipse according to the joint's coordinates.   
-            canvas.SetLeftAndTopForShape(ellipse, joint.Position.X, joint.Position.Y);            
+            canvas.SetLeftAndTopForShapeWrtCentre(ellipse, joint.Position.X, joint.Position.Y);            
 
             // 5) Add the ellipse to the canvas.
             canvas.AddChild(ellipse);
