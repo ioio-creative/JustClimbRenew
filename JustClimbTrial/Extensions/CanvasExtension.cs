@@ -62,12 +62,12 @@ namespace JustClimbTrial.Extensions
             Canvas.SetTop(uiElement, y);
         }
 
-        public static void SetLeftAndTopForShape(this Canvas canvas, Shape shape, Point position)
+        public static void SetLeftAndTopForShapeWrtCentre(this Canvas canvas, Shape shape, Point position)
         {
-            canvas.SetLeftAndTopForShape(shape, position.X, position.Y);
+            canvas.SetLeftAndTopForShapeWrtCentre(shape, position.X, position.Y);
         }
 
-        public static void SetLeftAndTopForShape(this Canvas canvas, Shape shape, double x, double y)
+        public static void SetLeftAndTopForShapeWrtCentre(this Canvas canvas, Shape shape, double x, double y)
         {
             canvas.SetLeftAndTop(shape, x - shape.Width * 0.5, y - shape.Height * 0.5);
         }
@@ -79,7 +79,7 @@ namespace JustClimbTrial.Extensions
 
         public static void DrawShape(this Canvas canvas, Shape shape, double x, double y)
         {
-            canvas.SetLeftAndTopForShape(shape, x, y);
+            canvas.SetLeftAndTopForShapeWrtCentre(shape, x, y);
             canvas.AddChild(shape);
         }
 
