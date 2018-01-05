@@ -35,16 +35,16 @@ namespace JustClimbTrial.Views.Pages
             InitializeComponent();
             //add some handlers manually because slider IsMoveToPointEnabled absorbs MouseButtonEvent
             //reference-- https://social.msdn.microsoft.com/Forums/vstudio/en-US/e1318ef4-c76c-4267-9031-3bb7a0db502b/sliderismovetopointenabled-aborts-mouse-click-events?forum=wpf
-            navigationSlider.AddHandler(Slider.PreviewMouseDownEvent, new MouseButtonEventHandler(NavSlider_MouseDown), true);
-            navigationSlider.AddHandler(Slider.PreviewMouseUpEvent, new MouseButtonEventHandler(NavSlider_MouseUp), true);            
+            navigationSlider.AddHandler(PreviewMouseDownEvent, new MouseButtonEventHandler(NavSlider_MouseDown), true);
+            navigationSlider.AddHandler(PreviewMouseUpEvent, new MouseButtonEventHandler(NavSlider_MouseUp), true);            
         }
 
         void InitializePropertyValues()
         {
             // Set the media's starting SpeedRatio to the current value of the
             // their respective slider controls.
-            mediaPlayback.SpeedRatio = (double)speedRatioSlider.Value/100;
-            playbackMonitor.SpeedRatio = (double)speedRatioSlider.Value/100;
+            mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
+            playbackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
         }
         private void ShowMediaInformation()
         {

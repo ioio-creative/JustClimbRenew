@@ -97,7 +97,7 @@ namespace JustClimbTrial.Helpers
             for (int i = 0; i <= 17; i++)
             {
                 string filename = string.Format("{0}{1}{2}", "1_", i.ToString("00000"), imgExtension);
-                Uri fileUri = new Uri( System.IO.Path.Combine(FileHelper.PngSequencesFolderPath(), "BoulderButton","ButtonNormal", filename) );
+                Uri fileUri = new Uri( System.IO.Path.Combine(FileHelper.ImgSequenceDirectory(), "BoulderButton","ButtonNormal", filename) );
                 BitmapSource frameSource = new BitmapImage(fileUri);
                 sequence.Add(frameSource);
             }

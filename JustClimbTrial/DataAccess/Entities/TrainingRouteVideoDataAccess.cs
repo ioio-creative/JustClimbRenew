@@ -6,7 +6,7 @@ namespace JustClimbTrial.DataAccess.Entities
 {
     public class TrainingRouteVideoDataAccess : DataAccessBase
     {
-        private static EntityType myEntityType = EntityType.TR;
+        private static EntityType myEntityType = EntityType.TV;
 
         public static IEnumerable<TrainingRouteVideo> TrainingRouteVideos
         {

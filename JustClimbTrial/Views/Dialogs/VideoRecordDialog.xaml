@@ -1,16 +1,16 @@
-﻿<NavigationWindow x:Class="JustClimbTrial.Views.Dialogs.VideoPlaybackDialog"
+﻿<NavigationWindow x:Class="JustClimbTrial.Views.Dialogs.VideoRecordDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JustClimbTrial.Views.Dialogs"
         mc:Ignorable="d"
-        Title="Just Climb - Video Playback" Height="200" Width="400"
-        MinHeight="100" MinWidth="300"
+        Title="Just Climb - Video Record" Height="400" Width="800"
+        MinHeight="200" MinWidth="400"
         ResizeMode="CanResize"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
-        Source="/Views/Pages/VideoPlaybackDialogConfirm.xaml"
+        Source="/Views/Pages/VideoRecord.xaml"
         >
 
 </NavigationWindow>

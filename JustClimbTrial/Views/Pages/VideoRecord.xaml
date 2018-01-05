@@ -1,0 +1,23 @@
+﻿<Page x:Class="JustClimbTrial.Views.Pages.VideoRecord"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
+      mc:Ignorable="d" 
+      Width="{Binding Path=Parent.ActualWidth}" Height="{Binding Path=Parent.ActualHeight}"
+      Title="VideoRecord"
+      Loaded="Page_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="lbStopwatch" Grid.Column="0"></TextBlock>
+        <Button x:Name="btnStartRecordVideo" Grid.Column="1">Start Record</Button>
+        <Button x:Name="btnStopRecordVideo" Grid.Column="2">Stop Record</Button>
+        <Button x:Name="btnViewVideo" Grid.Column="3">View Video</Button>
+    </Grid>
+</Page>

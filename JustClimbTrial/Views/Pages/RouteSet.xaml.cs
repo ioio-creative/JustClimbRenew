@@ -6,6 +6,7 @@ using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
+using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.UserControls;
 using Microsoft.Kinect;
 using System.Linq;
@@ -38,10 +39,6 @@ namespace JustClimbTrial.Views.Pages
         private RouteSetViewModel routeSetViewModel;
         private RocksOnWallViewModel rocksOnWallViewModel;
         private RocksOnRouteViewModel rocksOnRouteViewModel;
-
-        // declare Kinect object and frame reader
-        private KinectSensor kinectSensor;
-        private MultiSourceFrameReader mulSourceReader;
 
         #endregion
 
@@ -181,6 +178,16 @@ namespace JustClimbTrial.Views.Pages
         private void btnRecordDemo_Click(object sender, RoutedEventArgs e)
         {
             SetTemplateOfControlFromResource(ctrlBtnDemo, BtnDemoDoneTemplateResourceKey);
+
+            // show video record dialog
+            VideoRecordDialog videoRecordDialog = new VideoRecordDialog();
+
+            MainWindow mainWindow = Parent as MainWindow;
+            VideoRecord videoRecordPage = new VideoRecord(routeSetClimbMode,
+                VideoRecordType.IsDemo, mainWindow.KinectManagerClient);
+
+            videoRecordDialog.Navigate(videoRecordPage);            
+            videoRecordDialog.ShowDialog();
         }
 
         private void btnDemoDone_Click(object sender, RoutedEventArgs e)

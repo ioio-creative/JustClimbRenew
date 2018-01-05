@@ -1,7 +1,8 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Globals;
-using System;
+using JustClimbTrial.Helpers;
+using System.IO;
 using System.Windows;
 
 namespace JustClimbTrial
@@ -20,6 +21,9 @@ namespace JustClimbTrial
                 //Console.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
                 AppGlobal.WallID = "WA2017122912011l7oBf";
             }
+
+            //methods relating to video recording
+            Directory.CreateDirectory(FileHelper.VideoBufferFolderPath());
         }
     }
 }

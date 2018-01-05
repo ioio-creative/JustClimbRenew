@@ -344,7 +344,7 @@ namespace JustClimbTrial.ViewModels
             {
                 //png image dimension: 3000 x 3000
                 //centre circle size: 300x300
-                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.PngSequencesFolderPath(), "BoulderButton", "ButtonNormal", "1_00017.png"))),
+                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.ImgSequenceDirectory(), "BoulderButton", "ButtonNormal", "1_00017.png"))),
                 Width = 3000 / 300 * BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = 3000 / 300 * BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Stretch = Stretch.Fill

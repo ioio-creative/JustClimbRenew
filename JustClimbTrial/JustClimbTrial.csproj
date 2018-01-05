@@ -52,6 +52,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Kinect, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ProcessHelperDLL">
+      <HintPath>..\..\..\C#.NET\ProcessHelperDLL\ProcessHelperDLL\bin\Debug\ProcessHelperDLL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -98,6 +101,7 @@
     <Compile Include="DataAccess\Entities\TrainingRouteVideoDataAccess.cs" />
     <Compile Include="Enums\RockOnBoulderStatus.cs" />
     <Compile Include="Enums\ClimbMode.cs" />
+    <Compile Include="Enums\VideoRecordType.cs" />
     <Compile Include="Extensions\CanvasExtension.cs" />
     <Compile Include="Extensions\EllipseExtension.cs" />
     <Compile Include="Extensions\ImageControlExtension.cs" />
@@ -109,6 +113,11 @@
     <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
     <Compile Include="Kinect\KinectManager.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\RocksOnRouteViewModel.cs" />
     <Compile Include="ViewModels\RockViewModel.cs" />
@@ -135,6 +144,9 @@
     <Compile Include="Views\Dialogs\VideoPlaybackDialog.xaml.cs">
       <DependentUpon>VideoPlaybackDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\VideoRecordDialog.xaml.cs">
+      <DependentUpon>VideoRecordDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Pages\NewWall.xaml.cs">
       <DependentUpon>NewWall.xaml</DependentUpon>
     </Compile>
@@ -158,6 +170,9 @@
     </Compile>
     <Compile Include="Views\Pages\VideoPlaybackDialogConfirm.xaml.cs">
       <DependentUpon>VideoPlaybackDialogConfirm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\VideoRecord.xaml.cs">
+      <DependentUpon>VideoRecord.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\BoulderRockStatus.xaml.cs">
       <DependentUpon>BoulderRockStatus.xaml</DependentUpon>
@@ -188,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\VideoPlaybackDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\VideoRecordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -223,6 +242,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Pages\VideoRecord.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\BoulderRockStatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -249,11 +272,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <None Include="DataAccess\JustClimbApp.dbml.layout">
       <DependentUpon>JustClimbApp.dbml</DependentUpon>
     </None>
@@ -266,11 +284,11 @@
       <LastGenOutput>JustClimbApp.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <AppDesigner Include="Properties\" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
