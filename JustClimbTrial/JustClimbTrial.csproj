@@ -147,9 +147,6 @@
     <Compile Include="Views\Dialogs\VideoPlaybackDialog.xaml.cs">
       <DependentUpon>VideoPlaybackDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\VideoRecordDialog.xaml.cs">
-      <DependentUpon>VideoRecordDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Pages\NewWall.xaml.cs">
       <DependentUpon>NewWall.xaml</DependentUpon>
     </Compile>
@@ -206,10 +203,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\VideoPlaybackDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\VideoRecordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

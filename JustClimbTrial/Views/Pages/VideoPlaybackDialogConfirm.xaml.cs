@@ -20,9 +20,15 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoPlaybackDialogConfirm : Page
     {
-        public VideoPlaybackDialogConfirm()
+        // need to pass externalPlaybackMonitor to another view
+        private MediaElement externalPlaybackMonitor;
+
+
+        public VideoPlaybackDialogConfirm(MediaElement anExternalPlaybackMonitor)
         {
             InitializeComponent();
+
+            externalPlaybackMonitor = anExternalPlaybackMonitor;
         }
 
 
@@ -30,8 +36,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void btnYes_Click(object sender, RoutedEventArgs e)
         {            
-            VideoPlayback videoPlayback = new VideoPlayback();
-            this.NavigationService.Navigate(videoPlayback);
+            //VideoPlayback videoPlayback = new VideoPlayback(externalPlaybackMonitor);
+            //this.NavigationService.Navigate(videoPlayback);
         }
 
         private void btnNo_Click(object sender, RoutedEventArgs e)

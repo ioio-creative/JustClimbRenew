@@ -34,6 +34,7 @@ namespace JustClimbTrial.Views.Pages
 
         #region private members
 
+        private MainWindow parentMainWindow;
         private int newRouteNo;
         private ClimbMode routeSetClimbMode;
         private RouteSetViewModel routeSetViewModel;
@@ -127,9 +128,11 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            parentMainWindow = this.Parent as MainWindow;
+
             routeSetViewModel.LoadData();
 
-            rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, (this.Parent as MainWindow).KinectManagerClient.ManagerCoorMapper);
+            rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, parentMainWindow.KinectManagerClient.ManagerCoorMapper);
             bool isAnyRocksOnWall = rocksOnWallViewModel.
                 LoadAndDrawRocksOnWall(AppGlobal.WallID);
             rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
@@ -180,11 +183,10 @@ namespace JustClimbTrial.Views.Pages
             SetTemplateOfControlFromResource(ctrlBtnDemo, BtnDemoDoneTemplateResourceKey);
 
             // show video record dialog
-            VideoRecordDialog videoRecordDialog = new VideoRecordDialog();
-
-            MainWindow mainWindow = Parent as MainWindow;
+            VideoPlaybackDialog videoRecordDialog = new VideoPlaybackDialog(parentMainWindow.PlaygroundMedia);
             VideoRecord videoRecordPage = new VideoRecord(routeSetClimbMode,
-                VideoRecordType.IsDemo, mainWindow.KinectManagerClient);
+                VideoRecordType.IsDemo, parentMainWindow.KinectManagerClient,
+                parentMainWindow.PlaygroundMedia);
 
             videoRecordDialog.Navigate(videoRecordPage);            
             videoRecordDialog.ShowDialog();

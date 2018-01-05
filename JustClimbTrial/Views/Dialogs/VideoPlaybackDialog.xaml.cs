@@ -8,13 +8,9 @@ namespace JustClimbTrial.Views.Dialogs
     /// </summary>
     public partial class VideoPlaybackDialog : NavigationWindow
     {
-        public MediaElement PlaybackMonitor { get; set; }
-
         public VideoPlaybackDialog(MediaElement externalMediaElement)
         {
             InitializeComponent();
-
-            PlaybackMonitor = externalMediaElement;
         }
     }
 }

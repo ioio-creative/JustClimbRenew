@@ -3,21 +3,8 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
-using JustClimbTrial.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -30,17 +17,24 @@ namespace JustClimbTrial.Views.Pages
         private readonly VideoRecordType videoRecordType;
         private readonly VideoHelper videoHelper;
 
+        // need to pass externalPlaybackMonitor to another view
+        private MediaElement externalPlaybackMonitor;
+
 
         #region constructors
 
         public VideoRecord(ClimbMode aClimbMode, 
-            VideoRecordType aVideoRecordType, KinectManager kinectManagerClient)
+            VideoRecordType aVideoRecordType, 
+            KinectManager kinectManagerClient,
+            MediaElement anExternalPlaybackMonitor)
         {
             InitializeComponent();
             
             climbMode = aClimbMode;
             videoRecordType = aVideoRecordType;
             videoHelper = new VideoHelper(kinectManagerClient);
+
+            externalPlaybackMonitor = anExternalPlaybackMonitor;
         }
 
         #endregion
@@ -51,6 +45,11 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             InitialiseCommands();
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            videoHelper.ClearBuffer();
         }
 
         #endregion
@@ -118,11 +117,12 @@ namespace JustClimbTrial.Views.Pages
             if (exportVideoExitCode == 0)
             {
                 // navigate to VideoPlayback page
-                VideoPlayback videoPlayBack = new VideoPlayback();
+                VideoPlayback videoPlayBack = 
+                    new VideoPlayback(tmpVideoFilePath, externalPlaybackMonitor);
                 this.NavigationService.Navigate(videoPlayBack);
             }         
         }
 
-        #endregion
+        #endregion        
     }
 }

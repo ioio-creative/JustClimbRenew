@@ -87,15 +87,15 @@ namespace JustClimbTrial.Helpers
             });
         }
 
-        private void ClearBuffer()
-        {
-            FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
-        }
-
         #endregion
 
 
         #region public methods
+
+        public void ClearBuffer()
+        {
+            FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+        }
 
         public void StartRecording()
         {

@@ -14,6 +14,7 @@
             <RowDefinition Height="12*" Name="PlaybackWindow"/>
             <RowDefinition Height="1*" />
             <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
         <!-- row 0 Video Window-->
@@ -21,7 +22,9 @@
                       Width="{Binding RelativeSource={RelativeSource Self},Path=Parent.ActualWidth}" 
                       Height="{Binding RelativeSource={RelativeSource Self},Path=Parent.PlaybackWindow.ActualHeight}"
                       ScrubbingEnabled="True" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
-                      MediaOpened="PlaybackOpended" MediaEnded="PlaybackClosed" />
+                      MediaOpened="mediaPlayback_MediaOpended" 
+                      MediaEnded="mediaPlayback_MediaClosed" 
+                      Loaded="mediaPlayback_Loaded" />
 
         <!-- row 1 Video Navigation-->
         <!-- Seek to slider. Ths slider allows you to jump to different parts of the media playback. -->
@@ -55,6 +58,17 @@
             <!--Reset Speed Buttom-->
             <Button Name="speedResetBtn" Content="Reset Speed" Click="SpeedResetBtn_Click" Width="80" Height="20" Margin="10" />
 
+        </StackPanel>
+
+        <!-- row 3 Save Video -->
+        <StackPanel Name="panelSaveVideo"
+            Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Name="saveVideoBtn" Content="Save"
+                    Width="80" Height="20" Margin="10" 
+                    Click="saveVideoBtn_Click" />
+            <Button Name="cancelSaveVideoBtn" Content="Cancel"
+                    Width="80" Height="20" Margin="10" 
+                    Click="cancelSaveVideoBtn_Click" />
         </StackPanel>
     </Grid>
 </Page>

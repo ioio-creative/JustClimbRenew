@@ -28,10 +28,22 @@ namespace JustClimbTrial.Views.Pages
         private DispatcherTimer timer = new DispatcherTimer();
         private const double defaultTick = 500;
         private bool supressNavTick = false;
-        private MediaElement playbackMonitor;
+        private MediaElement externalPlaybackMonitor;
 
-        public VideoPlayback()
+        private readonly string videoFilePath;
+        private readonly bool isShowSaveVideoPanel;
+
+
+        #region constructors
+
+        public VideoPlayback(string aVideoFilePath, 
+            MediaElement anExternalPlaybackMonitor,
+            bool isToShowSaveVideoPanel)
         {
+            videoFilePath = aVideoFilePath;
+            externalPlaybackMonitor = anExternalPlaybackMonitor;
+            isShowSaveVideoPanel = isToShowSaveVideoPanel;
+
             InitializeComponent();
             //add some handlers manually because slider IsMoveToPointEnabled absorbs MouseButtonEvent
             //reference-- https://social.msdn.microsoft.com/Forums/vstudio/en-US/e1318ef4-c76c-4267-9031-3bb7a0db502b/sliderismovetopointenabled-aborts-mouse-click-events?forum=wpf
@@ -39,13 +51,17 @@ namespace JustClimbTrial.Views.Pages
             navigationSlider.AddHandler(PreviewMouseUpEvent, new MouseButtonEventHandler(NavSlider_MouseUp), true);            
         }
 
-        void InitializePropertyValues()
+        #endregion
+
+
+        private void InitializePropertyValues()
         {
             // Set the media's starting SpeedRatio to the current value of the
             // their respective slider controls.
             mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
-            playbackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
+            externalPlaybackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
         }
+
         private void ShowMediaInformation()
         {
             var duration = mediaPlayback.NaturalDuration.HasTimeSpan
@@ -55,7 +71,34 @@ namespace JustClimbTrial.Views.Pages
             Console.WriteLine(duration);
         }
 
-        private void PlaybackOpended(object sender, RoutedEventArgs e)
+
+        #region event handlers
+
+        private void VideoPlaybackLoaded(object sender, RoutedEventArgs e)
+        {
+            //VideoPlaybackDialog pageParent = this.Parent as VideoPlaybackDialog;
+            NavigationWindow pageParent = this.Parent as NavigationWindow;
+            pageParent.Width = 900;
+            pageParent.MinWidth = 600;
+            pageParent.Height = 600;
+            pageParent.MinHeight = 500;
+
+            mediaPlayback.Source = new Uri(videoFilePath);
+            externalPlaybackMonitor.Source = mediaPlayback.Source;
+
+            panelSaveVideo.Visibility =
+                isShowSaveVideoPanel ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void mediaPlayback_Loaded(object sender, RoutedEventArgs e)
+        {
+            // show first frame of video in WPF MediaElement
+            // https://stackoverflow.com/questions/1346886/show-first-frame-of-video-in-wpf-mediaelement
+            mediaPlayback.Play();
+            mediaPlayback.Pause();
+        }
+
+        private void mediaPlayback_MediaOpended(object sender, RoutedEventArgs e)
         {
             ShowMediaInformation();
             if (mediaPlayback.NaturalDuration.HasTimeSpan)
@@ -71,7 +114,7 @@ namespace JustClimbTrial.Views.Pages
             
         }
 
-        private void PlaybackClosed(object sender, RoutedEventArgs e)
+        private void mediaPlayback_MediaClosed(object sender, RoutedEventArgs e)
         {
             mediaPlayback.Stop();
         }
@@ -83,7 +126,7 @@ namespace JustClimbTrial.Views.Pages
             // already running.
             timer.Start();
             mediaPlayback.Play();
-            playbackMonitor.Play();
+            externalPlaybackMonitor.Play();
 
             // Initialize the MediaElement property values.
             InitializePropertyValues();
@@ -94,7 +137,7 @@ namespace JustClimbTrial.Views.Pages
             // The Pause method pauses the media if it is currently running.
             // The Play method can be used to resume.
             mediaPlayback.Pause();
-            playbackMonitor.Pause();
+            externalPlaybackMonitor.Pause();
         }
 
         private void StopMediaBtnClicked(object sender, RoutedEventArgs e)
@@ -102,35 +145,23 @@ namespace JustClimbTrial.Views.Pages
             // The Stop method stops and resets the media to be played from
             // the beginning.   
             mediaPlayback.Position = TimeSpan.FromMilliseconds(0);
-            playbackMonitor.Position = TimeSpan.FromMilliseconds(0);
+            externalPlaybackMonitor.Position = TimeSpan.FromMilliseconds(0);
 
             navigationSlider.Value = navigationSlider.Minimum;
             timer.Stop();
 
             mediaPlayback.Stop();
-            playbackMonitor.Stop();
+            externalPlaybackMonitor.Stop();
         }
 
         private void ChangeMediaSpeedRatio(object sender, MouseButtonEventArgs e)
         {
             mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
-            playbackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
+            externalPlaybackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
 
             timer.Interval = TimeSpan.FromMilliseconds((int)(defaultTick / speedRatioSlider.Value));
         }
-
-        private void VideoPlaybackLoaded(object sender, RoutedEventArgs e)
-        {
-            VideoPlaybackDialog pageParent = this.Parent as VideoPlaybackDialog;
-            pageParent.Width = 900;
-            pageParent.MinWidth = 600;
-            pageParent.Height = 600;
-            pageParent.MinHeight = 500;
-
-            playbackMonitor = pageParent.PlaybackMonitor;
-            playbackMonitor.Source = mediaPlayback.Source;
-        }
-
+        
         private void NavValueChangedHandler(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
 
@@ -144,14 +175,14 @@ namespace JustClimbTrial.Views.Pages
                 timer.Start();
             }
             mediaPlayback.Position = TimeSpan.FromSeconds(navigationSlider.Value);
-            playbackMonitor.Position = TimeSpan.FromSeconds(navigationSlider.Value);
+            externalPlaybackMonitor.Position = TimeSpan.FromSeconds(navigationSlider.Value);
 
             Console.WriteLine("Slider Value = " + navigationSlider.Value);
             Console.WriteLine("Current Position: " + mediaPlayback.Position.TotalSeconds);
 
         }
 
-        void TimerTickHandler(object sender, EventArgs e)
+        private void TimerTickHandler(object sender, EventArgs e)
         {
             if (!supressNavTick)
             {
@@ -172,7 +203,21 @@ namespace JustClimbTrial.Views.Pages
         {
             speedRatioSlider.Value = 100;
             mediaPlayback.SpeedRatio = 1;
-            playbackMonitor.SpeedRatio = 1;
+            externalPlaybackMonitor.SpeedRatio = 1;
         }
+
+        private void saveVideoBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void cancelSaveVideoBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+
     }
 }
