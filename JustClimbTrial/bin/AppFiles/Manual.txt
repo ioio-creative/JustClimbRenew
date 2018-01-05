@@ -1,0 +1,7 @@
+Operation Manual:
+
+Do not let non-player get inside FOV of sensor
+(Limit: above waist in cam)
+
+No people near wall when snapshot wall
+

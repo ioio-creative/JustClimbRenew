@@ -75,6 +75,16 @@ namespace JustClimbTrial.Kinect
             JointType.WristRight
         };
 
+        public static IEnumerable<JointType> HandJoints = new JointType[]
+        {
+            JointType.HandLeft,
+            JointType.HandRight,
+            JointType.ThumbLeft,
+            JointType.ThumbRight,
+            JointType.WristLeft,
+            JointType.WristRight
+        };
+
         #region Body Draw
 
 
