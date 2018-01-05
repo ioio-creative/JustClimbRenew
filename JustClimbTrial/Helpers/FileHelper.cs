@@ -15,7 +15,7 @@ namespace JustClimbTrial.Helpers
         public static string VideoTempFileFullPath(EntityType entityType)
         {
             string tmpVideoKey = KeyGenerator.GenerateNewKey(entityType);
-            return Path.Combine(settings.VideoTempDirectory, 
+            return Path.Combine(exeDirectory, settings.VideoTempDirectory, 
                 tmpVideoKey + settings.VideoFileExtension);
         }
 
