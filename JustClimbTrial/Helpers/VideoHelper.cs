@@ -87,6 +87,11 @@ namespace JustClimbTrial.Helpers
             });
         }
 
+        private void ClearBuffer()
+        {
+            FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+        }
+
         #endregion
 
 
@@ -96,6 +101,7 @@ namespace JustClimbTrial.Helpers
         {
             IsRecording = true;
             kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
+            ClearBuffer();
             StartQueue();
         }
 
@@ -106,9 +112,11 @@ namespace JustClimbTrial.Helpers
             kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
         }
 
-        public int ExportVideo(string outputFilePath)
+        public int ExportVideoAndClearBuffer(string outputFilePath)
         {
-            return ExportVideo(videoBufferFolderPath, outputFilePath);
+            int exitCode = ExportVideo(videoBufferFolderPath, outputFilePath);
+            ClearBuffer();
+            return exitCode;
         }
 
         public static int ExportVideo(string sequenceFolderPath, string outputFilePath)
@@ -122,7 +130,7 @@ namespace JustClimbTrial.Helpers
             //-vf:          apply horizontal flip video filter
             //output file name
             string exportVideoCmdArgumentsFormat =
-                "-i \"{0}\" %08d.png -framerate 25 -pix_fmt yuv420p -vf hflip \"{1}\"";
+                "-i \"{0}\\%08d.png\" -framerate 25 -pix_fmt yuv420p -vf hflip \"{1}\"";
 
             string exportVideoCmdArguments =
                 string.Format(exportVideoCmdArgumentsFormat,
@@ -131,7 +139,7 @@ namespace JustClimbTrial.Helpers
             ProcessStartInfo startInfo =
                 ProcessUtil.CreateProcessStartInfo(
                     ffmpegExePath,
-                    exportVideoCmdArgumentsFormat,
+                    exportVideoCmdArguments,
                     AppGlobal.ExeDirectory);
 
             using (Process proc = Process.Start(startInfo))

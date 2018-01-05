@@ -108,10 +108,11 @@ namespace JustClimbTrial.Views.Pages
                     break;
             }
 
-            // export video
             string tmpVideoFilePath =
-                FileHelper.VideoTempFileFullPath(videoEntityType);
-            int exportVideoExitCode = videoHelper.ExportVideo(tmpVideoFilePath);
+                    FileHelper.VideoTempFileFullPath(videoEntityType);
+
+            // export video                
+            int exportVideoExitCode = videoHelper.ExportVideoAndClearBuffer(tmpVideoFilePath);
 
             // TODO: deal with fail case
             if (exportVideoExitCode == 0)
@@ -119,7 +120,7 @@ namespace JustClimbTrial.Views.Pages
                 // navigate to VideoPlayback page
                 VideoPlayback videoPlayBack = new VideoPlayback();
                 this.NavigationService.Navigate(videoPlayBack);
-            }                       
+            }         
         }
 
         #endregion
