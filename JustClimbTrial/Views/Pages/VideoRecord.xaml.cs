@@ -110,7 +110,7 @@ namespace JustClimbTrial.Views.Pages
 
             // export video
             string tmpVideoFilePath =
-                FileHelper.VideoTempFullPath(videoEntityType);
+                FileHelper.VideoTempFileFullPath(videoEntityType);
             int exportVideoExitCode = videoHelper.ExportVideo(tmpVideoFilePath);
 
             // TODO: deal with fail case

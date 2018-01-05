@@ -1,12 +1,8 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Globals;
-<<<<<<< HEAD
 using JustClimbTrial.Helpers;
 using System.IO;
-=======
-using System;
->>>>>>> cd30385d8bd87e4bda491797bd32917baab0459d
 using System.Windows;
 
 namespace JustClimbTrial

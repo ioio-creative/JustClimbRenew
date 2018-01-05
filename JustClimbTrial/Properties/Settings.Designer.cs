@@ -115,5 +115,14 @@ namespace JustClimbTrial.Properties {
                 return ((string)(this["VideoRecordedDirectory"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ffmpeg.exe")]
+        public string FfmpegExePath {
+            get {
+                return ((string)(this["FfmpegExePath"]));
+            }
+        }
     }
 }
