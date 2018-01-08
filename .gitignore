@@ -13,11 +13,11 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/*
+[Dd]ebug/
 ![Dd]ebug/FileHelperDLL.dll
 ![Dd]ebug/ProcessHelperDLL.dll
 [Dd]ebugPublic/
-[Rr]elease/*
+[Rr]elease/
 ![Rr]elease/FileHelperDLL.dll
 ![Rr]elease/ProcessHelperDLL.dll
 [Rr]eleases/
