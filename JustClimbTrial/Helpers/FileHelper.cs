@@ -19,11 +19,32 @@ namespace JustClimbTrial.Helpers
                 tmpVideoKey + settings.VideoFileExtension);
         }
 
-        // Path: exeLocation/VideoFileDirectory/RouteNo/VideoNo.extension
-        public static string VideoRecordedFullPath(RouteVideoViewModel video)
-        {       
-            return Path.Combine(exeDirectory, settings.VideoRecordedDirectory,
+        // Path: exeLocation/BoulderRouteVideoRecordedDirectory/RouteNo/VideoNo.extension
+        public static string BoulderRouteVideoRecordedFullPath(RouteVideoViewModel video)
+        {
+            return Path.Combine(exeDirectory, settings.BoulderRouteVideoRecordedDirectory,
                 video.RouteNo, video.VideoNo + settings.VideoFileExtension);
+        }
+        
+        public static string BoulderRouteVideoRecordedFullPath(
+            BoulderRoute route, BoulderRouteVideo video)
+        {
+            return Path.Combine(exeDirectory, settings.BoulderRouteVideoRecordedDirectory,
+                route.RouteNo, video.VideoNo + settings.VideoFileExtension);
+        }
+
+        // Path: exeLocation/TrainingRouteVideoRecordedDirectory/RouteNo/VideoNo.extension
+        public static string TrainingRouteVideoRecordedFullPath(RouteVideoViewModel video)
+        {
+            return Path.Combine(exeDirectory, settings.TrainingRouteVideoRecordedDirectory,
+                video.RouteNo, video.VideoNo + settings.VideoFileExtension);
+        }
+
+        public static string TrainingRouteVideoRecordedFullPath(
+            TrainingRoute route, TrainingRouteVideo video)
+        {
+            return Path.Combine(exeDirectory, settings.BoulderRouteVideoRecordedDirectory,
+                route.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
 
         // Path: exeLocation/VideoResourcesDirectory/

@@ -39,11 +39,14 @@
     <Setting Name="VideoTempDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\temp\TempRecording</Value>
     </Setting>
-    <Setting Name="VideoRecordedDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\RecordedVideos</Value>
+    <Setting Name="BoulderRouteVideoRecordedDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\RecordedVideos\BoulderRoutes</Value>
     </Setting>
     <Setting Name="FfmpegExePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ffmpeg.exe</Value>
+    </Setting>
+    <Setting Name="TrainingRouteVideoRecordedDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\RecordedVideos\TrainingRoutes</Value>
     </Setting>
   </Settings>
 </SettingsFile>

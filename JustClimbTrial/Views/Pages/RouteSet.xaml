@@ -10,7 +10,8 @@
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Route Set - Boulder 3"
       WindowTitle="Route Set - Boulder 3"
-      Loaded="Page_Loaded">
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
     <Page.Resources>
         <viewModel:RouteSetViewModel x:Key="routeSetViewModel" />
         <ControlTemplate x:Key="boulderRockStatusTemplate">

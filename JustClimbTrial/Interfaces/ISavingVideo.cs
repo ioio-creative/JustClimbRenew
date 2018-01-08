@@ -4,5 +4,8 @@
     {
         string TmpVideoFilePath { get; set; }
         bool IsConfirmSaveVideo { get; set; }
+
+        void DeleteTmpVideoFileSafe();
+        void ResetSavingVideoProperties();
     }
 }

@@ -5,11 +5,15 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
       mc:Ignorable="d" 
-      Width="{Binding Path=Parent.ActualWidth}" Height="{Binding Path=Parent.ActualHeight}"
-      Loaded="VideoPlaybackLoaded"
-      Title="VideoPlayback">
+      Width="{Binding Path=Parent.ActualWidth}" Height="{Binding Path=Parent.ActualHeight}"      
+      Title="VideoPlayback"
+      Loaded="Page_Loaded">
 
     <Grid Name="PlaybackGrid" Width="{Binding Path=VideoPlayback}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="207*"/>
+            <ColumnDefinition Width="53*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="12*" Name="PlaybackWindow"/>
             <RowDefinition Height="1*" />
@@ -24,15 +28,15 @@
                       ScrubbingEnabled="True" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
                       MediaOpened="mediaPlayback_MediaOpended" 
                       MediaEnded="mediaPlayback_MediaClosed" 
-                      Loaded="mediaPlayback_Loaded" />
+                      Loaded="mediaPlayback_Loaded" Grid.ColumnSpan="2" Margin="0,0,0,18" Grid.RowSpan="2" />
 
         <!-- row 1 Video Navigation-->
         <!-- Seek to slider. Ths slider allows you to jump to different parts of the media playback. -->
         <Slider Grid.Row="1" Name="navigationSlider" Margin="20 0 20 0" VerticalAlignment="Center"
-                IsMoveToPointEnabled="True" />
-        
+                IsMoveToPointEnabled="True" Grid.ColumnSpan="2" />
+
         <!-- row 2 Video Controls-->
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Grid.ColumnSpan="2">
 
             <!-- Play button. -->
             <Button Name="playBtn" Content="Play" Width="50" Height="20" Margin="10" />
@@ -41,7 +45,7 @@
             <Button Name="pauseBtn" Content="Pause" Width="50" Height="20" Margin="10" />
 
             <!-- Stop button. -->
-            <Button Name="stopBtn" Content="Stop" Click="StopMediaBtnClicked" Width="50" Height="20" Margin="10" />
+            <Button Name="stopBtn" Content="Stop" Width="50" Height="20" Margin="10" />
 
             <!-- Speed slider. This slider allows you to change the speed of the media playback. -->
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5" Width="80" MinWidth="60">
@@ -62,7 +66,7 @@
 
         <!-- row 3 Save Video -->
         <StackPanel Name="panelSaveVideo"
-            Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal">
+            Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal" Margin="160,0,54.286,0">
             <Button Name="saveVideoBtn" Content="Save"
                     Width="80" Height="20" Margin="10" />
             <Button Name="cancelSaveVideoBtn" Content="Cancel"
