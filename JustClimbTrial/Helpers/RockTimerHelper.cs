@@ -43,7 +43,7 @@ namespace JustClimbTrial.Helpers
 
         public void AddRockTimerTickHandler(EventHandler anEventHandler)
         {
-            rockerTimer.Tick += anEventHandler;
+            rockTimer.Tick += anEventHandler;
         }
 
         public RockTimerHelper() : this(7, 3) { }
