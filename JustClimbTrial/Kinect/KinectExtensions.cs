@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Linq;
 
 namespace JustClimbTrial.Kinect
 {
@@ -61,29 +62,35 @@ namespace JustClimbTrial.Kinect
         };
 
         //Joint Types to validate boulder checkpoints
-        public static IEnumerable<JointType> LimbJoints = new JointType[] 
+        public static IEnumerable<JointType> LHandJoints = new JointType[]
         {
-            JointType.AnkleLeft,
-            JointType.AnkleRight,
-            JointType.FootLeft,
-            JointType.FootRight,
             JointType.HandLeft,
-            JointType.HandRight,
             JointType.ThumbLeft,
-            JointType.ThumbRight,
-            JointType.WristLeft,
-            JointType.WristRight
+            JointType.WristLeft
         };
 
-        public static IEnumerable<JointType> HandJoints = new JointType[]
+        public static IEnumerable<JointType> RHandJoints = new JointType[]
         {
-            JointType.HandLeft,
             JointType.HandRight,
-            JointType.ThumbLeft,
             JointType.ThumbRight,
-            JointType.WristLeft,
             JointType.WristRight
         };
+        
+        public static IEnumerable<JointType> LLegJoints = new JointType[]
+        {
+            JointType.AnkleLeft,
+            JointType.FootLeft,
+        };
+
+        public static IEnumerable<JointType> RLegJoints = new JointType[]
+        {
+            JointType.AnkleRight,
+            JointType.FootRight,
+        };
+
+        public static IEnumerable<JointType> HandJoints = LHandJoints.Union(RHandJoints);
+        public static IEnumerable<JointType> LegJoints = LLegJoints.Union(RLegJoints);   
+        public static IEnumerable<JointType> LimbJoints = HandJoints.Union(LLegJoints);
 
         #region Body Draw
 
