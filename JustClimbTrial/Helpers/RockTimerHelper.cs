@@ -7,59 +7,47 @@ using System.Windows.Threading;
 
 namespace JustClimbTrial.Helpers
 {
-    public class RockTimerHelper
+    public class RockTimerHelper : DispatcherTimer
     {
-        private DispatcherTimer rockTimer;
-        public TimeSpan Interval
-        {
-            get { return rockTimer.Interval; }
-            set { rockTimer.Interval = value; }
-        }
-        public bool IsEnabled
-        {
-            get { return rockTimer.IsEnabled; }
-            set { rockTimer.IsEnabled = value; }
-        }
-
         private readonly int RockTimerGoal;
         private int rockTimerCounter = 0;
         private int rockConstantTimerCounter = 0;
         private readonly int RockTimerAllowedLag;
 
-        public event EventHandler Tick;
-
-        public RockTimerHelper(int goal, int lag, int msInterval = 100)
+        public RockTimerHelper(int goal = 7, int lag = 3, int msInterval = 100) : base()
         {
-            Interval = TimeSpan.FromMilliseconds(msInterval);
-            rockTimer = new DispatcherTimer { Interval = Interval };
+            Interval = TimeSpan.FromMilliseconds(msInterval); 
             RockTimerGoal = goal;
             RockTimerAllowedLag = lag;
 
-            rockTimer.Tick += (sender, e) =>
+            Tick += (sender, e) =>
             {
-                Tick?.Invoke(sender, e);
+                rockConstantTimerCounter++;
             };
         }
 
-        public void AddRockTimerTickHandler(EventHandler anEventHandler)
+        public RockTimerHelper(int manualInterval) : this(msInterval: manualInterval) { }
+
+        public void RockTimerCountIncr()
         {
-            rockerTimer.Tick += anEventHandler;
+            rockTimerCounter++;
         }
 
-        public RockTimerHelper() : this(7, 3) { }
-
-        public RockTimerHelper(int msInterval) : this(7, 3, msInterval) { }
-
-        public void Start()
+        public void Reset()
         {
-            rockTimer.Start();
+            Stop();
+            rockConstantTimerCounter = 0;
+            rockTimerCounter = 0;
         }
 
-        public void Stop()
+        public bool IsTimerGoalReached()
         {
-            rockTimer.Stop();
+            return (rockTimerCounter == RockTimerGoal);
         }
 
-        
+        public bool IsLagThresholdExceeded()
+        {
+            return (rockConstantTimerCounter - rockTimerCounter >= RockTimerAllowedLag);
+        }
     }
 }
