@@ -61,6 +61,21 @@ namespace JustClimbTrial.Kinect
         };
 
         //Joint Types to validate boulder checkpoints
+
+        public static IEnumerable<JointType> RHandJoints = new JointType[]
+        {            
+            JointType.HandRight,
+            JointType.ThumbRight,
+            JointType.WristRight
+        };
+
+        public static IEnumerable<JointType> LHandJoints = new JointType[]
+        {
+            JointType.HandLeft,
+            JointType.ThumbLeft,
+            JointType.WristLeft
+        };
+
         public static IEnumerable<JointType> LimbJoints = new JointType[] 
         {
             JointType.AnkleLeft,

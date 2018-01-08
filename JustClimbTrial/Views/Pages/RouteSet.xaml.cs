@@ -4,11 +4,11 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
+using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.UserControls;
-using Microsoft.Kinect;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +19,7 @@ namespace JustClimbTrial.Views.Pages
     /// <summary>
     /// Interaction logic for RouteSet.xaml
     /// </summary>
-    public partial class RouteSet : Page
+    public partial class RouteSet : Page, ISavingVideo
     {
         #region resource keys
 
@@ -41,6 +41,14 @@ namespace JustClimbTrial.Views.Pages
         private RocksOnWallViewModel rocksOnWallViewModel;
         private RocksOnRouteViewModel rocksOnRouteViewModel;
 
+        #endregion
+
+
+        #region public members
+
+        public string TmpVideoFilePath { get; set; }
+        public bool IsConfirmSaveVideo { get; set; }
+        
         #endregion
 
 
@@ -190,6 +198,12 @@ namespace JustClimbTrial.Views.Pages
 
             videoRecordDialog.Navigate(videoRecordPage);            
             videoRecordDialog.ShowDialog();
+
+            if (videoRecordDialog.IsConfirmSaveVideo)
+            {
+                IsConfirmSaveVideo = true;
+                TmpVideoFilePath = videoRecordDialog.TmpVideoFilePath;
+            }
         }
 
         private void btnDemoDone_Click(object sender, RoutedEventArgs e)
@@ -215,7 +229,19 @@ namespace JustClimbTrial.Views.Pages
                             else
                             {
                                 TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
-                                rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
+                                string newTrainingRouteId = 
+                                    rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
+
+                                if (IsConfirmSaveVideo)
+                                {
+                                    TrainingRouteVideo newTrainingRouteVideo = new TrainingRouteVideo()
+                                    {
+                                        Route = newTrainingRouteId,
+                                        IsDemo = true
+                                    };
+                                    TrainingRouteVideoDataAccess.Insert(newTrainingRouteVideo, true);
+                                    newTrainingRoute.RouteNo;
+                                }
                             }                            
                             break;
                         case ClimbMode.Boulder:

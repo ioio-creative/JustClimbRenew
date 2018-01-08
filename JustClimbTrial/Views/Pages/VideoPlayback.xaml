@@ -35,10 +35,10 @@
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal">
 
             <!-- Play button. -->
-            <Button Name="playBtn" Content="Play" Click="PlayMediaBtnClicked" Width="50" Height="20" Margin="10" />
+            <Button Name="playBtn" Content="Play" Width="50" Height="20" Margin="10" />
 
             <!-- Pause button. -->
-            <Button Name="pauseBtn" Content="Pause" Click="PauseMediaBtnClicked" Width="50" Height="20" Margin="10" />
+            <Button Name="pauseBtn" Content="Pause" Width="50" Height="20" Margin="10" />
 
             <!-- Stop button. -->
             <Button Name="stopBtn" Content="Stop" Click="StopMediaBtnClicked" Width="50" Height="20" Margin="10" />
@@ -46,17 +46,17 @@
             <!-- Speed slider. This slider allows you to change the speed of the media playback. -->
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5" Width="80" MinWidth="60">
                 <TextBlock HorizontalAlignment="Right" Foreground="Black" Margin="5"  VerticalAlignment="Center">
-                        <Run Text="Speed: " />
-                        <Run Text="{Binding ElementName=speedRatioSlider, Path=Value}" />
-                        <Run Text="%" />
+                    <Run Text="Speed: " />
+                    <Run Text="{Binding ElementName=speedRatioSlider, Path=Value}" />
+                    <Run Text="%" />
                 </TextBlock>
             </StackPanel>
 
             <Slider Name="speedRatioSlider" VerticalAlignment="Center" PreviewMouseUp="ChangeMediaSpeedRatio" 
                     IsMoveToPointEnabled="True" TickPlacement="None" TickFrequency="5" IsSnapToTickEnabled="True" 
                     Value="100" Minimum="25" Maximum="300"  Width="100" Margin="10"/>
-            <!--Reset Speed Buttom-->
-            <Button Name="speedResetBtn" Content="Reset Speed" Click="SpeedResetBtn_Click" Width="80" Height="20" Margin="10" />
+            <!--Reset Speed Button-->
+            <Button Name="speedResetBtn" Content="Reset Speed" Width="80" Height="20" Margin="10" />
 
         </StackPanel>
 
@@ -64,11 +64,9 @@
         <StackPanel Name="panelSaveVideo"
             Grid.Row="3" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button Name="saveVideoBtn" Content="Save"
-                    Width="80" Height="20" Margin="10" 
-                    Click="saveVideoBtn_Click" />
+                    Width="80" Height="20" Margin="10" />
             <Button Name="cancelSaveVideoBtn" Content="Cancel"
-                    Width="80" Height="20" Margin="10" 
-                    Click="cancelSaveVideoBtn_Click" />
+                    Width="80" Height="20" Margin="10" />
         </StackPanel>
     </Grid>
 </Page>

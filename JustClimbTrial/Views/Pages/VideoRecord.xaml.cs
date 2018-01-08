@@ -13,12 +13,16 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoRecord : Page
     {
+        #region private members
+
         private readonly ClimbMode climbMode;
         private readonly VideoRecordType videoRecordType;
         private readonly VideoHelper videoHelper;
 
         // need to pass externalPlaybackMonitor to another view
         private MediaElement externalPlaybackMonitor;
+
+        #endregion
 
 
         #region constructors
@@ -117,12 +121,14 @@ namespace JustClimbTrial.Views.Pages
             if (exportVideoExitCode == 0)
             {
                 // navigate to VideoPlayback page
+                bool isToShowSaveVideoPanel = true;
                 VideoPlayback videoPlayBack = 
-                    new VideoPlayback(tmpVideoFilePath, externalPlaybackMonitor);
-                this.NavigationService.Navigate(videoPlayBack);
+                    new VideoPlayback(tmpVideoFilePath, externalPlaybackMonitor,
+                        isToShowSaveVideoPanel);
+                this.NavigationService.Navigate(videoPlayBack);                
             }         
         }
 
-        #endregion        
+        #endregion     
     }
 }

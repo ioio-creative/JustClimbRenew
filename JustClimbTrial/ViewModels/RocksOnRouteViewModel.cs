@@ -237,15 +237,15 @@ namespace JustClimbTrial.ViewModels
 
         #region database
 
-        public void SaveRocksOnTrainingRoute(TrainingRoute trainingRoute)
+        public string SaveRocksOnTrainingRoute(TrainingRoute trainingRoute)
         {
-            TrainingRouteAndRocksDataAccess.InsertRouteAndRocksOnRoute(
+            return TrainingRouteAndRocksDataAccess.InsertRouteAndRocksOnRoute(
                 trainingRoute, rocksOnRoute, true);
         }
 
-        public void SaveRocksOnBoulderRoute(BoulderRoute boulderRoute)
+        public string SaveRocksOnBoulderRoute(BoulderRoute boulderRoute)
         {
-            BoulderRouteAndRocksDataAccess.InsertRouteAndRocksOnRoute(
+            return BoulderRouteAndRocksDataAccess.InsertRouteAndRocksOnRoute(
                 boulderRoute, rocksOnRoute, true);
         }
 

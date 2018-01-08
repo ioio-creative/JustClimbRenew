@@ -1,22 +1,11 @@
-﻿using JustClimbTrial.Kinect;
-using JustClimbTrial.Views.Windows;
-using JustClimbTrial;
+﻿using JustClimbTrial.Interfaces;
+using JustClimbTrial.Mvvm.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using JustClimbTrial.Views.Dialogs;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -25,6 +14,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoPlayback : Page
     {
+        #region private members
+
         private DispatcherTimer timer = new DispatcherTimer();
         private const double defaultTick = 500;
         private bool supressNavTick = false;
@@ -33,12 +24,14 @@ namespace JustClimbTrial.Views.Pages
         private readonly string videoFilePath;
         private readonly bool isShowSaveVideoPanel;
 
+        #endregion
+        
 
         #region constructors
 
         public VideoPlayback(string aVideoFilePath, 
             MediaElement anExternalPlaybackMonitor,
-            bool isToShowSaveVideoPanel)
+            bool isToShowSaveVideoPanel = false)
         {
             videoFilePath = aVideoFilePath;
             externalPlaybackMonitor = anExternalPlaybackMonitor;
@@ -53,6 +46,16 @@ namespace JustClimbTrial.Views.Pages
 
         #endregion
 
+
+        private void InitializeCommands()
+        {
+            playBtn.Command = new RelayCommand(PlayMedia, CanPlayMedia);
+            pauseBtn.Command = new RelayCommand(PauseMedia, CanPauseMedia);
+            stopBtn.Command = new RelayCommand(StopMedia, CanStopMedia);
+            speedResetBtn.Command = new RelayCommand(ResetPlayMediaSpeed, CanResetPlayMediaSpeed);
+            saveVideoBtn.Command = new RelayCommand(PassSaveVideoMessageToDialogCaller, CanPassSaveVideoMessageToDialogCaller);
+            cancelSaveVideoBtn.Command = new RelayCommand(PassCancelSaveVideoMessageToDialogCaller, CanPassCancelSaveVideoMessageToDialogCaller);
+        }
 
         private void InitializePropertyValues()
         {
@@ -70,6 +73,105 @@ namespace JustClimbTrial.Views.Pages
 
             Console.WriteLine(duration);
         }
+
+
+        #region CanExecute command methods
+
+        private bool CanPlayMedia(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanPauseMedia(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanStopMedia(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanResetPlayMediaSpeed(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanPassSaveVideoMessageToDialogCaller(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanPassCancelSaveVideoMessageToDialogCaller(object parameter = null)
+        {
+            return true;
+        }
+
+        #endregion
+
+
+        #region command methods
+
+        private void PlayMedia(object parameter = null)
+        {
+            // The Play method will begin the media if it is not currently active or 
+            // resume media if it is paused. This has no effect if the media is
+            // already running.
+            timer.Start();
+            mediaPlayback.Play();
+            externalPlaybackMonitor.Play();
+
+            // Initialize the MediaElement property values.
+            InitializePropertyValues();
+        }
+
+        private void PauseMedia(object parameter = null)
+        {
+            // The Pause method pauses the media if it is currently running.
+            // The Play method can be used to resume.
+            mediaPlayback.Pause();
+            externalPlaybackMonitor.Pause();
+        }
+
+        private void StopMedia(object parameter = null)
+        {
+            // The Stop method stops and resets the media to be played from
+            // the beginning.   
+            mediaPlayback.Position = TimeSpan.FromMilliseconds(0);
+            externalPlaybackMonitor.Position = TimeSpan.FromMilliseconds(0);
+
+            navigationSlider.Value = navigationSlider.Minimum;
+            timer.Stop();
+
+            mediaPlayback.Stop();
+            externalPlaybackMonitor.Stop();
+        }
+
+        private void ResetPlayMediaSpeed(object parameter = null)
+        {
+            speedRatioSlider.Value = 100;
+            mediaPlayback.SpeedRatio = 1;
+            externalPlaybackMonitor.SpeedRatio = 1;
+        }
+
+        private void PassSaveVideoMessageToDialogCaller(object parameter = null)
+        {
+            ISavingVideo mySavingVideoParent = this.Parent as ISavingVideo;
+            mySavingVideoParent.TmpVideoFilePath = videoFilePath;
+            mySavingVideoParent.IsConfirmSaveVideo = true;
+
+            (mySavingVideoParent as Window).Close();
+        }
+
+        private void PassCancelSaveVideoMessageToDialogCaller(object parameter = null)
+        {
+            ISavingVideo mySavingVideoParent = this.Parent as ISavingVideo;
+            mySavingVideoParent.IsConfirmSaveVideo = false;
+
+            (mySavingVideoParent as Window).Close();
+        }
+
+        #endregion
 
 
         #region event handlers
@@ -119,41 +221,6 @@ namespace JustClimbTrial.Views.Pages
             mediaPlayback.Stop();
         }
 
-        private void PlayMediaBtnClicked(object sender, RoutedEventArgs e)
-        {
-            // The Play method will begin the media if it is not currently active or 
-            // resume media if it is paused. This has no effect if the media is
-            // already running.
-            timer.Start();
-            mediaPlayback.Play();
-            externalPlaybackMonitor.Play();
-
-            // Initialize the MediaElement property values.
-            InitializePropertyValues();
-        }
-
-        private void PauseMediaBtnClicked(object sender, RoutedEventArgs e)
-        {
-            // The Pause method pauses the media if it is currently running.
-            // The Play method can be used to resume.
-            mediaPlayback.Pause();
-            externalPlaybackMonitor.Pause();
-        }
-
-        private void StopMediaBtnClicked(object sender, RoutedEventArgs e)
-        {
-            // The Stop method stops and resets the media to be played from
-            // the beginning.   
-            mediaPlayback.Position = TimeSpan.FromMilliseconds(0);
-            externalPlaybackMonitor.Position = TimeSpan.FromMilliseconds(0);
-
-            navigationSlider.Value = navigationSlider.Minimum;
-            timer.Stop();
-
-            mediaPlayback.Stop();
-            externalPlaybackMonitor.Stop();
-        }
-
         private void ChangeMediaSpeedRatio(object sender, MouseButtonEventArgs e)
         {
             mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
@@ -199,25 +266,6 @@ namespace JustClimbTrial.Views.Pages
             //navigationSlider.Value = navigationSlider.Maximum * mouseOnNav.X / navigationSlider.ActualWidth;
         }
 
-        private void SpeedResetBtn_Click(object sender, RoutedEventArgs e)
-        {
-            speedRatioSlider.Value = 100;
-            mediaPlayback.SpeedRatio = 1;
-            externalPlaybackMonitor.SpeedRatio = 1;
-        }
-
-        private void saveVideoBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void cancelSaveVideoBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         #endregion
-
-
     }
 }

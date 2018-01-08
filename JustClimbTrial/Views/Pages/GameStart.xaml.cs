@@ -245,7 +245,8 @@ namespace JustClimbTrial.Views.Pages
                     //    {
                     //        relevantJoints.Add(bodyJoint);
                     //    }
-                    //}  
+                    //}
+
                     IEnumerable<Joint> LHandJoints =
                         body.Joints.Where(x => KinectExtensions.LHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
                     IEnumerable<Joint> RHandJoints =
