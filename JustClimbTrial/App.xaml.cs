@@ -17,9 +17,9 @@ namespace JustClimbTrial
             Wall newestValidWall = WallDataAccess.NewestValidWall;
             if (newestValidWall != null)
             {
-                AppGlobal.WallID = newestValidWall.WallID;
+                //AppGlobal.WallID = newestValidWall.WallID;
                 //Console.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
-                //AppGlobal.WallID = "WA2017122912011l7oBf";
+                AppGlobal.WallID = "WA2017122912011l7oBf";
             }
 
             //methods relating to video recording
