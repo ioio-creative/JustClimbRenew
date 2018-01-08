@@ -172,7 +172,8 @@ namespace JustClimbTrial.Kinect
                             if (ColorImageSourceArrived != null)
                             {
                                 BitmapSource colorImgSrc = ToBitmapSrc(colorFrame);
-                                ColorImageSourceArrived(sender, new ColorBitmapSrcEventArgs(colorImgSrc)); 
+                                ColorImageSourceArrived(sender, new ColorBitmapSrcEventArgs(colorImgSrc));
+
                             }
 
                             if (ColorBitmapArrived != null)

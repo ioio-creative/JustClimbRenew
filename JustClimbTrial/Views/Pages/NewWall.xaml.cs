@@ -363,7 +363,7 @@ namespace JustClimbTrial.Views.Pages
             using (ColorFrame colorFrame = mSourceFrame.ColorFrameReference.AcquireFrame())
             {
                 if (colorFrame != null)
-                {
+                {                    
                     BitmapSource newWallColorBitmapSrc = kinectManagerClient.ToBitmapSrc(colorFrame);
                     cameraIMG.Source = newWallColorBitmapSrc;
                     colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
@@ -374,7 +374,7 @@ namespace JustClimbTrial.Views.Pages
             using (DepthFrame depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame())
             {          
                 if (depthFrame != null)
-                {
+                {                    
                     // Access the depth frame data directly via LockImageBuffer to avoid making a copy
                     using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
                     {
