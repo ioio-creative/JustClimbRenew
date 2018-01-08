@@ -52,20 +52,12 @@ namespace JustClimbTrial.Views.Pages
         #region Gameplay Flags/Timers
 
         private bool gameStarted = false;
-        private DispatcherTimer rockTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-        private const int RockTimerGoal = 7;
-        private int rockTimerCounter = 0;
-        private int rockConstantTimerCounter = 0;
-        private const int RockTimerAllowedLag = 3;
 
-        private DispatcherTimer endTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-        private const int endTimerGoal = 30;
-        private int endTimerCounter = 0;
-        private int endConstantTimerCounter = 0;
-        private const int endTimerAllowedLag = 6;
+        private RockTimerHelper startRockTimer = new RockTimerHelper();
+
+        private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal:30, lag:6);
+
         private bool endHeld = false;
-
-
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
 
@@ -263,34 +255,31 @@ namespace JustClimbTrial.Views.Pages
                             playgroundWindow.LoopSrcnSvr = false;
                             playgroundMedia.Stop();
 
-                            rockTimer.Tick += (_sender, _e) =>
+                            startRockTimer.Tick += (_sender, _e) =>
                             {
-                                rockConstantTimerCounter++;
 
                                 if (AreBothHandsOnRock(LHandJoints, RHandJoints, startRockOnBoulderRoute.MyRockViewModel))
                                 {
-                                    rockTimerCounter++;
+                                    startRockTimer.RockTimerCountIncr();
 
-                                    if (rockTimerCounter == RockTimerGoal)
+                                    if (startRockTimer.IsTimerGoalReached())
                                     {
-                                        rockTimer.Stop();
+                                        startRockTimer.Reset();
                                         gameStarted = true;
                                         //TO DO: StartRock Feedback Animation
                                     }                                    
                                 }
 
-                                if (rockConstantTimerCounter - rockTimerCounter >= RockTimerAllowedLag)
+                                if (startRockTimer.IsLagThresholdExceeded())
                                 {
-                                    rockTimer.Stop();
-                                    rockConstantTimerCounter = 0;
-                                    rockTimerCounter = 0;
+                                    startRockTimer.Reset();
                                 }
                             };
-                            if (!rockTimer.IsEnabled)
+
+                            if (!startRockTimer.IsEnabled)
                             {
-                                rockTimer.Start();
-                                rockTimerCounter = 0;
-                                rockConstantTimerCounter = 0;
+                                startRockTimer.Reset();
+                                startRockTimer.Start();
                             }
                             
                         }
