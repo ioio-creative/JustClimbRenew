@@ -106,11 +106,11 @@ namespace JustClimbTrial.Kinect
 
         public bool SnapShotWallData(DepthSpacePoint[] colorSpaceMap, ushort[] dFrameData, byte[] colFrameData)
         {
-            // Deep copy
+            // Shallow copy?
             dCoordinatesInColorFrame = colorSpaceMap.Clone() as DepthSpacePoint[];
             wallDepthData = dFrameData.Clone() as ushort[];
             wallBitmap = colFrameData.Clone() as byte[];
-            IsSnapshotTaken = true;
+            IsSnapshotTaken = true;            
 
             return IsSnapshotTaken;
         }
