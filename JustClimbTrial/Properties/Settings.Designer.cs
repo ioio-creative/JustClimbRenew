@@ -109,10 +109,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos")]
-        public string VideoRecordedDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\BoulderRoutes")]
+        public string BoulderRouteVideoRecordedDirectory {
             get {
-                return ((string)(this["VideoRecordedDirectory"]));
+                return ((string)(this["BoulderRouteVideoRecordedDirectory"]));
             }
         }
         
@@ -122,6 +122,15 @@ namespace JustClimbTrial.Properties {
         public string FfmpegExePath {
             get {
                 return ((string)(this["FfmpegExePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\TrainingRoutes")]
+        public string TrainingRouteVideoRecordedDirectory {
+            get {
+                return ((string)(this["TrainingRouteVideoRecordedDirectory"]));
             }
         }
     }

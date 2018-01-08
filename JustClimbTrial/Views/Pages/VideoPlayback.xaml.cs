@@ -176,7 +176,7 @@ namespace JustClimbTrial.Views.Pages
 
         #region event handlers
 
-        private void VideoPlaybackLoaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             //VideoPlaybackDialog pageParent = this.Parent as VideoPlaybackDialog;
             NavigationWindow pageParent = this.Parent as NavigationWindow;
@@ -190,8 +190,10 @@ namespace JustClimbTrial.Views.Pages
 
             panelSaveVideo.Visibility =
                 isShowSaveVideoPanel ? Visibility.Visible : Visibility.Collapsed;
-        }
 
+            InitializeCommands();
+        }
+        
         private void mediaPlayback_Loaded(object sender, RoutedEventArgs e)
         {
             // show first frame of video in WPF MediaElement
@@ -266,6 +268,6 @@ namespace JustClimbTrial.Views.Pages
             //navigationSlider.Value = navigationSlider.Maximum * mouseOnNav.X / navigationSlider.ActualWidth;
         }
 
-        #endregion
+        #endregion        
     }
 }

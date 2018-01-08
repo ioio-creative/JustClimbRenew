@@ -113,8 +113,10 @@
     <Compile Include="Globals\AppGlobal.cs" />
     <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\RockTimerHelper.cs" />
     <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
+    <Compile Include="Interfaces\ISavingVideo.cs" />
     <Compile Include="Kinect\KinectManager.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

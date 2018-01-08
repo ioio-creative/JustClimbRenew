@@ -11,6 +11,7 @@
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
         Source="/Views/Pages/VideoPlaybackDialogConfirm.xaml"
+        Unloaded="NavigationWindow_Unloaded"
         >
 
 </NavigationWindow>

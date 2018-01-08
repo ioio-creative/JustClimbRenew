@@ -103,6 +103,7 @@ namespace JustClimbTrial.Views.Pages
             RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
         }
 
+
         // !!! Important !!!
         // don't call this method in page's constructor
         // call it in the page_load event
@@ -132,6 +133,22 @@ namespace JustClimbTrial.Views.Pages
         }
 
 
+        #region ISavingVideo interfaces
+
+        public void DeleteTmpVideoFileSafe()
+        {
+            FileHelperDLL.FileHelper.DeleteFileSafe(TmpVideoFilePath);
+        }
+
+        public void ResetSavingVideoProperties()
+        {
+            TmpVideoFilePath = null;
+            IsConfirmSaveVideo = false;
+        }
+
+        #endregion
+
+
         #region event handlers
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -151,6 +168,11 @@ namespace JustClimbTrial.Views.Pages
             {
                 UiHelper.NotifyUser("No rocks registered with the wall!");
             }        
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            DeleteTmpVideoFileSafe();
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)
@@ -188,6 +210,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void btnRecordDemo_Click(object sender, RoutedEventArgs e)
         {
+            ResetSavingVideoProperties();
+
             SetTemplateOfControlFromResource(ctrlBtnDemo, BtnDemoDoneTemplateResourceKey);
 
             // show video record dialog
@@ -209,6 +233,7 @@ namespace JustClimbTrial.Views.Pages
         private void btnDemoDone_Click(object sender, RoutedEventArgs e)
         {
             string errMsg = ValidateRouteParams();
+            string routeVideoRecordedFilePath = null;
             
             if (!string.IsNullOrEmpty(errMsg))
             {
@@ -229,18 +254,20 @@ namespace JustClimbTrial.Views.Pages
                             else
                             {
                                 TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
-                                string newTrainingRouteId = 
-                                    rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
+                                rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
 
                                 if (IsConfirmSaveVideo)
                                 {
                                     TrainingRouteVideo newTrainingRouteVideo = new TrainingRouteVideo()
                                     {
-                                        Route = newTrainingRouteId,
+                                        Route = newTrainingRoute.RouteID,
                                         IsDemo = true
                                     };
                                     TrainingRouteVideoDataAccess.Insert(newTrainingRouteVideo, true);
-                                    newTrainingRoute.RouteNo;
+                                    routeVideoRecordedFilePath =
+                                        FileHelper.TrainingRouteVideoRecordedFullPath(newTrainingRoute,
+                                            newTrainingRouteVideo);
+                                    FileHelperDLL.FileHelper.MoveAndRenameFile(TmpVideoFilePath, routeVideoRecordedFilePath);
                                 }
                             }                            
                             break;
@@ -255,6 +282,20 @@ namespace JustClimbTrial.Views.Pages
                             {
                                 BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
                                 rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
+
+                                if (IsConfirmSaveVideo)
+                                {
+                                    BoulderRouteVideo newBoulderRouteVideo = new BoulderRouteVideo()
+                                    {
+                                        Route = newBoulderRoute.RouteID,
+                                        IsDemo = true
+                                    };
+                                    BoulderRouteVideoDataAccess.Insert(newBoulderRouteVideo, true);
+                                    routeVideoRecordedFilePath =
+                                        FileHelper.BoulderRouteVideoRecordedFullPath(newBoulderRoute,
+                                            newBoulderRouteVideo);
+                                    FileHelperDLL.FileHelper.MoveAndRenameFile(TmpVideoFilePath, routeVideoRecordedFilePath);
+                                }
                             }
                             break;
                     }
@@ -436,7 +477,7 @@ namespace JustClimbTrial.Views.Pages
                 RouteNo = routeModel.RouteNo,
                 Wall = routeModel.Wall
             };
-        }
+        }        
 
         #endregion
     }
