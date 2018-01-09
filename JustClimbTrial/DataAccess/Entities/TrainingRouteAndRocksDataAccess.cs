@@ -28,6 +28,11 @@ namespace JustClimbTrial.DataAccess.Entities
                    };
         }
 
+        public static IOrderedEnumerable<RockOnRouteViewModel> OrderedRocksByRouteId(string routeId, Canvas canvas, CoordinateMapper coorMapper)
+        {
+            return RocksByRouteId(routeId, canvas, coorMapper).OrderBy(x => x.TrainingSeq);
+        }
+
         public static string InsertRouteAndRocksOnRoute(
             TrainingRoute aRoute,
             ICollection<RockOnTrainingRoute> someRocksOnTrainingRoute,

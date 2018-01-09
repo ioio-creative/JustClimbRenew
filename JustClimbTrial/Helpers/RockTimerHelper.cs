@@ -13,6 +13,7 @@ namespace JustClimbTrial.Helpers
         private int rockTimerCounter = 0;
         private int rockConstantTimerCounter = 0;
         private readonly int RockTimerAllowedLag;
+        public bool IsTickHandlerSubed = false;
 
         public RockTimerHelper(int goal = 7, int lag = 3, int msInterval = 100) : base()
         {

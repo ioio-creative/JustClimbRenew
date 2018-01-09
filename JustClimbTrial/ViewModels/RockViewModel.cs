@@ -135,6 +135,7 @@ namespace JustClimbTrial.ViewModels
             MyRock = aRock;
             BCanvas = canvas;            
             BoulderShape = GetNewRockOnWallEllipse();
+            CreateRockImage();
 
             CameraSpacePoint csp = aRock.GetCameraSpacePoint();
 

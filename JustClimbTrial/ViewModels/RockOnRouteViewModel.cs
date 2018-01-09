@@ -44,18 +44,34 @@ namespace JustClimbTrial.ViewModels
             {
                 case RockOnBoulderStatus.Start:
                     MyRockViewModel.ChangeRockShapeToStart();
-                    MyRockViewModel.CreateRockImage();
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
                     MyRockViewModel.ChangeRockShapeToIntermediate();
-                    MyRockViewModel.CreateRockImage();
                     break;
                 case RockOnBoulderStatus.End:
                     MyRockViewModel.ChangeRockShapeToEnd();
-                    MyRockViewModel.CreateRockImage();
                     break;
             }
+
+        }
+
+        public void DrawRockShapeWrtTrainSeq(int maxSeqNo)
+        {
+            if(TrainingSeq == 1)
+            {
+                MyRockViewModel.ChangeRockShapeToStart();
+            }
+            else if (TrainingSeq == maxSeqNo)
+            {
+                MyRockViewModel.ChangeRockShapeToEnd();
+            }
+            else
+            {
+                MyRockViewModel.ChangeRockShapeToIntermediate();
+            }
+
+            
         }
 
         #endregion
