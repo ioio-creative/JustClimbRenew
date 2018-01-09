@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.Enums;
+using JustClimbTrial.Helpers;
 
 namespace JustClimbTrial.ViewModels
 {
@@ -9,7 +10,7 @@ namespace JustClimbTrial.ViewModels
         public RockViewModel MyRockViewModel { get; set; }  // contains Shape and DataAccess.Rock
         public RockOnBoulderStatus BoulderStatus { get; set; }
         public int TrainingSeq { get; set; }
-
+        public RockTimerHelper MyRockTimerHelper { get; set; }
         #endregion
 
 
