@@ -22,5 +22,7 @@ namespace JustClimbTrial.Globals
         {
             FfmpegExePath = settings.FfmpegExePath;
         }
+
+        public static bool DEBUG { get; set; }
     }
 }
