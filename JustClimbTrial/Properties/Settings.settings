@@ -51,5 +51,8 @@
     <Setting Name="MaxVideoRecordDurationInMinutes" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">15</Value>
     </Setting>
+    <Setting Name="DEBUG" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

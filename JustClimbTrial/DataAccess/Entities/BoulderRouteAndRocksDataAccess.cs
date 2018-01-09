@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.Enums;
+using JustClimbTrial.Helpers;
 using JustClimbTrial.ViewModels;
 using Microsoft.Kinect;
 using System;
@@ -23,7 +24,8 @@ namespace JustClimbTrial.DataAccess.Entities
                    select new RockOnRouteViewModel
                    {
                        BoulderStatus = (RockOnBoulderStatus)Enum.Parse(typeof(RockOnBoulderStatus), rockOnBoulderRoute.BoulderRockRole),
-                       MyRockViewModel = new RockViewModel(rock, canvas, coorMapper)
+                       MyRockViewModel = new RockViewModel(rock, canvas, coorMapper),
+                       MyRockTimerHelper = new RockTimerHelper()
                    };
         }
 
