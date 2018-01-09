@@ -17,7 +17,7 @@ namespace JustClimbTrial
     public partial class MainWindow : NavigationWindow
     {
         //in Debug Mode we display the live camera image from Kinect at all times
-        public bool DebugMode = false;
+        private bool debug = AppGlobal.DEBUG;
 
         public KinectManager KinectManagerClient;
 
@@ -53,7 +53,7 @@ namespace JustClimbTrial
             //activate sensor in Main Window only once
             KinectManagerClient.OpenKinect();
 
-            if (DebugMode)
+            if (debug)
             {
                 KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
             }

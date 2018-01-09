@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using JustClimbTrial.Globals;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -7,6 +8,8 @@ namespace JustClimbTrial.Extensions
 {
     public static class CanvasExtension
     {
+        public static bool debug = AppGlobal.DEBUG;
+
         public static Point GetNormalisedPoint(this Canvas canvas, Point pt)
         {
             double normedX = GetNormalisedLengthWrtWidth(canvas, pt.X);

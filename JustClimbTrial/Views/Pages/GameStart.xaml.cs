@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.ViewModels;
@@ -23,6 +24,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class GameStart : Page
     {
+        private bool debug = AppGlobal.DEBUG;
+
         private const float DefaultDistanceThreshold = 0.1f;
 
         private string routeId;
@@ -30,8 +33,11 @@ namespace JustClimbTrial.Views.Pages
         private GameStartViewModel viewModel;
 
         private IEnumerable<RockOnRouteViewModel> interRocksOnBoulderRoute;
-        private RockOnRouteViewModel startRockOnBoulderRoute;
-        private RockOnRouteViewModel endRockOnBoulderRoute;
+        private IEnumerable<RockOnRouteViewModel> rocksOnTrainingRoute;
+        private int trainingRouteLength;
+
+        private RockOnRouteViewModel startRockOnRoute;
+        private RockOnRouteViewModel endRockOnRoute;
         private CameraSpacePoint[] interRocksOnRouteCamSP;
 
         private ulong playerBodyID;
@@ -50,13 +56,11 @@ namespace JustClimbTrial.Views.Pages
 
 
         #region Gameplay Flags/Timers
+        private int nextTrainRockIdx = 0;
 
         private bool gameStarted = false;
 
-        
-
-        private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal:24, lag:6);
-
+        private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
         private bool endHeld = false;
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
@@ -108,12 +112,12 @@ namespace JustClimbTrial.Views.Pages
             playgroundWindow = mainWindowClient.PlaygroundWindow;
             playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundMedia.Stop();
-            playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(),"Ready.mp4")));
+            playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Ready.mp4")));
             playgroundMedia.Play();
 
             gameplayVideoRecClient = new VideoHelper(kinectManagerClient);
 
-            if (mainWindowClient.DebugMode)
+            if (debug)
             {
                 kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
             }
@@ -130,6 +134,21 @@ namespace JustClimbTrial.Views.Pages
                 case ClimbMode.Training:
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
+
+                    rocksOnTrainingRoute = TrainingRouteAndRocksDataAccess.OrderedRocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
+                    endRockOnRoute = rocksOnTrainingRoute.Last();
+                    trainingRouteLength = rocksOnTrainingRoute.Count();
+
+
+                    foreach (var rockOnTrainingRoute in rocksOnTrainingRoute)
+                    {
+                        if (debug)
+                        {
+                            rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);
+                        }
+                    }
+
+
                     break;
                 case ClimbMode.Boulder:
                 default:
@@ -138,22 +157,25 @@ namespace JustClimbTrial.Views.Pages
 
                     IEnumerable<RockOnRouteViewModel> allRocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
                     interRocksOnBoulderRoute = allRocksOnBoulderRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Int);
-                    startRockOnBoulderRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
-                    endRockOnBoulderRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
-                    
+                    startRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                    endRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+
                     interRocksOnRouteCamSP = new CameraSpacePoint[interRocksOnBoulderRoute.Count()];
 
                     int i = 0;
                     foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                     {
-                        rockOnBoulderRoute.DrawRockShapeWrtStatus();
+                        if (debug)
+                        {
+                            rockOnBoulderRoute.DrawRockShapeWrtStatus();
+                        }
                         interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                         //TO BE CHANGED ---- ANIMATION
                         rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
                         i++;
                     }
                     break;
-            }         
+            }
         }
 
         private void BtnDemo_Click(object sender, RoutedEventArgs e)
@@ -163,11 +185,11 @@ namespace JustClimbTrial.Views.Pages
 
             //We temporary use this as video rec btn
             if (!isRecording)
-            {                                
+            {
                 BtnDemo.Content = "Stop Rec";
             }
             else
-            {                
+            {
                 BtnDemo.Content = "DEMO";
             }
 
@@ -176,11 +198,11 @@ namespace JustClimbTrial.Views.Pages
 
         private void BtnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
         {
-            if (mainWindowClient.DebugMode)
+            if (debug)
             {
                 kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
             }
-            
+
             //mainWindowClient.PlaygroundWindow.PlaygroundCamera.Opacity = 0;
 
             MediaElement playbackMonitor = mainWindowClient.PlaygroundWindow.PlaybackMedia;
@@ -195,8 +217,8 @@ namespace JustClimbTrial.Views.Pages
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
         {
-
-            if (mainWindowClient.DebugMode)
+            //remove skeleton shape when DEBUG
+            if (debug)
             {
                 foreach (IEnumerable<Shape> skeletonShapes in skeletonBodies)
                 {
@@ -205,25 +227,25 @@ namespace JustClimbTrial.Views.Pages
                         playgroundCanvas.RemoveChild(skeletonShape);
                     }
                 }
-                skeletonBodies = new List<IEnumerable<Shape>>(); 
+                skeletonBodies = new List<IEnumerable<Shape>>();
             }
-                       
+
 
             IList<Body> bodies = e.GetBodyList();
-            
-                        
+
+
             foreach (var body in bodies)
             {
                 if (body != null && body.IsTracked)
                 {
 
-
-                    if (mainWindowClient.DebugMode)
+                    //draw skeleton shape when DEBUG
+                    if (debug)
                     {
                         IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
-                        skeletonBodies.Add(skeletonShapes);  
+                        skeletonBodies.Add(skeletonShapes);
                     }
-           
+
 
                     //List<Joint> relevantJoints = new List<Joint>();
                     //foreach (Joint bodyJoint in body.Joints.Values)
@@ -251,40 +273,188 @@ namespace JustClimbTrial.Views.Pages
                         body.Joints.Where(x => KinectExtensions.LHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
                     IEnumerable<Joint> RHandJoints =
                         body.Joints.Where(x => KinectExtensions.RHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+                    
 
                     switch (climbMode)
                     {
                         case ClimbMode.Training:
+                            #region Training Gameplay
+                            IEnumerable<Joint> handJoints =
+                                        body.Joints.Where(x => KinectExtensions.HandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+                            RockOnRouteViewModel nextRockOnRoute = rocksOnTrainingRoute.ElementAt(nextTrainRockIdx);
+                            RockTimerHelper nextRockTimer = nextRockOnRoute.MyRockTimerHelper;
+                            Func<bool> trainingTargetReached;
+                            if (nextRockOnRoute.TrainingSeq == 1)
+                            {
+                                trainingTargetReached = () =>
+                                    AreBothJointGroupsOnRock(LHandJoints, RHandJoints, nextRockOnRoute.MyRockViewModel);
+                            }
+                            else if (nextRockOnRoute.TrainingSeq == trainingRouteLength)
+                            {
+                                trainingTargetReached = () =>
+                                    AreBothJointGroupsOnRock(LHandJoints, RHandJoints, nextRockOnRoute.MyRockViewModel) && body.TrackingId == playerBodyID;
+                            }
+                            else
+                            {
+                                trainingTargetReached = () =>
+                                    IsJointGroupOnRock(handJoints, nextRockOnRoute.MyRockViewModel) && body.TrackingId == playerBodyID;
+                            }
+
+
+                            if (trainingTargetReached())
+                            {
+                                //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
+
+                                playgroundWindow.LoopSrcnSvr = false;
+                                playgroundMedia.Stop();
+
+                                if (!nextRockTimer.IsTickHandlerSubed)
+                                {
+                                    nextRockTimer.Tick += (_sender, _e) =>
+                                    {
+
+                                        if (trainingTargetReached())
+                                        {
+                                            nextRockTimer.RockTimerCountIncr();
+
+                                            if (nextRockTimer.IsTimerGoalReached())
+                                            {
+                                                if (nextRockOnRoute.TrainingSeq == 1)
+                                                {
+                                                    //START ROCK REACHED VERIFIED
+                                                    playerBodyID = body.TrackingId;
+                                                    //Console.WriteLine("Player Tracking ID: "+playerBodyID);
+
+                                                    nextTrainRockIdx++;
+                                                    nextRockTimer.Reset();
+                                                    //TO DO: StartRock Feedback Animation
+                                                    playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
+                                                }
+                                                else if (nextRockOnRoute.TrainingSeq == trainingRouteLength)
+                                                {
+                                                    //END ROCK REACHED VERIFIED
+                                                    //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
+                                                    playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Countdown.mp4"));
+
+                                                    if (!endRockHoldTimer.IsTickHandlerSubed)
+                                                    {
+                                                        endRockHoldTimer.Tick += (_holdSender, _holdE) =>
+                                                        {
+                                                            endRockHoldTimer.RockTimerCountIncr();
+
+                                                            if (endRockHoldTimer.IsTimerGoalReached())
+                                                            {
+                                                                //END ROCK 3-second HOLD VERIFIED
+                                                                endRockHoldTimer.Stop();
+
+                                                                playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Finish.mp4"));
+                                                                playgroundMedia.Play();
+                                                                //TO DO: animation Feedback for that rock
+                                                            }
+
+                                                            if (endRockHoldTimer.IsLagThresholdExceeded())
+                                                            {
+                                                                playgroundMedia.Stop();
+                                                                endRockHoldTimer.Reset();
+                                                            }
+                                                        };
+
+                                                        endRockHoldTimer.IsTickHandlerSubed = true;
+                                                    }
+
+                                                    if (!endRockHoldTimer.IsEnabled)
+                                                    {
+                                                        endRockHoldTimer.Reset();
+                                                        playgroundMedia.Play();
+                                                        endRockHoldTimer.Start();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    //INTER ROCK REACHED VERIFIED
+                                                    nextRockTimer.Reset();
+                                                    nextTrainRockIdx++;
+                                                }
+                                            }
+                                        }
+
+                                        if (nextRockTimer.IsLagThresholdExceeded())
+                                        {
+                                            nextRockTimer.Reset();
+                                        }
+
+
+                                    };
+                                    nextRockTimer.IsTickHandlerSubed = true;
+                                }
+
+                                if (!nextRockTimer.IsEnabled)
+                                {
+                                    nextRockTimer.Reset();
+                                    nextRockTimer.Start();
+                                }
+                            }
+  
                             break;
+                        #endregion
+
                         case ClimbMode.Boulder:
                         default:
-#if climbMode == ClimbMode.Boulder
+
+                            #region Boulder Gameplay
+                            IEnumerable<Joint> fourLimbJoints =
+                                        body.Joints.Where(x => KinectExtensions.LimbJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+                            Func<RockOnRouteViewModel,bool> boulderTargetReached;
+                            boulderTargetReached = (x) =>
+                            {
+                                bool reached;
+                                switch (x.BoulderStatus)
+                                {
+                                    case RockOnBoulderStatus.Start:
+                                        reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
+                                        break;
+                                    case RockOnBoulderStatus.Int:
+                                    default:
+                                        reached = IsJointGroupOnRock(fourLimbJoints, x.MyRockViewModel) && body.TrackingId == playerBodyID;
+                                        break;
+                                    case RockOnBoulderStatus.End:
+                                        reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel) && body.TrackingId == playerBodyID;
+                                        break;
+                                }
+                                return reached;
+                            };
+                            
+                            
+
                             if (!gameStarted) //Progress: Game not yet started, waiting player to reach Starting Point
                             {
-                                if (AreBothJointGroupsOnRock(LHandJoints, RHandJoints, startRockOnBoulderRoute.MyRockViewModel))
+
+                                if (boulderTargetReached(startRockOnRoute))
                                 {
-                                    ///DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
-                                    playerBodyID = body.TrackingId;
-                                    //Console.WriteLine("Player Tracking ID: "+playerBodyID);
+                                    //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
 
                                     playgroundWindow.LoopSrcnSvr = false;
                                     playgroundMedia.Stop();
 
-                                    RockTimerHelper startRockTimer = startRockOnBoulderRoute.MyRockTimerHelper;
+                                    RockTimerHelper startRockTimer = startRockOnRoute.MyRockTimerHelper;
                                     startRockTimer.Tick += (_sender, _e) =>
                                     {
 
-                                        if (AreBothJointGroupsOnRock(LHandJoints, RHandJoints, startRockOnBoulderRoute.MyRockViewModel))
+                                        if (boulderTargetReached(startRockOnRoute))
                                         {
-                                            //START ROCK REACHED VERIFIED
+
                                             startRockTimer.RockTimerCountIncr();
 
                                             if (startRockTimer.IsTimerGoalReached())
                                             {
-                                                startRockTimer.Reset();
+                                                //START ROCK REACHED VERIFIED
+                                                playerBodyID = body.TrackingId;
+                                                //Console.WriteLine("Player Tracking ID: "+playerBodyID);
+
+                                                startRockTimer.Stop();
                                                 gameStarted = true;
                                                 //TO DO: StartRock Feedback Animation
-                                                playgroundMedia.Source = (new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4")));
+                                                playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
                                             }
                                         }
 
@@ -304,41 +474,53 @@ namespace JustClimbTrial.Views.Pages
                             else //gameStarted = true
                             {
                                 //Progress: Game Started, waiting player to reach End Point
-                                if (AreBothJointGroupsOnRock(LHandJoints, RHandJoints, endRockOnBoulderRoute.MyRockViewModel)
-                                    && body.TrackingId == playerBodyID)
+                                //CHECK END ROCK REACHED ALL THE TIME
+                                if (boulderTargetReached(endRockOnRoute))
                                 {
-                                    RockTimerHelper endRockTimer = endRockOnBoulderRoute.MyRockTimerHelper;
-                                    endRockTimer.Tick += (_sender, _e) =>
-                                    {
+                                    RockTimerHelper endRockTimer = endRockOnRoute.MyRockTimerHelper;
 
-                                        if (AreBothJointGroupsOnRock(LHandJoints, RHandJoints, endRockOnBoulderRoute.MyRockViewModel))
+                                    if (!endRockTimer.IsTickHandlerSubed)
+                                    {
+                                        endRockTimer.Tick += (_sender, _e) =>
+                                        {
+
+                                        if (boulderTargetReached(endRockOnRoute))
                                         {
                                             endRockTimer.RockTimerCountIncr();
 
                                             if (endRockTimer.IsTimerGoalReached())
                                             {
                                                 //END ROCK REACHED VERIFIED
-                                                endRockTimer.Reset();
+                                                endRockTimer.Stop();
 
                                                 //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
                                                 playgroundMedia.Source = (new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Countdown.mp4")));
 
-                                                endRockHoldTimer.Tick += (_holdSender, _holdE) =>
+                                                if (!endRockHoldTimer.IsTickHandlerSubed)
                                                 {
-                                                    if (endRockHoldTimer.IsTimerGoalReached())
+                                                    endRockHoldTimer.Tick += (_holdSender, _holdE) =>
                                                     {
-                                                        //END ROCK 3-second HOLD VERIFIED
-                                                        playgroundMedia.Source = (new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Finish.mp4")));
-                                                        playgroundMedia.Play();
-                                                        //TO DO: animation Feedback for that rock
-                                                    }
+                                                        endRockHoldTimer.RockTimerCountIncr();
 
-                                                    if (endRockHoldTimer.IsLagThresholdExceeded())
-                                                    {
-                                                        playgroundMedia.Stop();
-                                                        endRockHoldTimer.Reset();
-                                                    }
-                                                };
+                                                        if (endRockHoldTimer.IsTimerGoalReached())
+                                                        {
+                                                            //END ROCK 3-second HOLD VERIFIED
+                                                            endRockHoldTimer.Stop();
+
+                                                            playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Finish.mp4"));
+                                                            playgroundMedia.Play();
+                                                            //TO DO: animation Feedback for that rock
+                                                        }
+
+                                                        if (endRockHoldTimer.IsLagThresholdExceeded())
+                                                        {
+                                                            playgroundMedia.Stop();
+                                                            endRockHoldTimer.Reset();
+                                                        }
+                                                    };
+
+                                                    endRockHoldTimer.IsTickHandlerSubed = true;
+                                                }
 
                                                 if (!endRockHoldTimer.IsEnabled)
                                                 {
@@ -355,6 +537,9 @@ namespace JustClimbTrial.Views.Pages
                                         }
                                     };
 
+                                        endRockTimer.IsTickHandlerSubed = true;
+                                    }
+
                                     if (!endRockTimer.IsEnabled)
                                     {
                                         endRockTimer.Reset();
@@ -362,52 +547,58 @@ namespace JustClimbTrial.Views.Pages
                                     }
 
                                 }
-                                else //Intermediate Rocks verification
+                                
+                                
+                                foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
                                 {
-                                    IEnumerable<Joint> relevantJoints =
-                                        body.Joints.Where(x => KinectExtensions.LimbJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+                                    RockTimerHelper anyRockTimer = rockOnRoute.MyRockTimerHelper;
 
-                                    foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
+                                    if (boulderTargetReached(rockOnRoute))
                                     {
-                                        foreach (Joint relevantJoint in relevantJoints)
+                                        if (!anyRockTimer.IsTickHandlerSubed)
                                         {
-
-                                            if (IsJointOnRock(relevantJoint, rockOnRoute.MyRockViewModel)
-                                                && body.TrackingId == playerBodyID)
+                                            anyRockTimer.Tick += (_sender, _e) =>
                                             {
-                                                RockTimerHelper anyRockTimer = rockOnRoute.MyRockTimerHelper;
-                                                if (anyRockTimer.IsTimerGoalReached())
+                                                if (boulderTargetReached(rockOnRoute))
                                                 {
-                                                    //TO DO: animation Feedback for that rock
+                                                    anyRockTimer.RockTimerCountIncr();
 
-                                                    break;
+                                                    if (anyRockTimer.IsTimerGoalReached())
+                                                    {
+                                                        anyRockTimer.Stop();
+                                                        //TO DO: animation Feedback for that rock
+
+                                                    }
+                                                    if (anyRockTimer.IsLagThresholdExceeded())
+                                                    {
+                                                        anyRockTimer.Reset();
+                                                    }
+
                                                 }
-                                                if (anyRockTimer.IsLagThresholdExceeded())
-                                                {
-                                                    anyRockTimer.Reset();
-                                                }
+                                            };
 
-                                                if (!anyRockTimer.IsEnabled)
-                                                {
-                                                    anyRockTimer.Reset();
-                                                    anyRockTimer.Start();
-                                                }
-                                            }
-                                        }//CLOSE foreach (Joint relevantJoint in relevantJoints)
+                                            anyRockTimer.IsTickHandlerSubed = true;
+                                        }
 
-                                    }//CLOSE foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
+                                        if (!anyRockTimer.IsEnabled)
+                                        {
+                                            anyRockTimer.Reset();
+                                            anyRockTimer.Start();
+                                        }
+                                    }
 
-                                }
-                            } 
-#endif
+                                }//CLOSE foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
+
+                            }
                             break;
+                            #endregion
                     }
-                }                
+                }
 
             }//CLOSE foreach (var body in bodies)
         }
 
-#endregion
+        #endregion
 
         private bool IsJointOnRock(Joint joint, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {
@@ -420,24 +611,23 @@ namespace JustClimbTrial.Views.Pages
             return (distance < threshold);
         }
 
-        private bool IsJointGroupOnROck(IEnumerable<Joint> handJoints, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
+        private bool IsJointGroupOnRock(IEnumerable<Joint> joints, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {
-            bool isHandOnRock = false;
-            foreach (Joint handJoint in handJoints)
+            bool onRock = false;
+            foreach (Joint joint in joints)
             {
-                if (IsJointOnRock(handJoint, rockVM, threshold))
+                if (IsJointOnRock(joint, rockVM, threshold))
                 {
-                    isHandOnRock = true;
+                    onRock = true;
                     break;
                 }
             }
-            return isHandOnRock;
+            return onRock;
         }
 
         private bool AreBothJointGroupsOnRock(IEnumerable<Joint> groupA, IEnumerable<Joint> groupB, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {
-            return (IsJointGroupOnROck(groupA, rockVM, threshold) && IsJointGroupOnROck(groupB, rockVM, threshold) );
+            return (IsJointGroupOnRock(groupA, rockVM, threshold) && IsJointGroupOnRock(groupB, rockVM, threshold));
         }
-
     }
 }
