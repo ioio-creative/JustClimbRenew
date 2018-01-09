@@ -30,7 +30,7 @@ namespace JustClimbTrial.Views.Pages
         private DateTime recordStartTime;
         private const int timerIntervalInMillis = 1000;
         private readonly int maxRecordDurationInMinutes = AppGlobal.MaxVideoRecordDurationInMinutes;
-                                                
+
         #endregion
 
 
@@ -63,6 +63,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
+            timerToShowRecordTime.Tick -= timerToShowRecordTime_Tick;
             videoHelper.ClearBuffer();
         }
 
@@ -87,7 +88,7 @@ namespace JustClimbTrial.Views.Pages
         private void InitializeTimerToShowRecordTime()
         {
             timerToShowRecordTime = new DispatcherTimer();
-            timerToShowRecordTime.Tick += new EventHandler(timerToShowRecordTime_Tick);
+            timerToShowRecordTime.Tick += timerToShowRecordTime_Tick;
             timerToShowRecordTime.Interval = TimeSpan.FromMilliseconds(timerIntervalInMillis);
         }
 

@@ -111,13 +111,11 @@
         
         <!-- row 3 -->
         <Button x:Name="BtnDemo" 
-            Grid.Row="3" Grid.Column="0"                
-            Click="BtnDemo_Click">
+            Grid.Row="3" Grid.Column="0">
             DEMO
         </Button>
         <Button x:Name="BtnPlaySelectedVideo" 
-            Grid.Row="3" Grid.Column="1" 
-            Click="BtnPlaySelectedVideo_Click">
+            Grid.Row="3" Grid.Column="1">
             PLAY SELECTED VIDEO
         </Button>
         <TextBlock Grid.Row="3" Grid.Column="2">
@@ -126,8 +124,7 @@
         <TextBlock Grid.Row="3" Grid.Column="3" 
             x:Name="LbGameStatusDet" Text="Idling" />
         <Button Grid.Row="3" Grid.Column="4" 
-            x:Name="BtnRestartGame" 
-            Click="BtnRestartGame_Click">
+            x:Name="BtnRestartGame">
             RESTART
         </Button>
         <!-- end of row 3 -->

@@ -3,6 +3,7 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
+using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.Windows;
@@ -97,10 +98,86 @@ namespace JustClimbTrial.Views.Pages
         }
 
 
+        #region initializtion
+
+        private void InitializeCommands()
+        {
+            BtnDemo.Command = new RelayCommand(PlayDemoVideo, CanPlayDemoVideo);
+            BtnPlaySelectedVideo.Command = new RelayCommand(PlaySelectedVideo, CanPlaySelectedVideo);
+            BtnRestartGame.Command = new RelayCommand(RestartGame, CanRestartGame);
+        }
+
+        #endregion
+
+
+        #region command methods
+
+        private bool CanPlayDemoVideo(object paramter = null)
+        {
+            return true;
+        }
+
+        private bool CanPlaySelectedVideo(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanRestartGame(object parameter = null)
+        {
+            return true;
+        }
+
+        private void PlayDemoVideo(object parameter = null)
+        {
+            RouteVideoViewModel demoVideoVM = viewModel.RouteVideoViewModels.Single(x => x.IsDemo);
+
+            string demoVideoFilePath;
+            switch (climbMode)
+            {
+                case ClimbMode.Training:
+                    demoVideoFilePath = 
+                        FileHelper.TrainingRouteVideoRecordedFullPath(demoVideoVM);
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    demoVideoFilePath =
+                        FileHelper.BoulderRouteVideoRecordedFullPath(demoVideoVM);
+                    break;
+            }
+
+            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
+            VideoPlayback videoPlaybackPage =
+                new VideoPlayback(demoVideoFilePath, playgroundMedia);
+
+            videoPlaybackDialog.Navigate(videoPlaybackPage);
+            videoPlaybackDialog.ShowDialog();
+        }
+
+        private void PlaySelectedVideo(object parameter = null)
+        {
+            if (mainWindowClient.DebugMode)
+            {
+                kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
+            }
+
+            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
+            videoPlaybackDialog.ShowDialog();
+        }
+
+        private void RestartGame(object parameter = null)
+        {
+
+        }
+
+        #endregion
+
+
         #region event handlers
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            InitializeCommands();
+
             viewModel.LoadData();
 
             mainWindowClient = this.Parent as MainWindow;
@@ -156,44 +233,7 @@ namespace JustClimbTrial.Views.Pages
             }         
         }
 
-        private void BtnDemo_Click(object sender, RoutedEventArgs e)
-        {
-            //RouteVideoViewModel model = dgridRouteVideos.SelectedItem as RouteVideoViewModel;
-            //string abx = FileHelper.VideoFullPath(model);
-
-            //We temporary use this as video rec btn
-            if (!isRecording)
-            {                                
-                BtnDemo.Content = "Stop Rec";
-            }
-            else
-            {                
-                BtnDemo.Content = "DEMO";
-            }
-
-            isRecording = !isRecording;
-        }
-
-        private void BtnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
-        {
-            if (mainWindowClient.DebugMode)
-            {
-                kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
-            }
-            
-            //mainWindowClient.PlaygroundWindow.PlaygroundCamera.Opacity = 0;
-
-            MediaElement playbackMonitor = mainWindowClient.PlaygroundWindow.PlaybackMedia;
-            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playbackMonitor);
-            videoPlaybackDialog.ShowDialog();
-        }
-
-        private void BtnRestartGame_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
+        private void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
         {
 
             if (mainWindowClient.DebugMode)
@@ -258,7 +298,6 @@ namespace JustClimbTrial.Views.Pages
                             break;
                         case ClimbMode.Boulder:
                         default:
-#if climbMode == ClimbMode.Boulder
                             if (!gameStarted) //Progress: Game not yet started, waiting player to reach Starting Point
                             {
                                 if (AreBothJointGroupsOnRock(LHandJoints, RHandJoints, startRockOnBoulderRoute.MyRockViewModel))
@@ -398,8 +437,7 @@ namespace JustClimbTrial.Views.Pages
                                     }//CLOSE foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
 
                                 }
-                            } 
-#endif
+                            }
                             break;
                     }
                 }                
@@ -407,7 +445,8 @@ namespace JustClimbTrial.Views.Pages
             }//CLOSE foreach (var body in bodies)
         }
 
-#endregion
+        #endregion
+
 
         private bool IsJointOnRock(Joint joint, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {

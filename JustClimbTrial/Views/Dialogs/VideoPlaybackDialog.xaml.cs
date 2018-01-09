@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using System;
 
 namespace JustClimbTrial.Views.Dialogs
 {
@@ -50,11 +49,16 @@ namespace JustClimbTrial.Views.Dialogs
 
         #region event handlers
 
+        private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            ResetSavingVideoProperties();
+        }
+
         private void NavigationWindow_Unloaded(object sender, RoutedEventArgs e)
         {
             DeleteTmpVideoFileSafe();
-        }        
+        }
 
-        #endregion
+        #endregion        
     }
 }

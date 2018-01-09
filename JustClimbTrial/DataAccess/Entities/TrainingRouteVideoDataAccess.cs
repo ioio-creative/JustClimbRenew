@@ -34,9 +34,14 @@ namespace JustClimbTrial.DataAccess.Entities
             return ValidTrainingRouteVideos.Where(x => x.Route == routeId);
         }
 
+        public static TrainingRouteVideo ValidTrainingRouteDemoVideoByRouteId(string routeId)
+        {
+            return ValidTrainingRouteVideosByRouteId(routeId).Single(x => x.IsDemo.GetValueOrDefault(false));
+        }
+
         public static TrainingRouteVideo TrainingRouteVideoById(string videoId)
         {
-            return TrainingRouteVideos.Where(x => x.VideoID == videoId).Single();
+            return TrainingRouteVideos.Single(x => x.VideoID == videoId);
         }
 
         public static string Insert(TrainingRouteVideo proposedVideo, bool isSubmitChanges = true)
