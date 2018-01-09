@@ -22,28 +22,32 @@ namespace JustClimbTrial.Helpers
         // Path: exeLocation/BoulderRouteVideoRecordedDirectory/RouteNo/VideoNo.extension
         public static string BoulderRouteVideoRecordedFullPath(RouteVideoViewModel video)
         {
-            return Path.Combine(exeDirectory, settings.BoulderRouteVideoRecordedDirectory,
+            return Path.Combine(exeDirectory, 
+                string.Format(settings.BoulderRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
                 video.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
         
         public static string BoulderRouteVideoRecordedFullPath(
             BoulderRoute route, BoulderRouteVideo video)
         {
-            return Path.Combine(exeDirectory, settings.BoulderRouteVideoRecordedDirectory,
+            return Path.Combine(exeDirectory, 
+                string.Format(settings.BoulderRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
                 route.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
 
         // Path: exeLocation/TrainingRouteVideoRecordedDirectory/RouteNo/VideoNo.extension
         public static string TrainingRouteVideoRecordedFullPath(RouteVideoViewModel video)
         {
-            return Path.Combine(exeDirectory, settings.TrainingRouteVideoRecordedDirectory,
+            return Path.Combine(exeDirectory, 
+                string.Format(settings.TrainingRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
                 video.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
 
         public static string TrainingRouteVideoRecordedFullPath(
             TrainingRoute route, TrainingRouteVideo video)
         {
-            return Path.Combine(exeDirectory, settings.BoulderRouteVideoRecordedDirectory,
+            return Path.Combine(exeDirectory, 
+                string.Format(settings.BoulderRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
                 route.RouteNo, video.VideoNo + settings.VideoFileExtension);
         }
 

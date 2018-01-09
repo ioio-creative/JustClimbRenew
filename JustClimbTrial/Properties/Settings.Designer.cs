@@ -109,10 +109,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\BoulderRoutes")]
-        public string BoulderRouteVideoRecordedDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\{0}\\BoulderRoutes")]
+        public string BoulderRouteVideoRecordedDirectoryFormat {
             get {
-                return ((string)(this["BoulderRouteVideoRecordedDirectory"]));
+                return ((string)(this["BoulderRouteVideoRecordedDirectoryFormat"]));
             }
         }
         
@@ -127,10 +127,19 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\TrainingRoutes")]
-        public string TrainingRouteVideoRecordedDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\{0}\\TrainingRoutes")]
+        public string TrainingRouteVideoRecordedDirectoryFormat {
             get {
-                return ((string)(this["TrainingRouteVideoRecordedDirectory"]));
+                return ((string)(this["TrainingRouteVideoRecordedDirectoryFormat"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int MaxVideoRecordDurationInMinutes {
+            get {
+                return ((int)(this["MaxVideoRecordDurationInMinutes"]));
             }
         }
     }
