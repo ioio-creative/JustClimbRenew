@@ -39,14 +39,17 @@
     <Setting Name="VideoTempDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\temp\TempRecording</Value>
     </Setting>
-    <Setting Name="BoulderRouteVideoRecordedDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\RecordedVideos\BoulderRoutes</Value>
+    <Setting Name="BoulderRouteVideoRecordedDirectoryFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\RecordedVideos\{0}\BoulderRoutes</Value>
     </Setting>
     <Setting Name="FfmpegExePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ffmpeg.exe</Value>
     </Setting>
-    <Setting Name="TrainingRouteVideoRecordedDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\RecordedVideos\TrainingRoutes</Value>
+    <Setting Name="TrainingRouteVideoRecordedDirectoryFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\RecordedVideos\{0}\TrainingRoutes</Value>
+    </Setting>
+    <Setting Name="MaxVideoRecordDurationInMinutes" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="DEBUG" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>

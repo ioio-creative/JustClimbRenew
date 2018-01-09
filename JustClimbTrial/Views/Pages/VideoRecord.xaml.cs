@@ -1,10 +1,13 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.Enums;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
+using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -22,6 +25,12 @@ namespace JustClimbTrial.Views.Pages
         // need to pass externalPlaybackMonitor to another view
         private MediaElement externalPlaybackMonitor;
 
+        // timer to show time elapsed since recording started
+        private DispatcherTimer timerToShowRecordTime;
+        private DateTime recordStartTime;
+        private const int timerIntervalInMillis = 1000;
+        private readonly int maxRecordDurationInMinutes = AppGlobal.MaxVideoRecordDurationInMinutes;
+                                                
         #endregion
 
 
@@ -48,7 +57,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            InitialiseCommands();
+            InitializeCommands();
+            InitializeTimerToShowRecordTime();
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
@@ -56,12 +66,32 @@ namespace JustClimbTrial.Views.Pages
             videoHelper.ClearBuffer();
         }
 
+        private void timerToShowRecordTime_Tick(object sender, EventArgs e)
+        {
+            TimeSpan timeElapsed = DateTime.Now - recordStartTime;
+
+            lbStopwatch.Text = string.Format("{0:00}:{1:00}",
+                timeElapsed.Minutes, timeElapsed.Seconds);
+
+            if (timeElapsed.TotalMinutes > maxRecordDurationInMinutes)
+            {
+                StopRecordVideo();
+            }            
+        }
+
         #endregion
 
 
-        #region command methods
+        #region initialization
 
-        private void InitialiseCommands()
+        private void InitializeTimerToShowRecordTime()
+        {
+            timerToShowRecordTime = new DispatcherTimer();
+            timerToShowRecordTime.Tick += new EventHandler(timerToShowRecordTime_Tick);
+            timerToShowRecordTime.Interval = TimeSpan.FromMilliseconds(timerIntervalInMillis);
+        }
+
+        private void InitializeCommands()
         {
             btnStartRecordVideo.Command = new RelayCommand(
                 StartRecordVideo, CanStartRecordVideo);
@@ -70,6 +100,11 @@ namespace JustClimbTrial.Views.Pages
             btnViewVideo.Command = new RelayCommand(
                 ViewVideo, CanViewVideo);
         }
+
+        #endregion
+
+
+        #region command methods        
 
         private bool CanStartRecordVideo(object parameter = null)
         {
@@ -89,6 +124,8 @@ namespace JustClimbTrial.Views.Pages
         private void StartRecordVideo(object parameter = null)
         {
             videoHelper.StartRecording();
+            timerToShowRecordTime.Start();
+            recordStartTime = DateTime.Now;
         }
 
         private void StopRecordVideo(object parameter = null)
