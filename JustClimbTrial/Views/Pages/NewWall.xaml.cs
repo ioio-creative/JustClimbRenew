@@ -86,8 +86,7 @@ namespace JustClimbTrial.Views.Pages
 
 
         public NewWall()
-        {
-           
+        {           
             InitializeComponent();
 
             // set navHead
@@ -243,7 +242,6 @@ namespace JustClimbTrial.Views.Pages
             //kinectSensor.Open();
             //jcWall = new KinectWall(canvas, kinectSensor.CoordinateMapper);
             //rocksOnWallViewModel = new RocksOnWallViewModel(canvas, kinectSensor.CoordinateMapper);
-
 
             jcWall = new KinectWall(canvas, kinectManagerClient.kinectSensor.CoordinateMapper);
             rocksOnWallViewModel = new RocksOnWallViewModel(canvas, kinectManagerClient.kinectSensor.CoordinateMapper);

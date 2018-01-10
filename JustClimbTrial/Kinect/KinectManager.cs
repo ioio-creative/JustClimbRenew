@@ -93,7 +93,6 @@ namespace JustClimbTrial.Kinect
             {
                return kinectSensor.CoordinateMapper;
             }
-            set { }
         }
 
         #region BitmapSrc EventHandlers
@@ -134,6 +133,7 @@ namespace JustClimbTrial.Kinect
             }
             else
             {
+                isSuccess = false;
                 Console.WriteLine("Kinect not available!");
             }
 
@@ -173,7 +173,6 @@ namespace JustClimbTrial.Kinect
                             {
                                 BitmapSource colorImgSrc = ToBitmapSrc(colorFrame);
                                 ColorImageSourceArrived(sender, new ColorBitmapSrcEventArgs(colorImgSrc));
-
                             }
 
                             if (ColorBitmapArrived != null)
@@ -189,6 +188,7 @@ namespace JustClimbTrial.Kinect
                         }
                     }
                 }
+
                 if (DepthImageSourceArrived != null)
                 {
                     using (DepthFrame depthFrame = multiSourceFrame.DepthFrameReference.AcquireFrame())
@@ -225,7 +225,6 @@ namespace JustClimbTrial.Kinect
                     }
                 }
             }
-
         }
 
         //ColorFrame Stream to Image
@@ -294,8 +293,6 @@ namespace JustClimbTrial.Kinect
             return KinectExtensions.ToBitmapSrc(frameData, width, height);
         }
 
-
-
         public static Bitmap ResizeBitmap(Bitmap srcBitmap, int width, int height)
         {
             Bitmap result = new Bitmap(width, height);
@@ -307,8 +304,5 @@ namespace JustClimbTrial.Kinect
             }
             return result;
         }
-
     }
-
-
 }

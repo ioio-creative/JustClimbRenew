@@ -56,22 +56,31 @@ namespace JustClimbTrial
         {
             //by default play ScreenSaver.mp4 in Playground Window
             playgroundMedia = playgroundWindow.PlaygroundMedia;
-            playbackMedia = playgroundWindow.PlaybackMedia;         
+
+            playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4")));
+
 
             KinectManagerClient = new KinectManager();
             //activate sensor in Main Window only once
-            KinectManagerClient.OpenKinect();
-
-            if (debug)
-            {               
-                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
-                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
-                playgroundWindow.ShowImage(wallLogImg, 0.5);
+            bool isOpenKinectSuccessful = KinectManagerClient.OpenKinect();
+          
+            if (isOpenKinectSuccessful)
+            {
+                if (debug)
+                {
+                    Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
+                    BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+                    playgroundWindow.ShowImage(wallLogImg, 0.5);
+                }
+                else
+                {
+                    playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+                    playgroundMedia.Play();
+                }               
             }
             else
             {
-                playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
-                playgroundMedia.Play();
+                UiHelper.NotifyUser("Kinect is not available!");
             }
         }
 

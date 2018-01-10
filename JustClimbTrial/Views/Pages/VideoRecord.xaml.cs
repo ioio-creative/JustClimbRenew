@@ -134,6 +134,7 @@ namespace JustClimbTrial.Views.Pages
         private void StopRecordVideo(object parameter = null)
         {
             videoHelper.StopRecording();
+            timerToShowRecordTime.Stop();
         }
 
         private void ViewVideo(object parameter = null)
