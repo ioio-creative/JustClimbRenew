@@ -10,7 +10,8 @@
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Boulder Route 1 - Video Playback"
       WindowTitle="Boulder Route 1 - Video Playback"
-      Loaded="Page_Loaded">
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
     <Page.Resources>
         <viewModel:GameStartViewModel x:Key="gameStartViewModel" />
     </Page.Resources>

@@ -17,6 +17,8 @@ namespace JustClimbTrial.Views.Pages
     {
         private readonly bool debug = AppGlobal.DEBUG;
 
+        private MainWindow parentMainWindow;
+
         private RoutesViewModel viewModel;
         private ClimbMode climbMode;                    
 
@@ -73,7 +75,17 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            parentMainWindow = this.Parent as MainWindow;
+            if (debug)
+            {
+                parentMainWindow.SubscribeColorImgSrcToPlaygrd(); 
+            }
             viewModel.LoadData();
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            parentMainWindow.UnsubColorImgSrcToPlaygrd();
         }
 
         private void btnGameStart_Click(object sender, RoutedEventArgs e)
@@ -90,6 +102,7 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        #endregion        
+        #endregion
+
     }
 }

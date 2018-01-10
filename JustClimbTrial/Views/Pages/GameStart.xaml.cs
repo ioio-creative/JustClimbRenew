@@ -707,5 +707,11 @@ namespace JustClimbTrial.Views.Pages
         {
             return (IsJointGroupOnRock(groupA, rockVM, threshold) && IsJointGroupOnRock(groupB, rockVM, threshold));
         }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            mainWindowClient.UnsubColorImgSrcToPlaygrd();
+        }
+
     }
 }

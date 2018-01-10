@@ -7,7 +7,9 @@
       mc:Ignorable="d" 
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Just Climb - Select Mode" 
-      WindowTitle="Just Climb - Select Mode">
+      WindowTitle="Just Climb - Select Mode"
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />

@@ -13,6 +13,8 @@ namespace JustClimbTrial.Views.Pages
     {
         private readonly bool debug = AppGlobal.DEBUG;
 
+        private MainWindow parentMainWindow;
+
         public ModeSelect()
         {
             InitializeComponent();
@@ -34,5 +36,18 @@ namespace JustClimbTrial.Views.Pages
             NavigationService.Navigate(routesPage);
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            parentMainWindow = this.Parent as MainWindow;
+            if (debug)
+            {
+                parentMainWindow.SubscribeColorImgSrcToPlaygrd(); 
+            }
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            parentMainWindow.UnsubColorImgSrcToPlaygrd();
+        }
     }
 }

@@ -169,12 +169,18 @@ namespace JustClimbTrial.Views.Pages
             if (!isAnyRocksOnWall)
             {
                 UiHelper.NotifyUser("No rocks registered with the wall!");
-            }        
+            }
+
+            if (debug)
+            {
+                parentMainWindow.SubscribeColorImgSrcToPlaygrd();
+            }
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             DeleteTmpVideoFileSafe();
+            parentMainWindow.UnsubColorImgSrcToPlaygrd();
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)
