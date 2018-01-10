@@ -17,7 +17,7 @@ namespace JustClimbTrial
     public partial class MainWindow : NavigationWindow
     {
         //in Debug Mode we display the live camera image from Kinect at all times
-        private bool debug = AppGlobal.DEBUG;
+        private readonly bool debug = AppGlobal.DEBUG;
 
         public KinectManager KinectManagerClient;
 
@@ -34,6 +34,15 @@ namespace JustClimbTrial
             set { playgroundMedia = value; }
         }
 
+        private MediaElement playbackMedia;
+
+        public MediaElement PlaybackMedia
+        {
+            get { return playbackMedia; }
+            set { playbackMedia = value; }
+        }
+
+
 
         public MainWindow()
         {
@@ -47,21 +56,22 @@ namespace JustClimbTrial
         {
             //by default play ScreenSaver.mp4 in Playground Window
             playgroundMedia = playgroundWindow.PlaygroundMedia;
-            playgroundWindow.SetPlaygroundMediaSource(new Uri( Path.Combine(FileHelper.VideoResourcesFolderPath(),"ScreenSaver.mp4") ) );
+            playbackMedia = playgroundWindow.PlaybackMedia;         
 
             KinectManagerClient = new KinectManager();
             //activate sensor in Main Window only once
             KinectManagerClient.OpenKinect();
 
             if (debug)
-            {
-                KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
+            {               
+                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
+                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+                playgroundWindow.ShowImage(wallLogImg, 0.5);
             }
             else
             {
-                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
-                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
-                playgroundWindow.ShowImage(wallLogImg, 0.5);                
+                playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+                playgroundMedia.Play();
             }
         }
 
@@ -72,14 +82,25 @@ namespace JustClimbTrial
             KinectManagerClient.CloseKinect();
         }
 
-        public void HandleColorImageSourceArrived(object sender, ColorBitmapSrcEventArgs e)
+        private void HandleColorImageSourceArrived(object sender, ColorBitmapSrcEventArgs e)
         {
             playgroundWindow.ShowImage(e.GetColorBitmapSrc());
         }
 
-        public void SetPlaygroundMediaElementSource(Uri sourceUri)
+        public void SubscribeColorImgSrcToPlaygrd()
         {
-            playgroundWindow.SetPlaygroundMediaSource(sourceUri);
+            KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
+        }
+        public void UnsubColorImgSrcToPlaygrd()
+        {
+            KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;
+        }
+
+        public void LoadAndPlayScrnSvr()
+        {
+            playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+            playgroundWindow.LoopMedia = true;
+            playgroundMedia.Play();
         }
     }
 }

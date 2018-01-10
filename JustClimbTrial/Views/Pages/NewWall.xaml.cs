@@ -21,6 +21,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class NewWall : Page
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+
         #region constants
 
         private const string RockOverlapsWarningMsg = 
@@ -217,9 +219,6 @@ namespace JustClimbTrial.Views.Pages
             kinectManagerClient = myMainWindowParent.KinectManagerClient;
             if (kinectManagerClient.kinectSensor != null)
             {
-                //Unsubsricbe playground handler to in Mainwindow class and use local handler instead
-                kinectManagerClient.ColorImageSourceArrived -= myMainWindowParent.HandleColorImageSourceArrived;
-
                 kinectManagerClient.multiSourceReader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
 
                 colorWidth = KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;

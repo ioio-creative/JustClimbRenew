@@ -1,4 +1,5 @@
-﻿using JustClimbTrial.Views.Dialogs;
+﻿using JustClimbTrial.Globals;
+using JustClimbTrial.Views.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoPlaybackDialogConfirm : Page
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+
         // need to pass externalPlaybackMonitor to another view
         private MediaElement externalPlaybackMonitor;
 

@@ -1,5 +1,6 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.Enums;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.ViewModels;
 using System.Windows;
@@ -14,6 +15,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class Routes : Page
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+
         private RoutesViewModel viewModel;
         private ClimbMode climbMode;                    
 

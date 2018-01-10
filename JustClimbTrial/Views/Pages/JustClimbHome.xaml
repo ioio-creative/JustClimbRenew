@@ -8,7 +8,8 @@
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Just Climb - Home"
       WindowTitle="Just Climb - Home"
-      Loaded="Home_Loaded">
+      Loaded="Home_Loaded"
+      Unloaded="Home_Unloaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />

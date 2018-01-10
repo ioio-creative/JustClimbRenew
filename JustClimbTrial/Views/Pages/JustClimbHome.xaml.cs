@@ -13,7 +13,10 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class JustClimbHome : Page
     {
-       
+        private readonly bool debug = AppGlobal.DEBUG;
+
+        private MainWindow mainWindowParent;
+
         public JustClimbHome()
         {
 
@@ -31,6 +34,21 @@ namespace JustClimbTrial.Views.Pages
         private void Home_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowTitle = AppGlobal.WallID;
+            mainWindowParent = this.Parent as MainWindow;
+
+            if (debug)
+            {
+                mainWindowParent.SubscribeColorImgSrcToPlaygrd();
+            }
+        }
+
+
+        private void Home_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (debug)
+            {
+                mainWindowParent.UnsubColorImgSrcToPlaygrd();
+            }
         }
     }
 }

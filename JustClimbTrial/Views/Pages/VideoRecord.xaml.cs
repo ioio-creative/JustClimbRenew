@@ -16,6 +16,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoRecord : Page
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+
         #region private members
 
         private readonly ClimbMode climbMode;

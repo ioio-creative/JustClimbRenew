@@ -1,4 +1,5 @@
-﻿using JustClimbTrial.Interfaces;
+﻿using JustClimbTrial.Globals;
+using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using System;
 using System.Windows;
@@ -14,6 +15,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoPlayback : Page
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+
         #region private members
 
         private DispatcherTimer timer = new DispatcherTimer();

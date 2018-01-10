@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.Enums;
+using JustClimbTrial.Globals;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -10,6 +11,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class ModeSelect : Page
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+
         public ModeSelect()
         {
             InitializeComponent();

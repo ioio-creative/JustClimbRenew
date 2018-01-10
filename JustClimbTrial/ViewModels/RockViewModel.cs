@@ -357,6 +357,13 @@ namespace JustClimbTrial.ViewModels
             BoulderButtonSequence.LoadSequenceFolder();
 
         }
+
+        public void LoadStartRockInitialSeq()
+        {
+
+        }
+
+        //public void LoadStartRock
         #endregion
     }
 }

@@ -25,7 +25,7 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class GameStart : Page
     {
-        private bool debug = AppGlobal.DEBUG;
+        private readonly bool debug = AppGlobal.DEBUG;
 
         private const float DefaultDistanceThreshold = 0.1f;
 
@@ -113,7 +113,6 @@ namespace JustClimbTrial.Views.Pages
 
         #endregion
 
-
         #region command methods
 
         private bool CanPlayDemoVideo(object paramter = null)
@@ -161,7 +160,7 @@ namespace JustClimbTrial.Views.Pages
         {
             if (debug)
             {
-                kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
+                //kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
             }
 
             VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
@@ -189,14 +188,14 @@ namespace JustClimbTrial.Views.Pages
             playgroundWindow = mainWindowClient.PlaygroundWindow;
             playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundMedia.Stop();
-            playgroundWindow.SetPlaygroundMediaSource(new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Ready.mp4")));
+            playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Ready.mp4"));
             playgroundMedia.Play();
 
             gameplayVideoRecClient = new VideoHelper(kinectManagerClient);
 
             if (debug)
             {
-                kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
+                //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
             }
 
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
@@ -240,6 +239,8 @@ namespace JustClimbTrial.Views.Pages
                     interRocksOnRouteCamSP = new CameraSpacePoint[interRocksOnBoulderRoute.Count()];
 
                     int i = 0;
+                    startRockOnRoute.DrawRockShapeWrtStatus();
+                    endRockOnRoute.DrawRockShapeWrtStatus();
                     foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                     {
                         if (debug)
@@ -277,7 +278,7 @@ namespace JustClimbTrial.Views.Pages
         {
             if (debug)
             {
-                kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
+                //kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
             }
 
             //mainWindowClient.PlaygroundWindow.PlaygroundCamera.Opacity = 0;
@@ -382,7 +383,7 @@ namespace JustClimbTrial.Views.Pages
                             {
                                 //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
 
-                                playgroundWindow.LoopSrcnSvr = false;
+                                playgroundWindow.LoopMedia = false;
                                 playgroundMedia.Stop();
 
                                 if (!nextRockTimer.IsTickHandlerSubed)
@@ -487,7 +488,8 @@ namespace JustClimbTrial.Views.Pages
                                 switch (x.BoulderStatus)
                                 {
                                     case RockOnBoulderStatus.Start:
-                                        reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
+                                        //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
+                                        reached = IsJointGroupOnRock(fourLimbJoints, x.MyRockViewModel);
                                         break;
                                     case RockOnBoulderStatus.Int:
                                     default:
@@ -507,7 +509,7 @@ namespace JustClimbTrial.Views.Pages
                                 {
                                     //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
 
-                                    playgroundWindow.LoopSrcnSvr = false;
+                                    playgroundWindow.LoopMedia = false;
                                     playgroundMedia.Stop();
 
                                     RockTimerHelper startRockTimer = startRockOnRoute.MyRockTimerHelper;
@@ -528,7 +530,9 @@ namespace JustClimbTrial.Views.Pages
                                                 startRockTimer.Stop();
                                                 gameStarted = true;
                                                 //TO DO: StartRock Feedback Animation
+
                                                 playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
+                                                playgroundMedia.Play();
                                             }
                                         }
 

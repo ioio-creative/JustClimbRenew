@@ -21,6 +21,8 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class RouteSet : Page, ISavingVideo
     {
+        private readonly bool debug = AppGlobal.DEBUG;
+        
         #region resource keys
 
         private const string TrainingRockStatusTemplateResourceKey = "trainingRockStatusTemplate";

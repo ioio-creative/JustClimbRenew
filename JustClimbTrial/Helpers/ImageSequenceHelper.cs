@@ -15,12 +15,21 @@ using System.Windows.Threading;
 
 namespace JustClimbTrial.Helpers
 {
+    public enum RockAnimationSeq
+    {
+
+    }
+
     /// <summary>
     /// WPF Image Sequencer. Adapted from:
     /// http://blogarchive.claritycon.com/blog/2009/04/wpf-image-sequencer-for-animations/
     /// </summary>
     public class ImageSequenceHelper
     {
+        //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
+
+        public bool ToLoop = false;
+
         private int currentIndex;
         private Image image;
         private List<BitmapSource> images;
@@ -28,12 +37,13 @@ namespace JustClimbTrial.Helpers
 
         private string imgExtension = ".png";
 
-        public ImageSequenceHelper(Image image, int fps = 30)
+        public ImageSequenceHelper(Image image, int fps = 30, bool loop = false)
         {
             this.image = image;
             this.updateImageTimer = new DispatcherTimer(DispatcherPriority.Render);
             this.updateImageTimer.Interval = TimeSpan.FromMilliseconds(1000/fps);
             this.updateImageTimer.Tick += new EventHandler(this.updateImageTimer_Tick);
+            ToLoop = loop;
         }
 
 
@@ -104,6 +114,8 @@ namespace JustClimbTrial.Helpers
 
             return sequence;
         }
+
+        
 
         #endregion
     }
