@@ -11,6 +11,7 @@ namespace JustClimbTrial.ViewModels
         public RockOnBoulderStatus BoulderStatus { get; set; }
         public int TrainingSeq { get; set; }
         public RockTimerHelper MyRockTimerHelper { get; set; }
+        
         #endregion
 
 

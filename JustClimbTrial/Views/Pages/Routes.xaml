@@ -46,7 +46,7 @@
         <userControl:HeaderRowNavigation 
             x:Name="navHead"
             Grid.Row="0" Grid.ColumnSpan="5" 
-            HeaderRowTitle="{Binding Title}" />
+            HeaderRowTitle="" />
         <!-- end of row 0 -->
         
         <!-- row 1 -->

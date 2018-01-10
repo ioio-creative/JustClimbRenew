@@ -25,7 +25,7 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class GameStart : Page
     {
-        private bool debug = AppGlobal.DEBUG;
+        private readonly bool debug = AppGlobal.DEBUG;
 
         private const float DefaultDistanceThreshold = 0.1f;
 
