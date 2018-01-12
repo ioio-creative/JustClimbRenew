@@ -9,6 +9,8 @@ using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.UserControls;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,17 +21,18 @@ namespace JustClimbTrial.Views.Pages
     /// <summary>
     /// Interaction logic for RouteSet.xaml
     /// </summary>
-    public partial class RouteSet : Page, ISavingVideo
+    public partial class RouteSet : Page
     {
         private readonly bool debug = AppGlobal.DEBUG;
         
+                
         #region resource keys
 
         private const string TrainingRockStatusTemplateResourceKey = "trainingRockStatusTemplate";
         private const string BoulderRockStatusTemplateResourceKey = "boulderRockStatusTemplate";
 
-        private const string BtnRecordDemoTemplateResourceKey = "btnRecordDemoTemplate";
-        private const string BtnDemoDoneTemplateResourceKey = "btnDemoDoneTemplate";
+        //private const string BtnRecordDemoTemplateResourceKey = "btnRecordDemoTemplate";
+        //private const string BtnDemoDoneTemplateResourceKey = "btnDemoDoneTemplate";
 
         #endregion        
 
@@ -43,14 +46,6 @@ namespace JustClimbTrial.Views.Pages
         private RocksOnWallViewModel rocksOnWallViewModel;
         private RocksOnRouteViewModel rocksOnRouteViewModel;
 
-        #endregion
-
-
-        #region public members
-
-        public string TmpVideoFilePath { get; set; }
-        public bool IsConfirmSaveVideo { get; set; }
-        
         #endregion
 
 
@@ -93,7 +88,7 @@ namespace JustClimbTrial.Views.Pages
             }
 
             WindowTitle = Title;            
-            SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
+            //SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
             SetTemplateOfControlFromResource(ctrlRockStatus, rockStatusTemplateResourceKey);            
 
             navHead.ParentPage = this;
@@ -105,6 +100,33 @@ namespace JustClimbTrial.Views.Pages
             RouteSetImg.SetSourceByPath(FileHelper.WallLogImagePath(AppGlobal.WallID));
         }
 
+
+        #region initialization
+
+        // InitializeSaveRouteCommands() has to be called after initializing rocksOnWallViewModel
+        private void InitializeSaveRouteCommands()
+        {
+            Func<bool> validateRoute;
+
+            switch (routeSetClimbMode)
+            {
+                case ClimbMode.Training:
+                    validateRoute = () => 
+                        string.IsNullOrEmpty(rocksOnRouteViewModel.ValidateRocksOnTrainingRoute());
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    validateRoute = () =>
+                        string.IsNullOrEmpty(rocksOnRouteViewModel.ValidateRocksOnBoulderRoute());
+                    break;
+            }
+
+            Predicate<object> CanSaveRoute = x => 
+                string.IsNullOrEmpty(ValidateRouteParams()) && validateRoute();
+
+            btnConfirmRouteSet.Command = new RelayCommand(SaveRoute, CanSaveRoute);
+            btnCancelRouteSet.Command = new RelayCommand(CancelSaveRoute, CanCancelSaveRoute);
+        }
 
         // !!! Important !!!
         // don't call this method in page's constructor
@@ -134,20 +156,6 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-
-        #region ISavingVideo interfaces
-
-        public void DeleteTmpVideoFileSafe()
-        {
-            FileHelperDLL.FileHelper.DeleteFileSafe(TmpVideoFilePath);
-        }
-
-        public void ResetSavingVideoProperties()
-        {
-            TmpVideoFilePath = null;
-            IsConfirmSaveVideo = false;
-        }
-
         #endregion
 
 
@@ -164,6 +172,8 @@ namespace JustClimbTrial.Views.Pages
                 LoadAndDrawRocksOnWall(AppGlobal.WallID);
             rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
 
+            // InitializeSaveRouteCommands() has to be called after initializing rocksOnWallViewModel
+            InitializeSaveRouteCommands();
             SetUpBtnCommandsInRockStatusUserControls();
 
             if (!isAnyRocksOnWall)
@@ -178,8 +188,7 @@ namespace JustClimbTrial.Views.Pages
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {
-            DeleteTmpVideoFileSafe();
+        {            
             parentMainWindow.UnsubColorImgSrcToPlaygrd();
         }
 
@@ -216,107 +225,102 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        private void btnRecordDemo_Click(object sender, RoutedEventArgs e)
+        //private void btnRecordDemo_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string errMsg = ValidateRouteParams();
+
+        //    if (!string.IsNullOrEmpty(errMsg))
+        //    {
+        //        UiHelper.NotifyUser(errMsg);
+        //    }
+        //    else
+        //    {                
+        //        //SetTemplateOfControlFromResource(ctrlBtnDemo, BtnDemoDoneTemplateResourceKey);
+
+        //        // show video record dialog
+        //        VideoPlaybackDialog videoRecordDialog = new VideoPlaybackDialog(parentMainWindow.PlaygroundMedia);
+        //        VideoRecord videoRecordPage = new VideoRecord(routeSetClimbMode,
+        //            VideoRecordType.IsDemo, parentMainWindow.KinectManagerClient,
+        //            parentMainWindow.PlaygroundMedia);
+
+        //        videoRecordDialog.Navigate(videoRecordPage);
+        //        videoRecordDialog.ShowDialog();
+
+        //        if (videoRecordDialog.IsConfirmSaveVideo)
+        //        {
+        //            IsConfirmSaveVideo = true;
+        //            TmpVideoFilePath = videoRecordDialog.TmpVideoFilePath;
+        //        }
+        //    }
+        //}
+
+        //private void btnDemoDone_Click(object sender, RoutedEventArgs e)
+        //{            
+        //    SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
+        //}
+
+        #endregion
+
+
+        #region command methods
+
+        private bool CanCancelSaveRoute(object parameter = null)
         {
-            string errMsg = ValidateRouteParams();
-
-            if (!string.IsNullOrEmpty(errMsg))
-            {
-                UiHelper.NotifyUser(errMsg);
-            }
-            else
-            {
-                ResetSavingVideoProperties();
-
-                SetTemplateOfControlFromResource(ctrlBtnDemo, BtnDemoDoneTemplateResourceKey);
-
-                // show video record dialog
-                VideoPlaybackDialog videoRecordDialog = new VideoPlaybackDialog(parentMainWindow.PlaygroundMedia);
-                VideoRecord videoRecordPage = new VideoRecord(routeSetClimbMode,
-                    VideoRecordType.IsDemo, parentMainWindow.KinectManagerClient,
-                    parentMainWindow.PlaygroundMedia);
-
-                videoRecordDialog.Navigate(videoRecordPage);
-                videoRecordDialog.ShowDialog();
-
-                if (videoRecordDialog.IsConfirmSaveVideo)
-                {
-                    IsConfirmSaveVideo = true;
-                    TmpVideoFilePath = videoRecordDialog.TmpVideoFilePath;
-                }
-            }            
+            return true;
         }
 
-        private void btnDemoDone_Click(object sender, RoutedEventArgs e)
+        private void SaveRoute(object parameter = null)
         {
             string errMsg = ValidateRouteParams();
-            string routeVideoRecordedFilePath = null;
-            
-            if (!string.IsNullOrEmpty(errMsg))
+
+            try
             {
-                UiHelper.NotifyUser(errMsg);
-            }
-            else
-            {
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    throw new Exception(errMsg);
+                }
+
                 switch (routeSetClimbMode)
                 {
                     case ClimbMode.Training:
                         errMsg = rocksOnRouteViewModel.ValidateRocksOnTrainingRoute();
                         if (!string.IsNullOrEmpty(errMsg))
                         {
-                            UiHelper.NotifyUser(errMsg);
+                            throw new Exception(errMsg);
                         }
-                        else
-                        {
-                            TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
-                            rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);
-
-                            if (IsConfirmSaveVideo)
-                            {
-                                TrainingRouteVideo newTrainingRouteVideo = new TrainingRouteVideo()
-                                {
-                                    Route = newTrainingRoute.RouteID,
-                                    IsDemo = true
-                                };
-                                TrainingRouteVideoDataAccess.Insert(newTrainingRouteVideo, true);
-                                routeVideoRecordedFilePath =
-                                    FileHelper.TrainingRouteVideoRecordedFullPath(newTrainingRoute,
-                                        newTrainingRouteVideo);
-                                FileHelperDLL.FileHelper.MoveAndRenameFile(TmpVideoFilePath, routeVideoRecordedFilePath);
-                            }
-                        }                            
+                        
+                        TrainingRoute newTrainingRoute = CreateTrainingRouteFromUi();
+                        rocksOnRouteViewModel.SaveRocksOnTrainingRoute(newTrainingRoute);                        
                         break;
                     case ClimbMode.Boulder:
                     default:
                         errMsg = rocksOnRouteViewModel.ValidateRocksOnBoulderRoute();
                         if (!string.IsNullOrEmpty(errMsg))
                         {
-                            UiHelper.NotifyUser(errMsg);
+                            throw new Exception(errMsg);
                         }
-                        else
-                        {
-                            BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
-                            rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);
-
-                            if (IsConfirmSaveVideo)
-                            {
-                                BoulderRouteVideo newBoulderRouteVideo = new BoulderRouteVideo()
-                                {
-                                    Route = newBoulderRoute.RouteID,
-                                    IsDemo = true
-                                };
-                                BoulderRouteVideoDataAccess.Insert(newBoulderRouteVideo, true);
-                                routeVideoRecordedFilePath =
-                                    FileHelper.BoulderRouteVideoRecordedFullPath(newBoulderRoute,
-                                        newBoulderRouteVideo);
-                                FileHelperDLL.FileHelper.MoveAndRenameFile(TmpVideoFilePath, routeVideoRecordedFilePath);
-                            }
-                        }
+                        
+                        BoulderRoute newBoulderRoute = CreateBoulderRouteFromUi();
+                        rocksOnRouteViewModel.SaveRocksOnBoulderRoute(newBoulderRoute);                        
                         break;
-                }                
-            }
+                }
 
-            SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
+                // Switch to Routes page
+                Routes routesPage = new Routes(routeSetClimbMode);
+                this.NavigationService.Navigate(routesPage);
+            }
+            catch (Exception ex)
+            {
+                UiHelper.NotifyUser("Error when saving the route:" + Environment.NewLine +
+                    ex.ToString());
+            }
+        }
+
+        private void CancelSaveRoute(object parameter = null)
+        {
+            // Switch to ModeSelect page
+            ModeSelect modeSelectPage = new ModeSelect();
+            this.NavigationService.Navigate(modeSelectPage);
         }
 
         #endregion

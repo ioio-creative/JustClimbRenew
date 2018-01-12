@@ -20,6 +20,7 @@
         <ControlTemplate x:Key="trainingRockStatusTemplate">
             <userControl:TrainingRockStatus x:Name="ucTrainingRockStatus" DataContext="{Binding}" />
         </ControlTemplate>
+        <!--
         <ControlTemplate x:Key="btnRecordDemoTemplate">
             <Button x:Name="btnRecordDemo" Click="btnRecordDemo_Click">
                 RECORD DEMO
@@ -30,6 +31,7 @@
                 DEMO DONE
             </Button>
         </ControlTemplate>
+        -->
     </Page.Resources>
     <Page.DataContext>
         <StaticResource ResourceKey="routeSetViewModel" />
@@ -139,8 +141,10 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <!--
                     <Control x:Name="ctrlBtnDemo" 
                              Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                    -->
                     <Button x:Name="btnConfirmRouteSet" 
                             Grid.Row="1" Grid.Column="0">
                         <Button.Background>
