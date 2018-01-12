@@ -345,13 +345,15 @@ namespace JustClimbTrial.ViewModels
 
         public void CreateRockImageSequence()
         {
+            double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
+
             BoulderImage = new Image
             {
                 //png image dimension: 3000 x 3000
                 //centre circle size: 300x300
                 Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00017.png"))),
-                Width = 3000 / 300 * BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
-                Height = 3000 / 300 * BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
+                Width = 3000 / 300 * meanLength,
+                Height = 3000 / 300 * meanLength,
                 Stretch = Stretch.Fill
             };            
         }
@@ -361,7 +363,7 @@ namespace JustClimbTrial.ViewModels
             BCanvas.SetLeftAndTop(BoulderImage, bCanvasPoint.X - BoulderImage.Width * 0.5, bCanvasPoint.Y - BoulderImage.Height * 0.5);
             BCanvas.AddChild(BoulderImage);
 
-            BoulderButtonSequence = new ImageSequenceHelper(BoulderImage);
+            BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, true);
             BoulderButtonSequence.LoadSequenceFolder();
         }
         public void LoadStartRockInitialSeq()

@@ -66,14 +66,17 @@ namespace JustClimbTrial
           
             if (isOpenKinectSuccessful)
             {
+                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
+                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
                 if (debug)
                 {
-                    Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
-                    BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+                    
                     playgroundWindow.ShowImage(wallLogImg, 0.5);
                 }
                 else
                 {
+                    //MUST LOAD AN IMAGE TO PLAYGROUND CANVAS TO GIVE DIMENSION
+                    playgroundWindow.ShowImage(wallLogImg, 0);
                     playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
                     playgroundMedia.Play();
                 }               
