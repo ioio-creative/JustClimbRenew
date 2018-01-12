@@ -63,10 +63,10 @@ namespace JustClimbTrial.Helpers
             return Path.Combine(exeDirectory, settings.VideoBufferDirectory);
         }
 
-        // Path: exeLocation/VideoDirectory/ImgSequenceDirectory/
-        public static string ImgSequenceDirectory()
+        // Path: exeLocation/VideoDirectory/BoulderButtonNormalImgSequenceDirectory/
+        public static string BoulderButtonNormalImgSequenceDirectory()
         {
-            return Path.Combine(exeDirectory, settings.ImgSequenceDirectory);
+            return Path.Combine(exeDirectory, settings.BoulderButtonNormalImgSequenceDirectory);
         }
 
         // Path: exeLocation/WallLogDirectory/

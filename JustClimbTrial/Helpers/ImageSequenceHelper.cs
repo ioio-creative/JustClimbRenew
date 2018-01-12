@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -104,18 +105,26 @@ namespace JustClimbTrial.Helpers
         {
             List<BitmapSource> sequence = new List<BitmapSource>();
 
-            for (int i = 0; i <= 17; i++)
+            IEnumerable<FileInfo> imgFiles =
+                FileHelperDLL.FileHelper.GetFilesInDirectory(FileHelper.BoulderButtonNormalImgSequenceDirectory());
+
+            foreach (FileInfo imgFile in imgFiles)
             {
-                string filename = string.Format("{0}{1}{2}", "1_", i.ToString("00000"), imgExtension);
-                Uri fileUri = new Uri( System.IO.Path.Combine(FileHelper.ImgSequenceDirectory(), "BoulderButton","ButtonNormal", filename) );
+                Uri fileUri = new Uri(imgFile.FullName);
                 BitmapSource frameSource = new BitmapImage(fileUri);
                 sequence.Add(frameSource);
             }
 
+            //for (int i = 0; i <= 17; i++)
+            //{
+            //    string filename = string.Format("{0}{1}{2}", "1_", i.ToString("00000"), imgExtension);
+            //    Uri fileUri = new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), filename));
+            //    BitmapSource frameSource = new BitmapImage(fileUri);
+            //    sequence.Add(frameSource);
+            //}
+
             return sequence;
         }
-
-        
 
         #endregion
     }

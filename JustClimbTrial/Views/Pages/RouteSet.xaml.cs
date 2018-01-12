@@ -164,8 +164,8 @@ namespace JustClimbTrial.Views.Pages
                 LoadAndDrawRocksOnWall(AppGlobal.WallID);
             rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
 
-            SetUpBtnCommandsInRockStatusUserControls();            
-            
+            SetUpBtnCommandsInRockStatusUserControls();
+
             if (!isAnyRocksOnWall)
             {
                 UiHelper.NotifyUser("No rocks registered with the wall!");

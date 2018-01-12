@@ -91,10 +91,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences")]
-        public string ImgSequenceDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\ButtonNormal")]
+        public string BoulderButtonNormalImgSequenceDirectory {
             get {
-                return ((string)(this["ImgSequenceDirectory"]));
+                return ((string)(this["BoulderButtonNormalImgSequenceDirectory"]));
             }
         }
         
@@ -146,9 +146,9 @@ namespace JustClimbTrial.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DEBUG {
+        public bool IsDebugMode {
             get {
-                return ((bool)(this["DEBUG"]));
+                return ((bool)(this["IsDebugMode"]));
             }
         }
     }

@@ -135,7 +135,9 @@ namespace JustClimbTrial.ViewModels
             MyRock = aRock;
             BCanvas = canvas;            
             BoulderShape = GetNewRockOnWallEllipse();
-            CreateRockImage();
+            
+            // TODO: performance issue!!!
+            //CreateRockImageSequence();
 
             CameraSpacePoint csp = aRock.GetCameraSpacePoint();
 
@@ -338,24 +340,25 @@ namespace JustClimbTrial.ViewModels
 
         #endregion
 
-        #region image helpers
-        public void CreateRockImage()
+
+        #region image sequence helpers
+
+        public void CreateRockImageSequence()
         {
             BoulderImage = new Image
             {
                 //png image dimension: 3000 x 3000
                 //centre circle size: 300x300
-                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.ImgSequenceDirectory(), "BoulderButton", "ButtonNormal", "1_00017.png"))),
+                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00017.png"))),
                 Width = 3000 / 300 * BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = 3000 / 300 * BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Stretch = Stretch.Fill
             };
-            BCanvas.SetLeftAndTop(BoulderImage, new Point { X = bCanvasPoint.X - BoulderImage.Width * 0.5, Y = bCanvasPoint.Y - BoulderImage.Height * 0.5 });
+            BCanvas.SetLeftAndTop(BoulderImage, bCanvasPoint.X - BoulderImage.Width * 0.5, bCanvasPoint.Y - BoulderImage.Height * 0.5);
             BCanvas.AddChild(BoulderImage);
 
             BoulderButtonSequence = new ImageSequenceHelper(BoulderImage);
             BoulderButtonSequence.LoadSequenceFolder();
-
         }
 
         public void LoadStartRockInitialSeq()
@@ -364,6 +367,7 @@ namespace JustClimbTrial.ViewModels
         }
 
         //public void LoadStartRock
+        
         #endregion
     }
 }

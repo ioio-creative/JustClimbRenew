@@ -4,6 +4,7 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Mvvm.Infrastructure;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace JustClimbTrial.ViewModels
 {

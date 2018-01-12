@@ -241,7 +241,6 @@ namespace JustClimbTrial.ViewModels
             };
         }
 
-
         private void ResetIndicator()
         {
             canvas.SetLeftAndTopForShapeWrtCentre(selectedRockIndicator, selectedRock.BCanvasPoint);            

@@ -103,6 +103,5 @@ namespace JustClimbTrial.Views.Pages
         }
 
         #endregion
-
     }
 }

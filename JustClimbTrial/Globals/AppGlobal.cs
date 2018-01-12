@@ -32,7 +32,7 @@ namespace JustClimbTrial.Globals
         {
             FfmpegExePath = settings.FfmpegExePath;
             MaxVideoRecordDurationInMinutes = settings.MaxVideoRecordDurationInMinutes;
-            DEBUG = settings.DEBUG;
+            DEBUG = settings.IsDebugMode;
         }        
     }
 }

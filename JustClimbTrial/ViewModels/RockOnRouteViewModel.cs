@@ -59,7 +59,7 @@ namespace JustClimbTrial.ViewModels
 
         public void DrawRockShapeWrtTrainSeq(int maxSeqNo)
         {
-            if(TrainingSeq == 1)
+            if (TrainingSeq == 1)
             {
                 MyRockViewModel.ChangeRockShapeToStart();
             }
@@ -70,9 +70,7 @@ namespace JustClimbTrial.ViewModels
             else
             {
                 MyRockViewModel.ChangeRockShapeToIntermediate();
-            }
-
-            
+            } 
         }
 
         #endregion
