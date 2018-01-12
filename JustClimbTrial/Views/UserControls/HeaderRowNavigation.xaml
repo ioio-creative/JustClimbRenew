@@ -6,10 +6,10 @@
              xmlns:local="clr-namespace:JustClimbTrial.Views.UserControls"
              mc:Ignorable="d"             
              d:DesignHeight="100" d:DesignWidth="640"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             Loaded="UserControl_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
@@ -23,21 +23,25 @@
             </Button.Background>
         </Button>
         <StackPanel x:Name="panelStaffOptions" Grid.Column="1"
-                    HorizontalAlignment="Center" Orientation="Horizontal">
-        <Button x:Name="btnRescanWall" 
-                Grid.Column="1" Content="Rescan Wall" 
-                Visibility="{Binding StaffOptionsVisibility}"
-                Click="btnRescanWall_Click" />
-        <Button x:Name="btnRouteSet" 
-                Grid.Column="2" Content="Route Set" 
-                Visibility="{Binding StaffOptionsVisibility}"
-                Click="btnRouteSet_Click" />
+                    Orientation="Horizontal"
+                    Visibility="{Binding StaffOptionsVisibility}">
+            <Button x:Name="btnRescanWall" 
+                    Content="Rescan Wall"                     
+                    Click="btnRescanWall_Click" />
+            <Button x:Name="btnRouteSet" 
+                    Content="Route Set" 
+                    Click="btnRouteSet_Click" />
+            <Button x:Name="btnRecordDemoVideo"
+                    Content="Record Demo"
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}"
+                    Click="btnRecordDemoVideo_Click" />
+        </StackPanel>
         <TextBlock x:Name="lbTitle"
-            Grid.Column="4" 
+            Grid.Column="2" 
             Text="{Binding HeaderRowTitle}">
         </TextBlock>
         <Button x:Name="btnHome" 
-            Grid.Column="5" 
+            Grid.Column="3" 
             Click="btnHome_Click">
             <Image Source="/Resources/Images/Home.jpg" />
         </Button>

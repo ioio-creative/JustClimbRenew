@@ -1,4 +1,6 @@
-﻿using JustClimbTrial.Views.Dialogs;
+﻿using JustClimbTrial.Extensions;
+using JustClimbTrial.Interfaces;
+using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.Pages;
 using System.ComponentModel;
 using System.Windows;
@@ -29,8 +31,29 @@ namespace JustClimbTrial.Views.UserControls
 
             set
             {
-                _staffOptionsVisibility = value;
-                OnPropertyChanged(nameof(StaffOptionsVisibility));
+                if (_staffOptionsVisibility != value)
+                {
+                    _staffOptionsVisibility = value;
+                    OnPropertyChanged(nameof(StaffOptionsVisibility));
+                }
+            }
+        }
+
+        private Visibility _btnRecordDemoVideoVisibility;
+        public Visibility BtnRecordDemoVideoVisibility
+        {
+            get
+            {
+                return _btnRecordDemoVideoVisibility;
+            }
+
+            set
+            {
+                if (_btnRecordDemoVideoVisibility != value)
+                {
+                    _btnRecordDemoVideoVisibility = value;
+                    OnPropertyChanged(nameof(BtnRecordDemoVideoVisibility));
+                }
             }
         }
 
@@ -71,12 +94,23 @@ namespace JustClimbTrial.Views.UserControls
         {
             InitializeComponent();
             StaffOptionsVisibility = Visibility.Collapsed;
+            BtnRecordDemoVideoVisibility = Visibility.Collapsed;
         }
 
         #endregion
 
 
         #region event handlers
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //this.Parent
+            if (this.IsContainAncestor<ISavingVideo>())
+            {
+                BtnRecordDemoVideoVisibility
+                    = Visibility.Visible;
+            }
+        }
 
         // MouseDown event not working WPF
         // https://social.msdn.microsoft.com/Forums/en-US/61807025-d4c4-41e0-b648-b11183065009/mousedown-event-not-working-wpf?forum=wpf
@@ -126,6 +160,11 @@ namespace JustClimbTrial.Views.UserControls
                 RouteSet routeSetPage = new RouteSet(routeSetModeSelect.ClimbModeSelected);
                 ParentPage.NavigationService.Navigate(routeSetPage);
             }
+        }
+
+        private void btnRecordDemoVideo_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         #endregion        

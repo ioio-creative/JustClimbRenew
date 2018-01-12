@@ -3,6 +3,7 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
+using JustClimbTrial.Interfaces;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
@@ -23,7 +24,7 @@ namespace JustClimbTrial.Views.Pages
     /// <summary>
     /// Interaction logic for GameStart.xaml
     /// </summary>
-    public partial class GameStart : Page
+    public partial class GameStart : Page, ISavingVideo
     {
         private readonly bool debug = AppGlobal.DEBUG;
 
@@ -58,7 +59,39 @@ namespace JustClimbTrial.Views.Pages
         private bool isRecording = false;
 
 
+        #region ISavingVideo properties
+
+        public string TmpVideoFilePath
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool IsConfirmSaveVideo
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
+
         #region Gameplay Flags/Timers
+
         private int nextTrainRockIdx = 0;
 
         private bool gameStarted = false;
@@ -66,7 +99,7 @@ namespace JustClimbTrial.Views.Pages
         private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
         private bool endHeld = false;
 
-        private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
+        private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };        
 
         #endregion
 
@@ -264,7 +297,7 @@ namespace JustClimbTrial.Views.Pages
                             interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
                             //TO BE CHANGED ---- ANIMATION
-                            
+
                         }
                         startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
                         endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
@@ -734,5 +767,19 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
 
+
+        #region ISavingVideo methods
+
+        public void DeleteTmpVideoFileSafe()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetSavingVideoProperties()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

@@ -106,6 +106,7 @@
     <Compile Include="Enums\ClimbMode.cs" />
     <Compile Include="Enums\VideoRecordType.cs" />
     <Compile Include="Extensions\CanvasExtension.cs" />
+    <Compile Include="Extensions\DependencyObjectExtension.cs" />
     <Compile Include="Extensions\EllipseExtension.cs" />
     <Compile Include="Extensions\ImageControlExtension.cs" />
     <Compile Include="Helpers\ImageSequenceHelper.cs" />
