@@ -215,7 +215,6 @@ namespace JustClimbTrial.Views.Pages
                     endRockOnRoute = rocksOnTrainingRoute.Last();
                     trainingRouteLength = rocksOnTrainingRoute.Count();
 
-
                     foreach (var rockOnTrainingRoute in rocksOnTrainingRoute)
                     {
                         if (debug)
@@ -223,7 +222,6 @@ namespace JustClimbTrial.Views.Pages
                             rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);
                         }
                     }
-
 
                     break;
                 case ClimbMode.Boulder:
@@ -239,18 +237,33 @@ namespace JustClimbTrial.Views.Pages
                     interRocksOnRouteCamSP = new CameraSpacePoint[interRocksOnBoulderRoute.Count()];
 
                     int i = 0;
-                    startRockOnRoute.DrawRockShapeWrtStatus();
-                    endRockOnRoute.DrawRockShapeWrtStatus();
-                    foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
+                    if (debug)
                     {
-                        if (debug)
+                        startRockOnRoute.DrawRockShapeWrtStatus();
+                        endRockOnRoute.DrawRockShapeWrtStatus();
+                        foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                         {
                             rockOnBoulderRoute.DrawRockShapeWrtStatus();
+                            interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                            i++;
                         }
-                        interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                        //TO BE CHANGED ---- ANIMATION
-                        rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
-                        i++;
+
+                    }
+                    else
+                    {
+                        startRockOnRoute.DrawRockImageWrtStatus();
+                        endRockOnRoute.DrawRockImageWrtStatus();
+                        foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
+                        {
+
+                            rockOnBoulderRoute.DrawRockImageWrtStatus();
+                            rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                            interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                            i++;
+                            //TO BE CHANGED ---- ANIMATION
+
+                        } 
                     }
                     break;
             }
@@ -488,8 +501,8 @@ namespace JustClimbTrial.Views.Pages
                                 switch (x.BoulderStatus)
                                 {
                                     case RockOnBoulderStatus.Start:
-                                        //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
-                                        reached = IsJointGroupOnRock(fourLimbJoints, x.MyRockViewModel);
+                                        reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
+                                        //reached = IsJointGroupOnRock(fourLimbJoints, x.MyRockViewModel);
                                         break;
                                     case RockOnBoulderStatus.Int:
                                     default:
@@ -511,6 +524,7 @@ namespace JustClimbTrial.Views.Pages
 
                                     playgroundWindow.LoopMedia = false;
                                     playgroundMedia.Stop();
+                                    playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
 
                                     RockTimerHelper startRockTimer = startRockOnRoute.MyRockTimerHelper;
                                     startRockTimer.Tick += (_sender, _e) =>
@@ -531,7 +545,7 @@ namespace JustClimbTrial.Views.Pages
                                                 gameStarted = true;
                                                 //TO DO: StartRock Feedback Animation
 
-                                                playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
+                                                //playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
                                                 playgroundMedia.Play();
                                             }
                                         }
@@ -710,6 +724,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
+            kinectManagerClient.BodyFrameArrived -= HandleBodyListArrived;
+            playgroundCanvas.Children.Clear();
             mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
 

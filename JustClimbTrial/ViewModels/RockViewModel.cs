@@ -349,15 +349,17 @@ namespace JustClimbTrial.ViewModels
                 Width = 3000 / 300 * BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
                 Height = 3000 / 300 * BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
                 Stretch = Stretch.Fill
-            };
+            };           
+        }
+
+        public void SetRockImage()
+        {
             BCanvas.SetLeftAndTop(BoulderImage, new Point { X = bCanvasPoint.X - BoulderImage.Width * 0.5, Y = bCanvasPoint.Y - BoulderImage.Height * 0.5 });
             BCanvas.AddChild(BoulderImage);
 
             BoulderButtonSequence = new ImageSequenceHelper(BoulderImage);
             BoulderButtonSequence.LoadSequenceFolder();
-
         }
-
         public void LoadStartRockInitialSeq()
         {
 

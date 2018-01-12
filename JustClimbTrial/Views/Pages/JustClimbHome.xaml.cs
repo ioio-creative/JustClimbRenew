@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using JustClimbTrial.Globals;
+using System.IO;
+using JustClimbTrial.Helpers;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -35,6 +37,14 @@ namespace JustClimbTrial.Views.Pages
         {
             this.WindowTitle = AppGlobal.WallID;
             mainWindowParent = this.Parent as MainWindow;
+            MediaElement playgroundMedia = mainWindowParent.PlaygroundMedia;
+            if (!playgroundMedia.Source.Equals(new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"))))
+            {
+                playgroundMedia.Stop();
+                playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+                mainWindowParent.PlaygroundWindow.LoopMedia = true;
+                playgroundMedia.Play();
+            }
 
             if (debug)
             {

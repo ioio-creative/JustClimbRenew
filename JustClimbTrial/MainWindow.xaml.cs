@@ -57,7 +57,7 @@ namespace JustClimbTrial
             //by default play ScreenSaver.mp4 in Playground Window
             playgroundMedia = playgroundWindow.PlaygroundMedia;
 
-            playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4")));
+            playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
 
 
             KinectManagerClient = new KinectManager();
