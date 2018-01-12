@@ -14,7 +14,6 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
-            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Button x:Name="btnStaffOptions" 
             Grid.Column="0"
@@ -23,6 +22,8 @@
                 <ImageBrush ImageSource="/Resources/Images/JustClimbSquareLogo.jpg" />
             </Button.Background>
         </Button>
+        <StackPanel x:Name="panelStaffOptions" Grid.Column="1"
+                    HorizontalAlignment="Center" Orientation="Horizontal">
         <Button x:Name="btnRescanWall" 
                 Grid.Column="1" Content="Rescan Wall" 
                 Visibility="{Binding StaffOptionsVisibility}"
