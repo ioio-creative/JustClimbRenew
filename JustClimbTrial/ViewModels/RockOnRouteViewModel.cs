@@ -73,6 +73,23 @@ namespace JustClimbTrial.ViewModels
             } 
         }
 
+        public void DrawRockImageWrtStatus()
+        {
+            switch (BoulderStatus)
+            {
+                case RockOnBoulderStatus.Start:
+                    MyRockViewModel.SetRockImage();
+                    break;
+                case RockOnBoulderStatus.Int:
+                default:
+                    MyRockViewModel.SetRockImage();
+                    break;
+                case RockOnBoulderStatus.End:
+                    MyRockViewModel.SetRockImage();
+                    break;
+            }
+        }
+
         #endregion
     }
 }
