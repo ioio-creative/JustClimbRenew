@@ -37,6 +37,8 @@ namespace JustClimbTrial.Views.Pages
         private IEnumerable<RockOnRouteViewModel> rocksOnTrainingRoute;
         private int trainingRouteLength;
 
+        private RockOnRouteViewModel nextRockOnTrainRoute;
+
         private RockOnRouteViewModel startRockOnRoute;
         private RockOnRouteViewModel endRockOnRoute;
         private CameraSpacePoint[] interRocksOnRouteCamSP;
@@ -211,7 +213,7 @@ namespace JustClimbTrial.Views.Pages
                     navHead.HeaderRowTitle =
                         string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
 
-                    rocksOnTrainingRoute = TrainingRouteAndRocksDataAccess.OrderedRocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
+                    rocksOnTrainingRoute = TrainingRouteAndRocksDataAccess.OrderedRocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper).ToArray();
                     endRockOnRoute = rocksOnTrainingRoute.Last();
                     trainingRouteLength = rocksOnTrainingRoute.Count();
 
@@ -230,7 +232,7 @@ namespace JustClimbTrial.Views.Pages
                         string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
 
                     IEnumerable<RockOnRouteViewModel> allRocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
-                    interRocksOnBoulderRoute = allRocksOnBoulderRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Int);
+                    interRocksOnBoulderRoute = allRocksOnBoulderRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Int).ToArray();
                     startRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
                     endRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
 
@@ -262,8 +264,11 @@ namespace JustClimbTrial.Views.Pages
                             interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
                             //TO BE CHANGED ---- ANIMATION
+                            
+                        }
+                        startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
+                        endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
 
-                        } 
                     }
                     break;
             }
@@ -372,23 +377,23 @@ namespace JustClimbTrial.Views.Pages
                             #region Training Gameplay
                             IEnumerable<Joint> handJoints =
                                         body.Joints.Where(x => KinectExtensions.HandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
-                            RockOnRouteViewModel nextRockOnRoute = rocksOnTrainingRoute.ElementAt(nextTrainRockIdx);
-                            RockTimerHelper nextRockTimer = nextRockOnRoute.MyRockTimerHelper;
+                            nextRockOnTrainRoute = rocksOnTrainingRoute.ElementAt(nextTrainRockIdx);
+                            RockTimerHelper nextRockTimer = nextRockOnTrainRoute.MyRockTimerHelper;
                             Func<bool> trainingTargetReached;
-                            if (nextRockOnRoute.TrainingSeq == 1)
+                            if (nextRockOnTrainRoute.TrainingSeq == 1)
                             {
                                 trainingTargetReached = () =>
-                                    AreBothJointGroupsOnRock(LHandJoints, RHandJoints, nextRockOnRoute.MyRockViewModel);
+                                    AreBothJointGroupsOnRock(LHandJoints, RHandJoints, nextRockOnTrainRoute.MyRockViewModel);
                             }
-                            else if (nextRockOnRoute.TrainingSeq == trainingRouteLength)
+                            else if (nextRockOnTrainRoute.TrainingSeq == trainingRouteLength)
                             {
                                 trainingTargetReached = () =>
-                                    AreBothJointGroupsOnRock(LHandJoints, RHandJoints, nextRockOnRoute.MyRockViewModel) && body.TrackingId == playerBodyID;
+                                    AreBothJointGroupsOnRock(LHandJoints, RHandJoints, nextRockOnTrainRoute.MyRockViewModel) && body.TrackingId == playerBodyID;
                             }
                             else
                             {
                                 trainingTargetReached = () =>
-                                    IsJointGroupOnRock(handJoints, nextRockOnRoute.MyRockViewModel) && body.TrackingId == playerBodyID;
+                                    IsJointGroupOnRock(handJoints, nextRockOnTrainRoute.MyRockViewModel) && body.TrackingId == playerBodyID;
                             }
 
 
@@ -410,7 +415,7 @@ namespace JustClimbTrial.Views.Pages
 
                                             if (nextRockTimer.IsTimerGoalReached())
                                             {
-                                                if (nextRockOnRoute.TrainingSeq == 1)
+                                                if (nextRockOnTrainRoute.TrainingSeq == 1)
                                                 {
                                                     //START ROCK REACHED VERIFIED
                                                     playerBodyID = body.TrackingId;
@@ -421,7 +426,7 @@ namespace JustClimbTrial.Views.Pages
                                                     //TO DO: StartRock Feedback Animation
                                                     playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
                                                 }
-                                                else if (nextRockOnRoute.TrainingSeq == trainingRouteLength)
+                                                else if (nextRockOnTrainRoute.TrainingSeq == trainingRouteLength)
                                                 {
                                                     //END ROCK REACHED VERIFIED
                                                     //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK

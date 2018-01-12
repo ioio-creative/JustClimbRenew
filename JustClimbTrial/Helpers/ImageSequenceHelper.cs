@@ -29,7 +29,7 @@ namespace JustClimbTrial.Helpers
     {
         //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
 
-        public bool ToLoop = false;
+        public bool ToLoop = true;
 
         private int currentIndex;
         private Image image;
@@ -38,7 +38,7 @@ namespace JustClimbTrial.Helpers
 
         private string imgExtension = ".png";
 
-        public ImageSequenceHelper(Image image, int fps = 30, bool loop = false)
+        public ImageSequenceHelper(Image image, bool loop = false, int fps = 25)
         {
             this.image = image;
             this.updateImageTimer = new DispatcherTimer(DispatcherPriority.Render);
@@ -71,6 +71,7 @@ namespace JustClimbTrial.Helpers
             if (((this.images != null) && (this.currentIndex < this.images.Count)) && (this.currentIndex >= 0))
             {
                 image.Source = this.images[this.currentIndex];
+                currentIndex++;
             }
         }
 
@@ -90,13 +91,21 @@ namespace JustClimbTrial.Helpers
         {
             if (this.currentIndex == this.images.Count)
             {
-                this.currentIndex = 0;
+                if (ToLoop)
+                {
+                    this.currentIndex = 0;                    
+                }
+                else
+                {
+                    Stop();
+                }
+                
             }
-            this.currentIndex++;
             if (this.images != null)
             {
                 this.LoadCurrentIndex();
             }
+
         }
 
         #region Sequence BitmapSource List
@@ -106,7 +115,7 @@ namespace JustClimbTrial.Helpers
             List<BitmapSource> sequence = new List<BitmapSource>();
 
             IEnumerable<FileInfo> imgFiles =
-                FileHelperDLL.FileHelper.GetFilesInDirectory(FileHelper.BoulderButtonNormalImgSequenceDirectory());
+                FileHelperDLL.FileHelper.GetFilesInDirectoryByExtensions(FileHelper.BoulderButtonNormalImgSequenceDirectory(), ".png");
 
             foreach (FileInfo imgFile in imgFiles)
             {
