@@ -1,5 +1,6 @@
 ﻿using JustClimbTrial.Extensions;
 using JustClimbTrial.Interfaces;
+using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.Pages;
 using System.ComponentModel;
@@ -14,20 +15,38 @@ namespace JustClimbTrial.Views.UserControls
     /// </summary>
     public partial class HeaderRowNavigation : UserControl, INotifyPropertyChanged
     {
+        private bool _isRecordDemoVideo;
+        public bool IsRecordDemoVideo
+        {
+            get { return _isRecordDemoVideo; }
+            set
+            {
+                if (_isRecordDemoVideo != value)
+                {
+                    _isRecordDemoVideo = value;
+                    OnPropertyChanged(nameof(IsRecordDemoVideo));
+                }
+            }
+        }
+
         private Page _parentPage;      
         public Page ParentPage
         {
             private get { return _parentPage; }
-            set { _parentPage = value; }
+            set
+            {
+                if (_parentPage != value)
+                {
+                    _parentPage = value;
+                    OnPropertyChanged(nameof(ParentPage));
+                }
+            }
         }
 
         private Visibility _staffOptionsVisibility;
         public Visibility StaffOptionsVisibility
         {
-            get
-            {
-                return _staffOptionsVisibility;
-            }
+            get { return _staffOptionsVisibility; }
 
             set
             {
@@ -42,10 +61,7 @@ namespace JustClimbTrial.Views.UserControls
         private Visibility _btnRecordDemoVideoVisibility;
         public Visibility BtnRecordDemoVideoVisibility
         {
-            get
-            {
-                return _btnRecordDemoVideoVisibility;
-            }
+            get { return _btnRecordDemoVideoVisibility; }
 
             set
             {
@@ -63,10 +79,7 @@ namespace JustClimbTrial.Views.UserControls
         
         public string HeaderRowTitle
         {
-            get
-            {
-                return (string)GetValue(HeaderRowTitleProperty);
-            }
+            get { return (string)GetValue(HeaderRowTitleProperty); }            
 
             set
             {
@@ -100,16 +113,113 @@ namespace JustClimbTrial.Views.UserControls
         #endregion
 
 
+        #region initialization
+
+        private void InitializeCommands()
+        {
+            btnHome.Command =
+                new RelayCommand(SwitchToHomePage, CanSwitchToHomePage);
+            btnRescanWall.Command =
+                new RelayCommand(SwitchToNewWallPage, CanSwitchToNewWallPage);
+            btnRouteSet.Command =
+                new RelayCommand(SwitchToRouteSetPage, CanSwitchToRouteSetPage);
+            btnRecordDemoVideo.Command =
+                new RelayCommand(SwitchOnRecordDemoVideoMode, CanSwitchOnRecordDemoVideoMode);
+            btnCancelRecordDemoVideo.Command =
+                new RelayCommand(SwitchOffRecordDemoVideoMode, CanSwitchOffRecordDemoVideoMode);
+        }
+
+        #endregion
+
+
+        #region CanExecute command methods
+
+        private bool CanSwitchToHomePage(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanSwitchToNewWallPage(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanSwitchToRouteSetPage(object parameter = null)
+        {
+            return true;
+        }
+
+        private bool CanSwitchOnRecordDemoVideoMode(object parameter = null)
+        {
+            return !IsRecordDemoVideo;
+        }
+
+        private bool CanSwitchOffRecordDemoVideoMode(object parameter = null)
+        {
+            return IsRecordDemoVideo;
+        }
+
+        #endregion
+
+
+        #region command methods
+
+        private void SwitchToHomePage(object parameter = null)
+        {
+            if (ParentPage != null)
+            {
+                JustClimbHome justClimbHomePage = new JustClimbHome();
+                ParentPage.NavigationService.Navigate(justClimbHomePage);
+            }
+        }
+
+        private void SwitchToNewWallPage(object parameter = null)
+        {
+            if (ParentPage != null)
+            {
+                NewWall newWallPage = new NewWall();
+                ParentPage.NavigationService.Navigate(newWallPage);
+            }
+        }
+
+        private void SwitchToRouteSetPage(object parameter = null)
+        {
+            RouteSetModeSelectDialog routeSetModeSelect = new RouteSetModeSelectDialog();
+            bool dialogResult = routeSetModeSelect.ShowDialog().GetValueOrDefault(false);
+
+            if (dialogResult)
+            {
+                routeSetModeSelect.Close();
+                RouteSet routeSetPage = new RouteSet(routeSetModeSelect.ClimbModeSelected);
+                ParentPage.NavigationService.Navigate(routeSetPage);
+            }
+        }
+
+        private void SwitchOnRecordDemoVideoMode(object parameter = null)
+        {
+            IsRecordDemoVideo = true;
+        }
+
+        private void SwitchOffRecordDemoVideoMode(object parameter = null)
+        {
+            IsRecordDemoVideo = false;
+        }
+
+        #endregion
+
+
         #region event handlers
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //this.Parent
-            if (this.IsContainAncestor<ISavingVideo>())
+            // if an ancestor IS ISavingVideo
+            if (this.GetAncestorRecursive<ISavingVideo>() != null)
             {
                 BtnRecordDemoVideoVisibility
                     = Visibility.Visible;
             }
+
+            InitializeCommands();
         }
 
         // MouseDown event not working WPF
@@ -129,42 +239,6 @@ namespace JustClimbTrial.Views.UserControls
                         break;
                 }
             }
-        }
-        
-        private void btnHome_Click(object sender, RoutedEventArgs e)
-        {
-            if (ParentPage != null)
-            {
-                JustClimbHome justClimbHomePage = new JustClimbHome();
-                ParentPage.NavigationService.Navigate(justClimbHomePage);
-            }
-        }
-
-        private void btnRescanWall_Click(object sender, RoutedEventArgs e)
-        {
-            if (ParentPage != null)
-            {
-                NewWall newWallPage = new NewWall();
-                ParentPage.NavigationService.Navigate(newWallPage);
-            }
-        }
-
-        private void btnRouteSet_Click(object sender, RoutedEventArgs e)
-        {
-            RouteSetModeSelectDialog routeSetModeSelect = new RouteSetModeSelectDialog();
-            bool dialogResult = routeSetModeSelect.ShowDialog().GetValueOrDefault(false);
-
-            if (dialogResult)
-            {
-                routeSetModeSelect.Close();
-                RouteSet routeSetPage = new RouteSet(routeSetModeSelect.ClimbModeSelected);
-                ParentPage.NavigationService.Navigate(routeSetPage);
-            }
-        }
-
-        private void btnRecordDemoVideo_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         #endregion        

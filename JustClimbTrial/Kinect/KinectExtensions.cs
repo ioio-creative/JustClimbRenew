@@ -614,7 +614,7 @@ namespace JustClimbTrial.Kinect
         {
             // Read each line of the file into a string array. Each element
             // of the array is one line of the file.
-            string[] lines = System.IO.File.ReadAllLines(txtFilePath);
+            string[] lines = File.ReadAllLines(txtFilePath);
             //length of wallDepthMap = number of color pixels
             DepthSpacePoint[] wallDepthMap = new DepthSpacePoint[lines.Length-1];
 

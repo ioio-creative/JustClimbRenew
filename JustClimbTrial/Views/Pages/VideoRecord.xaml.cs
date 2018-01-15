@@ -121,7 +121,7 @@ namespace JustClimbTrial.Views.Pages
 
         private bool CanViewVideo(object parameter = null)
         {
-            return !videoHelper.IsRecording && videoHelper.IsFirstRecordingDone;
+            return !videoHelper.IsRecording && videoHelper.IsRecordingDone;
         }
 
         private void StartRecordVideo(object parameter = null)

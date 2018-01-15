@@ -26,23 +26,22 @@
                     Orientation="Horizontal"
                     Visibility="{Binding StaffOptionsVisibility}">
             <Button x:Name="btnRescanWall" 
-                    Content="Rescan Wall"                     
-                    Click="btnRescanWall_Click" />
+                    Content="Rescan Wall" />
             <Button x:Name="btnRouteSet" 
-                    Content="Route Set" 
-                    Click="btnRouteSet_Click" />
+                    Content="Route Set" />
             <Button x:Name="btnRecordDemoVideo"
                     Content="Record Demo"
-                    Visibility="{Binding BtnRecordDemoVideoVisibility}"
-                    Click="btnRecordDemoVideo_Click" />
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
+            <Button x:Name="btnCancelRecordDemoVideo"
+                    Content="Cancel Record Demo"
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
         </StackPanel>
         <TextBlock x:Name="lbTitle"
             Grid.Column="2" 
             Text="{Binding HeaderRowTitle}">
         </TextBlock>
         <Button x:Name="btnHome" 
-            Grid.Column="3" 
-            Click="btnHome_Click">
+            Grid.Column="3">
             <Image Source="/Resources/Images/Home.jpg" />
         </Button>
     </Grid>

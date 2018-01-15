@@ -20,7 +20,7 @@
     </Page.DataContext>
     <Grid x:Name="gridContainer">
         <Grid.Resources>
-            <CollectionViewSource x:Key="cvsRouteVideos" Source="{Binding RouteVideoViewModels}" />
+            <CollectionViewSource x:Key="cvsRouteVideos" Source="{Binding NonDemoRouteVideoViewModels}" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -34,17 +34,18 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
         <!-- row 0 -->
         <userControl:HeaderRowNavigation 
             x:Name="navHead"
-            Grid.Row="0" Grid.ColumnSpan="5" 
+            Grid.Row="0" Grid.ColumnSpan="6" 
             HeaderRowTitle="Boulder - Route Select" />
         <!-- end of row 0 -->
         
         <!-- row 1 -->
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -101,7 +102,7 @@
                   Width="auto" 
                   ItemsSource="{Binding Source={StaticResource ResourceKey=cvsRouteVideos}}"
                   Margin="10,10,10,10" 
-                  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" 
+                  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" 
                   RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="RouteNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto" />
@@ -119,12 +120,15 @@
             Grid.Row="3" Grid.Column="1">
             PLAY SELECTED VIDEO
         </Button>
-        <TextBlock Grid.Row="3" Grid.Column="2">
+        <TextBlock Grid.Row="3" Grid.Column="2"
+                   x:Name="LbIsRecordingDemo">
+        </TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="3">
             Game status:
         </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="3" 
+        <TextBlock Grid.Row="3" Grid.Column="4" 
             x:Name="LbGameStatusDet" Text="Idling" />
-        <Button Grid.Row="3" Grid.Column="4" 
+        <Button Grid.Row="3" Grid.Column="5" 
             x:Name="BtnRestartGame">
             RESTART
         </Button>

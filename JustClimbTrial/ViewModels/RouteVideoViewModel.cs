@@ -1,4 +1,6 @@
-﻿using JustClimbTrial.Mvvm.Infrastructure;
+﻿using JustClimbTrial.Enums;
+using JustClimbTrial.Helpers;
+using JustClimbTrial.Mvvm.Infrastructure;
 using System;
 
 namespace JustClimbTrial.ViewModels
@@ -12,5 +14,26 @@ namespace JustClimbTrial.ViewModels
         public bool IsDemo { get; set; }
         public DateTime CreateDT { get; set; }
         public string CreateDTString { get; set; }
+
+
+        public string VideoRecordedFullPath(ClimbMode climbMode)
+        {
+            string videoFilePath;
+
+            switch (climbMode)
+            {
+                case ClimbMode.Training:
+                    videoFilePath =
+                        FileHelper.TrainingRouteVideoRecordedFullPath(this);
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    videoFilePath =
+                        FileHelper.BoulderRouteVideoRecordedFullPath(this);
+                    break;
+            }
+
+            return videoFilePath;
+        }
     }
 }

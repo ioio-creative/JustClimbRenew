@@ -12,6 +12,7 @@ using JustClimbTrial.Views.Windows;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,7 +57,7 @@ namespace JustClimbTrial.Views.Pages
         private IList<IEnumerable<Shape>> skeletonBodies = new List<IEnumerable<Shape>>();
         private VideoHelper gameplayVideoRecClient;
 
-        private bool isRecording = false;
+        private bool isRecordingDemo = false;
 
 
         #region ISavingVideo properties
@@ -99,9 +100,10 @@ namespace JustClimbTrial.Views.Pages
         private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
         private bool endHeld = false;
 
-        private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };        
+        private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
 
         #endregion
+
 
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
@@ -148,16 +150,17 @@ namespace JustClimbTrial.Views.Pages
 
         #endregion
 
+
         #region command methods
 
         private bool CanPlayDemoVideo(object paramter = null)
         {
-            return true;
+            return viewModel.DemoRouteVideoViewModel != null;
         }
 
         private bool CanPlaySelectedVideo(object parameter = null)
         {
-            return true;
+            return DgridRouteVideos.SelectedItem != null;
         }
 
         private bool CanRestartGame(object parameter = null)
@@ -167,39 +170,15 @@ namespace JustClimbTrial.Views.Pages
 
         private void PlayDemoVideo(object parameter = null)
         {
-            RouteVideoViewModel demoVideoVM = viewModel.RouteVideoViewModels.Single(x => x.IsDemo);
-
-            string demoVideoFilePath;
-            switch (climbMode)
-            {
-                case ClimbMode.Training:
-                    demoVideoFilePath = 
-                        FileHelper.TrainingRouteVideoRecordedFullPath(demoVideoVM);
-                    break;
-                case ClimbMode.Boulder:
-                default:
-                    demoVideoFilePath =
-                        FileHelper.BoulderRouteVideoRecordedFullPath(demoVideoVM);
-                    break;
-            }
-
-            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
-            VideoPlayback videoPlaybackPage =
-                new VideoPlayback(demoVideoFilePath, playgroundMedia);
-
-            videoPlaybackDialog.Navigate(videoPlaybackPage);
-            videoPlaybackDialog.ShowDialog();
+            RouteVideoViewModel demoVideoVM = viewModel.DemoRouteVideoViewModel;
+            ShowVideoPlaybackDialog(demoVideoVM);
         }
 
         private void PlaySelectedVideo(object parameter = null)
         {
-            if (debug)
-            {
-                //kinectManagerClient.ColorImageSourceArrived -= mainWindowClient.HandleColorImageSourceArrived;
-            }
-
-            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
-            videoPlaybackDialog.ShowDialog();
+            RouteVideoViewModel selectedVideoVM = 
+                DgridRouteVideos.SelectedItem as RouteVideoViewModel;
+            ShowVideoPlaybackDialog(selectedVideoVM);
         }
 
         private void RestartGame(object parameter = null)
@@ -236,6 +215,7 @@ namespace JustClimbTrial.Views.Pages
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
 
             kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
+            navHead.PropertyChanged += OnNavHeadIsRecordDemoChanged;
 
             string headerRowTitleFormat = "{0} Route {1} - Video Playback";
 
@@ -250,11 +230,11 @@ namespace JustClimbTrial.Views.Pages
                     endRockOnRoute = rocksOnTrainingRoute.Last();
                     trainingRouteLength = rocksOnTrainingRoute.Count();
 
-                    foreach (var rockOnTrainingRoute in rocksOnTrainingRoute)
+                    if (debug)
                     {
-                        if (debug)
-                        {
-                            rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);
+                        foreach (var rockOnTrainingRoute in rocksOnTrainingRoute)
+                        {                            
+                            rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);                            
                         }
                     }
 
@@ -282,7 +262,6 @@ namespace JustClimbTrial.Views.Pages
                             interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
                         }
-
                     }
                     else
                     {
@@ -290,39 +269,32 @@ namespace JustClimbTrial.Views.Pages
                         endRockOnRoute.DrawRockImageWrtStatus();
                         foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                         {
-
                             rockOnBoulderRoute.DrawRockImageWrtStatus();
                             rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
 
                             interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
                             //TO BE CHANGED ---- ANIMATION
-
                         }
                         startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
                         endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
-
                     }
                     break;
             }
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            kinectManagerClient.BodyFrameArrived -= HandleBodyListArrived;
+            navHead.PropertyChanged -= OnNavHeadIsRecordDemoChanged;
+            playgroundCanvas.Children.Clear();
+            mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
 
         private void BtnDemo_Click(object sender, RoutedEventArgs e)
         {
             //RouteVideoViewModel model = dgridRouteVideos.SelectedItem as RouteVideoViewModel;
             //string abx = FileHelper.VideoFullPath(model);
-
-            //We temporary use this as video rec btn
-            if (!isRecording)
-            {
-                BtnDemo.Content = "Stop Rec";
-            }
-            else
-            {
-                BtnDemo.Content = "DEMO";
-            }
-
-            isRecording = !isRecording;
         }
 
         private void BtnPlaySelectedVideo_Click(object sender, RoutedEventArgs e)
@@ -359,22 +331,18 @@ namespace JustClimbTrial.Views.Pages
                 skeletonBodies = new List<IEnumerable<Shape>>();
             }
 
-
             IList<Body> bodies = e.GetBodyList();
-
 
             foreach (var body in bodies)
             {
                 if (body != null && body.IsTracked)
                 {
-
                     //draw skeleton shape when DEBUG
                     if (debug)
                     {
                         IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
                         skeletonBodies.Add(skeletonShapes);
                     }
-
 
                     //List<Joint> relevantJoints = new List<Joint>();
                     //foreach (Joint bodyJoint in body.Joints.Values)
@@ -402,7 +370,7 @@ namespace JustClimbTrial.Views.Pages
                         body.Joints.Where(x => KinectExtensions.LHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
                     IEnumerable<Joint> RHandJoints =
                         body.Joints.Where(x => KinectExtensions.RHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
-                    
+
 
                     switch (climbMode)
                     {
@@ -441,7 +409,6 @@ namespace JustClimbTrial.Views.Pages
                                 {
                                     nextRockTimer.Tick += (_sender, _e) =>
                                     {
-
                                         if (trainingTargetReached())
                                         {
                                             nextRockTimer.RockTimerCountIncr();
@@ -456,6 +423,10 @@ namespace JustClimbTrial.Views.Pages
 
                                                     nextTrainRockIdx++;
                                                     nextRockTimer.Reset();
+
+                                                    // start video recording
+                                                    gameplayVideoRecClient.StartRecording();
+
                                                     //TO DO: StartRock Feedback Animation
                                                     playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
                                                 }
@@ -478,6 +449,10 @@ namespace JustClimbTrial.Views.Pages
 
                                                                 playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Finish.mp4"));
                                                                 playgroundMedia.Play();
+
+                                                                // stop video recording
+                                                                gameplayVideoRecClient.StopRecording();
+
                                                                 //TO DO: animation Feedback for that rock
                                                             }
 
@@ -523,7 +498,7 @@ namespace JustClimbTrial.Views.Pages
                                     nextRockTimer.Start();
                                 }
                             }
-  
+
                             break;
                         #endregion
 
@@ -532,7 +507,7 @@ namespace JustClimbTrial.Views.Pages
                             #region Boulder Gameplay
                             IEnumerable<Joint> fourLimbJoints =
                                         body.Joints.Where(x => KinectExtensions.LimbJoints.Contains(x.Value.JointType)).Select(y => y.Value);
-                            Func<RockOnRouteViewModel,bool> boulderTargetReached;
+                            Func<RockOnRouteViewModel, bool> boulderTargetReached;
                             boulderTargetReached = (x) =>
                             {
                                 bool reached;
@@ -552,16 +527,19 @@ namespace JustClimbTrial.Views.Pages
                                 }
                                 return reached;
                             };
-                            
+
                             if (!gameStarted) //Progress: Game not yet started, waiting player to reach Starting Point
                             {
-
                                 if (boulderTargetReached(startRockOnRoute))
                                 {
                                     //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
 
                                     playgroundWindow.LoopMedia = false;
                                     playgroundMedia.Stop();
+
+                                    // start video recording
+                                    gameplayVideoRecClient.StartRecording();
+
                                     playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Start.mp4"));
 
                                     RockTimerHelper startRockTimer = startRockOnRoute.MyRockTimerHelper;
@@ -613,59 +591,62 @@ namespace JustClimbTrial.Views.Pages
                                     {
                                         endRockTimer.Tick += (_sender, _e) =>
                                         {
-
-                                        if (boulderTargetReached(endRockOnRoute))
-                                        {
-                                            endRockTimer.RockTimerCountIncr();
-
-                                            if (endRockTimer.IsTimerGoalReached())
+                                            if (boulderTargetReached(endRockOnRoute))
                                             {
-                                                //END ROCK REACHED VERIFIED
-                                                endRockTimer.Stop();
+                                                endRockTimer.RockTimerCountIncr();
 
-                                                //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
-                                                playgroundMedia.Source = (new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Countdown.mp4")));
-
-                                                if (!endRockHoldTimer.IsTickHandlerSubed)
+                                                if (endRockTimer.IsTimerGoalReached())
                                                 {
-                                                    endRockHoldTimer.Tick += (_holdSender, _holdE) =>
+                                                    //END ROCK REACHED VERIFIED
+                                                    endRockTimer.Stop();
+
+                                                    //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
+                                                    playgroundMedia.Source = (new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Countdown.mp4")));
+
+                                                    if (!endRockHoldTimer.IsTickHandlerSubed)
                                                     {
-                                                        endRockHoldTimer.RockTimerCountIncr();
-
-                                                        if (endRockHoldTimer.IsTimerGoalReached())
+                                                        endRockHoldTimer.Tick += (_holdSender, _holdE) =>
                                                         {
-                                                            //END ROCK 3-second HOLD VERIFIED
-                                                            endRockHoldTimer.Stop();
+                                                            endRockHoldTimer.RockTimerCountIncr();
 
-                                                            playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Finish.mp4"));
-                                                            playgroundMedia.Play();
-                                                            //TO DO: animation Feedback for that rock
-                                                        }
+                                                            if (endRockHoldTimer.IsTimerGoalReached())
+                                                            {
+                                                                //END ROCK 3-second HOLD VERIFIED
+                                                                endRockHoldTimer.Stop();
 
-                                                        if (endRockHoldTimer.IsLagThresholdExceeded())
-                                                        {
-                                                            playgroundMedia.Stop();
-                                                            endRockHoldTimer.Reset();
-                                                        }
-                                                    };
+                                                                playgroundMedia.Source = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "Finish.mp4"));
+                                                                playgroundMedia.Play();
 
-                                                    endRockHoldTimer.IsTickHandlerSubed = true;
-                                                }
+                                                                // stop video recording
+                                                                gameplayVideoRecClient.StopRecording();
 
-                                                if (!endRockHoldTimer.IsEnabled)
-                                                {
-                                                    endRockHoldTimer.Reset();
-                                                    playgroundMedia.Play();
-                                                    endRockHoldTimer.Start();
+                                                                //TO DO: animation Feedback for that rock
+                                                            }
+
+                                                            if (endRockHoldTimer.IsLagThresholdExceeded())
+                                                            {
+                                                                playgroundMedia.Stop();
+                                                                endRockHoldTimer.Reset();
+                                                            }
+                                                        };
+
+                                                        endRockHoldTimer.IsTickHandlerSubed = true;
+                                                    }
+
+                                                    if (!endRockHoldTimer.IsEnabled)
+                                                    {
+                                                        endRockHoldTimer.Reset();
+                                                        playgroundMedia.Play();
+                                                        endRockHoldTimer.Start();
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        if (endRockTimer.IsLagThresholdExceeded())
-                                        {
-                                            endRockTimer.Reset();
-                                        }
-                                    };
+                                            if (endRockTimer.IsLagThresholdExceeded())
+                                            {
+                                                endRockTimer.Reset();
+                                            }
+                                        };
 
                                         endRockTimer.IsTickHandlerSubed = true;
                                     }
@@ -675,10 +656,8 @@ namespace JustClimbTrial.Views.Pages
                                         endRockTimer.Reset();
                                         endRockTimer.Start();
                                     }
-
                                 }
-                                
-                                
+
                                 foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
                                 {
                                     RockTimerHelper anyRockTimer = rockOnRoute.MyRockTimerHelper;
@@ -728,11 +707,30 @@ namespace JustClimbTrial.Views.Pages
             }//CLOSE foreach (var body in bodies)
         }
 
+        private void OnNavHeadIsRecordDemoChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(navHead.IsRecordDemoVideo))
+            {
+                isRecordingDemo = navHead.IsRecordDemoVideo;
+
+                if (isRecordingDemo)
+                {
+                    LbIsRecordingDemo.Text = "Demo Recording";
+                }
+                else
+                {
+                    LbIsRecordingDemo.Text = "";
+                }
+            }
+        }
+
         #endregion
+
+        
+        #region determine overlap between Rock & Joint
 
         private bool IsJointOnRock(Joint joint, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {
-
             float distance = KinectExtensions.GetCameraSpacePointDistance(joint.Position, rockVM.MyRock.GetCameraSpacePoint());
 
             //CameraSpacePoint startCamSp = startRockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
@@ -760,12 +758,7 @@ namespace JustClimbTrial.Views.Pages
             return (IsJointGroupOnRock(groupA, rockVM, threshold) && IsJointGroupOnRock(groupB, rockVM, threshold));
         }
 
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {
-            kinectManagerClient.BodyFrameArrived -= HandleBodyListArrived;
-            playgroundCanvas.Children.Clear();
-            mainWindowClient.UnsubColorImgSrcToPlaygrd();
-        }
+        #endregion
 
 
         #region ISavingVideo methods
@@ -778,6 +771,23 @@ namespace JustClimbTrial.Views.Pages
         public void ResetSavingVideoProperties()
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+
+        #region video playback
+
+        private void ShowVideoPlaybackDialog(RouteVideoViewModel videoVM)
+        {
+            string videoFilePath = videoVM.VideoRecordedFullPath(climbMode);            
+
+            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
+            VideoPlayback videoPlaybackPage =
+                new VideoPlayback(videoFilePath, playgroundMedia);
+
+            videoPlaybackDialog.Navigate(videoPlaybackPage);
+            videoPlaybackDialog.ShowDialog();
         }
 
         #endregion

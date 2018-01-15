@@ -20,8 +20,8 @@ namespace JustClimbTrial.Helpers
         private KinectManager kinectManagerClient;
         private int frameCnt = 0;
 
-        public bool IsFirstRecordingDone { get; private set; }
         public bool IsRecording { get; private set; }
+        public bool IsRecordingDone { get; private set; }
 
         public BlockingCollection<ImageToSave> Queue { get; set; }
 
@@ -30,8 +30,8 @@ namespace JustClimbTrial.Helpers
         /// </summary>
         public VideoHelper(KinectManager aKinectManagerClient)
         {
-            IsFirstRecordingDone = false;
             IsRecording = false;
+            IsRecordingDone = false;
             Queue = new BlockingCollection<ImageToSave>();
             kinectManagerClient = aKinectManagerClient;
         }
@@ -75,6 +75,7 @@ namespace JustClimbTrial.Helpers
         private void StopQueue()
         {
             IsRecording = false;
+            IsRecordingDone = true;
             frameCnt = 0;
         }
 
@@ -100,6 +101,7 @@ namespace JustClimbTrial.Helpers
         public void StartRecording()
         {
             IsRecording = true;
+            IsRecordingDone = false;
             kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
             ClearBuffer();
             StartQueue();
@@ -107,7 +109,6 @@ namespace JustClimbTrial.Helpers
 
         public void StopRecording()
         {
-            IsFirstRecordingDone = true;
             StopQueue();
             kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
         }
