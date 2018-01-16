@@ -34,6 +34,11 @@ namespace JustClimbTrial.Helpers
             IsRecordingDone = false;
             Queue = new BlockingCollection<ImageToSave>();
             kinectManagerClient = aKinectManagerClient;
+
+            if (!Directory.Exists(videoBufferFolderPath))
+            {
+                Directory.CreateDirectory(videoBufferFolderPath);
+            }
         }
 
 
@@ -95,7 +100,15 @@ namespace JustClimbTrial.Helpers
 
         public void ClearBuffer()
         {
-            FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+            // TODO: file used by others exception?
+            try
+            {
+                FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         public void StartRecording()
@@ -122,6 +135,12 @@ namespace JustClimbTrial.Helpers
 
         public static int ExportVideo(string sequenceFolderPath, string outputFilePath)
         {
+            string outputFileDirectory = Path.GetDirectoryName(outputFilePath);
+            if (!Directory.Exists(outputFileDirectory))
+            {
+                Directory.CreateDirectory(outputFileDirectory);
+            }
+
             int exitCode = 0;
 
             //ffmpeg command-->

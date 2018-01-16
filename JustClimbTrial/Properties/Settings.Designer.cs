@@ -12,7 +12,7 @@ namespace JustClimbTrial.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -64,7 +64,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\temp\\VideoImgBuffer")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\temp\\TempRecording")]
         public string VideoBufferDirectory {
             get {
                 return ((string)(this["VideoBufferDirectory"]));
@@ -109,10 +109,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\{0}\\BoulderRoutes")]
-        public string BoulderRouteVideoRecordedDirectoryFormat {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\Wall_{0}\\BoulderRoutes\\Route_{1}\\{2}{3}")]
+        public string BoulderRouteVideoRecordedFilePathFormat {
             get {
-                return ((string)(this["BoulderRouteVideoRecordedDirectoryFormat"]));
+                return ((string)(this["BoulderRouteVideoRecordedFilePathFormat"]));
             }
         }
         
@@ -127,10 +127,10 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\{0}\\TrainingRoutes")]
-        public string TrainingRouteVideoRecordedDirectoryFormat {
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\RecordedVideos\\Wall_{0}\\TrainingRoutes\\Route_{1}\\{2}{3}")]
+        public string TrainingRouteVideoRecordedFilePathFormat {
             get {
-                return ((string)(this["TrainingRouteVideoRecordedDirectoryFormat"]));
+                return ((string)(this["TrainingRouteVideoRecordedFilePathFormat"]));
             }
         }
         
@@ -145,10 +145,46 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool IsDebugMode {
             get {
                 return ((bool)(this["IsDebugMode"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\Videos\\Start.mp4")]
+        public string GameplayStartVideoPath {
+            get {
+                return ((string)(this["GameplayStartVideoPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\Videos\\Countdown.mp4")]
+        public string GameplayCountdownVideoPath {
+            get {
+                return ((string)(this["GameplayCountdownVideoPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\Videos\\Finish.mp4")]
+        public string GameplayFinishVideoPath {
+            get {
+                return ((string)(this["GameplayFinishVideoPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\Videos\\Ready.mp4")]
+        public string GameplayReadyVideoPath {
+            get {
+                return ((string)(this["GameplayReadyVideoPath"]));
             }
         }
     }

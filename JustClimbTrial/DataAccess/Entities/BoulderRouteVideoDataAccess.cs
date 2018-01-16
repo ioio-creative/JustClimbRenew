@@ -44,6 +44,17 @@ namespace JustClimbTrial.DataAccess.Entities
             return BoulderRouteVideos.Single(x => x.VideoID == videoId);
         }
 
+        public static BoulderRouteVideo Insert(string routeId, bool isDemo, bool isSubmitChanges = true)
+        {
+            BoulderRouteVideo boulderRouteVideo = new BoulderRouteVideo()
+            {
+                Route = routeId,
+                IsDemo = isDemo            
+            };
+            Insert(boulderRouteVideo, isSubmitChanges);
+            return boulderRouteVideo;
+        }
+
         public static string Insert(BoulderRouteVideo proposedVideo, bool isSubmitChanges = true)
         {
             DateTime createDT = DateTime.Now;

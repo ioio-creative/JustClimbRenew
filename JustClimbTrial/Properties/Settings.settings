@@ -25,7 +25,7 @@
       <Value Profile="(Default)">Data Source=sing-mssql-1.chdc0elhkwnt.ap-southeast-1.rds.amazonaws.com;Initial Catalog=JustClimb;User ID=IoioSa;Password=Ioio0512;Persist Security Info=True;</Value>
     </Setting>
     <Setting Name="VideoBufferDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\temp\VideoImgBuffer</Value>
+      <Value Profile="(Default)">..\AppFiles\temp\TempRecording</Value>
     </Setting>
     <Setting Name="WallLogDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\WallLog</Value>
@@ -39,20 +39,32 @@
     <Setting Name="VideoTempDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\temp\TempRecording</Value>
     </Setting>
-    <Setting Name="BoulderRouteVideoRecordedDirectoryFormat" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\RecordedVideos\{0}\BoulderRoutes</Value>
+    <Setting Name="BoulderRouteVideoRecordedFilePathFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\RecordedVideos\Wall_{0}\BoulderRoutes\Route_{1}\{2}{3}</Value>
     </Setting>
     <Setting Name="FfmpegExePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ffmpeg.exe</Value>
     </Setting>
-    <Setting Name="TrainingRouteVideoRecordedDirectoryFormat" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\RecordedVideos\{0}\TrainingRoutes</Value>
+    <Setting Name="TrainingRouteVideoRecordedFilePathFormat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\RecordedVideos\Wall_{0}\TrainingRoutes\Route_{1}\{2}{3}</Value>
     </Setting>
     <Setting Name="MaxVideoRecordDurationInMinutes" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="IsDebugMode" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GameplayStartVideoPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\AppFiles\Resources\Videos\Start.mp4</Value>
+    </Setting>
+    <Setting Name="GameplayCountdownVideoPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\AppFiles\Resources\Videos\Countdown.mp4</Value>
+    </Setting>
+    <Setting Name="GameplayFinishVideoPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\AppFiles\Resources\Videos\Finish.mp4</Value>
+    </Setting>
+    <Setting Name="GameplayReadyVideoPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">..\AppFiles\Resources\Videos\Ready.mp4</Value>
     </Setting>
   </Settings>
 </SettingsFile>

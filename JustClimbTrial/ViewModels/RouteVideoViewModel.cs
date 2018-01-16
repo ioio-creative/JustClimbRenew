@@ -14,13 +14,14 @@ namespace JustClimbTrial.ViewModels
         public bool IsDemo { get; set; }
         public DateTime CreateDT { get; set; }
         public string CreateDTString { get; set; }
+        public ClimbMode RouteClimbMode { get; set; }
 
 
-        public string VideoRecordedFullPath(ClimbMode climbMode)
+        public string VideoRecordedFullPath()
         {
             string videoFilePath;
 
-            switch (climbMode)
+            switch (RouteClimbMode)
             {
                 case ClimbMode.Training:
                     videoFilePath =

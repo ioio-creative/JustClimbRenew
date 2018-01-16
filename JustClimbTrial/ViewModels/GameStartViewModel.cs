@@ -219,45 +219,6 @@ namespace JustClimbTrial.ViewModels
             List<string> days = DateTimeHelper.GetDaysForComboBox(DayToStringFormat).ToList();
             List<FilterHourViewModel> hours = DateTimeHelper.GetHoursForComboBox(HourToStringFormat).ToList();
 
-            // join valid video and (no specify valid) route
-            IEnumerable<RouteVideoViewModel> routeVideoViewModels;
-            switch (_climbMode)
-            {
-                case ClimbMode.Training:
-                    routeVideoViewModels =
-                        from video in TrainingRouteVideoDataAccess.ValidTrainingRouteVideosByRouteId(_routeId)
-                        join route in TrainingRouteDataAccess.TrainingRoutes on video.Route equals route.RouteID
-                        select new RouteVideoViewModel
-                        {
-                            VideoID = video.VideoID,
-                            VideoNo = video.VideoNo,
-                            RouteID = video.Route,
-                            RouteNo = route.RouteNo,
-                            IsDemo = video.IsDemo.GetValueOrDefault(false),
-                            CreateDT = video.CreateDT.GetValueOrDefault(),
-                            CreateDTString = FormatVideoCreateDTStringForDisplay(
-                                video.CreateDT.GetValueOrDefault())
-                        };
-                    break;
-                case ClimbMode.Boulder:
-                default:
-                    routeVideoViewModels =
-                        from video in BoulderRouteVideoDataAccess.ValidBoulderRouteVideosByRouteId(_routeId)
-                        join route in BoulderRouteDataAccess.BoulderRoutes on video.Route equals route.RouteID
-                        select new RouteVideoViewModel
-                        {
-                            VideoID = video.VideoID,
-                            VideoNo = video.VideoNo,
-                            RouteID = video.Route,
-                            RouteNo = route.RouteNo,
-                            IsDemo = video.IsDemo.GetValueOrDefault(false),
-                            CreateDT = video.CreateDT.GetValueOrDefault(),
-                            CreateDTString = FormatVideoCreateDTStringForDisplay(
-                                video.CreateDT.GetValueOrDefault())
-                        };
-                    break;
-            }
-
             // add null item at the front of the combo boxes
             if (_yearListFirstItem != null)
             {
@@ -283,9 +244,55 @@ namespace JustClimbTrial.ViewModels
             Months = new ObservableCollection<string>(months);
             Days = new ObservableCollection<string>(days);
             Hours = new ObservableCollection<FilterHourViewModel>(hours);
+
+            LoadRouteVideoData();
+        }
+
+        public void LoadRouteVideoData()
+        {
+            // join valid video and (no specify valid) route
+            switch (_climbMode)
+            {
+                case ClimbMode.Training:
+                    routeVideoViewModels =
+                        from video in TrainingRouteVideoDataAccess.ValidTrainingRouteVideosByRouteId(_routeId)
+                        join route in TrainingRouteDataAccess.TrainingRoutes on video.Route equals route.RouteID
+                        select new RouteVideoViewModel
+                        {
+                            VideoID = video.VideoID,
+                            VideoNo = video.VideoNo,
+                            RouteID = video.Route,
+                            RouteNo = route.RouteNo,
+                            IsDemo = video.IsDemo.GetValueOrDefault(false),
+                            CreateDT = video.CreateDT.GetValueOrDefault(),
+                            CreateDTString = FormatVideoCreateDTStringForDisplay(
+                                video.CreateDT.GetValueOrDefault()),
+                            RouteClimbMode = _climbMode
+                        };
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    routeVideoViewModels =
+                        from video in BoulderRouteVideoDataAccess.ValidBoulderRouteVideosByRouteId(_routeId)
+                        join route in BoulderRouteDataAccess.BoulderRoutes on video.Route equals route.RouteID
+                        select new RouteVideoViewModel
+                        {
+                            VideoID = video.VideoID,
+                            VideoNo = video.VideoNo,
+                            RouteID = video.Route,
+                            RouteNo = route.RouteNo,
+                            IsDemo = video.IsDemo.GetValueOrDefault(false),
+                            CreateDT = video.CreateDT.GetValueOrDefault(),
+                            CreateDTString = FormatVideoCreateDTStringForDisplay(
+                                video.CreateDT.GetValueOrDefault()),
+                            RouteClimbMode = _climbMode
+                        };
+                    break;
+            }
+
             NonDemoRouteVideoViewModels =
                 new ObservableCollection<RouteVideoViewModel>(
-                    routeVideoViewModels.Where(x => x.IsDemo == false));            
+                    routeVideoViewModels.Where(x => x.IsDemo == false));
         }
 
         private string FormatVideoCreateDTStringForDisplay(DateTime createDT)

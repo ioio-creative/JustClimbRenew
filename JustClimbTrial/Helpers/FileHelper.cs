@@ -22,33 +22,39 @@ namespace JustClimbTrial.Helpers
         // Path: exeLocation/BoulderRouteVideoRecordedDirectory/RouteNo/VideoNo.extension
         public static string BoulderRouteVideoRecordedFullPath(RouteVideoViewModel video)
         {
-            return Path.Combine(exeDirectory, 
-                string.Format(settings.BoulderRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
-                video.RouteNo, video.VideoNo + settings.VideoFileExtension);
+            return BoulderRouteVideoRecordedFullPath(video.RouteNo, video.VideoNo);
         }
         
         public static string BoulderRouteVideoRecordedFullPath(
             BoulderRoute route, BoulderRouteVideo video)
         {
-            return Path.Combine(exeDirectory, 
-                string.Format(settings.BoulderRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
-                route.RouteNo, video.VideoNo + settings.VideoFileExtension);
+            return BoulderRouteVideoRecordedFullPath(route.RouteNo, video.VideoNo);
         }
 
-        // Path: exeLocation/TrainingRouteVideoRecordedDirectory/RouteNo/VideoNo.extension
+        public static string BoulderRouteVideoRecordedFullPath(string routeNo, string videoNo)
+        {
+            return Path.Combine(exeDirectory,
+                string.Format(settings.BoulderRouteVideoRecordedFilePathFormat,
+                    AppGlobal.MyWall.WallNo, routeNo, videoNo, settings.VideoFileExtension));
+        }
+
+        // Path: exeLocation/TrainingRouteVideoRecordedDirectory/VideoNo.extension
         public static string TrainingRouteVideoRecordedFullPath(RouteVideoViewModel video)
         {
-            return Path.Combine(exeDirectory, 
-                string.Format(settings.TrainingRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
-                video.RouteNo, video.VideoNo + settings.VideoFileExtension);
+            return TrainingRouteVideoRecordedFullPath(video.RouteNo, video.VideoNo);
         }
 
         public static string TrainingRouteVideoRecordedFullPath(
             TrainingRoute route, TrainingRouteVideo video)
         {
-            return Path.Combine(exeDirectory, 
-                string.Format(settings.BoulderRouteVideoRecordedDirectoryFormat, AppGlobal.MyWall.WallNo),
-                route.RouteNo, video.VideoNo + settings.VideoFileExtension);
+            return TrainingRouteVideoRecordedFullPath(route.RouteNo, video.VideoNo);
+        }
+
+        public static string TrainingRouteVideoRecordedFullPath(string routeNo, string videoNo)
+        {
+            return Path.Combine(exeDirectory,
+                string.Format(settings.BoulderRouteVideoRecordedFilePathFormat,
+                    AppGlobal.MyWall.WallNo, routeNo, videoNo, settings.VideoFileExtension));
         }
 
         // Path: exeLocation/VideoResourcesDirectory/
@@ -78,6 +84,30 @@ namespace JustClimbTrial.Helpers
         public static string WallLogImagePath(string wallId)
         {
             return Path.Combine(WallLogFolderPath(), wallId, wallId + ".png");
+        }
+
+        // Path: exeLocation/GameplayReadyVideoPath
+        public static string GameplayReadyVideoPath()
+        {
+            return Path.Combine(exeDirectory, settings.GameplayReadyVideoPath);
+        }
+
+        // Path: exeLocation/GameplayStartVideoPath
+        public static string GameplayStartVideoPath()
+        {
+            return Path.Combine(exeDirectory, settings.GameplayStartVideoPath);
+        }
+
+        // Path: exeLocation/GameplayCountdownVideoPath
+        public static string GameplayCountdownVideoPath()
+        {
+            return Path.Combine(exeDirectory, settings.GameplayCountdownVideoPath);
+        }
+
+        // Path: exeLocation/GameplayCountdownVideoPath
+        public static string GameplayFinishVideoPath()
+        {
+            return Path.Combine(exeDirectory, settings.GameplayFinishVideoPath);
         }
     }
 }
