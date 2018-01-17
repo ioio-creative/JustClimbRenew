@@ -1,6 +1,7 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -124,7 +125,7 @@ namespace JustClimbTrial.Kinect
                 kinectSensor.Open();
 
                 multiSourceReader = kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
-                Console.WriteLine("Kinect activated!");
+                Debug.WriteLine("Kinect activated!");
                 //multiSourceReader = mSrcReader;
 
                 multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;
@@ -134,7 +135,7 @@ namespace JustClimbTrial.Kinect
             else
             {
                 isSuccess = false;
-                Console.WriteLine("Kinect not available!");
+                Debug.WriteLine("Kinect not available!");
             }
 
             return isSuccess;

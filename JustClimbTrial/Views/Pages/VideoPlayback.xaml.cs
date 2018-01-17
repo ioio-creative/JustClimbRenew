@@ -2,6 +2,7 @@
 using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -74,7 +75,7 @@ namespace JustClimbTrial.Views.Pages
                 ? mediaPlayback.NaturalDuration.TimeSpan.TotalMilliseconds.ToString("#ms")
                 : "No duration";
 
-            Console.WriteLine(duration);
+            Debug.WriteLine(duration);
         }
 
 
@@ -249,8 +250,8 @@ namespace JustClimbTrial.Views.Pages
             mediaPlayback.Position = TimeSpan.FromSeconds(navigationSlider.Value);
             externalPlaybackMonitor.Position = TimeSpan.FromSeconds(navigationSlider.Value);
 
-            Console.WriteLine("Slider Value = " + navigationSlider.Value);
-            Console.WriteLine("Current Position: " + mediaPlayback.Position.TotalSeconds);
+            Debug.WriteLine("Slider Value = " + navigationSlider.Value);
+            Debug.WriteLine("Current Position: " + mediaPlayback.Position.TotalSeconds);
 
         }
 

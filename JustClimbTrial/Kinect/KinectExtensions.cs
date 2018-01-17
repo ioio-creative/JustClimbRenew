@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Linq;
+using System.Diagnostics;
 
 namespace JustClimbTrial.Kinect
 {
@@ -122,7 +123,7 @@ namespace JustClimbTrial.Kinect
             joint = joint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
             if (joint.JointType == 0)
             {
-                Console.WriteLine($"Head Position in Camera Space = {joint.Position.X}, {joint.Position.Y}");
+                Debug.WriteLine($"Head Position in Camera Space = {joint.Position.X}, {joint.Position.Y}");
             }
 
             // 3) Create a WPF ellipse.
@@ -240,11 +241,11 @@ namespace JustClimbTrial.Kinect
             #region Joint Mapping Messages
             if (spPt.X == float.NegativeInfinity || spPt.Y == float.NegativeInfinity)
             {
-                //Console.WriteLine($"Joint Mapping Error: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
+                //Debug.WriteLine($"Joint Mapping Error: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
             }
             else if ((spPt.X < 0 || spPt.Y < 0 || spPt.X > FrameDimensions[mode].Item1 || spPt.Y > FrameDimensions[mode].Item2))
             {
-                //Console.WriteLine($"Joint Mapping Overflow: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
+                //Debug.WriteLine($"Joint Mapping Overflow: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
             }
             #endregion
 
@@ -255,7 +256,7 @@ namespace JustClimbTrial.Kinect
 
                 // 2) Scale the mapped coordinates to window dimensions.
                 spPt = spPt.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, mode);
-                //if (joint.JointType == 0) Console.WriteLine($"Head Position in Color Space = {spPt.X}, {spPt.Y}");
+                //if (joint.JointType == 0) Debug.WriteLine($"Head Position in Color Space = {spPt.X}, {spPt.Y}");
 
                 // 3) Draw the point on Canvas
                 shapeToReturn = spPt.DrawPoint(canvas);
@@ -331,7 +332,7 @@ namespace JustClimbTrial.Kinect
                 //maxDepth = frame.DepthMaxReliableDistance;
                 minDepth = 2000;//frame.DepthMinReliableDistance;
                 maxDepth = 5000;//frame.DepthMaxReliableDistance;
-                //Console.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
+                //Debug.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
             }
 
             PixelFormat format = PixelFormats.Bgr32;
@@ -446,7 +447,7 @@ namespace JustClimbTrial.Kinect
                             //minDepth = frame.DepthMinReliableDistance;
                             minDepth = 2000;//frame.DepthMinReliableDistance;
                             maxDepth = 5000;//frame.DepthMaxReliableDistance;
-                                            //Console.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
+                                            //Debug.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
                         }
 
                         ushort[] depthData = new ushort[width * height];
@@ -574,14 +575,14 @@ namespace JustClimbTrial.Kinect
                     using (FileStream fs = new FileStream(path, FileMode.Create))
                     {
                         encoder.Save(fs);
-                        Console.WriteLine("FrameExport Successful");
+                        Debug.WriteLine("FrameExport Successful");
                         frameCounter++;
                     }
                 });
             }
             catch (IOException ex)
             {
-                Console.WriteLine("FrameExport Exception");
+                Debug.WriteLine("FrameExport Exception");
             }
 
         }

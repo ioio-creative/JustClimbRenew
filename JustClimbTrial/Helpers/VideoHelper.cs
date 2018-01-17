@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using ProcessHelperDLL;
 using JustClimbTrial.Kinect;
+using JustClimbTrial.Extensions;
 
 namespace JustClimbTrial.Helpers
 {
@@ -14,6 +15,15 @@ namespace JustClimbTrial.Helpers
     //http://blog.bartdemeyer.be/2012/03/creating-thread-save-queue/
     public class VideoHelper
     {
+        //ffmpeg command-->
+        //-framerate:   set fps of output video
+        //-i:           locate folder containing img sequence as input;
+        //-pix_fmt:     set pixel format;
+        //-vf:          apply horizontal flip video filter
+        //output file name
+        private const string exportVideoCmdArgumentsFormat =
+            "-y -i \"{0}\\%08d.png\" -framerate 25 -pix_fmt yuv420p -vf hflip \"{1}\"";
+
         private static string ffmpegExePath = AppGlobal.FfmpegExePath;
         private static string videoBufferFolderPath = FileHelper.VideoBufferFolderPath();
 
@@ -21,7 +31,13 @@ namespace JustClimbTrial.Helpers
         private int frameCnt = 0;
 
         public bool IsRecording { get; private set; }
-        public bool IsRecordingDone { get; private set; }
+        public bool IsAllBufferFramesSaved
+        {
+            get
+            {
+                return !(IsRecording || Queue.Count > 0);
+            }
+        }
 
         public BlockingCollection<ImageToSave> Queue { get; set; }
 
@@ -31,7 +47,6 @@ namespace JustClimbTrial.Helpers
         public VideoHelper(KinectManager aKinectManagerClient)
         {
             IsRecording = false;
-            IsRecordingDone = false;
             Queue = new BlockingCollection<ImageToSave>();
             kinectManagerClient = aKinectManagerClient;
 
@@ -49,24 +64,35 @@ namespace JustClimbTrial.Helpers
         /// </summary>
         private void StartQueue()
         {
+            frameCnt = 0;
+            IsRecording = true;
+
             Task.Factory.StartNew(() =>
             {                
-                while (IsRecording)
+                //while (IsRecording)
+                // Queue.Count > 0 is added to the condition here
+                // to ensure that all ImageToSave added to the Queue will be saved as a file
+                while (!IsAllBufferFramesSaved)
                 {
-                    ImageToSave imageToSave = null;     
+                    if (Queue.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    ImageToSave imageToSave = null;
                     if (Queue.TryTake(out imageToSave))
                     {
                         string filePath = Path.Combine(imageToSave.FolderPath, frameCnt.ToString().PadLeft(8, '0') + ".png");
-                        Console.WriteLine("1: Saving image from queue to {0}", filePath);
+                        Debug.WriteLine("1: Saving image from queue to {0}", filePath);
                         try
                         {
                             imageToSave.VBitmap.Save(filePath);
                             frameCnt++;
-                            Console.WriteLine("1: Queue is holding {0} images", Queue.Count);
+                            Debug.WriteLine("1: Queue is holding {0} images", Queue.Count);
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("1: Error reading and executing queue", ex);
+                            Debug.WriteLine("1: Error reading and executing queue", ex);
                         }
                         finally
                         {
@@ -80,8 +106,9 @@ namespace JustClimbTrial.Helpers
         private void StopQueue()
         {
             IsRecording = false;
-            IsRecordingDone = true;
-            frameCnt = 0;
+
+            // !!!Important!!! setting frameCnt here is bad! it interrupts the queue!
+            //frameCnt = 0;
         }
 
         private void SaveImageToQueue(string filePath, Bitmap bitmap)
@@ -91,50 +118,15 @@ namespace JustClimbTrial.Helpers
                 VBitmap = bitmap.Clone() as Bitmap,  // !!! Good !!!
                 FolderPath = filePath
             });
-        }
+        }        
 
-        #endregion
-
-
-        #region public methods
-
-        public void ClearBuffer()
+        private async Task<int> ExportVideoAsync(string sequenceFolderPath, string outputFilePath)
         {
-            // TODO: file used by others exception?
-            try
+            if (!IsAllBufferFramesSaved)
             {
-                FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+                await WaitingForAllBufferFramesSavedAsync();
             }
-            catch (Exception ex)
-            {
 
-            }
-        }
-
-        public void StartRecording()
-        {
-            IsRecording = true;
-            IsRecordingDone = false;
-            kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
-            ClearBuffer();
-            StartQueue();
-        }
-
-        public void StopRecording()
-        {
-            StopQueue();
-            kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
-        }
-
-        public int ExportVideoAndClearBuffer(string outputFilePath)
-        {
-            int exitCode = ExportVideo(videoBufferFolderPath, outputFilePath);
-            ClearBuffer();
-            return exitCode;
-        }
-
-        public static int ExportVideo(string sequenceFolderPath, string outputFilePath)
-        {
             string outputFileDirectory = Path.GetDirectoryName(outputFilePath);
             if (!Directory.Exists(outputFileDirectory))
             {
@@ -142,15 +134,6 @@ namespace JustClimbTrial.Helpers
             }
 
             int exitCode = 0;
-
-            //ffmpeg command-->
-            //-framerate:   set fps of output video
-            //-i:           locate folder containing img sequence as input;
-            //-pix_fmt:     set pixel format;
-            //-vf:          apply horizontal flip video filter
-            //output file name
-            string exportVideoCmdArgumentsFormat =
-                "-i \"{0}\\%08d.png\" -framerate 25 -pix_fmt yuv420p -vf hflip \"{1}\"";
 
             string exportVideoCmdArguments =
                 string.Format(exportVideoCmdArgumentsFormat,
@@ -166,12 +149,72 @@ namespace JustClimbTrial.Helpers
             {
                 ProcessUtil.OutputFromProcess(proc);
 
+                //await proc.WaitForExitAsync();
                 proc.WaitForExit();
                 exitCode = proc.ExitCode;
             }
-            
+
             return exitCode;
         }
+
+        #endregion
+
+
+        #region public methods
+
+        public async Task WaitingForAllBufferFramesSavedAsync()
+        {
+            await Task.Run(() =>
+            {
+                while (!IsAllBufferFramesSaved)
+                {
+                    continue;
+                }
+            });
+        }
+
+        public void ClearBuffer()
+        {
+            // TODO: file used by others exception?
+            try
+            {
+                FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public bool StartRecording()
+        {
+            bool isRecordingStarted = false;
+
+            // ensure all buffer images from previous recording processes are saved
+            // before starting new recording            
+            if (IsAllBufferFramesSaved)
+            {
+                kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
+                ClearBuffer();
+                StartQueue();
+                isRecordingStarted = true;
+            }
+
+            return isRecordingStarted;
+        }
+
+        public void StopRecording()
+        {
+            StopQueue();
+            kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
+        }
+
+        public async Task<int> ExportVideoAndClearBufferAsync(string outputFilePath)
+        {            
+            int exitCode = await ExportVideoAsync(videoBufferFolderPath, outputFilePath);
+            ClearBuffer();
+            return exitCode;
+        }        
 
         #endregion
 

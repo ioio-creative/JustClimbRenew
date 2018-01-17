@@ -109,6 +109,7 @@
     <Compile Include="Extensions\DependencyObjectExtension.cs" />
     <Compile Include="Extensions\EllipseExtension.cs" />
     <Compile Include="Extensions\ImageControlExtension.cs" />
+    <Compile Include="Extensions\ProcessExtension.cs" />
     <Compile Include="Helpers\ImageSequenceHelper.cs" />
     <Compile Include="Extensions\RockExtension.cs" />
     <Compile Include="Globals\AppGlobal.cs" />

@@ -8,6 +8,7 @@ using JustClimbTrial.Views.Dialogs;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -236,7 +237,8 @@ namespace JustClimbTrial.Views.Pages
             }
             else
             {
-                Console.WriteLine("Kinect not available!");
+                //Debug.WriteLine("Kinect not available!");
+                UiHelper.NotifyUser("Kinect not available!");
             }
 
             //kinectSensor.Open();

@@ -2,6 +2,7 @@
 using JustClimbTrial.Kinect;
 using Microsoft.Kinect;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,8 +91,8 @@ namespace JustClimbTrial.Kinect
         //        depth = wallDepthData[(int)_boulderDSP.X + (int)(_boulderDSP.Y) * (int)KinectExtensions.FrameDimensions[SpaceMode.Depth].Item1];
         //        _boulderCAMSP = coMapper.MapDepthPointToCameraSpace(_boulderDSP, depth);
         //    }
-        //    Console.WriteLine($"Position: Color[{(int)(x_temp + 0.5f)}][{(int)(y_temp + 0.5f)}] ==> Depth[{_boulderDSP.X}][{_boulderDSP.Y}]");
-        //    Console.WriteLine($"New Boulder: x = {_boulderCAMSP.X}; y = {_boulderCAMSP.Y}; z = {_boulderCAMSP.Z}");
+        //    Debug.WriteLine($"Position: Color[{(int)(x_temp + 0.5f)}][{(int)(y_temp + 0.5f)}] ==> Depth[{_boulderDSP.X}][{_boulderDSP.Y}]");
+        //    Debug.WriteLine($"New Boulder: x = {_boulderCAMSP.X}; y = {_boulderCAMSP.Y}; z = {_boulderCAMSP.Z}");
 
         //    if (boulderList == null)
         //    {
@@ -125,7 +126,7 @@ namespace JustClimbTrial.Kinect
                 if (!Directory.Exists(wallLogPath))
                 {
                     DirectoryInfo di = Directory.CreateDirectory(wallLogPath);
-                    Console.WriteLine("Log directory created successfully at {0}.", Directory.GetCreationTime(wallLogPath));
+                    Debug.WriteLine("Log directory created successfully at {0}.", Directory.GetCreationTime(wallLogPath));
                 }
 
                 width = (int)KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;
@@ -160,7 +161,7 @@ namespace JustClimbTrial.Kinect
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR----Wall Coordinate Export Exception: " + ex.ToString() );
+                Debug.WriteLine("ERROR----Wall Coordinate Export Exception: " + ex.ToString() );
                 throw;
             }
             return exportMapperSuccess;
@@ -190,7 +191,7 @@ namespace JustClimbTrial.Kinect
             }
             catch (IOException ex)
             {
-                Console.WriteLine("ERROR----Wall Image Export Exception: " + ex.ToString());
+                Debug.WriteLine("ERROR----Wall Image Export Exception: " + ex.ToString());
             }
 
             return isImgSaved;

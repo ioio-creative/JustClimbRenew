@@ -18,7 +18,7 @@ namespace JustClimbTrial
             if (newestValidWall != null)
             {
                 AppGlobal.WallID = newestValidWall.WallID;
-                //Console.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
+                //Debug.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
                 //AppGlobal.WallID = "WA2017122912011l7oBf";
             }
 
