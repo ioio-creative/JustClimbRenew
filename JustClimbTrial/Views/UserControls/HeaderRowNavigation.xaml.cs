@@ -1,4 +1,6 @@
-﻿using JustClimbTrial.Extensions;
+﻿using JustClimbTrial.DataAccess.Entities;
+using JustClimbTrial.Enums;
+using JustClimbTrial.Extensions;
 using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.Views.Dialogs;
@@ -197,7 +199,37 @@ namespace JustClimbTrial.Views.UserControls
 
         private void SwitchOnRecordDemoVideoMode(object parameter = null)
         {
-            IsRecordDemoVideo = true;
+            // if an ancestor IS ISavingVideo
+            DependencyObject savingVideoObject = this.GetAncestorRecursive<ISavingVideo>();
+            if (savingVideoObject != null)
+            {
+                ISavingVideo savingVideoPage = savingVideoObject as ISavingVideo;
+                
+                if (savingVideoPage.IsRouteContainDemoVideo)
+                {
+                    MessageBoxResult mbr =
+                        MessageBox.Show("The route already contains a demo. Do you want to record a new one?", "Record new demo?",
+                            MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    switch (mbr)
+                    {
+                        case MessageBoxResult.Yes:
+                            IsRecordDemoVideo = true;
+                            break;
+                        case MessageBoxResult.No:
+                        default:
+                            IsRecordDemoVideo = false;
+                            break;
+                    }
+                }
+                else
+                {
+                    IsRecordDemoVideo = true;
+                }
+            }
+            else
+            {
+                IsRecordDemoVideo = true;
+            }            
         }
 
         private void SwitchOffRecordDemoVideoMode(object parameter = null)

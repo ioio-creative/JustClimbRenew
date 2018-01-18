@@ -21,6 +21,7 @@ namespace JustClimbTrial.Helpers
 
     }
 
+
     /// <summary>
     /// WPF Image Sequencer. Adapted from:
     /// http://blogarchive.claritycon.com/blog/2009/04/wpf-image-sequencer-for-animations/
@@ -33,10 +34,14 @@ namespace JustClimbTrial.Helpers
 
         private int currentIndex;
         private Image image;
+
         private List<BitmapSource> images;
+        //private List<ImageSource> images;
+
         private DispatcherTimer updateImageTimer;
 
         private string imgExtension = ".png";
+
 
         public ImageSequenceHelper(Image image, bool loop = false, int fps = 25)
         {
@@ -48,11 +53,12 @@ namespace JustClimbTrial.Helpers
         }
 
 
-
         public void Load(List<BitmapSource> images)
         {
             this.updateImageTimer.Stop();
-            this.images = images;
+
+            //this.images = images;
+
             this.currentIndex = 0;
             this.LoadCurrentIndex();
         }
@@ -86,7 +92,6 @@ namespace JustClimbTrial.Helpers
             this.updateImageTimer.Stop();
         }
 
-
         private void updateImageTimer_Tick(object sender, EventArgs e)
         {
             if (this.currentIndex == this.images.Count)
@@ -98,15 +103,15 @@ namespace JustClimbTrial.Helpers
                 else
                 {
                     Stop();
-                }
-                
+                }                
             }
+
             if (this.images != null)
             {
                 this.LoadCurrentIndex();
             }
-
         }
+
 
         #region Sequence BitmapSource List
 
@@ -124,16 +129,23 @@ namespace JustClimbTrial.Helpers
                 sequence.Add(frameSource);
             }
 
-            //for (int i = 0; i <= 17; i++)
-            //{
-            //    string filename = string.Format("{0}{1}{2}", "1_", i.ToString("00000"), imgExtension);
-            //    Uri fileUri = new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), filename));
-            //    BitmapSource frameSource = new BitmapImage(fileUri);
-            //    sequence.Add(frameSource);
-            //}
-
             return sequence;
         }
+
+        //private List<ImageSource> GetDefaultInitializeSequence()
+        //{
+        //    List<ImageSource> sequence = new List<ImageSource>();
+
+        //    IEnumerable<FileInfo> imgFiles =
+        //        FileHelperDLL.FileHelper.GetFilesInDirectoryByExtensions(FileHelper.BoulderButtonNormalImgSequenceDirectory(), ".png");
+
+        //    foreach (FileInfo imgFile in imgFiles)
+        //    {                
+        //        sequence.Add(ImageSourceHelper.GetImageSource(imgFile.FullName));
+        //    }
+
+        //    return sequence;
+        //}
 
         #endregion
     }

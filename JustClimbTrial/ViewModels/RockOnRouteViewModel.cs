@@ -88,9 +88,7 @@ namespace JustClimbTrial.ViewModels
                 case RockOnBoulderStatus.End:
                     MyRockViewModel.SetRockImage();
                     break;
-            }
-
-            
+            } 
         }
 
         #endregion

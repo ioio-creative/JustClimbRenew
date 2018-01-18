@@ -47,7 +47,7 @@ namespace JustClimbTrial.Views.Pages
             
             climbMode = aClimbMode;
             videoRecordType = aVideoRecordType;
-            videoHelper = new VideoHelper(kinectManagerClient);
+            videoHelper = VideoHelper.Instance(kinectManagerClient);
 
             externalPlaybackMonitor = anExternalPlaybackMonitor;
         }

@@ -206,11 +206,26 @@ namespace JustClimbTrial.ViewModels
                 }
                 else
                 {
+                    return routeVideoViewModels.Single(x => x.IsDemo);
+                }
+            }
+        }
+
+        public RouteVideoViewModel TryGetDemoRouteVideoViewModel
+        {
+            get
+            {
+                if (routeVideoViewModels == null)
+                {
+                    return null;
+                }
+                else
+                {
                     return routeVideoViewModels.SingleOrDefault(x => x.IsDemo);
                 }
             }
         }
-        
+
         // can be called by the view during Page.OnLoad
         public void LoadData()
         {

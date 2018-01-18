@@ -39,9 +39,27 @@ namespace JustClimbTrial.DataAccess.Entities
             return ValidBoulderRouteVideosByRouteId(routeId).Single(x => x.IsDemo.GetValueOrDefault(false));
         }
 
+        public static BoulderRouteVideo TryGetValidBoulderRouteDemoVideoByRouteId(string routeId)
+        {
+            return ValidBoulderRouteVideosByRouteId(routeId).SingleOrDefault(x => x.IsDemo.GetValueOrDefault(false));
+        }
+
         public static BoulderRouteVideo BoulderRouteVideoById(string videoId)
         {
             return BoulderRouteVideos.Single(x => x.VideoID == videoId);
+        }
+
+        public static BoulderRouteVideo InsertToReplacePreviousDemo(string routeId, bool isSubmitChanges = true)
+        {
+            SetIsDemoOfExistingDemoRouteVideoToFalse(routeId, isSubmitChanges);
+            return Insert(routeId, true, isSubmitChanges);
+        }
+
+        public static string InsertToReplacePreviousDemo(BoulderRouteVideo proposedVideo, bool isSubmitChanges = true)
+        {
+            SetIsDemoOfExistingDemoRouteVideoToFalse(proposedVideo.Route, isSubmitChanges);
+            proposedVideo.IsDemo = true;  // TODO: should force set IsDemo here?
+            return Insert(proposedVideo, isSubmitChanges);
         }
 
         public static BoulderRouteVideo Insert(string routeId, bool isDemo, bool isSubmitChanges = true)
@@ -86,5 +104,21 @@ namespace JustClimbTrial.DataAccess.Entities
                 database.SubmitChanges();
             }
         }
+
+
+        #region private methods
+
+        private static void SetIsDemoOfExistingDemoRouteVideoToFalse(string routeId, bool isSubmitChanges = true)
+        {
+            BoulderRouteVideo existingDemoVideo = ValidBoulderRouteDemoVideoByRouteId(routeId);
+            existingDemoVideo.IsDemo = false;
+
+            if (isSubmitChanges)
+            {
+                database.SubmitChanges();
+            }
+        }
+
+        #endregion
     }
 }

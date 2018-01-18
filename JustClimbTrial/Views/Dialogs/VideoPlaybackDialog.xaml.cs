@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using JustClimbTrial.Enums;
+using System;
 
 namespace JustClimbTrial.Views.Dialogs
 {
@@ -10,10 +12,14 @@ namespace JustClimbTrial.Views.Dialogs
     /// </summary>
     public partial class VideoPlaybackDialog : NavigationWindow, ISavingVideo
     {
-        #region properties
+        #region ISavingVideo properties
 
         public string TmpVideoFilePath { get; set; }
         public bool IsConfirmSaveVideo { get; set; }
+
+        public string RouteId => throw new NotImplementedException();
+        public ClimbMode RouteClimbMode => throw new NotImplementedException();
+        public bool IsRouteContainDemoVideo => throw new NotImplementedException();
 
         #endregion
 

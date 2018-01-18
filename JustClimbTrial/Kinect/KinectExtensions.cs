@@ -238,7 +238,9 @@ namespace JustClimbTrial.Kinect
                     break;
             }
 
+
             #region Joint Mapping Messages
+
             if (spPt.X == float.NegativeInfinity || spPt.Y == float.NegativeInfinity)
             {
                 //Debug.WriteLine($"Joint Mapping Error: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
@@ -247,6 +249,7 @@ namespace JustClimbTrial.Kinect
             {
                 //Debug.WriteLine($"Joint Mapping Overflow: Joint[{joint.JointType.ToString()}] ( {spPt.X} , {spPt.Y} )");
             }
+
             #endregion
 
 
@@ -302,10 +305,8 @@ namespace JustClimbTrial.Kinect
             return lineToReturn;
         }
 
-        #endregion
+        #endregion        
 
-
-        #endregion
 
         #region Image Functions
         ///<summary>

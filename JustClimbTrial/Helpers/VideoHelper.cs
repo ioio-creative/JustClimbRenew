@@ -13,7 +13,7 @@ namespace JustClimbTrial.Helpers
 {
     //Thread Saving Queue
     //http://blog.bartdemeyer.be/2012/03/creating-thread-save-queue/
-    public class VideoHelper
+    public sealed class VideoHelper
     {
         //ffmpeg command-->
         //-framerate:   set fps of output video
@@ -41,10 +41,25 @@ namespace JustClimbTrial.Helpers
 
         public BlockingCollection<ImageToSave> Queue { get; set; }
 
+
+        #region singleton
+
+        // https://msdn.microsoft.com/en-us/library/ff650316.aspx
+        private static VideoHelper instance;
+
+        public static VideoHelper Instance(KinectManager aKinectManagerClient)
+        {
+            if (instance == null)
+            {
+                instance = new VideoHelper(aKinectManagerClient);
+            }
+            return instance;
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public VideoHelper(KinectManager aKinectManagerClient)
+        private VideoHelper(KinectManager aKinectManagerClient)
         {
             IsRecording = false;
             Queue = new BlockingCollection<ImageToSave>();
@@ -55,6 +70,8 @@ namespace JustClimbTrial.Helpers
                 Directory.CreateDirectory(videoBufferFolderPath);
             }
         }
+
+        #endregion
 
 
         #region private methods

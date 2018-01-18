@@ -366,6 +366,7 @@ namespace JustClimbTrial.ViewModels
             BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, true);
             BoulderButtonSequence.LoadSequenceFolder();
         }
+
         public void LoadStartRockInitialSeq()
         {
 
