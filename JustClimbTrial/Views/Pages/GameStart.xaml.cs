@@ -244,7 +244,7 @@ namespace JustClimbTrial.Views.Pages
 
         #region event handlers
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
             navSvc = this.NavigationService;
@@ -255,12 +255,7 @@ namespace JustClimbTrial.Views.Pages
             viewModel.LoadData();
 
             mainWindowClient = this.Parent as MainWindow;
-            kinectManagerClient = mainWindowClient.KinectManagerClient;
-            playgroundWindow = mainWindowClient.PlaygroundWindow;
-            playgroundMedia = playgroundWindow.PlaygroundMedia;
-            playgroundMedia.Stop();
-            playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
-            playgroundMedia.Play();
+            kinectManagerClient = mainWindowClient.KinectManagerClient;            
 
             gameplayVideoRecClient = VideoHelper.Instance(kinectManagerClient);
 
@@ -270,8 +265,7 @@ namespace JustClimbTrial.Views.Pages
             }
 
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
-
-            kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
+            
             navHead.PropertyChanged += OnNavHeadIsRecordDemoChanged;
 
             string headerRowTitleFormat = "{0} Route {1} - Video Playback";
@@ -344,6 +338,16 @@ namespace JustClimbTrial.Views.Pages
                     }
                     break;
             }
+
+            await gameplayVideoRecClient.WaitingForAllBufferFramesSavedAsync();
+
+            playgroundWindow = mainWindowClient.PlaygroundWindow;
+            playgroundMedia = playgroundWindow.PlaygroundMedia;
+            playgroundMedia.Stop();
+            playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
+            playgroundMedia.Play();
+
+            kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

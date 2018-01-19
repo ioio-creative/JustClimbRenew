@@ -52,6 +52,8 @@ namespace JustClimbTrial.ViewModels
 
         public Image BoulderImage;
         public ImageSequenceHelper BoulderButtonSequence;
+
+
         // derived quantities
         // normalised
         //Left Edge
@@ -371,9 +373,7 @@ namespace JustClimbTrial.ViewModels
         public void LoadStartRockInitialSeq()
         {
 
-        }
-
-        //public void LoadStartRock
+        }      
         
         #endregion
     }

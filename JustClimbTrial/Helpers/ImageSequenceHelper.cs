@@ -28,7 +28,11 @@ namespace JustClimbTrial.Helpers
     /// </summary>
     public class ImageSequenceHelper
     {
+        #region preloaded sequences
+
         public static List<BitmapSource> DefaultInitializeSequence = GetDefaultInitializeSequence();
+
+        #endregion
 
 
         //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
@@ -39,12 +43,11 @@ namespace JustClimbTrial.Helpers
         private Image image;
 
         private List<BitmapSource> images;
-        //private List<ImageSource> images;
 
 
         private DispatcherTimer updateImageTimer;
 
-        private string imgExtension = ".png";
+        private const string ImgExtenstion = ".png";
 
 
         public ImageSequenceHelper(Image image, bool loop = false, int fps = 25)
@@ -115,12 +118,13 @@ namespace JustClimbTrial.Helpers
 
         #region Sequence BitmapSource List
 
-        public static List<BitmapSource> GetDefaultInitializeSequence()
+        // imgExt e.g. ".mp4"
+        private static List<BitmapSource> GetBitmapSourceList(string directoryPath, string imgExt = ImgExtenstion)
         {
             List<BitmapSource> sequence = new List<BitmapSource>();
 
             IEnumerable<FileInfo> imgFiles =
-                FileHelperDLL.FileHelper.GetFilesInDirectoryByExtensions(FileHelper.BoulderButtonNormalImgSequenceDirectory(), ".png");
+                FileHelperDLL.FileHelper.GetFilesInDirectoryByExtensions(directoryPath, imgExt);
 
             foreach (FileInfo imgFile in imgFiles)
             {
@@ -132,21 +136,11 @@ namespace JustClimbTrial.Helpers
             return sequence;
         }
 
-        //private List<ImageSource> GetDefaultInitializeSequence()
-        //{
-        //    List<ImageSource> sequence = new List<ImageSource>();
-
-        //    IEnumerable<FileInfo> imgFiles =
-        //        FileHelperDLL.FileHelper.GetFilesInDirectoryByExtensions(FileHelper.BoulderButtonNormalImgSequenceDirectory(), ".png");
-
-        //    foreach (FileInfo imgFile in imgFiles)
-        //    {                
-        //        sequence.Add(ImageSourceHelper.GetImageSource(imgFile.FullName));
-        //    }
-
-        //    return sequence;
-        //}
-
+        private static List<BitmapSource> GetDefaultInitializeSequence()
+        {            
+            return GetBitmapSourceList(FileHelper.BoulderButtonNormalImgSequenceDirectory());
+        }
+ 
         #endregion
     }
 }

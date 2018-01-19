@@ -25,7 +25,7 @@ x64/
 x86/
 bld/
 # https://stackoverflow.com/questions/8176102/gitignore-ignoring-bin-but-including-bin-refresh
-[Bb]in/
+[Bb]in/*
 ![Bb]in/AppFiles/
 [Oo]bj/
 [Ll]og/
@@ -324,3 +324,4 @@ JustClimbTrial/Helpers/FileHelper.cs
 JustClimbTrial/Properties/Settings.Designer.cs
 JustClimbTrial/Properties/Settings.settings
 
+*.mp4
