@@ -132,3 +132,4 @@ namespace JustClimbTrial.Helpers
             IsActive = false;
         }
     }
+}

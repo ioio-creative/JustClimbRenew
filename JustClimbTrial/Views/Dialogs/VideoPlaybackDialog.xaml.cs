@@ -17,9 +17,29 @@ namespace JustClimbTrial.Views.Dialogs
         public string TmpVideoFilePath { get; set; }
         public bool IsConfirmSaveVideo { get; set; }
 
-        public string RouteId => throw new NotImplementedException();
-        public ClimbMode RouteClimbMode => throw new NotImplementedException();
-        public bool IsRouteContainDemoVideo => throw new NotImplementedException();
+        public string RouteId
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ClimbMode RouteClimbMode
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool IsRouteContainDemoVideo
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         #endregion
 

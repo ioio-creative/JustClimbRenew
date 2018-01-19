@@ -4,6 +4,7 @@ using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using Microsoft.Kinect;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -364,7 +365,7 @@ namespace JustClimbTrial.ViewModels
             BCanvas.AddChild(BoulderImage);
 
             BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, true);
-            BoulderButtonSequence.LoadSequenceFolder();
+            BoulderButtonSequence.Load();
         }
 
         public void LoadStartRockInitialSeq()

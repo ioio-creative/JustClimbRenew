@@ -94,8 +94,6 @@ namespace JustClimbTrial.Kinect
         public static IEnumerable<JointType> LegJoints = LLegJoints.Union(RLegJoints);   
         public static IEnumerable<JointType> LimbJoints = HandJoints.Union(LLegJoints);
 
-        #region Body Draw
-
 
         #region Skeleton with Body.Joint<CameraSpacePoints>
 
@@ -309,6 +307,7 @@ namespace JustClimbTrial.Kinect
 
 
         #region Image Functions
+
         ///<summary>
         ///recieves color pixel data in byte[] and frame dimensions, returns BitmapSource
         /// </summary>
@@ -554,6 +553,9 @@ namespace JustClimbTrial.Kinect
             }
         }
 
+        #endregion
+
+
         #region Export Color Frame to IMG file
 
         public static async void EncodeBitmapSrcToPNGFile(BitmapSource colorImgSrc, int frameCounter)
@@ -587,10 +589,6 @@ namespace JustClimbTrial.Kinect
             }
 
         }
-
-        #endregion
-
-
 
         #endregion
 
@@ -675,6 +673,7 @@ namespace JustClimbTrial.Kinect
         {            
             return (float)Math.Sqrt( Math.Pow((A.X-B.X),2) + Math.Pow((A.Y - B.Y), 2) + Math.Pow((A.Z - B.Z), 2) );
         }
+        
         #endregion
     }
 }

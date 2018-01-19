@@ -28,6 +28,9 @@ namespace JustClimbTrial.Helpers
     /// </summary>
     public class ImageSequenceHelper
     {
+        public static List<BitmapSource> DefaultInitializeSequence = GetDefaultInitializeSequence();
+
+
         //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
 
         public bool ToLoop = true;
@@ -37,6 +40,7 @@ namespace JustClimbTrial.Helpers
 
         private List<BitmapSource> images;
         //private List<ImageSource> images;
+
 
         private DispatcherTimer updateImageTimer;
 
@@ -57,19 +61,15 @@ namespace JustClimbTrial.Helpers
         {
             this.updateImageTimer.Stop();
 
-            //this.images = images;
+            this.images = images;
 
             this.currentIndex = 0;
             this.LoadCurrentIndex();
         }
 
-        public void LoadSequenceFolder()
+        public void Load()
         {
-            //TO BE DONE: Add Argument To Load Different Sequence Folders 
-            this.updateImageTimer.Stop();
-            images = GetDefaultInitializeSequence();
-            this.currentIndex = 0;
-            this.LoadCurrentIndex();
+            Load(DefaultInitializeSequence);
         }
 
         private void LoadCurrentIndex()
@@ -115,7 +115,7 @@ namespace JustClimbTrial.Helpers
 
         #region Sequence BitmapSource List
 
-        private List<BitmapSource> GetDefaultInitializeSequence()
+        public static List<BitmapSource> GetDefaultInitializeSequence()
         {
             List<BitmapSource> sequence = new List<BitmapSource>();
 
