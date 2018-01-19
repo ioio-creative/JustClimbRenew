@@ -36,29 +36,52 @@ namespace JustClimbTrial.Helpers
 
 
         //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
+        private List<BitmapSource>[] sequencePlaylist;
+        private bool isLastFolderToLoop = false;
+
 
         public bool ToLoop = true;
 
+        private int currentFolder;
         private int currentIndex;
         private Image image;
 
         private List<BitmapSource> images;
 
-
         private DispatcherTimer updateImageTimer;
 
         private const string ImgExtenstion = ".png";
 
+        private event EventHandler<SeqFolderEndedEventArgs> SequenceFolderEnded;
+        private class SeqFolderEndedEventArgs : EventArgs
+        {
+            public bool loopFolder;
+
+            public SeqFolderEndedEventArgs(bool _loopFolder)
+            {
+                loopFolder = _loopFolder;
+            }
+        }
 
         public ImageSequenceHelper(Image image, bool loop = false, int fps = 25)
         {
             this.image = image;
             this.updateImageTimer = new DispatcherTimer(DispatcherPriority.Render);
             this.updateImageTimer.Interval = TimeSpan.FromMilliseconds(1000/fps);
-            this.updateImageTimer.Tick += new EventHandler(this.updateImageTimer_Tick);
+            this.updateImageTimer.Tick += new EventHandler(this.UpdateImageTimer_Tick);
             ToLoop = loop;
         }
 
+        public void SetSequences(bool loop, params List<BitmapSource>[] imgFolders)
+        {
+            sequencePlaylist = imgFolders;
+            isLastFolderToLoop = loop;
+
+            currentFolder = 0;
+            images = sequencePlaylist[currentFolder++];
+            SequenceFolderEnded += SequenceFolderEndedHandler;                          
+           
+        }
 
         public void Load(List<BitmapSource> images)
         {
@@ -68,6 +91,7 @@ namespace JustClimbTrial.Helpers
 
             this.currentIndex = 0;
             this.LoadCurrentIndex();
+          
         }
 
         public void Load()
@@ -95,7 +119,7 @@ namespace JustClimbTrial.Helpers
             this.updateImageTimer.Stop();
         }
 
-        private void updateImageTimer_Tick(object sender, EventArgs e)
+        private void UpdateImageTimer_Tick(object sender, EventArgs e)
         {
             if (this.currentIndex == this.images.Count)
             {
@@ -106,13 +130,27 @@ namespace JustClimbTrial.Helpers
                 else
                 {
                     Stop();
-                }                
+                }
+                SequenceFolderEnded?.Invoke(sender, new SeqFolderEndedEventArgs(isLastFolderToLoop) );
             }
 
             if (this.images != null)
             {
                 this.LoadCurrentIndex();
             }
+        }
+
+        private void SequenceFolderEndedHandler(object sender, SeqFolderEndedEventArgs e)
+        {
+            Stop();
+
+            ToLoop = false;
+            images = sequencePlaylist[currentFolder++];
+            if (currentFolder == sequencePlaylist.Length)
+            {
+                ToLoop = e.loopFolder;
+            }
+            Play();
         }
 
 
