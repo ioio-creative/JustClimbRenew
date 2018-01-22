@@ -22,21 +22,21 @@ namespace JustClimbTrial.Helpers
     {
         #region preloaded sequences
 
-        public static List<BitmapSource> DefaultInitialSequence = GetBitmapSourceList(FileHelper.BoulderButtonNormalImgSequenceDirectory());
-        public static List<BitmapSource> ShowSequence = GetBitmapSourceList(FileHelper.BoulderButtonShowImgSequenceDirectory());
-        public static List<BitmapSource> FeedbackSequence = GetBitmapSourceList(FileHelper.BoulderButtonFeedbackImgSequenceDirectory());
-        public static List<BitmapSource> ShinePopSequence = GetBitmapSourceList(FileHelper.BoulderButtonShinePopImgSequenceDirectory());
-        public static List<BitmapSource> ShineLoopSequence = GetBitmapSourceList(FileHelper.BoulderButtonShineLoopImgSequenceDirectory());
-        public static List<BitmapSource> ShineFeedbackPopSequence = GetBitmapSourceList(FileHelper.BoulderButtonShineFeedbackPopImgSequenceDirectory());
-        public static List<BitmapSource> ShineFeedbackLoopSequence = GetBitmapSourceList(FileHelper.BoulderButtonShineFeedbackLoopImgSequenceDirectory());
+        public static BitmapSource[] DefaultInitialSequence = GetBitmapSourceArray(FileHelper.BoulderButtonNormalImgSequenceDirectory());
+        public static BitmapSource[] ShowSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShowImgSequenceDirectory());
+        public static BitmapSource[] FeedbackSequence = GetBitmapSourceArray(FileHelper.BoulderButtonFeedbackImgSequenceDirectory());
+        public static BitmapSource[] ShinePopSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShinePopImgSequenceDirectory());
+        public static BitmapSource[] ShineLoopSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShineLoopImgSequenceDirectory());
+        public static BitmapSource[] ShineFeedbackPopSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShineFeedbackPopImgSequenceDirectory());
+        public static BitmapSource[] ShineFeedbackLoopSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShineFeedbackLoopImgSequenceDirectory());
 
-        public static List<BitmapSource> CombinedList = ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToList();
+        public static BitmapSource[] CombinedList = ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToArray();
 
         #endregion
 
 
         //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
-        private List<BitmapSource>[] sequencePlaylist;
+        private BitmapSource[][] sequencePlaylist;
         private bool isLastFolderToLoop = false;
 
 
@@ -46,7 +46,7 @@ namespace JustClimbTrial.Helpers
         private int currentImgIdxInFolder;
         private Image image;
 
-        private List<BitmapSource> imagesInFolder;
+        private BitmapSource[] imagesInFolder;
 
         private DispatcherTimer updateImageTimer;
 
@@ -72,13 +72,13 @@ namespace JustClimbTrial.Helpers
             isCurrentFolderToLoop = loop;
         }
 
-        public void SetAndPlaySequences(bool isLastFolderLoop, params List<BitmapSource>[] imgFolders)
+        public void SetAndPlaySequences(bool isLastFolderLoop, params BitmapSource[][] imgFolders)
         {
             SetSequences(isLastFolderLoop, imgFolders);
             Play();
         }
 
-        public void SetSequences(bool isLastFolderLoop, params List<BitmapSource>[] imgFolders)
+        public void SetSequences(bool isLastFolderLoop, params BitmapSource[][] imgFolders)
         {
             sequencePlaylist = imgFolders;
             isLastFolderToLoop = isLastFolderLoop;
@@ -88,15 +88,14 @@ namespace JustClimbTrial.Helpers
             SequenceFolderEnded += SequenceFolderEndedHandler;                                     
         }
 
-        public void Load(List<BitmapSource> images)
+        public void Load(BitmapSource[] images)
         {
             this.updateImageTimer.Stop();
 
             this.imagesInFolder = images;
 
             this.currentImgIdxInFolder = 0;
-            this.LoadCurrentIndex();
-          
+            this.LoadCurrentIndex();          
         }
 
         public void Load()
@@ -106,7 +105,7 @@ namespace JustClimbTrial.Helpers
 
         private void LoadCurrentIndex()
         {
-            if (((this.imagesInFolder != null) && (this.currentImgIdxInFolder < this.imagesInFolder.Count)) && (this.currentImgIdxInFolder >= 0))
+            if (((this.imagesInFolder != null) && (this.currentImgIdxInFolder < this.imagesInFolder.Length)) && (this.currentImgIdxInFolder >= 0))
             {
                 image.Source = this.imagesInFolder[this.currentImgIdxInFolder];
                 currentImgIdxInFolder++;
@@ -129,7 +128,7 @@ namespace JustClimbTrial.Helpers
 
         private void UpdateImageTimer_Tick(object sender, EventArgs e)
         {
-            if (this.currentImgIdxInFolder == this.imagesInFolder.Count)
+            if (this.currentImgIdxInFolder == this.imagesInFolder.Length)
             {
                 if (isCurrentFolderToLoop)
                 {
@@ -178,7 +177,7 @@ namespace JustClimbTrial.Helpers
         #region Sequence BitmapSource List
 
         // imgExt e.g. ".mp4"
-        private static List<BitmapSource> GetBitmapSourceList(string directoryPath, string imgExt = DefaultImgExtension)
+        private static BitmapSource[] GetBitmapSourceArray(string directoryPath, string imgExt = DefaultImgExtension)
         {
             List<BitmapSource> sequence = new List<BitmapSource>();
 
@@ -192,7 +191,7 @@ namespace JustClimbTrial.Helpers
                 sequence.Add(frameSource);
             }
 
-            return sequence;
+            return sequence.ToArray();
         }
         
         #endregion
