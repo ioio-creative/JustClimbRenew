@@ -1,0 +1,57 @@
+﻿<Page x:Class="JustClimbTrial.Views.Pages.WallAndFloor"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
+      xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="WallAndFloor"
+      WindowTitle="Just Climb - Wall And Floor"
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="6*" />
+        </Grid.RowDefinitions>
+
+        <!-- row 0 -->
+        <userControl:HeaderRowNavigation 
+            x:Name="navHead"
+            Grid.Row="0"
+            HeaderRowTitle="Boulder - Route Select" />
+        <!-- end of row 0 -->
+
+        <!-- row 1 -->
+        <!-- grid 1 -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Viewbox Name="viewBox" Grid.Column="0" RenderTransformOrigin="0.5, 0.5">
+                <Grid>
+                    <Image Name="cameraIMG" />
+                    <Canvas x:Name="canvas" Background="Transparent" MouseDown="canvas_MouseDown" 
+                            Width="{Binding ActualWidth, ElementName=cameraIMG, Mode=OneWay}" 
+                            Height="{Binding ActualHeight, ElementName=cameraIMG, Mode=OneWay}" />
+                </Grid>
+                <Viewbox.RenderTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </Viewbox.RenderTransform>
+            </Viewbox>
+
+            <StackPanel Grid.Column="1">
+                <Button Name="ConfigWallBtn" Content="Configure Wall" Click="ConfigWallBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                <Button Name="ConfigFloorBtn" Content="Configure Floor" Click="ConfigFloorBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                <Button Name="UndoBtn" Content="Undo" Click="UndoBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                <Button Name="ConfirmBtn" Content="Confirm" Click="ConfirmBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+            </StackPanel>
+        </Grid>
+        <!-- end of grid 1 -->
+        <!-- end of row 1 -->
+    </Grid>
+</Page>

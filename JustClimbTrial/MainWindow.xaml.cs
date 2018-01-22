@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
+using JustClimbTrial.Views.Pages;
 using JustClimbTrial.Views.Windows;
 using System;
 using System.IO;
@@ -18,6 +19,7 @@ namespace JustClimbTrial
     {
         //in Debug Mode we display the live camera image from Kinect at all times
         private readonly bool debug = AppGlobal.DEBUG;
+        private readonly bool wallAndFloor = AppGlobal.WAF;
 
         public KinectManager KinectManagerClient;
 
@@ -54,6 +56,12 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (wallAndFloor)
+            {
+                WallAndFloor wAndF = new WallAndFloor();
+                Navigate(wAndF);
+            }
+            
             //by default play ScreenSaver.mp4 in Playground Window
             playgroundMedia = playgroundWindow.PlaygroundMedia;
 

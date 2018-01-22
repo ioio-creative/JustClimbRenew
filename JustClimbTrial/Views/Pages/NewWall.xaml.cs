@@ -251,7 +251,7 @@ namespace JustClimbTrial.Views.Pages
             InitialiseCommands();
         }
 
-        private void Page_Unloaded(object sender, EventArgs e)
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
     

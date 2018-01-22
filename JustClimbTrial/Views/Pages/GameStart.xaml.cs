@@ -7,6 +7,7 @@ using JustClimbTrial.Helpers;
 using JustClimbTrial.Interfaces;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
+using JustClimbTrial.Properties;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.Windows;
@@ -15,10 +16,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -126,15 +129,23 @@ namespace JustClimbTrial.Views.Pages
         private bool gameStarted = false;
 
         private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
-        private bool endHeld = false;
 
+        private bool gameOverFlag = false;
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
+        private Plane wallPlane;
+        private Plane floorPlane;
 
         #endregion
 
 
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
+            //Load Wall and Floor Planes to local variables
+            float[] planeParams = Settings.Default.WallPlaneStr.Split(',').Select(x => float.Parse(x)).ToArray();
+            wallPlane = new Plane(planeParams[0], planeParams[1], planeParams[2], planeParams[3]);
+            planeParams = Settings.Default.FloorPlaneStr.Split(',').Select(x => float.Parse(x)).ToArray();
+            floorPlane = new Plane(planeParams[0], planeParams[1], planeParams[2], planeParams[3]);
+
             routeId = aRouteId;
             climbMode = aClimbMode;
 
@@ -326,9 +337,7 @@ namespace JustClimbTrial.Views.Pages
 
                         startRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
                         startRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            ImageSequenceHelper.ShowSequence,  // 1
-                            ImageSequenceHelper.ShinePopSequence,  // 3
-                            ImageSequenceHelper.ShineLoopSequence  // 4
+                            ImageSequenceHelper.CombinedList
                         );
 
                         //endRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
@@ -379,6 +388,10 @@ namespace JustClimbTrial.Views.Pages
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
         {
+            //Microsoft.Kinect.Vector4 floorClipPlane = e.GetFloorClipPlane();
+
+            //floorPlane = new Plane(floorClipPlane.X, floorClipPlane.Y, floorClipPlane.Z, floorClipPlane.W);
+            
             //remove skeleton shape when DEBUG
             if (debug)
             {
@@ -403,6 +416,8 @@ namespace JustClimbTrial.Views.Pages
                     {
                         IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
                         skeletonBodies.Add(skeletonShapes);
+
+                        gameOverFlag = IsBodyGameOver(body);
                     }
 
                     IEnumerable<Joint> LHandJoints =
@@ -832,6 +847,30 @@ namespace JustClimbTrial.Views.Pages
         private bool AreBothJointGroupsOnRock(IEnumerable<Joint> groupA, IEnumerable<Joint> groupB, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {
             return (IsJointGroupOnRock(groupA, rockVM, threshold) && IsJointGroupOnRock(groupB, rockVM, threshold));
+        }
+
+        private bool IsBodyGameOver(Body body)
+        {
+            Joint bodyCenterJoint = body.Joints.Single(x => x.Value.JointType == JointType.SpineMid).Value;
+            Vector3 bodyCenterVec = new Vector3(bodyCenterJoint.Position.X, bodyCenterJoint.Position.Y, bodyCenterJoint.Position.Z);
+            float distanceFromWall = Plane.DotCoordinate(wallPlane, bodyCenterVec);
+
+            Console.WriteLine("DistanceFromWall = " + distanceFromWall);
+
+            //Joint LFootJoint = body.Joints.Single(x => x.Value.JointType == JointType.FootLeft).Value;
+            //Joint RFootJoint = body.Joints.Single(x => x.Value.JointType == JointType.FootRight).Value;
+            //Vector3 LFootVec = new Vector3(LFootJoint.Position.X, LFootJoint.Position.Y, LFootJoint.Position.Z);
+            //Vector3 RFootVec = new Vector3(RFootJoint.Position.X, RFootJoint.Position.Y, RFootJoint.Position.Z);
+
+            //float distanceFromFloor = Math.Min(Plane.DotCoordinate(wallPlane, LFootVec), Plane.DotCoordinate(wallPlane, RFootVec));
+
+            Joint headJoint = body.Joints.Single(x => x.Value.JointType == JointType.Head).Value;
+            Vector3 headVec = new Vector3(headJoint.Position.X, headJoint.Position.Y, headJoint.Position.Z);
+            double distanceFromFloor = Plane.DotCoordinate(floorPlane, headVec);
+
+            Console.WriteLine("DistanceFromFloor = " + distanceFromFloor);
+
+            return true;
         }
 
         #endregion

@@ -30,13 +30,20 @@ namespace JustClimbTrial.Helpers
         public static BitmapSource[] ShineFeedbackPopSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShineFeedbackPopImgSequenceDirectory());
         public static BitmapSource[] ShineFeedbackLoopSequence = GetBitmapSourceArray(FileHelper.BoulderButtonShineFeedbackLoopImgSequenceDirectory());
 
-        public static BitmapSource[] CombinedList = ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToArray();
+        public static BitmapSource[][] CombinedList = new BitmapSource[][]
+        {
+            ShowSequence,  // 1
+            ShinePopSequence,  // 3
+            ShineLoopSequence  // 4
+        };
 
-        #endregion
+        //public static BitmapSource[] CombinedList = ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToArray();
+
+    #endregion
 
 
-        //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
-        private BitmapSource[][] sequencePlaylist;
+    //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
+    private BitmapSource[][] sequencePlaylist;
         private bool isLastFolderToLoop = false;
 
 
@@ -72,13 +79,13 @@ namespace JustClimbTrial.Helpers
             isCurrentFolderToLoop = loop;
         }
 
-        public void SetAndPlaySequences(bool isLastFolderLoop, params BitmapSource[][] imgFolders)
+        public void SetAndPlaySequences(bool isLastFolderLoop, BitmapSource[][] imgFolders)
         {
             SetSequences(isLastFolderLoop, imgFolders);
             Play();
         }
 
-        public void SetSequences(bool isLastFolderLoop, params BitmapSource[][] imgFolders)
+        public void SetSequences(bool isLastFolderLoop, BitmapSource[][] imgFolders)
         {
             sequencePlaylist = imgFolders;
             isLastFolderToLoop = isLastFolderLoop;
@@ -178,20 +185,23 @@ namespace JustClimbTrial.Helpers
 
         // imgExt e.g. ".mp4"
         private static BitmapSource[] GetBitmapSourceArray(string directoryPath, string imgExt = DefaultImgExtension)
-        {
-            List<BitmapSource> sequence = new List<BitmapSource>();
-
+        {            
             IEnumerable<FileInfo> imgFiles =
                 FileHelperDLL.FileHelper.GetFilesInDirectoryByExtensions(directoryPath, imgExt);
+
+            BitmapSource[] sequence = new BitmapSource[imgFiles.Count()];
+            int sequenceCnt = 0;
 
             foreach (FileInfo imgFile in imgFiles)
             {
                 Uri fileUri = new Uri(imgFile.FullName);
                 BitmapSource frameSource = new BitmapImage(fileUri);
-                sequence.Add(frameSource);
+                sequence[sequenceCnt++] = frameSource;
+                //sequence.Add(frameSource);
             }
 
-            return sequence.ToArray();
+            //return sequence.ToArray();
+            return sequence;
         }
         
         #endregion

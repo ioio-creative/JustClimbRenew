@@ -52,7 +52,7 @@
       <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="IsDebugMode" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="GameplayStartVideoPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\Videos\Start.mp4</Value>
@@ -83,6 +83,15 @@
     </Setting>
     <Setting Name="BoulderButtonShineFeedbackLoopImgSequenceDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\6_Button_Shine_Feedback_Loop</Value>
+    </Setting>
+    <Setting Name="WandF" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WallPlaneStr" Type="System.String" Scope="User">
+      <Value Profile="(Default)">w1,w2,w3,D</Value>
+    </Setting>
+    <Setting Name="FloorPlaneStr" Type="System.String" Scope="User">
+      <Value Profile="(Default)">f1,f2,f3,D</Value>
     </Setting>
   </Settings>
 </SettingsFile>

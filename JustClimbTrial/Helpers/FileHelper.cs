@@ -11,6 +11,7 @@ namespace JustClimbTrial.Helpers
         private static string exeDirectory = AppGlobal.ExeDirectory;
         private static Settings settings = new Settings();
 
+
         // Path: exeLocation/VideoTempDirectory/RandomString.extension
         public static string VideoTempFileFullPath(EntityType entityType)
         {

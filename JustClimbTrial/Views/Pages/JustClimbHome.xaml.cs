@@ -7,6 +7,7 @@ using System.Windows.Media;
 using JustClimbTrial.Globals;
 using System.IO;
 using JustClimbTrial.Helpers;
+using JustClimbTrial.Properties;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -49,7 +50,7 @@ namespace JustClimbTrial.Views.Pages
             if (debug)
             {
                 mainWindowParent.SubscribeColorImgSrcToPlaygrd();
-            }
+            }            
         }
 
 

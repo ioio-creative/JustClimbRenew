@@ -71,15 +71,22 @@ namespace JustClimbTrial.Kinect
     public class BodyListArrEventArgs
     {
         private readonly IList<Body> kinectBodies;
+        private readonly Vector4 floorClipPlane;
 
-        public BodyListArrEventArgs(IList<Body> bodies)
+        public BodyListArrEventArgs(IList<Body> bodies, Vector4 aFloorClipPlane)
         {
             kinectBodies = bodies;
+            floorClipPlane = aFloorClipPlane;
         }
 
         public IList<Body> GetBodyList()
         {
             return kinectBodies;
+        }
+
+        public Vector4 GetFloorClipPlane()
+        {
+            return floorClipPlane;
         }
     }
 
@@ -221,7 +228,7 @@ namespace JustClimbTrial.Kinect
                         {
                             IList <Body> kinectBodies = new Body[bodyFrame.BodyFrameSource.BodyCount];
                             bodyFrame.GetAndRefreshBodyData(kinectBodies);
-                            BodyFrameArrived(sender, new BodyListArrEventArgs(kinectBodies));
+                            BodyFrameArrived(sender, new BodyListArrEventArgs(kinectBodies, bodyFrame.FloorClipPlane));
                         }
                     }
                 }

@@ -63,6 +63,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -117,6 +118,7 @@
     <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\ImageSourceHelper.cs" />
+    <Compile Include="Helpers\PlaneHelper.cs" />
     <Compile Include="Helpers\RockTimerHelper.cs" />
     <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
@@ -179,6 +181,9 @@
     </Compile>
     <Compile Include="Views\Pages\VideoRecord.xaml.cs">
       <DependentUpon>VideoRecord.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\WallAndFloor.xaml.cs">
+      <DependentUpon>WallAndFloor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\BoulderRockStatus.xaml.cs">
       <DependentUpon>BoulderRockStatus.xaml</DependentUpon>
@@ -245,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Pages\VideoRecord.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\WallAndFloor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

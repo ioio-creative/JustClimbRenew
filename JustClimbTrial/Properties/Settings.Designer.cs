@@ -12,7 +12,7 @@ namespace JustClimbTrial.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -145,7 +145,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool IsDebugMode {
             get {
                 return ((bool)(this["IsDebugMode"]));
@@ -239,6 +239,39 @@ namespace JustClimbTrial.Properties {
         public string BoulderButtonShineFeedbackLoopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShineFeedbackLoopImgSequenceDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WandF {
+            get {
+                return ((bool)(this["WandF"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("w1,w2,w3,D")]
+        public string WallPlaneStr {
+            get {
+                return ((string)(this["WallPlaneStr"]));
+            }
+            set {
+                this["WallPlaneStr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("f1,f2,f3,D")]
+        public string FloorPlaneStr {
+            get {
+                return ((string)(this["FloorPlaneStr"]));
+            }
+            set {
+                this["FloorPlaneStr"] = value;
             }
         }
     }
