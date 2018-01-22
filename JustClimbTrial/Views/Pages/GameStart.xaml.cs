@@ -264,6 +264,8 @@ namespace JustClimbTrial.Views.Pages
                 //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
             }
 
+            playgroundWindow = mainWindowClient.PlaygroundWindow;
+            playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
             
             navHead.PropertyChanged += OnNavHeadIsRecordDemoChanged;
@@ -316,33 +318,41 @@ namespace JustClimbTrial.Views.Pages
                     }
                     else
                     {
-                        startRockOnRoute.DrawRockImageWrtStatus();
-                        endRockOnRoute.DrawRockImageWrtStatus();
+                        //startRockOnRoute.DrawRockImageWrtStatus();
+                        //startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                        //endRockOnRoute.DrawRockImageWrtStatus();
+                        //endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                        startRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
+                        startRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
+                            ImageSequenceHelper.ShowSequence,  // 1
+                            ImageSequenceHelper.ShinePopSequence,  // 3
+                            ImageSequenceHelper.ShineLoopSequence  // 4
+                        );
+
+                        //endRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
+                        //endRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(false,
+                        //    ImageSequenceHelper.ShowSequence);  // 1
+
                         foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                         {
-                            rockOnBoulderRoute.DrawRockImageWrtStatus();
-                            rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
+                            //rockOnBoulderRoute.DrawRockImageWrtStatus();
+                            //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                            //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
+                            //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
+                            //    ImageSequenceHelper.ShowSequence);  // 1
 
                             interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
-                            //TO BE CHANGED ---- ANIMATION
-
                         }
-                        startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
-                        endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
-
-                        // inter & end stay in last frame
-
-                        // start play shineA sequence
-                        // shineA contains 2 subsequences loop & nor loop
                     }
                     break;
             }
 
             await gameplayVideoRecClient.WaitingForAllBufferFramesSavedAsync();
 
-            playgroundWindow = mainWindowClient.PlaygroundWindow;
-            playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundMedia.Stop();
             playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
             playgroundMedia.Play();

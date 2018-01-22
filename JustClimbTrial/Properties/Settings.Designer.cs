@@ -145,7 +145,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsDebugMode {
             get {
                 return ((bool)(this["IsDebugMode"]));
@@ -185,6 +185,60 @@ namespace JustClimbTrial.Properties {
         public string GameplayReadyVideoPath {
             get {
                 return ((string)(this["GameplayReadyVideoPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\1_Button_Show")]
+        public string BoulderButtonShowImgSequenceDirectory {
+            get {
+                return ((string)(this["BoulderButtonShowImgSequenceDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\2_Button_Feedback")]
+        public string BoulderButtonFeedbackImgSequenceDirectory {
+            get {
+                return ((string)(this["BoulderButtonFeedbackImgSequenceDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\3_Button_Shine_Pop")]
+        public string BoulderButtonShinePopImgSequenceDirectory {
+            get {
+                return ((string)(this["BoulderButtonShinePopImgSequenceDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\4_Button_Shine_Loop")]
+        public string BoulderButtonShineLoopImgSequenceDirectory {
+            get {
+                return ((string)(this["BoulderButtonShineLoopImgSequenceDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\5_Button_Shine_Feedback_Pop")]
+        public string BoulderButtonShineFeedbackPopImgSequenceDirectory {
+            get {
+                return ((string)(this["BoulderButtonShineFeedbackPopImgSequenceDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\6_Button_Shine_Feedback_Loop")]
+        public string BoulderButtonShineFeedbackLoopImgSequenceDirectory {
+            get {
+                return ((string)(this["BoulderButtonShineFeedbackLoopImgSequenceDirectory"]));
             }
         }
     }

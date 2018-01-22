@@ -75,6 +75,42 @@ namespace JustClimbTrial.Helpers
             return Path.Combine(exeDirectory, settings.BoulderButtonNormalImgSequenceDirectory);
         }
 
+        // Path: exeLocation/VideoDirectory/BoulderButtonShowImgSequenceDirectory/
+        public static string BoulderButtonShowImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.BoulderButtonShowImgSequenceDirectory);
+        }
+
+        // Path: exeLocation/VideoDirectory/BoulderButtonFeedbackImgSequenceDirectory/
+        public static string BoulderButtonFeedbackImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.BoulderButtonFeedbackImgSequenceDirectory);
+        }
+
+        // Path: exeLocation/VideoDirectory/BoulderButtonShinePopImgSequenceDirectory/
+        public static string BoulderButtonShinePopImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.BoulderButtonShinePopImgSequenceDirectory);
+        }
+
+        // Path: exeLocation/VideoDirectory/BoulderButtonShineLoopImgSequenceDirectory/
+        public static string BoulderButtonShineLoopImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.BoulderButtonShineLoopImgSequenceDirectory);
+        }
+
+        // Path: exeLocation/VideoDirectory/BoulderButtonShineFeedbackPopImgSequenceDirectory/
+        public static string BoulderButtonShineFeedbackPopImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.BoulderButtonShineFeedbackPopImgSequenceDirectory);
+        }
+
+        // Path: exeLocation/VideoDirectory/BoulderButtonShineFeedbackLoopImgSequenceDirectory/
+        public static string BoulderButtonShineFeedbackLoopImgSequenceDirectory()
+        {
+            return Path.Combine(exeDirectory, settings.BoulderButtonShineFeedbackLoopImgSequenceDirectory);
+        }
+
         // Path: exeLocation/WallLogDirectory/
         public static string WallLogFolderPath()
         {
