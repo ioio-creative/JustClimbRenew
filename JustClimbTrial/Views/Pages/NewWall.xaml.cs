@@ -218,7 +218,7 @@ namespace JustClimbTrial.Views.Pages
 
             kinectManagerClient = myMainWindowParent.KinectManagerClient;
             if (kinectManagerClient.kinectSensor != null)
-            {
+            {                
                 kinectManagerClient.multiSourceReader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
 
                 colorWidth = KinectExtensions.FrameDimensions[SpaceMode.Color].Item1;
@@ -233,7 +233,8 @@ namespace JustClimbTrial.Views.Pages
                 bitmap = new WriteableBitmap((int)depthWidth, (int)depthHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
 
                 // Calculate the WriteableBitmap back buffer size
-                bitmapBackBufferSize = (uint)((bitmap.BackBufferStride * (bitmap.PixelHeight - 1)) + (bitmap.PixelWidth * bytesPerPixel));
+                bitmapBackBufferSize = (uint)((bitmap.BackBufferStride * (bitmap.PixelHeight - 1)) + (bitmap.PixelWidth * bytesPerPixel)); 
+                
             }
             else
             {
@@ -254,13 +255,8 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
-    
-            if (kinectManagerClient.multiSourceReader != null)
-            {
-                // MultiSourceFrameReder is IDisposable
-                kinectManagerClient.multiSourceReader.Dispose();
-                kinectManagerClient.multiSourceReader = null;
-            }
+
+            kinectManagerClient.multiSourceFrame = null;
         }        
        
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)

@@ -127,21 +127,26 @@ namespace JustClimbTrial.Kinect
             bool isSuccess = false;
 
             // activate sensor
-            if (kinectSensor != null)
+            if (kinectSensor != null )
             {
-                kinectSensor.Open();
+                if (!kinectSensor.IsOpen)
+                {
+                    kinectSensor.Open(); 
+                }
 
-                multiSourceReader = kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
-                Debug.WriteLine("Kinect activated!");
-                //multiSourceReader = mSrcReader;
+                if (multiSourceReader == null)
+                {
+                    multiSourceReader = kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
+                    Debug.WriteLine("Kinect activated!");
+                    //multiSourceReader = mSrcReader;
 
-                multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;
-
+                    multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;
+                    
+                }
                 isSuccess = true;
-            }
+            }                 
             else
-            {
-                isSuccess = false;
+            {              
                 Debug.WriteLine("Kinect not available!");
             }
 
@@ -150,18 +155,18 @@ namespace JustClimbTrial.Kinect
 
         public void CloseKinect()
         {
-            //if (multiSourceReader != null)
-            //{
-            //    // MultiSourceFrameReder is IDisposable
-            //    multiSourceReader.Dispose();
-            //    multiSourceReader = null;
-            //}
+            if (multiSourceReader != null)
+            {
+                // MultiSourceFrameReder is IDisposable
+                multiSourceReader.Dispose();
+                multiSourceReader = null;
+            }
 
-            //if (kinectSensor != null)
-            //{
-            //    kinectSensor.Close();
-            //    kinectSensor = null;
-            //}
+            if (kinectSensor != null)
+            {
+                kinectSensor.Close();
+                kinectSensor = null;
+            }
         }
 
         public void Manager_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)

@@ -97,8 +97,14 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
         {
-            KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;
+            KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;          
             playgroundWindow.Close();
+            if (KinectManagerClient.multiSourceReader != null)
+            {
+                // MultiSourceFrameReder is IDisposable
+                KinectManagerClient.multiSourceReader.Dispose();
+                KinectManagerClient.multiSourceReader = null;
+            }
             KinectManagerClient.CloseKinect();
         }
 

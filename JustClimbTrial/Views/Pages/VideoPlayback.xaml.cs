@@ -222,7 +222,7 @@ namespace JustClimbTrial.Views.Pages
             
         }
 
-        private void mediaPlayback_MediaClosed(object sender, RoutedEventArgs e)
+        private void mediaPlayback_MediaEnded(object sender, RoutedEventArgs e)
         {
             mediaPlayback.Stop();
         }

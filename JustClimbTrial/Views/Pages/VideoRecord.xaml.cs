@@ -97,7 +97,7 @@ namespace JustClimbTrial.Views.Pages
         private void InitializeCommands()
         {
             btnStartRecordVideo.Command = new RelayCommand(
-                StartRecordVideo, CanStartRecordVideo);
+                StartRecordVideoAsync, CanStartRecordVideo);
             btnStopRecordVideo.Command = new RelayCommand(
                 StopRecordVideo, CanStopRecordVideo);
             btnViewVideo.Command = new RelayCommand(
@@ -124,9 +124,9 @@ namespace JustClimbTrial.Views.Pages
             return !videoHelper.IsRecording && videoHelper.IsAllBufferFramesSaved;
         }
 
-        private void StartRecordVideo(object parameter = null)
+        private async void StartRecordVideoAsync(object parameter = null)
         {
-            videoHelper.StartRecording();
+            await videoHelper.StartRecordingAsync();
             timerToShowRecordTime.Start();
             recordStartTime = DateTime.Now;
         }

@@ -146,5 +146,10 @@ namespace JustClimbTrial.Helpers
         {
             return Path.Combine(exeDirectory, settings.GameplayFinishVideoPath);
         }
+
+        public static string GameOverVideoPath()
+        {
+            return Path.Combine(exeDirectory, settings.GameOverVideoPath);
+        }
     }
 }

@@ -130,8 +130,8 @@ namespace JustClimbTrial.Views.Pages
 
         private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
 
-        private bool gameOverFlag = false;
-        private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1500) };
+
+        private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         private Plane wallPlane;
         private Plane floorPlane;
 
@@ -224,14 +224,7 @@ namespace JustClimbTrial.Views.Pages
         {            
             if (!gameplayVideoRecClient.IsRecording)
             {
-                if (gameplayVideoRecClient.StartRecording())
-                {
-                    UiHelper.NotifyUser("start recording");
-                }
-                else
-                {
-                    UiHelper.NotifyUser(VideoHelperEngagedErrMsg);
-                }
+                await gameplayVideoRecClient.StartRecordingAsync();                
             }
             else
             {
@@ -270,109 +263,113 @@ namespace JustClimbTrial.Views.Pages
 
             gameplayVideoRecClient = VideoHelper.Instance(kinectManagerClient);
 
-            if (debug)
+            if (kinectManagerClient.OpenKinect())
             {
-                //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
-            }
 
-            playgroundWindow = mainWindowClient.PlaygroundWindow;
-            playgroundMedia = playgroundWindow.PlaygroundMedia;
-            playgroundCanvas = playgroundWindow.PlaygroundCanvas;
-            
-            navHead.PropertyChanged += OnNavHeadIsRecordDemoChanged;
+                if (debug)
+                {
+                    //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
+                }
 
-            string headerRowTitleFormat = "{0} Route {1} - Video Playback";
+                playgroundWindow = mainWindowClient.PlaygroundWindow;
+                playgroundMedia = playgroundWindow.PlaygroundMedia;
+                playgroundCanvas = playgroundWindow.PlaygroundCanvas;
 
-            //methods to access rocks on route from database
-            switch (climbMode)
-            {
-                case ClimbMode.Training:
-                    navHead.HeaderRowTitle =
-                        string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
+                navHead.PropertyChanged += OnNavHeadIsRecordDemoChanged;
 
-                    rocksOnTrainingRoute = TrainingRouteAndRocksDataAccess.OrderedRocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper).ToArray();
-                    endRockOnRoute = rocksOnTrainingRoute.Last();
-                    trainingRouteLength = rocksOnTrainingRoute.Count();
+                string headerRowTitleFormat = "{0} Route {1} - Video Playback";
 
-                    if (debug)
-                    {
-                        foreach (var rockOnTrainingRoute in rocksOnTrainingRoute)
-                        {                            
-                            rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);                            
-                        }
-                    }
+                //methods to access rocks on route from database
+                switch (climbMode)
+                {
+                    case ClimbMode.Training:
+                        navHead.HeaderRowTitle =
+                            string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
 
-                    break;
-                case ClimbMode.Boulder:
-                default:
-                    navHead.HeaderRowTitle =
-                        string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
+                        rocksOnTrainingRoute = TrainingRouteAndRocksDataAccess.OrderedRocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper).ToArray();
+                        endRockOnRoute = rocksOnTrainingRoute.Last();
+                        trainingRouteLength = rocksOnTrainingRoute.Count();
 
-                    IEnumerable<RockOnRouteViewModel> allRocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
-                    interRocksOnBoulderRoute = allRocksOnBoulderRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Int).ToArray();
-                    startRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
-                    endRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
-
-                    interRocksOnRouteCamSP = new CameraSpacePoint[interRocksOnBoulderRoute.Count()];
-
-                    int i = 0;
-                    if (debug)
-                    {
-                        startRockOnRoute.DrawRockShapeWrtStatus();
-                        endRockOnRoute.DrawRockShapeWrtStatus();
-                        foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
+                        if (debug)
                         {
-                            rockOnBoulderRoute.DrawRockShapeWrtStatus();
-                            interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                            i++;
-                        }
-                    }
-                    else
-                    {
-                        //startRockOnRoute.DrawRockImageWrtStatus();
-                        //startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
-
-                        //endRockOnRoute.DrawRockImageWrtStatus();
-                        //endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
-
-                        startRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
-                        startRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            new BitmapSource[][]
+                            foreach (var rockOnTrainingRoute in rocksOnTrainingRoute)
                             {
+                                rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);
+                            }
+                        }
+
+                        break;
+                    case ClimbMode.Boulder:
+                    default:
+                        navHead.HeaderRowTitle =
+                            string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
+
+                        IEnumerable<RockOnRouteViewModel> allRocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
+                        interRocksOnBoulderRoute = allRocksOnBoulderRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Int).ToArray();
+                        startRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                        endRockOnRoute = allRocksOnBoulderRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+
+                        interRocksOnRouteCamSP = new CameraSpacePoint[interRocksOnBoulderRoute.Count()];
+
+                        int i = 0;
+                        if (debug)
+                        {
+                            startRockOnRoute.DrawRockShapeWrtStatus();
+                            endRockOnRoute.DrawRockShapeWrtStatus();
+                            foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
+                            {
+                                rockOnBoulderRoute.DrawRockShapeWrtStatus();
+                                interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            //startRockOnRoute.DrawRockImageWrtStatus();
+                            //startRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                            //endRockOnRoute.DrawRockImageWrtStatus();
+                            //endRockOnRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                            startRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
+                            startRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
+                                new BitmapSource[][]
+                                {
                                 ImageSequenceHelper.ShowSequence,  // 1
                                 ImageSequenceHelper.ShinePopSequence,  // 3
                                 //ImageSequenceHelper.ShineLoopSequence  // 4
                                 ImageSequenceHelper.ShineFeedbackLoopSequence
+                                }
+                            );
+
+                            endRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
+                            endRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
+                                new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
+
+                            foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
+                            {
+                                //rockOnBoulderRoute.DrawRockImageWrtStatus();
+                                //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
+
+                                //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
+                                //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
+                                //    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
+
+                                interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
+                                i++;
                             }
-                        );
-
-                        endRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
-                        endRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
-
-                        foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
-                        {
-                            //rockOnBoulderRoute.DrawRockImageWrtStatus();
-                            //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
-
-                            //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
-                            //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            //    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
-
-                            interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                            i++;
                         }
-                    }
-                    break;
+                        break;
+                }
+
+                await gameplayVideoRecClient.WaitingForAllBufferFramesSavedAsync();
+
+                playgroundMedia.Stop();
+                playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
+                playgroundMedia.Play();
+
+                kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
             }
-
-            await gameplayVideoRecClient.WaitingForAllBufferFramesSavedAsync();
-
-            playgroundMedia.Stop();
-            playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
-            playgroundMedia.Play();
-
-            kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
@@ -388,6 +385,7 @@ namespace JustClimbTrial.Views.Pages
 
             kinectManagerClient.BodyFrameArrived -= HandleBodyListArrived;
             navHead.PropertyChanged -= OnNavHeadIsRecordDemoChanged;
+            playgroundMedia.MediaEnded -= PlaygroundVideoEndedHandler;
             playgroundCanvas.Children.Clear();
             mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
@@ -413,6 +411,11 @@ namespace JustClimbTrial.Views.Pages
 
             IList<Body> bodies = e.GetBodyList();
 
+            if (gameStarted && !bodies.Where(x => x.TrackingId == playerBodyID).Any())
+            {
+                OnGameOver();
+            }
+
             foreach (var body in bodies)
             {
                 if (body != null && body.IsTracked)
@@ -421,25 +424,20 @@ namespace JustClimbTrial.Views.Pages
                     if (debug)
                     {
                         IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
-                        skeletonBodies.Add(skeletonShapes);
-
-                        gameOverFlag = IsBodyGameOver(body);
+                        skeletonBodies.Add(skeletonShapes);                       
                     }
+             
 
-                    IEnumerable<Joint> LHandJoints =
-                        body.Joints.Where(x => KinectExtensions.LHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
-                    IEnumerable<Joint> RHandJoints =
-                        body.Joints.Where(x => KinectExtensions.RHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
-
-                    switch (climbMode)
+                    if (!gameStarted)
                     {
-                        case ClimbMode.Training:
-                            TrainingGameplay(body, LHandJoints, RHandJoints);
-                            break;
-                        case ClimbMode.Boulder:
-                        default:
-                            BoulderGameplay(body, LHandJoints, RHandJoints);
-                            break;
+                        GameplayMainSwitch(body);
+                    }
+                    else
+                    {
+                        if (body.TrackingId == playerBodyID)
+                        {
+                            GameplayMainSwitch(body);
+                        }
                     }
                 }
 
@@ -467,23 +465,20 @@ namespace JustClimbTrial.Views.Pages
         {
             if (gameStarted)
             {
-                UiHelper.NotifyUser("Can't navigate away before the game is finished!");
+                UiHelper.NotifyUser("Can't leave page before the game is finished!");
                 e.Cancel = true;
             }
         }
 
-        private bool OnGameplayStart()
+        private async Task OnGameplayStartAsync()
         {
             // start video recording
-            bool isRecordingStarted = gameplayVideoRecClient.StartRecording();
+            await gameplayVideoRecClient.StartRecordingAsync();
 
-            if (isRecordingStarted)
-            {
-                playgroundMedia.Source = new Uri(FileHelper.GameplayStartVideoPath());
-                playgroundMedia.Play();
-            }
+            playgroundMedia.Source = new Uri(FileHelper.GameplayStartVideoPath());
+            playgroundMedia.Play();
 
-            return isRecordingStarted;
+            gameStarted = true;
         }
 
         private async Task OnGameplayFinishAsync()
@@ -491,18 +486,59 @@ namespace JustClimbTrial.Views.Pages
             gameStarted = false;
 
             playgroundMedia.Source = new Uri(FileHelper.GameplayFinishVideoPath());
+            playgroundMedia.MediaEnded += PlaygroundVideoEndedHandler;
             playgroundMedia.Play();
 
-            // stop video recording
-            gameplayVideoRecClient.StopRecording();
-
             await SaveVideoRecordedInDbAndLocallyAsync();
+
+
+        }
+
+        private void OnGameOver()
+        {
+            gameStarted = false;
+            playgroundCanvas.Children.Clear();
+
+            playgroundMedia.Source = new Uri(FileHelper.GameOverVideoPath());
+            playgroundMedia.MediaEnded += PlaygroundVideoEndedHandler;
+
+            playgroundMedia.Play();
+            
+        }
+
+        private void PlaygroundVideoEndedHandler(object sender, RoutedEventArgs e)
+        {
+            //This Function should only be subscribed when Gameover or Finish videos are loaded to playground
+            if (gameplayVideoRecClient.IsRecording)
+            {
+                // stop video recording
+                gameplayVideoRecClient.StopRecording(); 
+            }
+
+            NavigationService.Navigate(new Routes(climbMode));
         }
 
         #endregion
 
 
         #region game play logic
+        private void GameplayMainSwitch(Body body)
+        {
+            IEnumerable<Joint> LHandJoints =
+                        body.Joints.Where(x => KinectExtensions.LHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+            IEnumerable<Joint> RHandJoints =
+                body.Joints.Where(x => KinectExtensions.RHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+            switch (climbMode)
+            {
+                case ClimbMode.Training:
+                    TrainingGameplay(body, LHandJoints, RHandJoints);
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    BoulderGameplay(body, LHandJoints, RHandJoints);
+                    break;
+            }
+        }
 
         private void TrainingGameplay(Body body, IEnumerable<Joint> LHandJoints, 
             IEnumerable<Joint> RHandJoints)
@@ -511,6 +547,29 @@ namespace JustClimbTrial.Views.Pages
                         body.Joints.Where(x => KinectExtensions.HandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
             nextRockOnTrainRoute = rocksOnTrainingRoute.ElementAt(nextTrainRockIdx);
             RockTimerHelper nextRockTimer = nextRockOnTrainRoute.MyRockTimerHelper;
+
+            if (nextRockOnTrainRoute.TrainingSeq > 1)
+            {
+                //CHECK GAME OVER AT ALL TIMES AFTER GAME STARTED(Training Sequence > 1)              
+                if (IsBodyGameOver(body))
+                {
+                    gameOverTimer.Tick += (_sender, _e) =>
+                    {
+                        if (IsBodyGameOver(body))
+                        {
+                            gameOverTimer.Stop();
+
+                            OnGameOver();
+                        }
+                    };
+                    if (!gameOverTimer.IsEnabled)
+                    {
+                        gameOverTimer.Stop();
+                        gameOverTimer.Start();
+                    }
+                }
+            }
+
             Func<bool> trainingTargetReached;
             if (nextRockOnTrainRoute.TrainingSeq == 1)
             {
@@ -537,7 +596,7 @@ namespace JustClimbTrial.Views.Pages
 
                 if (!nextRockTimer.IsTickHandlerSubed)
                 {
-                    nextRockTimer.Tick += (_sender, _e) =>
+                    nextRockTimer.Tick += async (_sender, _e) =>
                     {
                         if (trainingTargetReached())
                         {
@@ -547,19 +606,18 @@ namespace JustClimbTrial.Views.Pages
                             {
                                 if (nextRockOnTrainRoute.TrainingSeq == 1)
                                 {
-                                    bool isRecordingStarted = OnGameplayStart();
+                                    await OnGameplayStartAsync();
 
-                                    if (isRecordingStarted)
-                                    {
-                                        //START ROCK REACHED VERIFIED
-                                        playerBodyID = body.TrackingId;
-                                        //Debug.WriteLine("Player Tracking ID: "+playerBodyID);
 
-                                        nextTrainRockIdx++;
-                                        nextRockTimer.Reset();
+                                    //START ROCK REACHED VERIFIED
+                                    playerBodyID = body.TrackingId;
+                                    //Debug.WriteLine("Player Tracking ID: "+playerBodyID);
 
-                                        //TO DO: StartRock Feedback Animation
-                                    }
+                                    nextTrainRockIdx++;
+                                    nextRockTimer.Reset();
+
+                                    //TO DO: StartRock Feedback Animation
+                                    
                                 }
                                 else if (nextRockOnTrainRoute.TrainingSeq == trainingRouteLength)
                                 {
@@ -662,7 +720,7 @@ namespace JustClimbTrial.Views.Pages
                     playgroundMedia.Stop();
 
                     RockTimerHelper startRockTimer = startRockOnRoute.MyRockTimerHelper;
-                    startRockTimer.Tick += (_sender, _e) =>
+                    startRockTimer.Tick += async (_sender, _e) =>
                     {
                         if (boulderTargetReached(startRockOnRoute))
                         {
@@ -676,15 +734,7 @@ namespace JustClimbTrial.Views.Pages
 
                                 startRockTimer.Stop();
 
-                                bool isRecordingStarted = OnGameplayStart();
-                                if (isRecordingStarted)
-                                {
-                                    gameStarted = true;
-                                }
-                                else
-                                {
-                                    UiHelper.NotifyUser(VideoHelperEngagedErrMsg);
-                                }
+                                await OnGameplayStartAsync();                                                              
 
                                 //TO DO: StartRock Feedback Animation                                
                             }
@@ -705,6 +755,25 @@ namespace JustClimbTrial.Views.Pages
             }
             else //gameStarted = true
             {
+                //CHECK GAME OVER AT ALL TIMES AFTER GAME STARTED              
+                if (IsBodyGameOver(body))
+                {
+                    gameOverTimer.Tick += (_sender, _e) =>
+                    {
+                        if (IsBodyGameOver(body))
+                        {
+                            gameOverTimer.Stop();
+
+                            OnGameOver();
+                        }
+                    };
+                    if (!gameOverTimer.IsEnabled)
+                    {
+                        gameOverTimer.Stop();
+                        gameOverTimer.Start();
+                    }
+                }
+                
                 //Progress: Game Started, waiting player to reach End Point
                 //CHECK END ROCK REACHED ALL THE TIME
                 if (boulderTargetReached(endRockOnRoute))
@@ -819,12 +888,12 @@ namespace JustClimbTrial.Views.Pages
                     }
                 } //CLOSE foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
             }
-        }
+        }       
 
         #endregion
 
 
-        #region determine overlap between Rock & Joint
+        #region determine overlap between Rock & Joint / gameover
 
         private bool IsJointOnRock(Joint joint, RockViewModel rockVM, float threshold = DefaultDistanceThreshold)
         {
@@ -855,28 +924,28 @@ namespace JustClimbTrial.Views.Pages
             return (IsJointGroupOnRock(groupA, rockVM, threshold) && IsJointGroupOnRock(groupB, rockVM, threshold));
         }
 
-        private bool IsBodyGameOver(Body body)
+        private bool IsBodyGameOver(Body body, float wallThr = 2f, float floorThr = 1f)//Default thresholds are in Meters
         {
+            
             Joint bodyCenterJoint = body.Joints[JointType.SpineMid];
             Vector3 bodyCenterVec = new Vector3(bodyCenterJoint.Position.X, bodyCenterJoint.Position.Y, bodyCenterJoint.Position.Z);
-            float distanceFromWall = Plane.DotCoordinate(wallPlane, bodyCenterVec);
+            float distanceFromWall = Math.Abs(Plane.DotCoordinate(wallPlane, bodyCenterVec));
 
-            Console.WriteLine("DistanceFromWall = " + distanceFromWall);
+            //Console.WriteLine("DistanceFromWall = " + distanceFromWall);
 
-            //Joint LFootJoint = body.Joints[FootLeft];
-            //Joint RFootJoint = body.Joints[JointType.FootRight];
-            //Vector3 LFootVec = new Vector3(LFootJoint.Position.X, LFootJoint.Position.Y, LFootJoint.Position.Z);
-            //Vector3 RFootVec = new Vector3(RFootJoint.Position.X, RFootJoint.Position.Y, RFootJoint.Position.Z);
+            //Joint headJoint = body.Joints[JointType.Head];
+            //Vector3 headVec = new Vector3(headJoint.Position.X, headJoint.Position.Y, headJoint.Position.Z);
+            //double distanceFromFloor = Plane.DotCoordinate(floorPlane, headVec);
 
-            //float distanceFromFloor = Math.Min(Plane.DotCoordinate(wallPlane, LFootVec), Plane.DotCoordinate(wallPlane, RFootVec));
+            Joint LFootJoint = body.Joints[JointType.FootLeft];
+            Joint RFootJoint = body.Joints[JointType.FootRight];
+            Vector3 LFootVec = new Vector3(LFootJoint.Position.X, LFootJoint.Position.Y, LFootJoint.Position.Z);
+            Vector3 RFootVec = new Vector3(RFootJoint.Position.X, RFootJoint.Position.Y, RFootJoint.Position.Z);
 
-            Joint headJoint = body.Joints[JointType.Head];
-            Vector3 headVec = new Vector3(headJoint.Position.X, headJoint.Position.Y, headJoint.Position.Z);
-            double distanceFromFloor = Plane.DotCoordinate(floorPlane, headVec);
+            float distanceFromFloor = Math.Min(Math.Abs(Plane.DotCoordinate(wallPlane, LFootVec)), Math.Abs(Plane.DotCoordinate(wallPlane, RFootVec)));
 
-            Console.WriteLine("DistanceFromFloor = " + distanceFromFloor);
-
-            return true;
+            return (distanceFromWall > wallThr);
+            //return (distanceFromWall > wallThr || distanceFromFloor < floorThr );
         }
 
         #endregion

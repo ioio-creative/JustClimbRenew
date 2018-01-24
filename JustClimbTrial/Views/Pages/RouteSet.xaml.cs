@@ -163,27 +163,30 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            parentMainWindow = this.Parent as MainWindow;
-
-            routeSetViewModel.LoadData();
-
-            rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, parentMainWindow.KinectManagerClient.ManagerCoorMapper);
-            bool isAnyRocksOnWall = rocksOnWallViewModel.
-                LoadAndDrawRocksOnWall(AppGlobal.WallID);
-            rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
-
-            // InitializeSaveRouteCommands() has to be called after initializing rocksOnWallViewModel
-            InitializeSaveRouteCommands();
-            SetUpBtnCommandsInRockStatusUserControls();
-
-            if (!isAnyRocksOnWall)
+            if ( (this.Parent as MainWindow).KinectManagerClient.OpenKinect())
             {
-                UiHelper.NotifyUser("No rocks registered with the wall!");
-            }
+                parentMainWindow = this.Parent as MainWindow;
 
-            if (debug)
-            {
-                parentMainWindow.SubscribeColorImgSrcToPlaygrd();
+                routeSetViewModel.LoadData();
+
+                rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, parentMainWindow.KinectManagerClient.ManagerCoorMapper);
+                bool isAnyRocksOnWall = rocksOnWallViewModel.
+                    LoadAndDrawRocksOnWall(AppGlobal.WallID);
+                rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
+
+                // InitializeSaveRouteCommands() has to be called after initializing rocksOnWallViewModel
+                InitializeSaveRouteCommands();
+                SetUpBtnCommandsInRockStatusUserControls();
+
+                if (!isAnyRocksOnWall)
+                {
+                    UiHelper.NotifyUser("No rocks registered with the wall!");
+                }
+
+                if (debug)
+                {
+                    parentMainWindow.SubscribeColorImgSrcToPlaygrd();
+                } 
             }
         }
 

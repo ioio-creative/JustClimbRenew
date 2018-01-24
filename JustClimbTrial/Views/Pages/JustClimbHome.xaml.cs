@@ -30,7 +30,7 @@ namespace JustClimbTrial.Views.Pages
         {
             ModeSelect modeSelectPage = new ModeSelect();
             this.NavigationService.Navigate(modeSelectPage);
-
+           
             //(this.Parent as MainWindow).KinectManagerClient.ColorImageSourceArrived -= (this.Parent as MainWindow).HandleColorImageSourceArrived;
         }
 
@@ -50,7 +50,8 @@ namespace JustClimbTrial.Views.Pages
             if (debug)
             {
                 mainWindowParent.SubscribeColorImgSrcToPlaygrd();
-            }            
+            }
+            
         }
 
 

@@ -203,21 +203,15 @@ namespace JustClimbTrial.Helpers
             }
         }
 
-        public bool StartRecording()
+        public async Task StartRecordingAsync()
         {
-            bool isRecordingStarted = false;
-
             // ensure all buffer images from previous recording processes are saved
-            // before starting new recording            
-            if (IsAllBufferFramesSaved)
-            {
-                kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
-                ClearBuffer();
-                StartQueue();
-                isRecordingStarted = true;
-            }
+            // before starting new recording
+            await WaitingForAllBufferFramesSavedAsync();
 
-            return isRecordingStarted;
+            kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
+            ClearBuffer();
+            StartQueue();
         }
 
         public void StopRecording()

@@ -75,18 +75,17 @@ namespace JustClimbTrial.Views.Pages
             //Settings settings = new Settings();
             //UiHelper.NotifyUser(settings.WallPlaneStr);
 
+            // pass this Page to the top row user control so it can use this Page's NavigationService
+            navHead.ParentPage = this;
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
+            
 
-            if (kinectManagerClient.multiSourceReader != null)
-            {
-                // MultiSourceFrameReder is IDisposable
-                kinectManagerClient.multiSourceReader.Dispose();
-                kinectManagerClient.multiSourceReader = null;
-            }
+            kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
+            kinectManagerClient.multiSourceFrame = null;
+            
         }
 
         private void ConfigWallBtn_Click(object sender, RoutedEventArgs e)
