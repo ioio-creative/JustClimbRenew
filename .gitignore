@@ -27,6 +27,7 @@ bld/
 # https://stackoverflow.com/questions/8176102/gitignore-ignoring-bin-but-including-bin-refresh
 [Bb]in/*
 ![Bb]in/AppFiles/
+[Bb]in/AppFiles/temp/*
 [Oo]bj/
 [Ll]og/
 
