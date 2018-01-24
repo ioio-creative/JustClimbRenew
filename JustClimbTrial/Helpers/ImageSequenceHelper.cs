@@ -34,10 +34,34 @@ namespace JustClimbTrial.Helpers
         {
             ShowSequence,  // 1
             ShinePopSequence,  // 3
-            ShineLoopSequence  // 4
+            //ShineLoopSequence  // 4
+            ShineFeedbackLoopSequence
         };
 
-        //public static BitmapSource[] CombinedList = ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToArray();
+        //public static BitmapSource[] CombinedList; //= ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToArray();
+
+        static ImageSequenceHelper()
+        {
+            //List<BitmapSource> list = new List<BitmapSource>();
+
+            //foreach (BitmapSource bms in ShowSequence)
+            //{
+            //    list.Add(bms);
+            //}
+
+            //foreach (BitmapSource bms in ShinePopSequence)
+            //{
+            //    list.Add(bms);
+            //}
+
+            ////foreach (BitmapSource bms in ShineLoopSequence)
+            ////{
+            ////    list.Add(bms);
+            ////}
+
+            //CombinedList = list.ToArray();
+        }
+
 
     #endregion
 
@@ -60,15 +84,7 @@ namespace JustClimbTrial.Helpers
         private const string DefaultImgExtension = ".png";
 
         private event EventHandler SequenceFolderEnded;
-        //private class SeqFolderEndedEventArgs : EventArgs
-        //{
-        //    public bool loopFolder;
 
-        //    public SeqFolderEndedEventArgs(bool _loopFolder)
-        //    {
-        //        loopFolder = _loopFolder;
-        //    }
-        //}
 
         public ImageSequenceHelper(Image image, bool loop = false, int fps = 25)
         {
@@ -174,7 +190,7 @@ namespace JustClimbTrial.Helpers
                 imagesInFolder = sequencePlaylist[currentFolder++];
 
                 isCurrentFolderToLoop = false;
-                Play();
+                Play();                
             }            
         }
 

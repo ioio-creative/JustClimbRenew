@@ -52,7 +52,7 @@
       <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="IsDebugMode" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="GameplayStartVideoPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\Videos\Start.mp4</Value>
@@ -88,10 +88,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="WallPlaneStr" Type="System.String" Scope="User">
-      <Value Profile="(Default)">w1,w2,w3,D</Value>
+      <Value Profile="(Default)">1,2,3,4</Value>
     </Setting>
     <Setting Name="FloorPlaneStr" Type="System.String" Scope="User">
-      <Value Profile="(Default)">f1,f2,f3,D</Value>
+      <Value Profile="(Default)">1,2,3,4</Value>
     </Setting>
   </Settings>
 </SettingsFile>

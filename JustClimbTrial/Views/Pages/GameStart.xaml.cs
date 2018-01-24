@@ -337,12 +337,18 @@ namespace JustClimbTrial.Views.Pages
 
                         startRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
                         startRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            ImageSequenceHelper.CombinedList
+                            new BitmapSource[][]
+                            {
+                                ImageSequenceHelper.ShowSequence,  // 1
+                                ImageSequenceHelper.ShinePopSequence,  // 3
+                                //ImageSequenceHelper.ShineLoopSequence  // 4
+                                ImageSequenceHelper.ShineFeedbackLoopSequence
+                            }
                         );
 
-                        //endRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
-                        //endRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(false,
-                        //    ImageSequenceHelper.ShowSequence);  // 1
+                        endRockOnRoute.MyRockViewModel.CreateBoulderImageSequence();
+                        endRockOnRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
+                            new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
 
                         foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                         {
@@ -351,7 +357,7 @@ namespace JustClimbTrial.Views.Pages
 
                             //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
                             //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            //    ImageSequenceHelper.ShowSequence);  // 1
+                            //    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
 
                             interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
@@ -851,20 +857,20 @@ namespace JustClimbTrial.Views.Pages
 
         private bool IsBodyGameOver(Body body)
         {
-            Joint bodyCenterJoint = body.Joints.Single(x => x.Value.JointType == JointType.SpineMid).Value;
+            Joint bodyCenterJoint = body.Joints[JointType.SpineMid];
             Vector3 bodyCenterVec = new Vector3(bodyCenterJoint.Position.X, bodyCenterJoint.Position.Y, bodyCenterJoint.Position.Z);
             float distanceFromWall = Plane.DotCoordinate(wallPlane, bodyCenterVec);
 
             Console.WriteLine("DistanceFromWall = " + distanceFromWall);
 
-            //Joint LFootJoint = body.Joints.Single(x => x.Value.JointType == JointType.FootLeft).Value;
-            //Joint RFootJoint = body.Joints.Single(x => x.Value.JointType == JointType.FootRight).Value;
+            //Joint LFootJoint = body.Joints[FootLeft];
+            //Joint RFootJoint = body.Joints[JointType.FootRight];
             //Vector3 LFootVec = new Vector3(LFootJoint.Position.X, LFootJoint.Position.Y, LFootJoint.Position.Z);
             //Vector3 RFootVec = new Vector3(RFootJoint.Position.X, RFootJoint.Position.Y, RFootJoint.Position.Z);
 
             //float distanceFromFloor = Math.Min(Plane.DotCoordinate(wallPlane, LFootVec), Plane.DotCoordinate(wallPlane, RFootVec));
 
-            Joint headJoint = body.Joints.Single(x => x.Value.JointType == JointType.Head).Value;
+            Joint headJoint = body.Joints[JointType.Head];
             Vector3 headVec = new Vector3(headJoint.Position.X, headJoint.Position.Y, headJoint.Position.Z);
             double distanceFromFloor = Plane.DotCoordinate(floorPlane, headVec);
 
