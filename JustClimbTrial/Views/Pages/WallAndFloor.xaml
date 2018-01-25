@@ -13,21 +13,10 @@
       Unloaded="Page_Unloaded">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="6*" />
-        </Grid.RowDefinitions>
-
-        <!-- row 0 -->
-        <userControl:HeaderRowNavigation 
-            x:Name="navHead"
-            Grid.Row="0"
-            HeaderRowTitle="Boulder - Route Select" />
-        <!-- end of row 0 -->
 
         <!-- row 1 -->
         <!-- grid 1 -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="3*" />
@@ -44,12 +33,19 @@
                 </Viewbox.RenderTransform>
             </Viewbox>
 
-            <StackPanel Grid.Column="1">
-                <Button Name="ConfigWallBtn" Content="Configure Wall" Click="ConfigWallBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
-                <Button Name="ConfigFloorBtn" Content="Configure Floor" Click="ConfigFloorBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
-                <Button Name="UndoBtn" Content="Undo" Click="UndoBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
-                <Button Name="ConfirmBtn" Content="Confirm" Click="ConfirmBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
-            </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height ="2*" MinHeight="10"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Button Name="ConfigWallBtn" Content="Configure Wall" Click="ConfigWallBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <Button Name="ConfigFloorBtn" Content="Configure Floor" Click="ConfigFloorBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <Button Name="UndoBtn" Content="Undo" Click="UndoBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <Button Name="ConfirmBtn" Content="Confirm" Click="ConfirmBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+                </StackPanel>
+                <Button Grid.Row="1" Name="CancelBtn" Content="Cancel" Click="CancelBtn_Click" FontSize="10" Height="50" Margin="50 10 50 10" />
+            </Grid>
         </Grid>
         <!-- end of grid 1 -->
         <!-- end of row 1 -->

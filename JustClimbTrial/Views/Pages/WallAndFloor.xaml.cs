@@ -76,7 +76,7 @@ namespace JustClimbTrial.Views.Pages
             //UiHelper.NotifyUser(settings.WallPlaneStr);
 
             // pass this Page to the top row user control so it can use this Page's NavigationService
-            navHead.ParentPage = this;
+            //navHead.ParentPage = this;
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
@@ -142,15 +142,41 @@ namespace JustClimbTrial.Views.Pages
 
                 settings.Save();
 
-                UiHelper.NotifyUser("Wall and Floor Saved as Planes");
+                if (UiHelper.NotifyUserResult("Wall and Floor Saved as Planes. Click \"OK\" to quit Application.") == MessageBoxResult.OK)
+                {
+                    Application.Current.Shutdown();
+                }
             }
-            else if( wallPlane != default(System.Numerics.Plane) )
+            else if (wallPlane == default(System.Numerics.Plane) && floorPlane == default(System.Numerics.Plane))
+            {
+                UiHelper.NotifyUser("Please Configure Points on Wall and Floor");
+
+            }
+            else if( wallPlane == default(System.Numerics.Plane) )
             {
                 UiHelper.NotifyUser("Please Configure Points on Wall");
             }
-            else if( floorPlane != default(System.Numerics.Plane))
+            else if( floorPlane == default(System.Numerics.Plane))
             {
                 UiHelper.NotifyUser("Please Configure Points on Floor");
+            }
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string messageBoxText = "Do you want to cancel and quit the application?";
+            string caption = "Exit";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button);
+
+            // Process message box results
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    Application.Current.Shutdown();
+                    break;
+                case MessageBoxResult.No:
+                    break;
             }
         }
 

@@ -9,5 +9,10 @@ namespace JustClimbTrial.Helpers
             // MessageBox is modal automatically
             MessageBox.Show(msg);
         }
+
+        public static MessageBoxResult NotifyUserResult(string msg)
+        {
+            return MessageBox.Show(msg);
+        }
     }
 }
