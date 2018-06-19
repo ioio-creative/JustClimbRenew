@@ -17,10 +17,10 @@ namespace JustClimbTrial.ViewModels
 
         #region set training rock
 
-        public void SetRockTrainingSeqAndDraw(int seqNo)
+        public void SetRockTrainingSeqAndDraw(int seqNo, bool mirrorSeqNo = false)
         {
             TrainingSeq = seqNo;
-            MyRockViewModel.DrawSequenceRockOnCanvas(seqNo);
+            MyRockViewModel.DrawSequenceRockOnCanvas(seqNo, mirrorSeqNo);
         }
 
         public void UndrawRockTrainingSeq()

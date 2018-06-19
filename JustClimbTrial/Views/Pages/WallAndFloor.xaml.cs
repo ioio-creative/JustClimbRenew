@@ -24,6 +24,8 @@ namespace JustClimbTrial.Views.Pages
     /// <summary>
     /// Interaction logic for WallAndFloor.xaml
     /// </summary>
+    /// 
+    //Remarks: If calibration not accurate in practice, should use sampling and averaging to calibrate planes
     public partial class WallAndFloor : Page
     {
         private MainWindow myMainWindowParent;

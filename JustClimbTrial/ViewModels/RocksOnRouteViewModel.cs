@@ -153,7 +153,7 @@ namespace JustClimbTrial.ViewModels
             return SelectedRockOnRoute == null;
         }
 
-        public void SetSelectedTrainingRockSeqNo()
+        public void SetSelectedTrainingRockSeqNo(bool mirrorSeqNo = false)
         {
             int seqNo = rocksOnRoute.Count;
 
@@ -166,7 +166,7 @@ namespace JustClimbTrial.ViewModels
                 if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
                     SelectedRockOnRoute.TrainingSeq != seqNo)
                 {
-                    SelectedRockOnRoute.SetRockTrainingSeqAndDraw(seqNo);                    
+                    SelectedRockOnRoute.SetRockTrainingSeqAndDraw(seqNo, mirrorSeqNo);                    
                 }
 
                 AttachLineToLastTrainingRockOnCanvas();

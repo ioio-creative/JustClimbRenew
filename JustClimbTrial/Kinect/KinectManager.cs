@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace JustClimbTrial.Kinect
 {
+    //Windows.Media.Imaging.BitmapSource
     public class ColorBitmapSrcEventArgs : EventArgs
     {
         private readonly BitmapSource colorBitmapSrc;
@@ -26,6 +27,7 @@ namespace JustClimbTrial.Kinect
             return colorBitmapSrc;
         }
     }
+    //Drawing.Bitmap
     public class ColorBitmapEventArgs
     {
         private readonly Bitmap colorBitmap;
@@ -126,30 +128,31 @@ namespace JustClimbTrial.Kinect
         {
             bool isSuccess = false;
 
-            // activate sensor
-            if (kinectSensor != null )
+            
+            if (!kinectSensor.IsOpen)
             {
-                if (!kinectSensor.IsOpen)
-                {
-                    kinectSensor.Open(); 
-                }
+                // activate sensor
+                kinectSensor.Open(); 
+            }
+            
+            if (kinectSensor.IsOpen && multiSourceReader == null)
+            {
+                multiSourceReader = kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
+                //multiSourceReader = mSrcReader;
 
-                if (multiSourceReader == null)
-                {
-                    multiSourceReader = kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
-                    Debug.WriteLine("Kinect activated!");
-                    //multiSourceReader = mSrcReader;
+                multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;                  
+            }
+            
+            isSuccess = kinectSensor.IsOpen && multiSourceReader != null;
 
-                    multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;
-                    
-                }
-                isSuccess = true;
-            }                 
+            if (isSuccess)
+            {
+                Debug.WriteLine("Kinect activated!");
+            }
             else
-            {              
+            {
                 Debug.WriteLine("Kinect not available!");
             }
-
             return isSuccess;
         }
 
@@ -192,6 +195,7 @@ namespace JustClimbTrial.Kinect
                             {
                                 using (Bitmap colorBitmap = ToBitmap(colorFrame))
                                 {
+                                    //Recording Frame Dimensions Hard-Coded!!!!
                                     using (Bitmap resizedBitmap = ResizeBitmap(colorBitmap, 640, 360))
                                     {
                                         ColorBitmapArrived(sender, new ColorBitmapEventArgs(resizedBitmap));

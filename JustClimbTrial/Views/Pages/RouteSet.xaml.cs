@@ -217,7 +217,7 @@ namespace JustClimbTrial.Views.Pages
                     switch (routeSetClimbMode)
                     {
                         case ClimbMode.Training:
-                            SetSelectedTrainingRockSeqNo();
+                            SetSelectedTrainingRockSeqNo(true);
                             break;
                         case ClimbMode.Boulder:
                         default:
@@ -331,9 +331,9 @@ namespace JustClimbTrial.Views.Pages
 
         #region command methods for TrainingRockStatus UserControl
 
-        private void SetSelectedTrainingRockSeqNo()
+        private void SetSelectedTrainingRockSeqNo(bool mirrorSeqNo = false)
         {
-            rocksOnRouteViewModel.SetSelectedTrainingRockSeqNo();
+            rocksOnRouteViewModel.SetSelectedTrainingRockSeqNo(mirrorSeqNo);
         }
 
         private bool CanUndoLastSelectedTrainingRock(object parameter = null)

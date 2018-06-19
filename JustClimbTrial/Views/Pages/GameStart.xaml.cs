@@ -56,11 +56,17 @@ namespace JustClimbTrial.Views.Pages
 
         private ulong playerBodyID;
 
+        #region Manager vars
         private MainWindow mainWindowClient;
-        private KinectManager kinectManagerClient;
+        private KinectManager kinectManagerClient; 
+        #endregion
+
+        #region Playground variables
         private Playground playgroundWindow;
         private Canvas playgroundCanvas;
         private MediaElement playgroundMedia;
+        #endregion
+
 
         //private IEnumerable<Shape> skeletonShapes;
         private IList<IEnumerable<Shape>> skeletonBodies = new List<IEnumerable<Shape>>();
@@ -152,10 +158,10 @@ namespace JustClimbTrial.Views.Pages
             InitializeComponent();
 
             // pass cvsBoulderRouteVideos and _routeId to the view model
-            viewModel = gridContainer.DataContext as GameStartViewModel;
+            viewModel = v_gridContainer.DataContext as GameStartViewModel;
             if (viewModel != null)
             {
-                CollectionViewSource cvsVideos = gridContainer.Resources["cvsRouteVideos"] as CollectionViewSource;
+                CollectionViewSource cvsVideos = v_gridContainer.Resources["cvsRouteVideos"] as CollectionViewSource;
                 viewModel.SetCvsVideos(cvsVideos);
                 viewModel.SetRouteId(aRouteId);
                 viewModel.SetClimbMode(aClimbMode);
@@ -282,7 +288,9 @@ namespace JustClimbTrial.Views.Pages
                 //methods to access rocks on route from database
                 switch (climbMode)
                 {
+                    
                     case ClimbMode.Training:
+                        #region Training Mode Setup
                         navHead.HeaderRowTitle =
                             string.Format(headerRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
 
@@ -297,12 +305,15 @@ namespace JustClimbTrial.Views.Pages
                                 rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(trainingRouteLength);
                             }
                         }
-
+                        #endregion
                         break;
+                    
+
                     case ClimbMode.Boulder:
                     default:
+                        #region Boulder Mode Setup
                         navHead.HeaderRowTitle =
-                            string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
+                                            string.Format(headerRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
 
                         IEnumerable<RockOnRouteViewModel> allRocksOnBoulderRoute = BoulderRouteAndRocksDataAccess.RocksByRouteId(routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
                         interRocksOnBoulderRoute = allRocksOnBoulderRoute.Where(x => x.BoulderStatus == RockOnBoulderStatus.Int).ToArray();
@@ -358,7 +369,8 @@ namespace JustClimbTrial.Views.Pages
                                 interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                                 i++;
                             }
-                        }
+                        } 
+                        #endregion
                         break;
                 }
 
@@ -366,6 +378,7 @@ namespace JustClimbTrial.Views.Pages
 
                 playgroundMedia.Stop();
                 playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
+                playgroundWindow.LoopMedia = true;
                 playgroundMedia.Play();
 
                 kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
@@ -396,52 +409,60 @@ namespace JustClimbTrial.Views.Pages
 
             //floorPlane = new Plane(floorClipPlane.X, floorClipPlane.Y, floorClipPlane.Z, floorClipPlane.W);
             
-            //remove skeleton shape when DEBUG
+            //remove skeleton shape and empty List<>when DEBUG
             if (debug)
             {
-                foreach (IEnumerable<Shape> skeletonShapes in skeletonBodies)
+                foreach (Shape skeletonShape in skeletonBodies.SelectMany(shapes => shapes))
                 {
-                    foreach (Shape skeletonShape in skeletonShapes)
-                    {
-                        playgroundCanvas.RemoveChild(skeletonShape);
-                    }
+                    playgroundCanvas.RemoveChild(skeletonShape);
                 }
-                skeletonBodies = new List<IEnumerable<Shape>>();
+
+                //foreach (IEnumerable<Shape> skeletonShapes in skeletonBodies)
+                //{
+                //    foreach (Shape skeletonShape in skeletonShapes)
+                //    {
+                //        playgroundCanvas.RemoveChild(skeletonShape);
+                //    }
+                //}
+                //skeletonBodies = new List<IEnumerable<Shape>>();
+                skeletonBodies.Clear();
             }
 
             IList<Body> bodies = e.GetBodyList();
 
+            // if game started and player (previously tracked) is no longer tracked, then game over
             if (gameStarted && !bodies.Where(x => x.TrackingId == playerBodyID).Any())
             {
                 OnGameOver();
             }
-
-            foreach (var body in bodies)
-            {
-                if (body != null && body.IsTracked)
+            else
+            {            
+                foreach (var body in bodies)
                 {
-                    //draw skeleton shape when DEBUG
-                    if (debug)
+                    if (body != null && body.IsTracked)
                     {
-                        IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
-                        skeletonBodies.Add(skeletonShapes);                       
-                    }
-             
+                        //draw skeleton shape when DEBUG
+                        if (debug)
+                        {
+                            IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
+                            skeletonBodies.Add(skeletonShapes);
+                        }
 
-                    if (!gameStarted)
-                    {
-                        GameplayMainSwitch(body);
-                    }
-                    else
-                    {
-                        if (body.TrackingId == playerBodyID)
+                        if (!gameStarted)
                         {
                             GameplayMainSwitch(body);
                         }
+                        else
+                        {
+                            if (body.TrackingId == playerBodyID)
+                            {
+                                GameplayMainSwitch(body);
+                            }
+                        }
                     }
-                }
 
-            }//CLOSE foreach (var body in bodies)
+                }//CLOSE foreach (var body in bodies) 
+            }
         }
 
         private void OnNavHeadIsRecordDemoChanged(object sender, PropertyChangedEventArgs e)
@@ -540,11 +561,12 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
+        //CONTINUE HERE
         private void TrainingGameplay(Body body, IEnumerable<Joint> LHandJoints, 
             IEnumerable<Joint> RHandJoints)
         {
             IEnumerable<Joint> handJoints =
-                        body.Joints.Where(x => KinectExtensions.HandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+                        LHandJoints.Union(RHandJoints);//.Where(x => KinectExtensions.HandJoints.Contains(x.JointType));
             nextRockOnTrainRoute = rocksOnTrainingRoute.ElementAt(nextTrainRockIdx);
             RockTimerHelper nextRockTimer = nextRockOnTrainRoute.MyRockTimerHelper;
 
@@ -1034,6 +1056,7 @@ namespace JustClimbTrial.Views.Pages
             else
             {
                 UiHelper.NotifyUser("Error when saving video no. " + routeVideoNo);
+                //TODO: delete db video entry when failed to save video file
             }
 
             // !!! Important !!! refresh data grid to see the route video item newly inserted
@@ -1041,14 +1064,12 @@ namespace JustClimbTrial.Views.Pages
             //CollectionViewSource.GetDefaultView(DgridRouteVideos.ItemsSource).Refresh();
             viewModel.LoadRouteVideoData();
 
-            // TODO: rather strange code
-            if (isRecordingDemo)
-            {
-                // this would change isRecordingDemo as well
-                // as isRecordingDemo is bound to navHead.IsRecordDemoVideo
-                // via event handler OnNavHeadIsRecordDemoChanged
-                navHead.IsRecordDemoVideo = false;                
-            }
+            //navHead.IsRecordDemoVideo setter already checks current state before changing value
+            // this would change this.isRecordingDemo as well
+            // as isRecordingDemo is bound to navHead.IsRecordDemoVideo
+            // via event handler OnNavHeadIsRecordDemoChanged
+            navHead.IsRecordDemoVideo = false;                
+            
         }
 
         #endregion

@@ -29,15 +29,16 @@ namespace JustClimbTrial
             get { return playgroundWindow; }
         }
 
+        //Monitors projected to Wall (i.e. Playground)
+        //bottom layer for [Count Down]/[Start]/[Game Over],etc videos
         private MediaElement playgroundMedia;                
         public MediaElement PlaygroundMedia
         {
             get { return playgroundMedia; }
             set { playgroundMedia = value; }
         }
-
+        //top layer for game recording playback
         private MediaElement playbackMedia;
-
         public MediaElement PlaybackMedia
         {
             get { return playbackMedia; }
@@ -56,42 +57,41 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //Wall & Floor Calibration
             if (wallAndFloor)
             {
                 WallAndFloor wAndF = new WallAndFloor();
                 Navigate(wAndF);
             }
-            
-            //by default play ScreenSaver.mp4 in Playground Window
-            playgroundMedia = playgroundWindow.PlaygroundMedia;
+            //Get registered wall from File
+            Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
+            BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
 
-            playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
-
-
-            KinectManagerClient = new KinectManager();
             //activate sensor in Main Window only once
+            KinectManagerClient = new KinectManager();
             bool isOpenKinectSuccessful = KinectManagerClient.OpenKinect();
-          
+
+            //assign MediaElement ref to MainWindow member var
+            PlaygroundMedia = playgroundWindow.PlaygroundMedia;
+            //MUST LOAD AN IMAGE TO PLAYGROUND CANVAS TO GIVE DIMENSION
+            playgroundWindow.ShowImage(wallLogImg, 0);
+            //play ScreenSaver.mp4 in Playground Window
+            CheckAndLoadAndPlayScrnSvr();
+
             if (isOpenKinectSuccessful)
-            {
-                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
-                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+            {                             
                 if (debug)
-                {
-                    
+                {                   
                     playgroundWindow.ShowImage(wallLogImg, 0.5);
                 }
-                else
-                {
-                    //MUST LOAD AN IMAGE TO PLAYGROUND CANVAS TO GIVE DIMENSION
-                    playgroundWindow.ShowImage(wallLogImg, 0);
-                    playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
-                    playgroundMedia.Play();
-                }               
+                UiHelper.NotifyUser("Kinect connected!");
             }
             else
             {
-                UiHelper.NotifyUser("Kinect is not available!");
+                if (UiHelper.NotifyUserResult("Kinect is not available!" + Environment.NewLine + "Please Check Kinect Connection and Restart Programme.") == MessageBoxResult.OK)
+                {
+                    Application.Current.Shutdown();
+                }
             }
         }
 
@@ -113,6 +113,8 @@ namespace JustClimbTrial
             playgroundWindow.ShowImage(e.GetColorBitmapSrc());
         }
 
+
+        //This is only called by several Pages when debug mode in On
         public void SubscribeColorImgSrcToPlaygrd()
         {
             KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
@@ -122,11 +124,16 @@ namespace JustClimbTrial
             KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;
         }
 
-        public void LoadAndPlayScrnSvr()
+        public void CheckAndLoadAndPlayScrnSvr()
         {
-            playgroundMedia.Source = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
-            playgroundWindow.LoopMedia = true;
-            playgroundMedia.Play();
+            Uri scrnSvrUri = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+            if ( playgroundMedia.Source == null || !playgroundMedia.Source.Equals(scrnSvrUri))
+            {
+                playgroundMedia.Stop();
+                playgroundMedia.Source = scrnSvrUri;
+                playgroundWindow.LoopMedia = true;
+                playgroundMedia.Play();
+            }
         }
     }
 }

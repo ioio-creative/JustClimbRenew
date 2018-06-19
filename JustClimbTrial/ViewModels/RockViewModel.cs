@@ -220,7 +220,7 @@ namespace JustClimbTrial.ViewModels
                 BCanvas.GetActualLengthWrtHeight(normedTop));
         }
 
-        public TextBlock DrawSequenceRockOnCanvas(int seqNo)
+        public TextBlock DrawSequenceRockOnCanvas(int seqNo, bool mirrorTxt = false)
         {
             // https://www.codeproject.com/Questions/629557/write-text-onto-canvas-wpf
             TrainingRockSeqNoText = new TextBlock()
@@ -231,6 +231,10 @@ namespace JustClimbTrial.ViewModels
                 FontWeight = FontWeight.FromOpenTypeWeight(10),
                 Margin = new Thickness(0, 0, 0, 0)
             };
+            if (mirrorTxt)
+            {
+                TrainingRockSeqNoText.RenderTransform = new ScaleTransform(-1, 1, 0.5, 0.5);
+            }
             BCanvas.SetLeftAndTop(TrainingRockSeqNoText, bCanvasPoint);            
             //TrainingRockSeqNoText.RenderTransform = new RotateTransform(90, 0, 0); // this line can rotate it but not in the axis i want
             BCanvas.AddChild(TrainingRockSeqNoText);

@@ -2,6 +2,7 @@
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
@@ -18,8 +19,8 @@ namespace JustClimbTrial
             if (newestValidWall != null)
             {
                 AppGlobal.WallID = newestValidWall.WallID;
-                //Debug.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
-                //AppGlobal.WallID = "WA2017122912011l7oBf";
+                Debug.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
+                AppGlobal.WallID = "WA201801161851jhcCKA";
             }
 
             //methods relating to video recording
