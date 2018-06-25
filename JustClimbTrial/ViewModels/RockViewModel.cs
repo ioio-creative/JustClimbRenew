@@ -347,6 +347,12 @@ namespace JustClimbTrial.ViewModels
 
         #endregion
 
+        #region Recolor Shape Stroke
+        public void RecolorRockShape(Brush color)
+        {
+            BoulderShape.Stroke = color;
+        }
+        #endregion
 
         #region image sequence helpers
 
