@@ -81,7 +81,7 @@ namespace JustClimbTrial.Views.Pages
 
         private bool isSnapShotTaken = false;
 
-        private MainWindow myMainWindowParent;
+        private MainWindow mainWindowClient;
 
         #endregion
 
@@ -214,9 +214,9 @@ namespace JustClimbTrial.Views.Pages
 
         public void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            myMainWindowParent = this.Parent as MainWindow;
+            mainWindowClient = this.Parent as MainWindow;
 
-            kinectManagerClient = myMainWindowParent.KinectManagerClient;
+            kinectManagerClient = mainWindowClient.KinectManagerClient;
             if (kinectManagerClient.kinectSensor != null)
             {                
                 kinectManagerClient.multiSourceReader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
@@ -362,7 +362,7 @@ namespace JustClimbTrial.Views.Pages
                     BitmapSource newWallColorBitmapSrc = kinectManagerClient.ToBitmapSrc(colorFrame);
                     cameraIMG.Source = newWallColorBitmapSrc;
                     colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
-                    myMainWindowParent.PlaygroundWindow.ShowImage(newWallColorBitmapSrc);
+                    mainWindowClient.PlaygroundWindow.ShowImage(newWallColorBitmapSrc);
                 }
             }
   

@@ -20,7 +20,7 @@ namespace JustClimbTrial
             {
                 AppGlobal.WallID = newestValidWall.WallID;
                 Debug.WriteLine("Wall Loaded -- WallID: " + AppGlobal.WallID);
-                AppGlobal.WallID = "WA201801161851jhcCKA";
+                //AppGlobal.WallID = "WA201801161851jhcCKA";
             }
 
             //methods relating to video recording

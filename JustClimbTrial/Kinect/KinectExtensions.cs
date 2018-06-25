@@ -331,7 +331,7 @@ namespace JustClimbTrial.Kinect
                 //minDepth = frame.DepthMinReliableDistance;
                 //maxDepth = frame.DepthMaxReliableDistance;
                 minDepth = 2000;//frame.DepthMinReliableDistance;
-                maxDepth = 5000;//frame.DepthMaxReliableDistance;
+                maxDepth = 6500;//frame.DepthMaxReliableDistance;
                 //Debug.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
             }
 

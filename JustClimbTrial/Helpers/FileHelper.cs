@@ -54,7 +54,7 @@ namespace JustClimbTrial.Helpers
         public static string TrainingRouteVideoRecordedFullPath(string routeNo, string videoNo)
         {
             return Path.Combine(exeDirectory,
-                string.Format(settings.BoulderRouteVideoRecordedFilePathFormat,
+                string.Format(settings.TrainingRouteVideoRecordedFilePathFormat,
                     AppGlobal.MyWall.WallNo, routeNo, videoNo, settings.VideoFileExtension));
         }
 

@@ -18,7 +18,7 @@ namespace JustClimbTrial.Views.Pages
     {
         private readonly bool debug = AppGlobal.DEBUG;
 
-        private MainWindow mainWindowParent;
+        private MainWindow mainWindowClient;
 
         public JustClimbHome()
         {
@@ -37,12 +37,12 @@ namespace JustClimbTrial.Views.Pages
         private void Home_Loaded(object sender, RoutedEventArgs e)
         {
             this.WindowTitle = AppGlobal.WallID;
-            mainWindowParent = this.Parent as MainWindow;
-            mainWindowParent.CheckAndLoadAndPlayScrnSvr();
+            mainWindowClient = this.Parent as MainWindow;
+            mainWindowClient.CheckAndLoadAndPlayScrnSvr();
 
             if (debug)
             {
-                mainWindowParent.SubscribeColorImgSrcToPlaygrd();
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
             }
             
         }
@@ -52,7 +52,7 @@ namespace JustClimbTrial.Views.Pages
         {
             if (debug)
             {
-                mainWindowParent.UnsubColorImgSrcToPlaygrd();
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
             }
         }
     }

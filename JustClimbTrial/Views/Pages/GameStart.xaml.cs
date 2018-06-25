@@ -238,9 +238,10 @@ namespace JustClimbTrial.Views.Pages
 
         private async void RestartGame(object parameter = null)
         {
+            //TODO: review restart logic
             if (!gameplayVideoRecClient.IsRecording)
             {
-                await gameplayVideoRecClient.StartRecordingAsync();
+                
             }
             else
             {
@@ -281,10 +282,9 @@ namespace JustClimbTrial.Views.Pages
 
             if (kinectManagerClient.OpenKinect())
             {
-
                 if (debug)
                 {
-                    //kinectManagerClient.ColorImageSourceArrived += mainWindowClient.HandleColorImageSourceArrived;
+                    mainWindowClient.SubscribeColorImgSrcToPlaygrd();
                 }
 
                 playgroundWindow = mainWindowClient.PlaygroundWindow;
@@ -412,7 +412,10 @@ namespace JustClimbTrial.Views.Pages
             navHead.PropertyChanged -= OnNavHeadIsRecordDemoChanged;
             playgroundMedia.MediaEnded -= PlaygroundVideoEndedHandler;
             playgroundCanvas.Children.Clear();
-            mainWindowClient.UnsubColorImgSrcToPlaygrd();
+            if (debug)
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
+            }
         }
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
@@ -560,6 +563,7 @@ namespace JustClimbTrial.Views.Pages
             gameStarted = false;
             playgroundCanvas.Children.Clear();
 
+            //Play "GameOver" Video
             playgroundMedia.Source = new Uri(FileHelper.GameOverVideoPath());
             playgroundMedia.MediaEnded += PlaygroundVideoEndedHandler;
 
@@ -576,7 +580,9 @@ namespace JustClimbTrial.Views.Pages
                 gameplayVideoRecClient.StopRecording();
             }
 
-            NavigationService.Navigate(new Routes(climbMode));
+            //TODO: Rethink how to restart situations
+            RestartGame();
+            //NavigationService.Navigate(new Routes(climbMode));
         }
 
         #endregion
@@ -602,6 +608,7 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
+        //TRAINING
         private bool IsTrainingTargetReached(RockOnRouteViewModel rockOnRouteVM, Body body,
             IEnumerable<Joint> LHandJoints, IEnumerable<Joint> RHandJoints)
         {
@@ -747,9 +754,9 @@ namespace JustClimbTrial.Views.Pages
                 }
             }
         }
+        //endof TRAINING
 
-
-        //CONTINUE HERE
+        //BOULDER
         private void SetStartBoulderRockTimerTickEventHandler(Body body, RockTimerHelper startRockTimer, Func<RockOnRouteViewModel, bool> isBoulderTargetReached)
         {
             EventHandler startRockTimerTickEventHandler = null;
@@ -975,6 +982,7 @@ namespace JustClimbTrial.Views.Pages
                 }
             }
         }
+        //endof BOULDER
 
         private void SetEndRockHoldTimerTickEventHandler(Body body, RockTimerHelper prevRockTimer, EventHandler prevRockTimerTickHandler, Func<RockOnRouteViewModel, bool> isEndRockReached)
         {

@@ -28,7 +28,7 @@ namespace JustClimbTrial.Views.Pages
     //Remarks: If calibration not accurate in practice, should use sampling and averaging to calibrate planes
     public partial class WallAndFloor : Page
     {
-        private MainWindow myMainWindowParent;
+        private MainWindow mainWindowClient;
         // declare Kinect object and frame reader
         private KinectManager kinectManagerClient;
 
@@ -53,9 +53,9 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            myMainWindowParent = Parent as MainWindow;
+            mainWindowClient = Parent as MainWindow;
 
-            kinectManagerClient = myMainWindowParent.KinectManagerClient;
+            kinectManagerClient = mainWindowClient.KinectManagerClient;
             if (kinectManagerClient.kinectSensor != null)
             {
                 kinectManagerClient.multiSourceReader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;

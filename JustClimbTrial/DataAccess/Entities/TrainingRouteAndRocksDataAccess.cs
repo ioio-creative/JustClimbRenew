@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.Enums;
+using JustClimbTrial.Helpers;
 using JustClimbTrial.ViewModels;
 using Microsoft.Kinect;
 using System;
@@ -24,7 +25,8 @@ namespace JustClimbTrial.DataAccess.Entities
                    {
                        // TODO: can I use -1 as default value?
                        TrainingSeq = rockOnTrainingRoute.TrainingRouteSeq.GetValueOrDefault(-1),
-                       MyRockViewModel = new RockViewModel(rock, canvas, coorMapper)
+                       MyRockViewModel = new RockViewModel(rock, canvas, coorMapper),
+                       MyRockTimerHelper = new RockTimerHelper()
                    };
         }
 
