@@ -30,7 +30,7 @@ namespace JustClimbTrial.Helpers
         private KinectManager kinectManagerClient;
         private int frameCnt = 0;
 
-        public bool IsRecording { get; private set; }
+        public bool IsRecording;
         public bool IsAllBufferFramesSaved
         {
             get
@@ -120,6 +120,12 @@ namespace JustClimbTrial.Helpers
             });
         }
 
+        private void StopRecording()
+        {
+            StopQueue();
+            kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
+        }
+
         private void StopQueue()
         {
             IsRecording = false;
@@ -137,13 +143,8 @@ namespace JustClimbTrial.Helpers
             });
         }        
 
-        private async Task<int> ExportVideoAsync(string sequenceFolderPath, string outputFilePath)
+        private int ExportVideo(string sequenceFolderPath, string outputFilePath)
         {
-            if (!IsAllBufferFramesSaved)
-            {
-                await WaitingForAllBufferFramesSavedAsync();
-            }
-
             string outputFileDirectory = Path.GetDirectoryName(outputFilePath);
             if (!Directory.Exists(outputFileDirectory))
             {
@@ -174,21 +175,24 @@ namespace JustClimbTrial.Helpers
             return exitCode;
         }
 
+        private async Task WaitingForAllBufferFramesSavedAsync()
+        {
+            if (!IsAllBufferFramesSaved)
+            {
+                await Task.Run(() =>
+                {
+                    while (!IsAllBufferFramesSaved)
+                    {
+                        continue;
+                    }
+                });
+            }
+        }
+
         #endregion
 
 
         #region public methods
-
-        public async Task WaitingForAllBufferFramesSavedAsync()
-        {
-            await Task.Run(() =>
-            {
-                while (!IsAllBufferFramesSaved)
-                {
-                    continue;
-                }
-            });
-        }
 
         public void ClearBuffer()
         {
@@ -214,15 +218,19 @@ namespace JustClimbTrial.Helpers
             StartQueue();
         }
 
-        public void StopRecording()
+        public void StopRecordingIfIsRecording()
         {
-            StopQueue();
-            kinectManagerClient.ColorBitmapArrived -= HandleColorBitmapArrived;
+            if (IsRecording)
+            {
+                StopRecording();
+            }
         }
 
-        public async Task<int> ExportVideoAndClearBufferAsync(string outputFilePath)
-        {            
-            int exitCode = await ExportVideoAsync(videoBufferFolderPath, outputFilePath);
+        public async Task<int> StopRecordingIfIsRecordingAndExportVideoAndClearBufferAsync(string outputFilePath)
+        {
+            StopRecordingIfIsRecording();
+            await WaitingForAllBufferFramesSavedAsync();
+            int exitCode = ExportVideo(videoBufferFolderPath, outputFilePath);
             ClearBuffer();
             return exitCode;
         }        

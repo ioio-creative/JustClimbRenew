@@ -36,12 +36,6 @@ namespace JustClimbTrial.ViewModels
             set { SetValue(() => RouteDifficulties, value); }
         }
 
-        public ObservableCollection<Rock> RocksOnWall
-        {
-            get { return GetValue(() => RocksOnWall); }
-            set { SetValue(() => RocksOnWall, value); }
-        }
-
         #endregion
 
 
@@ -49,7 +43,6 @@ namespace JustClimbTrial.ViewModels
         {
             AgeGroups = new ObservableCollection<AgeGroup>(AgeGroupDataAccess.ValidAgeGroups);
             RouteDifficulties = new ObservableCollection<RouteDifficulty>(RouteDifficultyDataAccess.ValidRouteDifficulties);
-            RocksOnWall = new ObservableCollection<Rock>(RockDataAccess.ValidRocksOnWall(AppGlobal.WallID));
         }
     }
 }

@@ -121,7 +121,7 @@ namespace JustClimbTrial.Views.Pages
 
         private bool CanViewVideo(object parameter = null)
         {
-            return !videoHelper.IsRecording && videoHelper.IsAllBufferFramesSaved;
+            return videoHelper.IsAllBufferFramesSaved;
         }
 
         private async void StartRecordVideoAsync(object parameter = null)
@@ -133,7 +133,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void StopRecordVideo(object parameter = null)
         {
-            videoHelper.StopRecording();
+            videoHelper.StopRecordingIfIsRecording();
             timerToShowRecordTime.Stop();
         }
 
@@ -156,7 +156,7 @@ namespace JustClimbTrial.Views.Pages
                     FileHelper.VideoTempFileFullPath(videoEntityType);
 
             // export video                
-            int exportVideoExitCode = await videoHelper.ExportVideoAndClearBufferAsync(tmpVideoFilePath);
+            int exportVideoExitCode = await videoHelper.StopRecordingIfIsRecordingAndExportVideoAndClearBufferAsync(tmpVideoFilePath);
 
             // TODO: deal with fail case
             if (exportVideoExitCode == 0)

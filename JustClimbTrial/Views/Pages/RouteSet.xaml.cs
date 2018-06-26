@@ -39,7 +39,7 @@ namespace JustClimbTrial.Views.Pages
 
         #region private members
 
-        private MainWindow parentMainWindow;
+        private MainWindow mainWindowClient;
         private int newRouteNo;
         private ClimbMode routeSetClimbMode;
         private RouteSetViewModel routeSetViewModel;
@@ -163,13 +163,13 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if ( (this.Parent as MainWindow).KinectManagerClient.OpenKinect())
-            {
-                parentMainWindow = this.Parent as MainWindow;
+            mainWindowClient = this.Parent as MainWindow;
 
+            if (mainWindowClient.KinectManagerClient.OpenKinect())
+            {
                 routeSetViewModel.LoadData();
 
-                rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, parentMainWindow.KinectManagerClient.ManagerCoorMapper);
+                rocksOnWallViewModel = new RocksOnWallViewModel(canvasWall, mainWindowClient.KinectManagerClient.ManagerCoorMapper);
                 bool isAnyRocksOnWall = rocksOnWallViewModel.
                     LoadAndDrawRocksOnWall(AppGlobal.WallID);
                 rocksOnRouteViewModel = new RocksOnRouteViewModel(canvasWall);
@@ -185,14 +185,14 @@ namespace JustClimbTrial.Views.Pages
 
                 if (debug)
                 {
-                    parentMainWindow.SubscribeColorImgSrcToPlaygrd();
+                    mainWindowClient.SubscribeColorImgSrcToPlaygrd();
                 } 
             }
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {            
-            parentMainWindow.UnsubColorImgSrcToPlaygrd();
+            mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)
@@ -227,40 +227,6 @@ namespace JustClimbTrial.Views.Pages
                 } 
             }
         }
-
-        //private void btnRecordDemo_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string errMsg = ValidateRouteParams();
-
-        //    if (!string.IsNullOrEmpty(errMsg))
-        //    {
-        //        UiHelper.NotifyUser(errMsg);
-        //    }
-        //    else
-        //    {                
-        //        //SetTemplateOfControlFromResource(ctrlBtnDemo, BtnDemoDoneTemplateResourceKey);
-
-        //        // show video record dialog
-        //        VideoPlaybackDialog videoRecordDialog = new VideoPlaybackDialog(parentMainWindow.PlaygroundMedia);
-        //        VideoRecord videoRecordPage = new VideoRecord(routeSetClimbMode,
-        //            VideoRecordType.IsDemo, parentMainWindow.KinectManagerClient,
-        //            parentMainWindow.PlaygroundMedia);
-
-        //        videoRecordDialog.Navigate(videoRecordPage);
-        //        videoRecordDialog.ShowDialog();
-
-        //        if (videoRecordDialog.IsConfirmSaveVideo)
-        //        {
-        //            IsConfirmSaveVideo = true;
-        //            TmpVideoFilePath = videoRecordDialog.TmpVideoFilePath;
-        //        }
-        //    }
-        //}
-
-        //private void btnDemoDone_Click(object sender, RoutedEventArgs e)
-        //{            
-        //    SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
-        //}
 
         #endregion
 
