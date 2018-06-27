@@ -55,6 +55,12 @@ namespace JustClimbTrial.DataAccess.Entities
             return Insert(routeId, true, isSubmitChanges);
         }
 
+        public static BoulderRouteVideo InsertToReplacePreviousDemo(Tuple<string, string> videoIdAndNo, string routeId, bool isSubmitChanges = true)
+        {
+            SetIsDemoOfExistingDemoRouteVideoToFalse(routeId, isSubmitChanges);
+            return Insert(videoIdAndNo, routeId, true, isSubmitChanges);
+        }
+
         public static string InsertToReplacePreviousDemo(BoulderRouteVideo proposedVideo, bool isSubmitChanges = true)
         {
             SetIsDemoOfExistingDemoRouteVideoToFalse(proposedVideo.Route, isSubmitChanges);
@@ -62,24 +68,45 @@ namespace JustClimbTrial.DataAccess.Entities
             return Insert(proposedVideo, isSubmitChanges);
         }
 
+        public static string InsertToReplacePreviousDemo(Tuple<string, string> videoIdAndNo, BoulderRouteVideo proposedVideo, bool isSubmitChanges = true)
+        {
+            SetIsDemoOfExistingDemoRouteVideoToFalse(proposedVideo.Route, isSubmitChanges);
+            proposedVideo.IsDemo = true;  // TODO: should force set IsDemo here?
+            return Insert(videoIdAndNo, proposedVideo, isSubmitChanges);
+        }
+
         public static BoulderRouteVideo Insert(string routeId, bool isDemo, bool isSubmitChanges = true)
         {
-            BoulderRouteVideo boulderRouteVideo = new BoulderRouteVideo()
+            BoulderRouteVideo routeVideo = new BoulderRouteVideo()
             {
                 Route = routeId,
                 IsDemo = isDemo            
             };
-            Insert(boulderRouteVideo, isSubmitChanges);
-            return boulderRouteVideo;
+            Insert(routeVideo, isSubmitChanges);
+            return routeVideo;
+        }
+
+        public static BoulderRouteVideo Insert(Tuple<string, string> videoIdAndNo, string routeId, bool isDemo, bool isSubmitChanges = true)
+        {
+            BoulderRouteVideo routeVideo = new BoulderRouteVideo()
+            {
+                Route = routeId,
+                IsDemo = isDemo
+            };
+            Insert(videoIdAndNo, routeVideo, isSubmitChanges);
+            return routeVideo;
         }
 
         public static string Insert(BoulderRouteVideo proposedVideo, bool isSubmitChanges = true)
         {
-            DateTime createDT = DateTime.Now;
-            proposedVideo.IsDeleted = false;
-            proposedVideo.CreateDT = createDT;
+            return Insert(GenerateIdAndNo(), proposedVideo, isSubmitChanges);
+        }
 
-            Tuple<string, string> videoIdAndNo = KeyGenerator.GenerateNewKeyAndNo(myEntityType, createDT);
+        public static string Insert(Tuple<string, string> videoIdAndNo, BoulderRouteVideo proposedVideo, bool isSubmitChanges = true)
+        {
+            proposedVideo.IsDeleted = false;
+            proposedVideo.CreateDT = DateTime.Now;
+
             proposedVideo.VideoID = videoIdAndNo.Item1;
             proposedVideo.VideoNo = videoIdAndNo.Item2;
 
@@ -93,7 +120,7 @@ namespace JustClimbTrial.DataAccess.Entities
             return proposedVideo.VideoID;
         }
 
-        public static void SetIsDeletedToTrue(string videoId, bool isSubmitChanges = true)
+        static void SetIsDeletedToTrue(string videoId, bool isSubmitChanges = true)
         {
             BoulderRouteVideo videoToDelete = BoulderRouteVideoById(videoId);
             videoToDelete.IsDeleted = true;
@@ -103,6 +130,12 @@ namespace JustClimbTrial.DataAccess.Entities
             {
                 database.SubmitChanges();
             }
+        }
+
+        //Generate VideoId
+        public static Tuple<string, string> GenerateIdAndNo()
+        {
+            return KeyGenerator.GenerateNewKeyAndNo(myEntityType, DateTime.Now);
         }
 
 

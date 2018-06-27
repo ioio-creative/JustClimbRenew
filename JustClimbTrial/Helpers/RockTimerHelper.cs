@@ -19,7 +19,7 @@ namespace JustClimbTrial.Helpers
 
             Tick += (sender, e) =>
             {
-                rockConstantTimerCounter++;
+                this.rockConstantTimerCounter++;
             };
         }
 

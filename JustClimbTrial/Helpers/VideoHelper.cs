@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ProcessHelperDLL;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Extensions;
+using JustClimbTrial.DataAccess;
 
 namespace JustClimbTrial.Helpers
 {
@@ -26,6 +27,7 @@ namespace JustClimbTrial.Helpers
 
         private static string ffmpegExePath = AppGlobal.FfmpegExePath;
         private static string videoBufferFolderPath = FileHelper.VideoBufferFolderPath();
+        private string videoBufferSubfolderPathByKey;
 
         private KinectManager kinectManagerClient;
         private int frameCnt = 0;
@@ -64,11 +66,6 @@ namespace JustClimbTrial.Helpers
             IsRecording = false;
             Queue = new BlockingCollection<ImageToSave>();
             kinectManagerClient = aKinectManagerClient;
-
-            if (!Directory.Exists(videoBufferFolderPath))
-            {
-                Directory.CreateDirectory(videoBufferFolderPath);
-            }
         }
 
         #endregion
@@ -199,22 +196,37 @@ namespace JustClimbTrial.Helpers
             // TODO: file used by others exception?
             try
             {
-                FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferFolderPath);
+                //FileHelperDLL.FileHelper.DeleteAllFilesInDirectorySafe(videoBufferSubfolderPathByKey);
+                if (Directory.Exists(videoBufferSubfolderPathByKey))
+                {
+                    Directory.Delete(videoBufferSubfolderPathByKey, true); 
+                }
             }
             catch (Exception ex)
             {
-
+                UiHelper.NotifyUser("Error when clearing buffer at " + videoBufferSubfolderPathByKey);
             }
         }
 
         public async Task StartRecordingAsync()
         {
+            await StartRecordingAsync(KeyGenerator.RandomString(10));
+        }
+
+        public async Task StartRecordingAsync(string videoKey)
+        {
+            videoBufferSubfolderPathByKey = Path.Combine(videoBufferFolderPath, videoKey);
+
+            if (!Directory.Exists(videoBufferSubfolderPathByKey))
+            {
+                Directory.CreateDirectory(videoBufferSubfolderPathByKey);
+            }
+
             // ensure all buffer images from previous recording processes are saved
             // before starting new recording
             await WaitingForAllBufferFramesSavedAsync();
 
             kinectManagerClient.ColorBitmapArrived += HandleColorBitmapArrived;
-            ClearBuffer();
             StartQueue();
         }
 
@@ -230,7 +242,7 @@ namespace JustClimbTrial.Helpers
         {
             StopRecordingIfIsRecording();
             await WaitingForAllBufferFramesSavedAsync();
-            int exitCode = ExportVideo(videoBufferFolderPath, outputFilePath);
+            int exitCode = ExportVideo(videoBufferSubfolderPathByKey, outputFilePath);
             ClearBuffer();
             return exitCode;
         }        
@@ -244,7 +256,7 @@ namespace JustClimbTrial.Helpers
         {
             if (IsRecording)
             {
-                SaveImageToQueue(videoBufferFolderPath, e.GetColorBitmap());
+                SaveImageToQueue(videoBufferSubfolderPathByKey, e.GetColorBitmap());
             }
         }
 

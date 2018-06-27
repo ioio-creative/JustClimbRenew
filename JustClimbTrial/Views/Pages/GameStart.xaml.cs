@@ -45,6 +45,7 @@ namespace JustClimbTrial.Views.Pages
 
         private string routeId;
         private ClimbMode climbMode;
+        private Tuple<string, string> videoIdAndNo;
         private GameStartViewModel viewModel;
 
         private RocksOnRouteViewModel rocksOnRouteVM;
@@ -138,7 +139,7 @@ namespace JustClimbTrial.Views.Pages
 
         #region Gameplay Flags/Timers
 
-        private int nextTrainRockIdx = 0;
+        //private int nextTrainRockIdx = 0;
 
         private bool gameStarted = false;
 
@@ -148,7 +149,7 @@ namespace JustClimbTrial.Views.Pages
         private Plane wallPlane;
         private Plane floorPlane;
 
-        private bool interRocksVisualFeedBack = false;
+        private bool interRocksVisualFeedBack = true;
 
         #endregion
 
@@ -415,11 +416,24 @@ namespace JustClimbTrial.Views.Pages
 
         private async Task OnGameplayStartAsync()
         {
-            // start video recording
-            await gameplayVideoRecClient.StartRecordingAsync();
+            switch (climbMode)
+            {
+                case ClimbMode.Boulder:
+                default:
+                    videoIdAndNo = BoulderRouteVideoDataAccess.GenerateIdAndNo();
+                    break;
+                case ClimbMode.Training:
+                    videoIdAndNo = TrainingRouteVideoDataAccess.GenerateIdAndNo();
+                    break;                
+            }
 
+            // start video recording
+            await gameplayVideoRecClient.StartRecordingAsync(videoIdAndNo.Item2);
+
+            playgroundMedia.Stop();
             //Play "Start" video
             playgroundMedia.Source = new Uri(FileHelper.GameplayStartVideoPath());
+            playgroundWindow.LoopMedia = false;
             playgroundMedia.Play();
 
             gameStarted = true;
@@ -429,7 +443,9 @@ namespace JustClimbTrial.Views.Pages
         {
             gameStarted = false;
             //Play "Finish" video
+            playgroundMedia.Stop();
             playgroundMedia.Source = new Uri(FileHelper.GameplayFinishVideoPath());
+            playgroundWindow.LoopMedia = false;
             playgroundMedia.MediaEnded += HandlePlaygroundVideoEndedAsync;
             playgroundMedia.Play();
         }
@@ -466,18 +482,21 @@ namespace JustClimbTrial.Views.Pages
             gameStarted = false;
             playgroundCanvas.Children.Clear();
 
+            playgroundMedia.Stop();
             //Play "GameOver" Video
             playgroundMedia.Source = new Uri(FileHelper.GameOverVideoPath());
+            playgroundWindow.LoopMedia = false;
             playgroundMedia.MediaEnded += HandlePlaygroundVideoEndedAsync;
-
             playgroundMedia.Play();
         }
 
         private void ResetGameStart()
         {
-            //TODO: Rethink how to restart situations
-
+            //TODO: Check Video Recorder after reset (multiple export after reset)
+            //rocktimers tick sub and unsub
+            Console.WriteLine("Before Reset: " + playgroundCanvas.Children.Count);
             playgroundCanvas.Children.Clear();
+            Console.WriteLine("After Reset: " + playgroundCanvas.Children.Count);
 
             if (debug)
             {
@@ -492,6 +511,7 @@ namespace JustClimbTrial.Views.Pages
                         string.Format(HeaderRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
 
                     nextRockOnTrainRoute = rocksOnRouteVM.RockOnRouteEnumerator;
+                    nextRockOnTrainRoute.Reset();
                     nextRockOnTrainRoute.MoveNext();
                     //Console.WriteLine("rock: " + nextRockOnTrainRoute.Current.TrainingSeq);
 
@@ -653,6 +673,7 @@ namespace JustClimbTrial.Views.Pages
                             nextRockTimer.Reset();
                             //Play "Count down to 3" video
                             playgroundMedia.Source = new Uri(FileHelper.GameplayCountdownVideoPath());
+                            playgroundWindow.LoopMedia = false;
 
                             if (!endRockHoldTimer.IsTickHandlerSubed)
                             {
@@ -678,13 +699,18 @@ namespace JustClimbTrial.Views.Pages
                             //TODO: Interrock reached behaviour                                  
                             //INTER ROCK REACHED VERIFIED
                             nextRockTimer.Reset();
-                            nextRockOnTrainRoute.MoveNext();
-                            //nextTrainRockIdx++;
 
                             if (debug)
                             {
                                 DebugRecolorRockVM(nextRockOnTrainRoute.Current);
                             }
+
+
+                            //We call movenext after everything has been done to current RockVM
+                            nextRockOnTrainRoute.MoveNext();
+                            //nextTrainRockIdx++;
+
+                            
                         }
 
                     }
@@ -720,9 +746,6 @@ namespace JustClimbTrial.Views.Pages
             if (isTrainingTargetReached(nextRockOnTrainRoute.Current))
             {
                 //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
-                //Stop "Ready" video
-                playgroundWindow.LoopMedia = false;
-                playgroundMedia.Stop();
 
                 if (!nextRockTimer.IsTickHandlerSubed)
                 {
@@ -758,6 +781,7 @@ namespace JustClimbTrial.Views.Pages
 
                         startRockTimer.Reset();
                         startRockTimer.Tick -= startRockTimerTickEventHandler;
+                        startRockTimer.IsTickHandlerSubed = false;
                         await OnGameplayStartAsync();
 
                         //TODO: StartRock Feedback Animation
@@ -792,10 +816,12 @@ namespace JustClimbTrial.Views.Pages
                         //END ROCK REACHED VERIFIED
                         endRockTimer.Reset();
                         endRockTimer.Tick -= endRockTimerTickEventHandler;
+                        endRockTimer.IsTickHandlerSubed = false;
 
                         //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
                         //Play "Count down to 3" video
                         playgroundMedia.Source = new Uri(FileHelper.GameplayCountdownVideoPath());
+                        playgroundWindow.LoopMedia = false;
 
                         if (!endRockHoldTimer.IsTickHandlerSubed)
                         {
@@ -841,6 +867,7 @@ namespace JustClimbTrial.Views.Pages
                         interRockTimer.Reset();
 
                         interRockTimer.Tick -= interRockTimerTickEventHandler;
+                        interRockTimer.IsTickHandlerSubed = false;
                         //TODO: animation Feedback for that rock
                         if (debug)
                         {
@@ -871,16 +898,16 @@ namespace JustClimbTrial.Views.Pages
             {
                 case RockOnBoulderStatus.Start:
                     //TODO: confirm condition during UAT
-                    //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
-                    reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
+                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
+                    //reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
                     reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     break;
                 case RockOnBoulderStatus.End:
-                    //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel) && body.TrackingId == playerBodyID;
-                    reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    //reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     break;
             }
 
@@ -901,6 +928,7 @@ namespace JustClimbTrial.Views.Pages
                 {
                     //DO SOMETHING WHEN RELEVANT JOINT(S) TOUCHES STARTING POINT
 
+                    //
                     playgroundWindow.LoopMedia = false;
                     playgroundMedia.Stop();
 
@@ -909,7 +937,6 @@ namespace JustClimbTrial.Views.Pages
                     if (!startRockTimer.IsTickHandlerSubed)
                     {
                         SetStartBoulderRockTimerTickEventHandler(body, startRockTimer, isBoulderTargetReached);
-                        startRockTimer.IsTickHandlerSubed = true;
                     }
 
                     if (!startRockTimer.IsEnabled)
@@ -981,11 +1008,14 @@ namespace JustClimbTrial.Views.Pages
 
                 if (endRockHoldTimer.IsTimerGoalReached())
                 {
+                    //TODO: Countdown finishes eventhough joint left target
                     //END ROCK 3-second HOLD VERIFIED
                     endRockHoldTimer.Reset();
 
                     prevRockTimer.Tick -= prevRockTimerTickHandler;
+                    prevRockTimer.IsTickHandlerSubed = false;
                     endRockHoldTimer.Tick -= endRockHoldTimerTickEventHandler;
+                    endRockHoldTimer.IsTickHandlerSubed = false;
 
                     OnGameplayFinish();
 
@@ -997,6 +1027,7 @@ namespace JustClimbTrial.Views.Pages
                     playgroundMedia.Stop();
                     endRockHoldTimer.Reset();
                     endRockHoldTimer.Tick -= endRockHoldTimerTickEventHandler;
+                    endRockHoldTimer.IsTickHandlerSubed = false;
                 }
             };
 
@@ -1084,65 +1115,62 @@ namespace JustClimbTrial.Views.Pages
 
         private async Task SaveVideoRecordedInDbAndLocallyAsync()
         {
-            // note: must save to db first to generate the video id and no.
-            // before saving local video file
+            // TODO: show loading message
 
             int exportVideoErrorCode = 0;
-            string routeVideoNo = null;
+            string routeVideoNo = videoIdAndNo.Item2;
 
             switch (climbMode)
             {
                 case ClimbMode.Training:
-                    // save to db first
-                    TrainingRouteVideo trainingRouteVideo;
-                    if (isRecordingDemo)
-                    {
-                        trainingRouteVideo = TrainingRouteVideoDataAccess.InsertToReplacePreviousDemo(routeId, true);                        
-                    }
-                    else
-                    {
-                        trainingRouteVideo =
-                            TrainingRouteVideoDataAccess.Insert(routeId, isRecordingDemo, true);
-                    }
-                    
-                    // save local video file
+                    // save local video file first
                     string trainingRouteVideoLocalPath = FileHelper.TrainingRouteVideoRecordedFullPath(
                         TrainingRouteDataAccess.TrainingRouteNoById(routeId),
-                        trainingRouteVideo.VideoNo);
+                        routeVideoNo);
+                    
+                    exportVideoErrorCode = 
+                        await gameplayVideoRecClient.StopRecordingIfIsRecordingAndExportVideoAndClearBufferAsync(trainingRouteVideoLocalPath);                    
 
-                    // TODO: show loading message
-                    exportVideoErrorCode = await gameplayVideoRecClient.StopRecordingIfIsRecordingAndExportVideoAndClearBufferAsync(trainingRouteVideoLocalPath);
-                    // TODO: hide loading message
-
-                    routeVideoNo = trainingRouteVideo.VideoNo;
+                    if (exportVideoErrorCode == 0)
+                    {
+                        // save to db last                        
+                        if (isRecordingDemo)
+                        {
+                            TrainingRouteVideoDataAccess.InsertToReplacePreviousDemo(videoIdAndNo, routeId, true);
+                        }
+                        else
+                        {                            
+                            TrainingRouteVideoDataAccess.Insert(videoIdAndNo, routeId, isRecordingDemo, true);
+                        }
+                    }
+                    
                     break;
                 case ClimbMode.Boulder:
                 default:
-                    // save to db first
-                    BoulderRouteVideo boulderRouteVideo;
-                    if (isRecordingDemo)
-                    {
-                        boulderRouteVideo =
-                            BoulderRouteVideoDataAccess.InsertToReplacePreviousDemo(routeId, true);
-                    }
-                    else
-                    {
-                        boulderRouteVideo =
-                            BoulderRouteVideoDataAccess.Insert(routeId, isRecordingDemo, true);
-                    }
-
-                    // save local video file
+                    // save local video file first
                     string boulderRouteVideoLocalPath = FileHelper.BoulderRouteVideoRecordedFullPath(
                         BoulderRouteDataAccess.BoulderRouteNoById(routeId),
-                        boulderRouteVideo.VideoNo);
+                        routeVideoNo);
 
-                    // TODO: show loading message
-                    exportVideoErrorCode = await gameplayVideoRecClient.StopRecordingIfIsRecordingAndExportVideoAndClearBufferAsync(boulderRouteVideoLocalPath);
-                    // TODO: hide loading message
+                    exportVideoErrorCode = 
+                        await gameplayVideoRecClient.StopRecordingIfIsRecordingAndExportVideoAndClearBufferAsync(boulderRouteVideoLocalPath);
 
-                    routeVideoNo = boulderRouteVideo.VideoNo;
+                    if (exportVideoErrorCode == 0)
+                    {
+                        // save to db last                    
+                        if (isRecordingDemo)
+                        {
+                            BoulderRouteVideoDataAccess.InsertToReplacePreviousDemo(videoIdAndNo, routeId, true);
+                        }
+                        else
+                        {
+                            BoulderRouteVideoDataAccess.Insert(videoIdAndNo, routeId, isRecordingDemo, true);
+                        } 
+                    }
                     break;
             }
+
+            // TODO: hide loading message
 
             if (exportVideoErrorCode == 0)
             {
@@ -1151,7 +1179,6 @@ namespace JustClimbTrial.Views.Pages
             else
             {
                 UiHelper.NotifyUser("Error when saving video no. " + routeVideoNo);
-                //TODO: delete db video entry when failed to save video file
             }
 
             // !!! Important !!! refresh data grid to see the route video item newly inserted

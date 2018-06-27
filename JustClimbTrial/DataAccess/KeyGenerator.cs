@@ -127,7 +127,7 @@ namespace JustClimbTrial.DataAccess
         /* private methods */
 
         // http://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
-        private static string RandomString(int length)
+        public static string RandomString(int length)
         {
             return new string(Enumerable.Repeat(CharCollection, length)
                 .Select(s => s[RandObj.Next(s.Length)]).ToArray());
