@@ -520,6 +520,10 @@ namespace JustClimbTrial.Views.Pages
                     {
                         rocksOnRouteVM.DrawTrainingPathInGame();
                     }
+                    else
+                    {
+
+                    }
 
                     #endregion
                     break;
@@ -569,7 +573,7 @@ namespace JustClimbTrial.Views.Pages
 
                             //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
                             //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            //    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
+                            //  new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
 
                             //interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
@@ -723,8 +727,7 @@ namespace JustClimbTrial.Views.Pages
                 }
             };//trainingRockTimerTickHandler = async (_sender, _e) =>
 
-            nextRockTimer.Tick += trainingRockTimerTickEventHandler;
-            nextRockTimer.IsTickHandlerSubed = true;
+            nextRockTimer.AddTickEventHandler(trainingRockTimerTickEventHandler);            
         }
 
         private void TrainingGameplay(Body body, IEnumerable<Joint> LHandJoints,
@@ -781,8 +784,7 @@ namespace JustClimbTrial.Views.Pages
                         //Debug.WriteLine("Player Tracking ID: " + playerBodyID);
 
                         startRockTimer.Reset();
-                        startRockTimer.Tick -= startRockTimerTickEventHandler;
-                        startRockTimer.IsTickHandlerSubed = false;
+                        startRockTimer.RemoveTickEventHandler(startRockTimerTickEventHandler);
                         await OnGameplayStartAsync();
 
                         //TODO: StartRock Feedback Animation
@@ -799,8 +801,7 @@ namespace JustClimbTrial.Views.Pages
                 }
             };//startRockTimerTickEventHandler = async (_sender, _e) =>
 
-            startRockTimer.Tick += startRockTimerTickEventHandler;
-            startRockTimer.IsTickHandlerSubed = true;
+            startRockTimer.AddTickEventHandler(startRockTimerTickEventHandler);
         }
 
         private void SetEndBoulderRockTimerTickEventHandler(Body body, RockTimerHelper endRockTimer, Func<RockOnRouteViewModel, bool> isBoulderTargetReached)
@@ -816,8 +817,7 @@ namespace JustClimbTrial.Views.Pages
                     {
                         //END ROCK REACHED VERIFIED
                         endRockTimer.Reset();
-                        endRockTimer.Tick -= endRockTimerTickEventHandler;
-                        endRockTimer.IsTickHandlerSubed = false;
+                        //endRockTimer.RemoveTickEventHandler(endRockTimerTickEventHandler);
 
                         //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
                         //Play "Count down to 3" video
@@ -850,8 +850,7 @@ namespace JustClimbTrial.Views.Pages
                 }
             };//endRockTimerTickEventHandler = (_sender, _e) =>
 
-            endRockTimer.Tick += endRockTimerTickEventHandler;
-            endRockTimer.IsTickHandlerSubed = true;
+            endRockTimer.AddTickEventHandler(endRockTimerTickEventHandler);
         }
 
         private void SetInterBoulderRockTimerTickEventHandler(Body body, RockOnRouteViewModel rockOnRoute, RockTimerHelper interRockTimer, Func<RockOnRouteViewModel, bool> isBoulderTargetReached)
@@ -867,8 +866,7 @@ namespace JustClimbTrial.Views.Pages
                     {
                         interRockTimer.Reset();
 
-                        interRockTimer.Tick -= interRockTimerTickEventHandler;
-                        interRockTimer.IsTickHandlerSubed = false;
+                        interRockTimer.RemoveTickEventHandler(interRockTimerTickEventHandler);
                         //TODO: animation Feedback for that rock
                         if (debug)
                         {
@@ -883,8 +881,7 @@ namespace JustClimbTrial.Views.Pages
                 }
             };//interRockTimerTickEventHandler = (_sender, _e) =>
 
-            interRockTimer.Tick += interRockTimerTickEventHandler;
-            interRockTimer.IsTickHandlerSubed = true;
+            interRockTimer.AddTickEventHandler(interRockTimerTickEventHandler);
         }
 
         private bool IsBoulderTargetReached(RockOnRouteViewModel rockOnRouteVM, Body body,
@@ -997,7 +994,7 @@ namespace JustClimbTrial.Views.Pages
         
         // end of boulder
 
-        private void SetEndRockHoldTimerTickEventHandler(Body body, RockTimerHelper prevRockTimer, EventHandler prevRockTimerTickHandler, Func<RockOnRouteViewModel, bool> isEndRockReached)
+        private void SetEndRockHoldTimerTickEventHandler(Body body, RockTimerHelper endRockTimer, EventHandler endRockTimerTickHandler, Func<RockOnRouteViewModel, bool> isEndRockReached)
         {
             EventHandler endRockHoldTimerTickEventHandler = null;
             endRockHoldTimerTickEventHandler = (_holdSender, _holdE) =>
@@ -1013,12 +1010,11 @@ namespace JustClimbTrial.Views.Pages
                     //END ROCK 3-second HOLD VERIFIED
                     endRockHoldTimer.Reset();
 
-                    prevRockTimer.Tick -= prevRockTimerTickHandler;
-                    prevRockTimer.IsTickHandlerSubed = false;
-                    endRockHoldTimer.Tick -= endRockHoldTimerTickEventHandler;
-                    endRockHoldTimer.IsTickHandlerSubed = false;
-
                     OnGameplayFinish();
+
+                    endRockTimer.RemoveTickEventHandler(endRockTimerTickHandler);
+                    endRockHoldTimer.RemoveTickEventHandler(endRockHoldTimerTickEventHandler);                    
+                  
 
                     //TODO: animation Feedback for that rock
                 }
@@ -1027,13 +1023,11 @@ namespace JustClimbTrial.Views.Pages
                 {
                     playgroundMedia.Stop();
                     endRockHoldTimer.Reset();
-                    endRockHoldTimer.Tick -= endRockHoldTimerTickEventHandler;
-                    endRockHoldTimer.IsTickHandlerSubed = false;
+                    endRockHoldTimer.RemoveTickEventHandler(endRockHoldTimerTickEventHandler);                    
                 }
             };
 
-            endRockHoldTimer.Tick += endRockHoldTimerTickEventHandler;
-            endRockHoldTimer.IsTickHandlerSubed = true;
+            endRockHoldTimer.AddTickEventHandler(endRockHoldTimerTickEventHandler);
         }
 
         #endregion

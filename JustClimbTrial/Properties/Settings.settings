@@ -70,7 +70,7 @@
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\1_Button_Show</Value>
     </Setting>
     <Setting Name="BoulderButtonFeedbackImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\2_Button_Feedback</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\2A_Feedback_Lite</Value>
     </Setting>
     <Setting Name="BoulderButtonShinePopImgSequenceDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\3_Button_Shine_Pop</Value>
