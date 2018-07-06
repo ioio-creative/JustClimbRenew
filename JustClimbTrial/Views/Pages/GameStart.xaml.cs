@@ -15,6 +15,7 @@ using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -143,6 +144,7 @@ namespace JustClimbTrial.Views.Pages
 
         private bool gameStarted = false;
 
+        //TODO: combine hold and endrock timer to avoid confusion
         private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -438,11 +440,13 @@ namespace JustClimbTrial.Views.Pages
             playgroundMedia.Play();
 
             gameStarted = true;
+            Console.WriteLine("Game Started !");
         }
 
         private void OnGameplayFinish()
         {
             gameStarted = false;
+            Debug.WriteLine("Finished!");
             //Play "Finish" video
             playgroundMedia.Stop();
             playgroundMedia.Source = new Uri(FileHelper.GameplayFinishVideoPath());
@@ -481,6 +485,7 @@ namespace JustClimbTrial.Views.Pages
         private void OnGameOver()
         {
             gameStarted = false;
+            Debug.WriteLine("Over!");
             playgroundCanvas.Children.Clear();
 
             playgroundMedia.Stop();
@@ -654,16 +659,20 @@ namespace JustClimbTrial.Views.Pages
                         //Starting Rock
                         if (nextRockOnTrainRoute.Current == rocksOnRouteVM.StartRock)
                         {
+                            playerBodyID = body.TrackingId;
+                            Debug.WriteLine("Player Tracking ID: " + playerBodyID);
+
+                            Debug.WriteLine("before OnGameplayStartAsync");
+
                             await OnGameplayStartAsync();
 
 
-                            //START ROCK REACHED VERIFIED
-                            playerBodyID = body.TrackingId;
-                            //Debug.WriteLine("Player Tracking ID: "+playerBodyID);
+                            //START ROCK REACHED VERIFIED                           
 
                             nextRockOnTrainRoute.MoveNext();
                             //nextTrainRockIdx++;
                             nextRockTimer.Reset();
+                            nextRockTimer.RemoveTickEventHandler(trainingRockTimerTickEventHandler);
 
                             //TODO: StartRock Feedback Animation
                             if (debug)
@@ -704,6 +713,7 @@ namespace JustClimbTrial.Views.Pages
                             //TODO: Interrock reached behaviour                                  
                             //INTER ROCK REACHED VERIFIED
                             nextRockTimer.Reset();
+                            nextRockTimer.RemoveTickEventHandler(trainingRockTimerTickEventHandler);
 
                             if (debug)
                             {
