@@ -407,6 +407,7 @@ namespace JustClimbTrial.Views.Pages
             }
 
             ResetGameStart();
+            playgroundMedia.MediaEnded -= HandlePlaygroundVideoEndedAsync;
         }
 
         #endregion
@@ -457,7 +458,7 @@ namespace JustClimbTrial.Views.Pages
                 //We have to declare null to EventHandler before we can unsubcribe itself inside lambda expression
                 ////https://stackoverflow.com/questions/3082143/can-an-anonymous-delegate-unsubscribe-itself-from-an-event-once-it-has-been-fire
 
-                EventHandler _tickHandler = null;
+                EventHandler _tickHandler  = null;
                 _tickHandler = (_sender, _e) =>
                 {
                     if (IsBodyGameOver(body))
@@ -898,7 +899,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 case RockOnBoulderStatus.Start:
                     //TODO: confirm condition during UAT
-                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel);
+                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
                     //reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
                     break;
                 case RockOnBoulderStatus.Int:
@@ -906,7 +907,7 @@ namespace JustClimbTrial.Views.Pages
                     reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     break;
                 case RockOnBoulderStatus.End:
-                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, x.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     //reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     break;
             }
