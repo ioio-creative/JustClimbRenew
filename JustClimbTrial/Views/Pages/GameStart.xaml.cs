@@ -519,6 +519,10 @@ namespace JustClimbTrial.Views.Pages
                     {
                         rocksOnRouteVM.DrawTrainingPathInGame();
                     }
+                    else
+                    {
+
+                    }
 
                     #endregion
                     break;
@@ -568,7 +572,7 @@ namespace JustClimbTrial.Views.Pages
 
                             //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
                             //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            //    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
+                            //  new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
 
                             //interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
