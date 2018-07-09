@@ -14,6 +14,12 @@ namespace JustClimbTrial.ViewModels
         
         #endregion
 
+        public RockTimerHelper InitializeRockTimerHelper(int goal, int lag, int msInterval = 100)
+        {
+            MyRockTimerHelper = new RockTimerHelper(goal, lag, msInterval);
+            return MyRockTimerHelper;
+        }
+
 
         #region set training rock
 

@@ -11,6 +11,8 @@ namespace JustClimbTrial.Views.Windows
     public partial class Playground : Window
     {
         public bool LoopMedia = true;
+        public bool PlaygroundMediaPlaying;
+        public bool PlaybackMediaPlaying;
 
 
         public Playground()
