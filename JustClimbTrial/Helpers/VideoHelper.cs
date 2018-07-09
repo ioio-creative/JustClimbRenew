@@ -97,12 +97,12 @@ namespace JustClimbTrial.Helpers
                     if (Queue.TryTake(out imageToSave))
                     {
                         string filePath = Path.Combine(imageToSave.FolderPath, frameCnt.ToString().PadLeft(8, '0') + ".png");
-                        Debug.WriteLine("1: Saving image from queue to {0}", filePath);
+                        //Debug.WriteLine("1: Saving image from queue to {0}", filePath);
                         try
                         {
                             imageToSave.VBitmap.Save(filePath);
                             frameCnt++;
-                            Debug.WriteLine("1: Queue is holding {0} images", Queue.Count);
+                            //Debug.WriteLine("1: Queue is holding {0} images", Queue.Count);
                         }
                         catch (Exception ex)
                         {

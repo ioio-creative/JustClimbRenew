@@ -57,12 +57,6 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //Wall & Floor Calibration
-            if (wallAndFloor)
-            {
-                WallAndFloor wAndF = new WallAndFloor();
-                Navigate(wAndF);
-            }
             //Get registered wall from File
             Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
             BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
@@ -92,6 +86,13 @@ namespace JustClimbTrial
                 {
                     Application.Current.Shutdown();
                 }
+            }
+
+            //Wall & Floor Calibration
+            if (wallAndFloor)
+            {
+                WallAndFloor wAndF = new WallAndFloor();
+                Navigate(wAndF);
             }
         }
 

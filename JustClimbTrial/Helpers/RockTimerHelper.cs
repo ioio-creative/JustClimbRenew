@@ -40,6 +40,8 @@ namespace JustClimbTrial.Helpers
 
             };
 
+            // internal timer
+            // no need to change to use AddTickEventHandler()
             timer.Tick += (sender, e) =>
             {
                 this.rockConstantTimerCounter++;
