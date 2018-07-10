@@ -5,43 +5,64 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JustClimbTrial.Views.UserControls"
              mc:Ignorable="d"             
-             d:DesignHeight="100" d:DesignWidth="640"
+             d:DesignHeight="90" d:DesignWidth="960"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              Loaded="UserControl_Loaded">
     <Grid Margin="25,0,0,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*" />
-            <ColumnDefinition Width="299*" />
-            <ColumnDefinition Width="110*" />
-            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
+        
         <Button x:Name="btnStaffOptions" 
             Grid.Column="0"
-            PreviewMouseDown="btnStaffOptions_PreviewMouseDown" Margin="0,0,19,0">
+            PreviewMouseDown="btnStaffOptions_PreviewMouseDown" Margin="0,0,0,0">
             <Button.Background>
                 <ImageBrush ImageSource="/Resources/Images/btn1_JC Logo - General.png" />
             </Button.Background>
         </Button>
-        <StackPanel x:Name="panelStaffOptions" Grid.Column="1"
+        <Button x:Name="btnRescanWall" Content="Rescan Wall"
+                Grid.Column="1" Opacity="0"
+                Visibility="{Binding StaffOptionsVisibility}"/>
+        <Image Source="/Resources/Images/btn1_Rescan - General.png" 
+               Grid.Column="1" Margin="10,0,10,5"
+               VerticalAlignment="Bottom"
+               Visibility="{Binding StaffOptionsVisibility}"/>
+        <Button x:Name="btnRouteSet" Content="Route Set" 
+                Grid.Column="2" Opacity="0"
+                Visibility="{Binding StaffOptionsVisibility}"/>
+        <Image Source="/Resources/Images/btn1_Route Set - General.png" 
+               Grid.Column="2" Margin="10,0,10,5"
+               VerticalAlignment="Bottom"
+               Visibility="{Binding StaffOptionsVisibility}"/>
+        
+        <Button x:Name="btnRecordDemoVideo" Content="Record Demo"
+                    Grid.Column="3" Opacity="0"
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
+        <Image Source="/Resources/Images/btn1_record demo.png" 
+               Grid.Column="3" Margin="10,0,10,9"
+               VerticalAlignment="Bottom"
+               Visibility="{Binding BtnRecordDemoVideoVisibility}"/>
+        
+        <StackPanel x:Name="panelStaffOptions" Grid.Column="4"
                     Orientation="Horizontal"
                     Visibility="{Binding StaffOptionsVisibility}">
-            <Button x:Name="btnRescanWall" 
-                    Content="Rescan Wall" />
-            <Button x:Name="btnRouteSet" 
-                    Content="Route Set" />
-            <Button x:Name="btnRecordDemoVideo"
-                    Content="Record Demo"
-                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
+            
             <Button x:Name="btnCancelRecordDemoVideo"
                     Content="Cancel Record Demo"
                     Visibility="{Binding BtnRecordDemoVideoVisibility}" />
         </StackPanel>
+        
         <TextBlock x:Name="lbTitle"
-            Grid.Column="2" 
+            Grid.Column="4" 
             Text="{Binding HeaderRowTitle}">
         </TextBlock>
         <Button x:Name="btnHome" 
-            Grid.Column="3">
+            Grid.Column="5">
             <Image Source="/Resources/Images/btn1_Home - General.png" />
         </Button>
     </Grid>
