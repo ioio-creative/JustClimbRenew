@@ -1,6 +1,4 @@
-﻿using JustClimbTrial.DataAccess.Entities;
-using JustClimbTrial.Enums;
-using JustClimbTrial.Extensions;
+﻿using JustClimbTrial.Extensions;
 using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.Views.Dialogs;

@@ -3,6 +3,7 @@ using JustClimbTrial.Enums;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.ViewModels;
+using JustClimbTrial.Views.UserControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,15 +19,16 @@ namespace JustClimbTrial.Views.Pages
         private readonly bool debug = AppGlobal.DEBUG;
 
         private MainWindow parentMainWindow;
+        private HeaderRowNavigation navHead;
 
         private RoutesViewModel viewModel;
-        private ClimbMode climbMode;                    
+        private ClimbMode climbMode;                   
 
         public Routes() : this(ClimbMode.Boulder) { }
 
         public Routes(ClimbMode aClimbMode)
         {           
-            InitializeComponent();            
+            InitializeComponent();
 
             climbMode = aClimbMode;
 
@@ -48,25 +50,7 @@ namespace JustClimbTrial.Views.Pages
                 });
                 viewModel.SetClimbMode(aClimbMode);
             }
-
-            // pass this Page to the top row user control so it can use this Page's NavigationService
-            navHead.ParentPage = this;
-
-            // set titles
-            string titleFormat = "Just Climb - {0} Routes";
-            string headerRowTitleFormat = "{0} - Route Select";
-            switch (climbMode)
-            {
-                case ClimbMode.Training:
-                    Title = string.Format(titleFormat, "Training");                    
-                    navHead.HeaderRowTitle = string.Format(headerRowTitleFormat, "Training");
-                    break;
-                case ClimbMode.Boulder:
-                default:
-                    Title = string.Format(titleFormat, "Boulder");                    
-                    navHead.HeaderRowTitle = string.Format(headerRowTitleFormat, "Boulder");
-                    break;
-            }
+            
             WindowTitle = Title;
         }
 
@@ -76,11 +60,33 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             parentMainWindow = this.Parent as MainWindow;
+            navHead = master.NavHead;
+
             if (debug)
             {
                 parentMainWindow.SubscribeColorImgSrcToPlaygrd(); 
             }
             viewModel.LoadData();
+
+            
+            // pass this Page to the top row user control so it can use this Page's NavigationService
+            navHead.ParentPage = this;
+
+            // set titles
+            string titleFormat = "Just Climb - {0} Routes";
+            string headerRowTitleFormat = "{0} - Route Select";
+            switch (climbMode)
+            {
+                case ClimbMode.Training:
+                    Title = string.Format(titleFormat, "Training");
+                    navHead.HeaderRowTitle = string.Format(headerRowTitleFormat, "Training");
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    Title = string.Format(titleFormat, "Boulder");
+                    navHead.HeaderRowTitle = string.Format(headerRowTitleFormat, "Boulder");
+                    break;
+            }
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
