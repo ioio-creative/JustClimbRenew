@@ -8,16 +8,16 @@
              d:DesignHeight="100" d:DesignWidth="640"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              Loaded="UserControl_Loaded">
-    <Grid>
+    <Grid Margin="25,0,0,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="299*" />
+            <ColumnDefinition Width="110*" />
+            <ColumnDefinition Width="100*" />
         </Grid.ColumnDefinitions>
         <Button x:Name="btnStaffOptions" 
             Grid.Column="0"
-            PreviewMouseDown="btnStaffOptions_PreviewMouseDown">
+            PreviewMouseDown="btnStaffOptions_PreviewMouseDown" Margin="0,0,19,0">
             <Button.Background>
                 <ImageBrush ImageSource="/Resources/Images/btn1_JC Logo - General.png" />
             </Button.Background>

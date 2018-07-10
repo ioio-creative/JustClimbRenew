@@ -774,8 +774,7 @@ namespace JustClimbTrial.Views.Pages
                     //This Block only happens for End Rock
                     if (nextRockOnRouteVM == rocksOnRouteVM.EndRock)
                     {
-                        if (playgroundMedia.)
-                        {
+                        
 
                             //Play "Count down to 3" video
                             playgroundMedia.Source = new Uri(FileHelper.GameplayCountdownVideoPath());
@@ -789,7 +788,7 @@ namespace JustClimbTrial.Views.Pages
                                 nextRockTimer.Start();
                                 playgroundMedia.Play();
                             } 
-                        }
+                        
 
                         if (debug)
                         {
