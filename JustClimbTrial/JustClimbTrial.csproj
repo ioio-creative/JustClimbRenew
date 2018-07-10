@@ -306,7 +306,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-<<<<<<< HEAD
   <ItemGroup>
     <Resource Include="Resources\update from client\btn1_back.png" />
     <Resource Include="Resources\Images\btn1_Boulder - Mode.png" />
@@ -333,8 +332,6 @@
     <Resource Include="Resources\Images\btn1_Training - Mode.png" />
     <Resource Include="Resources\update from client\sample.png" />
   </ItemGroup>
-=======
->>>>>>> 37c3f6cb7620aa4d178a4e54f47d62e687f260e6
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
