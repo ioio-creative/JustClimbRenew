@@ -19,7 +19,7 @@
             Grid.Column="0"
             PreviewMouseDown="btnStaffOptions_PreviewMouseDown">
             <Button.Background>
-                <ImageBrush ImageSource="/Resources/Images/JustClimbSquareLogo.jpg" />
+                <ImageBrush ImageSource="/Resources/Images/btn1_JC Logo - General.png" />
             </Button.Background>
         </Button>
         <StackPanel x:Name="panelStaffOptions" Grid.Column="1"
@@ -42,7 +42,7 @@
         </TextBlock>
         <Button x:Name="btnHome" 
             Grid.Column="3">
-            <Image Source="/Resources/Images/Home.jpg" />
+            <Image Source="/Resources/Images/btn1_Home - General.png" />
         </Button>
     </Grid>
 </UserControl>

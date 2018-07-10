@@ -28,16 +28,21 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Image Source="/Resources/Images/JustClimbLogo.png"
+        <Image Source="/Resources/Images/btn1_JC Logo - Landing.png"
                Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"
                HorizontalAlignment="Stretch"
-               Margin="0,0,0,10" />
+               Margin="0,0,0,0" />
+
+        <Image Source="/Resources/Images/btn1_Start - Landing.png" 
+               Grid.Row="5" Grid.Column="2" 
+               VerticalAlignment="Top" HorizontalAlignment="Center"
+               Margin="-20,0,-20,0" StretchDirection="DownOnly" Grid.RowSpan="2"/>
+
         <Button x:Name="BtnStart"
-            Grid.Row="4" Grid.Column="2" 
-            VerticalAlignment="Stretch"
-            Margin="0,10,0,0" 
-            Click="BtnStart_Click">
-            START
+            Grid.Row="5" Grid.Column="2"
+            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+            Margin="-15,0,-15,10" 
+            Click="BtnStart_Click" Opacity="0.5" >
         </Button>
     </Grid>
 </Page>

@@ -27,16 +27,27 @@
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
+        <Image Source="/Resources/Images/btn1_Boulder - Mode.png"
+            Grid.Row="3" Grid.Column="1" 
+            VerticalAlignment="Top"   
+            Margin="0,0,0,-30"/>
         <Button x:Name="BtnBoulder"
             Grid.Row="3" Grid.Column="1" 
             HorizontalAlignment="Stretch"
-            Click="BtnBoulder_Click">
+            Margin="5,0,5,15"
+            Click="BtnBoulder_Click" Opacity="0.5">
             Boulder
         </Button>
+
+        <Image Source="/Resources/Images/btn1_Training - Mode.png"
+            Grid.Row="3" Grid.Column="3" 
+            VerticalAlignment="Top"   
+            Margin="0,0,0,-30"/>
         <Button x:Name="BtnTraining"
             Grid.Row="3" Grid.Column="3" 
             HorizontalAlignment="Stretch"
-            Click="BtnTraining_Click">
+            Margin="5,0,5,15"
+            Click="BtnTraining_Click" Opacity="0.5">
             Training
         </Button>
     </Grid>

@@ -306,7 +306,32 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\update from client\btn1_back.png" />
+    <Resource Include="Resources\Images\btn1_Boulder - Mode.png" />
+    <Resource Include="Resources\update from client\btn1_cancel.png" />
+    <Resource Include="Resources\update from client\btn1_confirm.png" />
+    <Resource Include="Resources\update from client\btn1_demo done.png" />
+    <Resource Include="Resources\update from client\btn1_Demo.png" />
+    <Resource Include="Resources\update from client\btn1_done.png" />
+    <Resource Include="Resources\Images\btn1_Home - General.png" />
+    <Resource Include="Resources\Images\btn1_JC Logo - General.png" />
+    <Resource Include="Resources\update from client\btn1_pause.png" />
+    <Resource Include="Resources\update from client\btn1_Play select video.png" />
+    <Resource Include="Resources\update from client\btn1_record demo.png" />
+    <Resource Include="Resources\update from client\btn1_Rescan - General.png" />
+    <Resource Include="Resources\update from client\btn1_Restart.png" />
+    <Resource Include="Resources\update from client\btn1_return.png" />
+    <Resource Include="Resources\update from client\btn1_route end.png" />
+    <Resource Include="Resources\update from client\btn1_route int.png" />
+    <Resource Include="Resources\update from client\btn1_route none.png" />
+    <Resource Include="Resources\update from client\btn1_Route Set - General.png" />
+    <Resource Include="Resources\update from client\btn1_route start.png" />
+    <Resource Include="Resources\Images\btn1_Start - Landing.png" />
+    <Resource Include="Resources\update from client\btn1_start to play.png" />
+    <Resource Include="Resources\Images\btn1_Training - Mode.png" />
+    <Resource Include="Resources\update from client\sample.png" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
@@ -325,11 +350,12 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Cancel.jpg" />
     <Resource Include="Resources\Images\Home.jpg" />
-    <Resource Include="Resources\Images\JustClimbLogo.png" />
-    <Resource Include="Resources\Images\JustClimbSquareLogo.jpg" />
     <Resource Include="Resources\Images\JustClimbWall.png" />
     <Resource Include="Resources\Images\Tick.jpg" />
     <Resource Include="Resources\Images\TrainingSeqGoBack.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\btn1_JC Logo - Landing.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
