@@ -17,7 +17,7 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        
+
         <Button x:Name="btnStaffOptions" 
             Grid.Column="0"
             PreviewMouseDown="btnStaffOptions_PreviewMouseDown" Margin="0,0,0,0">
@@ -25,13 +25,18 @@
                 <ImageBrush ImageSource="/Resources/Images/btn1_JC Logo - General.png" />
             </Button.Background>
         </Button>
-        <Button x:Name="btnRescanWall" Content="Rescan Wall"
-                Grid.Column="1" Opacity="0"
-                Visibility="{Binding StaffOptionsVisibility}"/>
-        <Image Source="/Resources/Images/btn1_Rescan - General.png" 
+
+        <Button x:Name="btnRescanWall"
+                Grid.Column="1" VerticalAlignment="Bottom"
+                Background="Transparent" BorderBrush="Transparent"               
+                Visibility="{Binding StaffOptionsVisibility}">
+            <Image Source="/Resources/Images/btn1_Rescan - General.png" 
+               Margin="10,0,10,5"/>
+        </Button >
+        <!--<Image Source="/Resources/Images/btn1_Rescan - General.png" 
                Grid.Column="1" Margin="10,0,10,5"
                VerticalAlignment="Bottom"
-               Visibility="{Binding StaffOptionsVisibility}"/>
+               Visibility="{Binding StaffOptionsVisibility}"/>-->
         <Button x:Name="btnRouteSet" Content="Route Set" 
                 Grid.Column="2" Opacity="0"
                 Visibility="{Binding StaffOptionsVisibility}"/>
