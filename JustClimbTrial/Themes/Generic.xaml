@@ -5,6 +5,7 @@
     xmlns:master="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"
     xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls">
 
+    <!-- https://www.codeproject.com/Articles/23069/WPF-Master-Pages -->
     <Style TargetType="{x:Type master:MasterWithNavigation}">
         <Setter Property="Template">
             <Setter.Value>

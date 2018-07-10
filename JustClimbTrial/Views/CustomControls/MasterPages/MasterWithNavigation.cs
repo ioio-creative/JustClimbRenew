@@ -45,6 +45,7 @@ namespace JustClimbTrial.Views.CustomControls.MasterPages
     ///     <MyNamespace:MasterWithNavigation/>
     ///
     /// </summary>
+    /// https://www.codeproject.com/Articles/23069/WPF-Master-Pages
     public class MasterWithNavigation : Control
     {
         static MasterWithNavigation()
@@ -56,6 +57,9 @@ namespace JustClimbTrial.Views.CustomControls.MasterPages
         {
             get
             {
+                // https://docs.microsoft.com/en-us/dotnet/framework/wpf/controls/how-to-find-controltemplate-generated-elements
+                // https://stackoverflow.com/questions/29094171/how-to-find-controls-in-custom-window-in-wpf
+                // Note: You need to do it in the Loaded event (or later).
                 return Template.FindName("navHead", this) as HeaderRowNavigation;
             }
         }
