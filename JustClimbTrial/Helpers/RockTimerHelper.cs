@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Threading;
 
 namespace JustClimbTrial.Helpers
@@ -69,6 +70,7 @@ namespace JustClimbTrial.Helpers
 
         public bool IsLagThresholdExceeded()
         {
+            Debug.WriteLine("Rock Timer Threshold: " + rockConstantTimerCounter + " - " + rockTimerCounter);
             return (rockConstantTimerCounter - rockTimerCounter >= RockTimerAllowedLag);
         }
 
