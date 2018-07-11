@@ -746,9 +746,9 @@ namespace JustClimbTrial.Views.Pages
                     nextRockTimer.RemoveTickEventHandler(trainingRockTimerTickEventHandler);
 
                     if (isEndCountDownVideoPlaying)
-                    {
-                        playgroundMedia.Stop();
+                    {                        
                         playgroundMedia.Position = TimeSpan.FromSeconds(0);
+                        playgroundMedia.Stop();
                         isEndCountDownVideoPlaying = false;
                     }
 
@@ -896,9 +896,9 @@ namespace JustClimbTrial.Views.Pages
                     endRockTimer.RemoveTickEventHandler(endRockTimerTickEventHandler);
 
                     if (isEndCountDownVideoPlaying)
-                    {
-                        playgroundMedia.Stop();
+                    {                        
                         playgroundMedia.Position = TimeSpan.FromSeconds(0);
+                        playgroundMedia.Stop();
                         isEndCountDownVideoPlaying = false;
                     }
 
