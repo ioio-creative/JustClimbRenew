@@ -66,7 +66,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </Grid>
-                <Grid Grid.Row="1" Grid.Column="3">
+                <Grid Grid.Row="0" Grid.Column="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
@@ -99,7 +99,7 @@
                       Width="auto" 
                       ItemsSource="{Binding Source={StaticResource ResourceKey=cvsRoutes}}"                  
                       Margin="10,10,10,10" 
-                      Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" 
+                      Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
                       RowDetailsVisibilityMode="VisibleWhenSelected">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="routeNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto"/>
@@ -111,7 +111,7 @@
 
                 <!-- row 2 -->
                 <Button x:Name="btnGameStart" 
-                    Grid.Row="3" Grid.Column="2"                
+                    Grid.Row="2" Grid.Column="2"                
                     Click="btnGameStart_Click">
                     GAME
                 </Button>
