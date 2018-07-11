@@ -177,7 +177,7 @@ namespace JustClimbTrial.Views.Pages
             InitializeComponent();
 
             // pass cvsBoulderRouteVideos and _routeId to the view model
-            viewModel = v_gridContainer.DataContext as GameStartViewModel;
+            viewModel = this.DataContext as GameStartViewModel;
             if (viewModel != null)
             {
                 CollectionViewSource cvsVideos = v_gridContainer.Resources["cvsRouteVideos"] as CollectionViewSource;
@@ -260,6 +260,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            navHead = master.NavHead;
+
             // pass this Page to the top row user control so it can use this Page's NavigationService
             navHead.ParentPage = this;
 
@@ -445,6 +447,7 @@ namespace JustClimbTrial.Views.Pages
             //Play "Start" video
             playgroundMedia.Source = new Uri(FileHelper.GameplayStartVideoPath());
             playgroundWindow.LoopMedia = false;
+            playgroundMedia.Visibility = Visibility.Visible;
             playgroundMedia.Play();
 
             gameStarted = true;
@@ -461,6 +464,7 @@ namespace JustClimbTrial.Views.Pages
             playgroundMedia.Source = new Uri(FileHelper.GameplayFinishVideoPath());
             playgroundWindow.LoopMedia = false;
             playgroundMedia.MediaEnded += HandlePlaygroundVideoEndedAsync;
+            playgroundMedia.Visibility = Visibility.Visible;
             playgroundMedia.Play();
         }
 
@@ -502,6 +506,7 @@ namespace JustClimbTrial.Views.Pages
             playgroundMedia.Source = new Uri(FileHelper.GameOverVideoPath());
             playgroundWindow.LoopMedia = false;
             playgroundMedia.MediaEnded += HandlePlaygroundVideoEndedAsync;
+            playgroundMedia.Visibility = Visibility.Visible;
             playgroundMedia.Play();
         }
 
@@ -600,6 +605,7 @@ namespace JustClimbTrial.Views.Pages
             playgroundMedia.Stop();
             playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
             playgroundWindow.LoopMedia = true;
+            playgroundMedia.Visibility = Visibility.Visible;
             playgroundMedia.Play();
         }
 
@@ -679,6 +685,9 @@ namespace JustClimbTrial.Views.Pages
 
                     if (nextRockTimer.IsTimerGoalReached())
                     {
+                        nextRockTimer.Reset();
+                        nextRockTimer.RemoveTickEventHandler(trainingRockTimerTickEventHandler);
+
                         //Starting Rock
                         if (currentRockOnRouteVM == rocksOnRouteVM.StartRock)
                         {
@@ -728,13 +737,8 @@ namespace JustClimbTrial.Views.Pages
 
                             //We call movenext after everything has been done to current RockVM
                             nextRockOnTrainRoute.MoveNext();
-                            //nextTrainRockIdx++;
-
-                            
                         }
-                        //nextRockOnTrainRoute.MoveNext();
-                        nextRockTimer.Reset();
-                        nextRockTimer.RemoveTickEventHandler(trainingRockTimerTickEventHandler);
+                        
                     }
                 }
                 else
@@ -748,8 +752,9 @@ namespace JustClimbTrial.Views.Pages
                     nextRockTimer.RemoveTickEventHandler(trainingRockTimerTickEventHandler);
 
                     if (isEndCountDownVideoPlaying)
-                    {                        
-                        playgroundMedia.Position = TimeSpan.FromSeconds(0);
+                    {
+                        //playgroundMedia.Position = TimeSpan.FromSeconds(0);
+                        playgroundMedia.Visibility = Visibility.Hidden;
                         playgroundMedia.Stop();
                         isEndCountDownVideoPlaying = false;
                     }
@@ -766,9 +771,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void TrainingGameplay(Body body, IEnumerable<Joint> LHandJoints,
             IEnumerable<Joint> RHandJoints)
-        {
-            
-
+        {            
             RockOnRouteViewModel nextRockOnRouteVM = nextRockOnTrainRoute.Current;
             if (nextRockOnRouteVM != null)
             {
@@ -783,7 +786,6 @@ namespace JustClimbTrial.Views.Pages
                     //This Block only happens for End Rock
                     if (nextRockOnRouteVM == rocksOnRouteVM.EndRock)
                     {
-
                         if (!isEndCountDownVideoPlaying)
                         {
                             //Play "Count down to 3" video
@@ -791,6 +793,7 @@ namespace JustClimbTrial.Views.Pages
                             playgroundWindow.LoopMedia = false;
 
                             nextRockTimer = nextRockOnRouteVM.InitializeRockTimerHelper(EndRockHoldTimerGoal, EndRockHoldTimerLag);
+                            playgroundMedia.Visibility = Visibility.Visible;
                             playgroundMedia.Play();
                             isEndCountDownVideoPlaying = true;
                         }
@@ -899,7 +902,8 @@ namespace JustClimbTrial.Views.Pages
 
                     if (isEndCountDownVideoPlaying)
                     {                        
-                        playgroundMedia.Position = TimeSpan.FromSeconds(0);
+                        //playgroundMedia.Position = TimeSpan.FromSeconds(0);
+                        playgroundMedia.Visibility = Visibility.Hidden;
                         playgroundMedia.Stop();
                         isEndCountDownVideoPlaying = false;
                     }
@@ -1022,6 +1026,7 @@ namespace JustClimbTrial.Views.Pages
                         playgroundWindow.LoopMedia = false;
 
                         endRockTimer = rocksOnRouteVM.EndRock.InitializeRockTimerHelper(EndRockHoldTimerGoal, EndRockHoldTimerLag);
+                        playgroundMedia.Visibility = Visibility.Visible;
                         playgroundMedia.Play();
                         isEndCountDownVideoPlaying = true;
                     }
