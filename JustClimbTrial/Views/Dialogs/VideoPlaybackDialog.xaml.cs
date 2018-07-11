@@ -46,7 +46,7 @@ namespace JustClimbTrial.Views.Dialogs
 
         #region constructors
 
-        public VideoPlaybackDialog(MediaElement externalMediaElement)
+        public VideoPlaybackDialog()
         {
             InitializeComponent();
         }

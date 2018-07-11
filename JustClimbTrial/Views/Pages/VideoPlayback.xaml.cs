@@ -19,11 +19,11 @@ namespace JustClimbTrial.Views.Pages
         private readonly bool debug = AppGlobal.DEBUG;
 
         #region private members
+        private MainWindow mainWindowClient;
 
         private DispatcherTimer timer = new DispatcherTimer();
         private const double defaultTick = 500;
         private bool supressNavTick = false;
-        private MediaElement externalPlaybackMonitor;
 
         private readonly string videoFilePath;
         private readonly bool isShowSaveVideoPanel;
@@ -34,11 +34,11 @@ namespace JustClimbTrial.Views.Pages
         #region constructors
 
         public VideoPlayback(string aVideoFilePath, 
-            MediaElement anExternalPlaybackMonitor,
+            MainWindow mainWindow,
             bool isToShowSaveVideoPanel = false)
         {
+            mainWindowClient = mainWindow;
             videoFilePath = aVideoFilePath;
-            externalPlaybackMonitor = anExternalPlaybackMonitor;
             isShowSaveVideoPanel = isToShowSaveVideoPanel;
 
             InitializeComponent();
@@ -65,8 +65,9 @@ namespace JustClimbTrial.Views.Pages
         {
             // Set the media's starting SpeedRatio to the current value of the
             // their respective slider controls.
-            mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
-            externalPlaybackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
+            double speedRatio = speedRatioSlider.Value * 0.01;
+            mediaPlayback.SpeedRatio = speedRatio;
+            mainWindowClient.SetSpeedRatioOfPlaybackMedia(speedRatio);         
         }
 
         private void ShowMediaInformation()
@@ -123,7 +124,7 @@ namespace JustClimbTrial.Views.Pages
             // already running.
             timer.Start();
             mediaPlayback.Play();
-            externalPlaybackMonitor.Play();
+            mainWindowClient.PlayPlaygbackMedia();
 
             // Initialize the MediaElement property values.
             InitializePropertyValues();
@@ -134,28 +135,29 @@ namespace JustClimbTrial.Views.Pages
             // The Pause method pauses the media if it is currently running.
             // The Play method can be used to resume.
             mediaPlayback.Pause();
-            externalPlaybackMonitor.Pause();
+            mainWindowClient.PausePlaygbackMedia();
         }
 
         private void StopMedia(object parameter = null)
         {
             // The Stop method stops and resets the media to be played from
-            // the beginning.   
-            mediaPlayback.Position = TimeSpan.FromMilliseconds(0);
-            externalPlaybackMonitor.Position = TimeSpan.FromMilliseconds(0);
+            // the beginning. 
+            TimeSpan beginning = TimeSpan.FromMilliseconds(0);
+            mediaPlayback.Position = beginning;
+            mainWindowClient.SetPositionOfPlaybackMedia(beginning);
 
             navigationSlider.Value = navigationSlider.Minimum;
             timer.Stop();
 
             mediaPlayback.Stop();
-            externalPlaybackMonitor.Stop();
+            mainWindowClient.StopPlaygbackMedia();
         }
 
         private void ResetPlayMediaSpeed(object parameter = null)
         {
             speedRatioSlider.Value = 100;
             mediaPlayback.SpeedRatio = 1;
-            externalPlaybackMonitor.SpeedRatio = 1;
+            mainWindowClient.SetSpeedRatioOfPlaybackMedia(1);
         }
 
         private void PassSaveVideoMessageToDialogCaller(object parameter = null)
@@ -190,7 +192,7 @@ namespace JustClimbTrial.Views.Pages
             pageParent.MinHeight = 500;
 
             mediaPlayback.Source = new Uri(videoFilePath);
-            externalPlaybackMonitor.Source = mediaPlayback.Source;
+            mainWindowClient.ChangeSrcInPlaygbackMedia(videoFilePath);
 
             panelSaveVideo.Visibility =
                 isShowSaveVideoPanel ? Visibility.Visible : Visibility.Collapsed;
@@ -229,8 +231,9 @@ namespace JustClimbTrial.Views.Pages
 
         private void ChangeMediaSpeedRatio(object sender, MouseButtonEventArgs e)
         {
-            mediaPlayback.SpeedRatio = speedRatioSlider.Value * 0.01;
-            externalPlaybackMonitor.SpeedRatio = speedRatioSlider.Value * 0.01;
+            double speedRatio = speedRatioSlider.Value * 0.01;
+            mediaPlayback.SpeedRatio = speedRatio;
+            mainWindowClient.SetSpeedRatioOfPlaybackMedia(speedRatio);
 
             timer.Interval = TimeSpan.FromMilliseconds((int)(defaultTick / speedRatioSlider.Value));
         }
@@ -247,8 +250,9 @@ namespace JustClimbTrial.Views.Pages
                 supressNavTick = false;
                 timer.Start();
             }
-            mediaPlayback.Position = TimeSpan.FromSeconds(navigationSlider.Value);
-            externalPlaybackMonitor.Position = TimeSpan.FromSeconds(navigationSlider.Value);
+            TimeSpan sliderTimePosition = TimeSpan.FromSeconds(navigationSlider.Value);
+            mediaPlayback.Position = sliderTimePosition;
+            mainWindowClient.SetPositionOfPlaybackMedia(sliderTimePosition);
 
             Debug.WriteLine("Slider Value = " + navigationSlider.Value);
             Debug.WriteLine("Current Position: " + mediaPlayback.Position.TotalSeconds);

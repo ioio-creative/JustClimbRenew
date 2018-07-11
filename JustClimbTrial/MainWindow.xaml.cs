@@ -1,14 +1,18 @@
-﻿using JustClimbTrial.Globals;
+﻿using JustClimbTrial.Extensions;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Views.Pages;
 using JustClimbTrial.Views.Windows;
+using Microsoft.Kinect;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace JustClimbTrial
 {
@@ -24,27 +28,13 @@ namespace JustClimbTrial
         public KinectManager KinectManagerClient;
 
         private Playground playgroundWindow;
-        public Playground PlaygroundWindow
-        {
-            get { return playgroundWindow; }
-        }
 
         //Monitors projected to Wall (i.e. Playground)
         //bottom layer for [Count Down]/[Start]/[Game Over],etc videos
-        private MediaElement playgroundMedia;                
-        public MediaElement PlaygroundMedia
-        {
-            get { return playgroundMedia; }
-            set { playgroundMedia = value; }
-        }
+        private MediaElement playgroundMedia;
+        private Canvas playgroundCanvas;
         //top layer for game recording playback
         private MediaElement playbackMedia;
-        public MediaElement PlaybackMedia
-        {
-            get { return playbackMedia; }
-            set { playbackMedia = value; }
-        }
-
 
 
         public MainWindow()
@@ -66,7 +56,9 @@ namespace JustClimbTrial
             bool isOpenKinectSuccessful = KinectManagerClient.OpenKinect();
 
             //assign MediaElement ref to MainWindow member var
-            PlaygroundMedia = playgroundWindow.PlaygroundMedia;
+            playgroundMedia = playgroundWindow.PlaygroundMedia;
+            playgroundCanvas = playgroundWindow.PlaygroundCanvas;
+            playbackMedia = playgroundWindow.PlaybackMedia;
             //MUST LOAD AN IMAGE TO PLAYGROUND CANVAS TO GIVE DIMENSION
             playgroundWindow.ShowImage(wallLogImg, 0);
             //play ScreenSaver.mp4 in Playground Window
@@ -127,7 +119,7 @@ namespace JustClimbTrial
 
         public void CheckAndLoadAndPlayScrnSvr()
         {
-            Uri scrnSvrUri = new Uri(Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+            Uri scrnSvrUri = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
             if ( playgroundMedia.Source == null || !playgroundMedia.Source.Equals(scrnSvrUri))
             {
                 playgroundMedia.Stop();
@@ -137,9 +129,116 @@ namespace JustClimbTrial
             }
         }
 
-        #region playground Media Elements ctrl
+        #region Playground Canvas ctrl
+        public Canvas GetPlaygroundCanvas()
+        {
+            return playgroundCanvas;
+        }
 
+        public void ShowImageInPlaygroundCanvas(BitmapSource bitmapSrc)
+        {
+            playgroundWindow.ShowImage(bitmapSrc);
+        }
 
+        public IEnumerable<Shape> DrawSkeletonInPlaygroundCanvas(Body body, CoordinateMapper coorMapper, SpaceMode spaceMode)
+        {
+            return playgroundCanvas.DrawSkeleton(body, coorMapper, spaceMode);
+        }
+
+        public void RemoveChildFromPlaygroundCanvas(UIElement uiElement)
+        {
+            playgroundCanvas.RemoveChild(uiElement);
+        }
+
+        public void ClearPlaygroundCanvas()
+        {
+            playgroundCanvas.Children.Clear();
+        }
+        #endregion
+
+        #region Playground Media ctrl
+        public void ChangeSrcAndPlayInPlaygroundMedia(string uriString, bool loop = false)
+        {
+            StopPlaygroundMedia();
+            ChangeSrcInPlaygroundMedia(uriString);
+            PlayPlaygroundMedia(loop);        
+        }
+
+        public void ChangeSrcInPlaygroundMedia(string uriString)
+        {
+            playgroundMedia.Source = new Uri(uriString);
+        }
+
+        public void PlayPlaygroundMedia(bool loop = false)
+        {
+            playgroundWindow.LoopMedia = loop;
+            playgroundMedia.Visibility = Visibility.Visible;
+            playgroundMedia.Play();
+        }
+
+        public void StopPlaygroundMedia()
+        {
+            playgroundMedia.Visibility = Visibility.Hidden;
+            playgroundMedia.Stop();
+        }
+
+        public void PausePlaygroundMedia()
+        {
+            playgroundMedia.Pause();
+        }
+
+        public void AddPlaygrounMediaEndedEventHandler(RoutedEventHandler eventHandler)
+        {
+            playgroundMedia.MediaEnded += eventHandler;
+        }
+
+        public void RemovePlaygrounMediaEndedEventHandler(RoutedEventHandler eventHandler)
+        {
+            playgroundMedia.MediaEnded -= eventHandler;
+        }
+        #endregion
+
+        #region Playback Media ctrl
+
+        public void ChangeSrcAndPlayInPlaygbackMedia(string uriString, bool loop = false)
+        {
+            StopPlaygbackMedia();
+            ChangeSrcInPlaygbackMedia(uriString);
+            PlayPlaygbackMedia(loop);
+        }
+
+        public void ChangeSrcInPlaygbackMedia(string uriString)
+        {
+            playbackMedia.Source = new Uri(uriString);
+        }
+
+        public void PlayPlaygbackMedia(bool loop = false)
+        {
+            playgroundWindow.LoopMedia = loop;
+            playbackMedia.Visibility = Visibility.Visible;
+            playbackMedia.Play();
+        }
+
+        public void StopPlaygbackMedia()
+        {
+            playbackMedia.Visibility = Visibility.Hidden;
+            playbackMedia.Stop();
+        }
+
+        public void PausePlaygbackMedia()
+        {
+            playbackMedia.Pause();
+        }
+        
+        public void SetPositionOfPlaybackMedia(TimeSpan timeSpan)
+        {
+            playbackMedia.Position = timeSpan;
+        }
+
+        public void SetSpeedRatioOfPlaybackMedia(double speedRatio)
+        {
+            playbackMedia.SpeedRatio = speedRatio;
+        }
 
         #endregion
     }

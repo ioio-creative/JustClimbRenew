@@ -362,7 +362,7 @@ namespace JustClimbTrial.Views.Pages
                     BitmapSource newWallColorBitmapSrc = kinectManagerClient.ToBitmapSrc(colorFrame);
                     cameraIMG.Source = newWallColorBitmapSrc;
                     colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
-                    mainWindowClient.PlaygroundWindow.ShowImage(newWallColorBitmapSrc);
+                    mainWindowClient.ShowImageInPlaygroundCanvas(newWallColorBitmapSrc);
                 }
             }
   

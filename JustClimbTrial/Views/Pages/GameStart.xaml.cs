@@ -72,14 +72,6 @@ namespace JustClimbTrial.Views.Pages
 
         #endregion
 
-        #region Playground variables
-
-        private Playground playgroundWindow;
-        private Canvas playgroundCanvas;
-        private MediaElement playgroundMedia;
-
-        #endregion
-
 
         private IList<IEnumerable<Shape>> skeletonBodies = new List<IEnumerable<Shape>>();
         private VideoHelper gameplayVideoRecClient;
@@ -285,15 +277,11 @@ namespace JustClimbTrial.Views.Pages
                     mainWindowClient.SubscribeColorImgSrcToPlaygrd();
                 }
 
-                playgroundWindow = mainWindowClient.PlaygroundWindow;
-                playgroundMedia = playgroundWindow.PlaygroundMedia;
-                playgroundCanvas = playgroundWindow.PlaygroundCanvas;
-
                 navHead.PropertyChanged += HandleNavHeadIsRecordDemoChanged;
 
                 //methods to access rocks on route from database
                 rocksOnRouteVM = RocksOnRouteViewModel.CreateFromDatabase(climbMode,
-                    routeId, playgroundCanvas, kinectManagerClient.ManagerCoorMapper);
+                    routeId, mainWindowClient.GetPlaygroundCanvas(), kinectManagerClient.ManagerCoorMapper);
 
                 ResetGameStart();                
 
@@ -311,8 +299,8 @@ namespace JustClimbTrial.Views.Pages
 
             kinectManagerClient.BodyFrameArrived -= HandleBodyListArrived;
             navHead.PropertyChanged -= HandleNavHeadIsRecordDemoChanged;
-            playgroundMedia.MediaEnded -= HandlePlaygroundVideoEndedAsync;
-            playgroundCanvas.Children.Clear();
+            mainWindowClient.RemovePlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
+            mainWindowClient.ClearPlaygroundCanvas();
             if (debug)
             {
                 mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
@@ -330,7 +318,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 foreach (Shape skeletonShape in skeletonBodies.SelectMany(shapes => shapes))
                 {
-                    playgroundCanvas.RemoveChild(skeletonShape);
+                    mainWindowClient.GetPlaygroundCanvas().RemoveChild(skeletonShape);
                 }
 
                 //foreach (IEnumerable<Shape> skeletonShapes in skeletonBodies)
@@ -360,7 +348,7 @@ namespace JustClimbTrial.Views.Pages
                         //draw skeleton shape when DEBUG
                         if (debug)
                         {
-                            IEnumerable<Shape> skeletonShapes = playgroundCanvas.DrawSkeleton(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
+                            IEnumerable<Shape> skeletonShapes = mainWindowClient.DrawSkeletonInPlaygroundCanvas(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
                             skeletonBodies.Add(skeletonShapes);
                         }
 
@@ -419,7 +407,7 @@ namespace JustClimbTrial.Views.Pages
             }
 
             ResetGameStart();
-            playgroundMedia.MediaEnded -= HandlePlaygroundVideoEndedAsync;
+            mainWindowClient.RemovePlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
         }
 
         #endregion
@@ -443,12 +431,8 @@ namespace JustClimbTrial.Views.Pages
             // start video recording
             await gameplayVideoRecClient.StartRecordingAsync(videoIdAndNo.Item2);
 
-            playgroundMedia.Stop();
             //Play "Start" video
-            playgroundMedia.Source = new Uri(FileHelper.GameplayStartVideoPath());
-            playgroundWindow.LoopMedia = false;
-            playgroundMedia.Visibility = Visibility.Visible;
-            playgroundMedia.Play();
+            mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayStartVideoPath());
 
             gameStarted = true;
             Console.WriteLine("Game Started !");
@@ -460,12 +444,8 @@ namespace JustClimbTrial.Views.Pages
             isEndCountDownVideoPlaying = false;
             Debug.WriteLine("Finished!");
             //Play "Finish" video
-            playgroundMedia.Stop();
-            playgroundMedia.Source = new Uri(FileHelper.GameplayFinishVideoPath());
-            playgroundWindow.LoopMedia = false;
-            playgroundMedia.MediaEnded += HandlePlaygroundVideoEndedAsync;
-            playgroundMedia.Visibility = Visibility.Visible;
-            playgroundMedia.Play();
+            mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayFinishVideoPath());
+            mainWindowClient.AddPlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
         }
 
         private void CheckGameOverWithTimer(Body body)
@@ -499,24 +479,18 @@ namespace JustClimbTrial.Views.Pages
         {
             gameStarted = false;
             Debug.WriteLine("Over!");
-            playgroundCanvas.Children.Clear();
+            mainWindowClient.ClearPlaygroundCanvas();
 
-            playgroundMedia.Stop();
             //Play "GameOver" Video
-            playgroundMedia.Source = new Uri(FileHelper.GameOverVideoPath());
-            playgroundWindow.LoopMedia = false;
-            playgroundMedia.MediaEnded += HandlePlaygroundVideoEndedAsync;
-            playgroundMedia.Visibility = Visibility.Visible;
-            playgroundMedia.Play();
+            mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameOverVideoPath());
+            mainWindowClient.AddPlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
         }
 
         private void ResetGameStart()
         {
             //TODO: Check Video Recorder after reset (multiple export after reset)
             //rocktimers tick sub and unsub
-            Console.WriteLine("Before Reset: " + playgroundCanvas.Children.Count);
-            playgroundCanvas.Children.Clear();
-            Console.WriteLine("After Reset: " + playgroundCanvas.Children.Count);
+            mainWindowClient.ClearPlaygroundCanvas();
 
             if (debug)
             {
@@ -602,11 +576,7 @@ namespace JustClimbTrial.Views.Pages
                     break;
             }//close switch (climbMode)              
 
-            playgroundMedia.Stop();
-            playgroundMedia.Source = new Uri(FileHelper.GameplayReadyVideoPath());
-            playgroundWindow.LoopMedia = true;
-            playgroundMedia.Visibility = Visibility.Visible;
-            playgroundMedia.Play();
+            mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayReadyVideoPath(), true);
         }
 
         #endregion
@@ -753,9 +723,7 @@ namespace JustClimbTrial.Views.Pages
 
                     if (isEndCountDownVideoPlaying)
                     {
-                        //playgroundMedia.Position = TimeSpan.FromSeconds(0);
-                        playgroundMedia.Visibility = Visibility.Hidden;
-                        playgroundMedia.Stop();
+                        mainWindowClient.StopPlaygroundMedia();
                         isEndCountDownVideoPlaying = false;
                     }
 
@@ -789,12 +757,9 @@ namespace JustClimbTrial.Views.Pages
                         if (!isEndCountDownVideoPlaying)
                         {
                             //Play "Count down to 3" video
-                            playgroundMedia.Source = new Uri(FileHelper.GameplayCountdownVideoPath());
-                            playgroundWindow.LoopMedia = false;
+                            mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayCountdownVideoPath());
 
                             nextRockTimer = nextRockOnRouteVM.InitializeRockTimerHelper(EndRockHoldTimerGoal, EndRockHoldTimerLag);
-                            playgroundMedia.Visibility = Visibility.Visible;
-                            playgroundMedia.Play();
                             isEndCountDownVideoPlaying = true;
                         }
 
@@ -901,10 +866,8 @@ namespace JustClimbTrial.Views.Pages
                     endRockTimer.RemoveTickEventHandler(endRockTimerTickEventHandler);
 
                     if (isEndCountDownVideoPlaying)
-                    {                        
-                        //playgroundMedia.Position = TimeSpan.FromSeconds(0);
-                        playgroundMedia.Visibility = Visibility.Hidden;
-                        playgroundMedia.Stop();
+                    {
+                        mainWindowClient.StopPlaygroundMedia();
                         isEndCountDownVideoPlaying = false;
                     }
 
@@ -994,8 +957,7 @@ namespace JustClimbTrial.Views.Pages
                     //DO SOMETHING WHEN RELEVANT JOINT(S) TOUCHES STARTING POINT
 
                     //
-                    playgroundWindow.LoopMedia = false;
-                    playgroundMedia.Stop();
+                    mainWindowClient.StopPlaygroundMedia();
 
                     RockTimerHelper startRockTimer = rocksOnRouteVM.StartRock.MyRockTimerHelper;
 
@@ -1022,12 +984,9 @@ namespace JustClimbTrial.Views.Pages
                     if (!isEndCountDownVideoPlaying)
                     {
                         //Play "Count down to 3" video
-                        playgroundMedia.Source = new Uri(FileHelper.GameplayCountdownVideoPath());
-                        playgroundWindow.LoopMedia = false;
+                        mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayCountdownVideoPath());
 
                         endRockTimer = rocksOnRouteVM.EndRock.InitializeRockTimerHelper(EndRockHoldTimerGoal, EndRockHoldTimerLag);
-                        playgroundMedia.Visibility = Visibility.Visible;
-                        playgroundMedia.Play();
                         isEndCountDownVideoPlaying = true;
                     }
 
@@ -1272,9 +1231,9 @@ namespace JustClimbTrial.Views.Pages
         {
             string videoFilePath = videoVM.VideoRecordedFullPath();            
 
-            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog(playgroundMedia);
+            VideoPlaybackDialog videoPlaybackDialog = new VideoPlaybackDialog();
             VideoPlayback videoPlaybackPage =
-                new VideoPlayback(videoFilePath, playgroundMedia);
+                new VideoPlayback(videoFilePath, mainWindowClient);
 
             videoPlaybackDialog.Navigate(videoPlaybackPage);
             videoPlaybackDialog.ShowDialog();
