@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:JustClimbTrial.Views.Windows"
         mc:Ignorable="d"
         Title="Playground" Name="PlaygroundWindow"
-        Height="720" Width="1280" Background="White">
+        Height="720" Width="1280" Background="Black">
 
     <Viewbox Name="PlaygroundView" RenderTransformOrigin="0.5, 0.5" Stretch="Uniform"
               Margin="0,0,-8,-31">

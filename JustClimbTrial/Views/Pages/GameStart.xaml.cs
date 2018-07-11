@@ -142,8 +142,8 @@ namespace JustClimbTrial.Views.Pages
 
         //TODO: combine hold and endrock timer to avoid confusion
         //private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
-        private const int EndRockHoldTimerGoal = 24; //unit = 10 millisecs
-        private const int EndRockHoldTimerLag = 6;
+        private const int EndRockHoldTimerGoal = 20; //unit = 10 millisecs
+        private const int EndRockHoldTimerLag = 10;
         private bool isEndCountDownVideoPlaying = false;
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -618,7 +618,8 @@ namespace JustClimbTrial.Views.Pages
             //Both hands need to be on starting rock to start training mode
             if (rockOnRouteVM == rocksOnRouteVM.StartRock)
             {
-                reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
+                reached = IsJointGroupOnRock(LHandJoints.Union(RHandJoints), rockOnRouteVM.MyRockViewModel);
+                //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
                 if (reached)
                 {
                     Debug.Write(body.Joints[JointType.HandTipLeft].Position.X);
@@ -629,7 +630,8 @@ namespace JustClimbTrial.Views.Pages
             //Both hands need to be on final rock to end game
             else if (rockOnRouteVM == rocksOnRouteVM.EndRock)
             {
-                reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                reached = IsJointGroupOnRock(LHandJoints.Union(RHandJoints), rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
             }
             //Single hand can validate for all the other rocks in between
             else
@@ -754,7 +756,7 @@ namespace JustClimbTrial.Views.Pages
                     //This Block only happens for End Rock
                     if (nextRockOnRouteVM == rocksOnRouteVM.EndRock)
                     {
-                        if (!isEndCountDownVideoPlaying)
+                        if (gameStarted && !isEndCountDownVideoPlaying)
                         {
                             //Play "Count down to 3" video
                             mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayCountdownVideoPath());
@@ -763,17 +765,25 @@ namespace JustClimbTrial.Views.Pages
                             isEndCountDownVideoPlaying = true;
                         }
 
+                        // no need to re-subscribe tick handler 
+                        // after the game is finished or over
+                        // (gameStarted will be set to false)
+                        if (!nextRockTimer.IsTickHandlerSubed && gameStarted)
+                        {
+                            SetNextTrainingRockTimerTickEventHandler(body.TrackingId, nextRockOnRouteVM);
+                        }
+
                         if (debug)
                         {
                             DebugRecolorRockVM(rocksOnRouteVM.EndRock);
                         }
                     }
-
-                    //DO SOMETHING WHEN ANY RELEVANT JOINT TOUCHES STARTING POINT
-
-                    if (!nextRockTimer.IsTickHandlerSubed)
+                    else //non-End rocks
                     {
-                        SetNextTrainingRockTimerTickEventHandler(body.TrackingId, nextRockOnRouteVM);
+                        if (!nextRockTimer.IsTickHandlerSubed)
+                        {
+                            SetNextTrainingRockTimerTickEventHandler(body.TrackingId, nextRockOnRouteVM);
+                        } 
                     }
 
                     if (!nextRockTimer.IsEnabled)
@@ -926,16 +936,16 @@ namespace JustClimbTrial.Views.Pages
             {
                 case RockOnBoulderStatus.Start:
                     //TODO: confirm condition during UAT
-                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
-                    //reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
+                    //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
+                    reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
                     reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     break;
                 case RockOnBoulderStatus.End:
-                    reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
-                    //reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
                     break;
             }
 
@@ -955,10 +965,6 @@ namespace JustClimbTrial.Views.Pages
                 if (isBoulderTargetReachedFunc(rocksOnRouteVM.StartRock))
                 {
                     //DO SOMETHING WHEN RELEVANT JOINT(S) TOUCHES STARTING POINT
-
-                    //
-                    mainWindowClient.StopPlaygroundMedia();
-
                     RockTimerHelper startRockTimer = rocksOnRouteVM.StartRock.MyRockTimerHelper;
 
                     if (!startRockTimer.IsTickHandlerSubed)
@@ -990,7 +996,7 @@ namespace JustClimbTrial.Views.Pages
                         isEndCountDownVideoPlaying = true;
                     }
 
-                    if (!endRockTimer.IsTickHandlerSubed)
+                    if (!endRockTimer.IsTickHandlerSubed && gameStarted)
                     {
                         SetEndBoulderRockTimerTickEventHandler();
                     }
@@ -1006,21 +1012,20 @@ namespace JustClimbTrial.Views.Pages
                 {
                     foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
                     {
-                        RockTimerHelper interRockTimer = rockOnRoute.MyRockTimerHelper;
-
                         if (isBoulderTargetReachedFunc(rockOnRoute))
                         {
+                            RockTimerHelper interRockTimer = rockOnRoute.MyRockTimerHelper;
+
                             if (!interRockTimer.IsTickHandlerSubed)
                             {
                                 SetInterBoulderRockTimerTickEventHandler(rockOnRoute);
                             }
-                        }
-
-                        if (!interRockTimer.IsEnabled)
-                        {
-                            interRockTimer.Reset();
-                            interRockTimer.Start();
-                        }
+                            if (!interRockTimer.IsEnabled)
+                            {
+                                interRockTimer.Reset();
+                                interRockTimer.Start();
+                            }
+                        }     
                     } //CLOSE foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute) 
                 }
             }
@@ -1098,7 +1103,7 @@ namespace JustClimbTrial.Views.Pages
             return (IsJointGroupOnRock(groupA, rockVM, threshold) && IsJointGroupOnRock(groupB, rockVM, threshold));
         }
 
-        private bool IsBodyGameOver(Body body, float wallThr = 2f, float floorThr = 1f)//Default thresholds are in Meters
+        private bool IsBodyGameOver(Body body, float wallThr = 1f, float floorThr = 1f)//Default thresholds are in Meters
         {
             
             Joint bodyCenterJoint = body.Joints[JointType.SpineMid];
