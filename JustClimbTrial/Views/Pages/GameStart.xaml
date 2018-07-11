@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
       xmlns:viewModel="clr-namespace:JustClimbTrial.ViewModels"
-      xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls"
+      xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls"      
+      xmlns:masters="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"
       mc:Ignorable="d" 
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Boulder Route 1 - Video Playback"
@@ -18,81 +19,77 @@
     <Page.DataContext>
         <StaticResource ResourceKey="gameStartViewModel"/>
     </Page.DataContext>
-    <Grid x:Name="v_gridContainer">
-        <Grid.Resources>
-            <CollectionViewSource x:Key="cvsRouteVideos" Source="{Binding NonDemoRouteVideoViewModels}" />
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        
-        <!-- row 0 -->
-        <userControl:HeaderRowNavigation 
-            x:Name="navHead"
-            Grid.Row="0" Grid.ColumnSpan="6" 
-            HeaderRowTitle="Boulder - Route Select" />
-        <!-- end of row 0 -->
-        
-        <!-- row 1 -->
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="DATE" />
-            <ComboBox x:Name="ddlYear"
+
+    <masters:MasterWithNavigation x:Name="master">
+        <masters:MasterWithNavigation.Content>
+            <Grid x:Name="v_gridContainer">
+                <Grid.Resources>
+                    <CollectionViewSource x:Key="cvsRouteVideos" Source="{Binding NonDemoRouteVideoViewModels}" />
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!-- row 0 -->
+                <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="DATE" />
+                    <ComboBox x:Name="ddlYear"
                       Grid.Column="1"
                       ItemsSource="{Binding Years}"
                       SelectedIndex="0"
                       SelectedItem="{Binding SelectedYear,
                         Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox x:Name="ddlMonth"
+                    <ComboBox x:Name="ddlMonth"
                       Grid.Column="2"
                       ItemsSource="{Binding Months}"
                       SelectedIndex="0"
                       SelectedItem="{Binding SelectedMonth,
                         Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox x:Name="ddlDay"
+                    <ComboBox x:Name="ddlDay"
                       Grid.Column="3"
                       ItemsSource="{Binding Days}"
                       SelectedIndex="0"
                       SelectedItem="{Binding SelectedDay,
                         Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox x:Name="ddlHour"
+                    <ComboBox x:Name="ddlHour"
                       Grid.Column="4"
                       ItemsSource="{Binding Hours}"
                       SelectedIndex="0"
                       SelectedItem="{Binding SelectedHour,
                         Mode=TwoWay,
                         UpdateSourceTrigger=PropertyChanged}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding HourString}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
-        <!-- end of row 1 -->
-        
-        <!-- row 2 -->
-        <DataGrid x:Name="DgridRouteVideos"
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding HourString}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                <!-- end of row 0 -->
+
+                <!-- row 1 -->
+                <DataGrid x:Name="DgridRouteVideos"
                   SelectionUnit="FullRow" 
                   SelectionMode="Single" 
                   AutoGenerateColumns="false" 
@@ -102,36 +99,38 @@
                   Width="auto" 
                   ItemsSource="{Binding Source={StaticResource ResourceKey=cvsRouteVideos}}"
                   Margin="10,10,10,10" 
-                  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" 
+                  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" 
                   RowDetailsVisibilityMode="VisibleWhenSelected">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="RouteNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto" />
-                <DataGridTextColumn x:Name="CreatDTColumn" Binding="{Binding CreateDTString}" Header="Date" Width="Auto" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <!-- end of row 2 -->
-        
-        <!-- row 3 -->
-        <Button x:Name="BtnDemo" 
-            Grid.Row="3" Grid.Column="0">
-            DEMO
-        </Button>
-        <Button x:Name="BtnPlaySelectedVideo" 
-            Grid.Row="3" Grid.Column="1">
-            PLAY SELECTED VIDEO
-        </Button>
-        <TextBlock Grid.Row="3" Grid.Column="2"
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="RouteNoColumn" Binding="{Binding RouteNo}" Header="ROUTE" Width="Auto" />
+                        <DataGridTextColumn x:Name="CreatDTColumn" Binding="{Binding CreateDTString}" Header="Date" Width="Auto" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!-- end of row 1 -->
+
+                <!-- row 2 -->
+                <Button x:Name="BtnDemo" 
+                    Grid.Row="2" Grid.Column="0">
+                    DEMO
+                </Button>
+                <Button x:Name="BtnPlaySelectedVideo" 
+                    Grid.Row="3" Grid.Column="1">
+                    PLAY SELECTED VIDEO
+                </Button>
+                <TextBlock Grid.Row="3" Grid.Column="2"
                    x:Name="LbIsRecordingDemo">
-        </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="3">
-            Game status:
-        </TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="4" 
-            x:Name="LbGameStatusDet" Text="Idling" />
-        <Button Grid.Row="3" Grid.Column="5" 
-            x:Name="BtnRestartGame">
-            RESTART
-        </Button>
-        <!-- end of row 3 -->
-    </Grid>
+                </TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="3">
+                    Game status:
+                </TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="4" 
+                    x:Name="LbGameStatusDet" Text="Idling" />
+                <Button Grid.Row="3" Grid.Column="5" 
+                    x:Name="BtnRestartGame">
+                    RESTART
+                </Button>
+                <!-- end of row 2 -->
+            </Grid>
+        </masters:MasterWithNavigation.Content>
+    </masters:MasterWithNavigation>
 </Page>

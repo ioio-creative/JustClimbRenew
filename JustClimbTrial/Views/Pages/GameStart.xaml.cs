@@ -10,6 +10,7 @@ using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.Properties;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
+using JustClimbTrial.Views.UserControls;
 using JustClimbTrial.Views.Windows;
 using Microsoft.Kinect;
 using System;
@@ -41,6 +42,7 @@ namespace JustClimbTrial.Views.Pages
 
         // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
         private NavigationService navSvc;
+        private HeaderRowNavigation navHead;
 
         private const float DefaultDistanceThreshold = 0.1f;
                 
@@ -191,10 +193,7 @@ namespace JustClimbTrial.Views.Pages
                     HourString = "time"
                 });
             }
-
-            // pass this Page to the top row user control so it can use this Page's NavigationService
-            navHead.ParentPage = this;
-
+           
             // set titles
             Title = "Just Climb - Game Start";
             WindowTitle = Title;
@@ -261,6 +260,9 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            // pass this Page to the top row user control so it can use this Page's NavigationService
+            navHead.ParentPage = this;
+
             // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
             navSvc = this.NavigationService;
             navSvc.Navigating += NavigationService_Navigating;
