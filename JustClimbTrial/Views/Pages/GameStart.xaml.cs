@@ -575,8 +575,8 @@ namespace JustClimbTrial.Views.Pages
 
                         foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                         {
-                            //rockOnBoulderRoute.DrawRockImageWrtStatus();
-                            //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
+                            rockOnBoulderRoute.SetRockImageWrtStatus();
+                            rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
 
                             //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
                             //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,

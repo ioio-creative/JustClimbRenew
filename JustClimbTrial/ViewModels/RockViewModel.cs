@@ -33,7 +33,6 @@ namespace JustClimbTrial.ViewModels
                 return bPoint;
             }            
         }
-
         //scaled point wrt canvas dimensions (x/y)
         private readonly Point bCanvasPoint;
         public Point BCanvasPoint
@@ -43,16 +42,15 @@ namespace JustClimbTrial.ViewModels
                 return BCanvas.GetActualPoint(BPoint);
             }            
         }
-        
-        public Shape BoulderShape { get; set; }
-
         public Canvas BCanvas { get; set; }
 
-        private TextBlock TrainingRockSeqNoText;
-
+        //Animation sequence, used in GameStart
         public Image BoulderImage;
         public ImageSequenceHelper BoulderButtonSequence;
 
+        //Shape and TextBlock are used in Scan Wall, Route Set and GameStart(debug)
+        public Shape BoulderShape { get; set; }
+        private TextBlock TrainingRockSeqNoText;
 
         // derived quantities
         // normalised
@@ -356,26 +354,27 @@ namespace JustClimbTrial.ViewModels
 
         #region image sequence helpers
 
-        public void CreateRockImageSequence()
-        {
-            double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
+        //public void CreateRockImageSequence()
+        //{
+        //    double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
 
-            BoulderImage = new Image
-            {
-                //png image dimension: 500 x 500
-                //centre circle size: 300x300
-                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
-                Width = 500 / 300 * meanLength,
-                Height = 500 / 300 * meanLength,
-                Stretch = Stretch.Fill
-            };
-        }
+        //    BoulderImage = new Image
+        //    {
+        //        //png image dimension: 500 x 500
+        //        //centre circle size: 300x300
+        //        Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
+        //        Width = 500 / 300 * meanLength,
+        //        Height = 500 / 300 * meanLength,
+        //        Stretch = Stretch.Fill
+        //    };
+        //}
 
-        public void SetRockImage()
+        public Image SetRockImage()
         {
             BCanvas.SetLeftAndTop(BoulderImage, bCanvasPoint.X - BoulderImage.Width * 0.5, bCanvasPoint.Y - BoulderImage.Height * 0.5);
             BCanvas.AddChild(BoulderImage);
 
+            return BoulderImage;
             BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, true);
             BoulderButtonSequence.Load();
         }

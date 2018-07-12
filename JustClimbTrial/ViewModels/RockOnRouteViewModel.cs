@@ -11,6 +11,8 @@ namespace JustClimbTrial.ViewModels
         public RockOnBoulderStatus BoulderStatus { get; set; }
         public int TrainingSeq { get; set; }
         public RockTimerHelper MyRockTimerHelper { get; set; }
+
+        public ImageSequenceHelper RockAnimationSequence;
         
         #endregion
 
@@ -39,7 +41,7 @@ namespace JustClimbTrial.ViewModels
 
         #region set boulder rock
 
-        public void SetRockStatusAndDraw(RockOnBoulderStatus status)
+        public void SetRockStatusAndDrawShape(RockOnBoulderStatus status)
         {
             BoulderStatus = status;
             DrawRockShapeWrtStatus();
@@ -79,9 +81,11 @@ namespace JustClimbTrial.ViewModels
             } 
         }
 
-        public void DrawRockImageWrtStatus()
+        public void SetRockImageWrtStatus()
         {
-            MyRockViewModel.CreateRockImageSequence();
+            //TODO: initialize boulder img sequences according to boulder status
+
+            //MyRockViewModel.CreateRockImageSequence();
             switch (BoulderStatus)
             {
                 case RockOnBoulderStatus.Start:
@@ -94,6 +98,24 @@ namespace JustClimbTrial.ViewModels
                 case RockOnBoulderStatus.End:
                     MyRockViewModel.SetRockImage();
                     break;
+            }
+        }
+
+        public void SetRockImageWrtTrainSeq(int maxSeqNo)
+        {
+            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), true);
+
+            if (TrainingSeq == 1)
+            {
+                MyRockViewModel.ChangeRockShapeToStart();
+            }
+            else if (TrainingSeq == maxSeqNo)
+            {
+                MyRockViewModel.ChangeRockShapeToEnd();
+            }
+            else
+            {
+                MyRockViewModel.ChangeRockShapeToIntermediate();
             }
         }
 

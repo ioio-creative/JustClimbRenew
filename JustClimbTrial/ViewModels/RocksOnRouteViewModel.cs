@@ -266,7 +266,7 @@ namespace JustClimbTrial.ViewModels
                 if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
                     SelectedRockOnRoute.BoulderStatus != status)
                 {
-                    SelectedRockOnRoute.SetRockStatusAndDraw(status);             
+                    SelectedRockOnRoute.SetRockStatusAndDrawShape(status);             
                 }
             }            
         }
