@@ -7,9 +7,10 @@
       xmlns:master="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Test">
-
-    <master:MasterWithNavigation>
+      Title="Test" 
+      Loaded="Page_Loaded">
+    
+    <master:MasterWithNavigation x:Name="master">
         <master:MasterWithNavigation.Content>
             Hello, world!
         </master:MasterWithNavigation.Content>

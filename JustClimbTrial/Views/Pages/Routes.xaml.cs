@@ -19,10 +19,12 @@ namespace JustClimbTrial.Views.Pages
         private readonly bool debug = AppGlobal.DEBUG;
 
         private MainWindow parentMainWindow;
-        private HeaderRowNavigation navHead;
 
         private RoutesViewModel viewModel;
-        private ClimbMode climbMode;                   
+        private ClimbMode climbMode;
+
+
+        #region constructors
 
         public Routes() : this(ClimbMode.Boulder) { }
 
@@ -54,13 +56,31 @@ namespace JustClimbTrial.Views.Pages
             WindowTitle = Title;
         }
 
+        #endregion
+
+
+        #region initialization
+
+        private void InitializeNavHead()
+        {
+            HeaderRowNavigation navHead = master.NavHead;
+
+            // pass this Page to the top row user control so it can use this Page's NavigationService
+            navHead.ParentPage = this;
+
+            string headerRowTitleFormat = "{0} - Route Select";
+            navHead.HeaderRowTitle = string.Format(headerRowTitleFormat,
+                ClimbModeGlobals.StringDict[climbMode]);
+        }
+
+        #endregion
+
 
         #region event handlers
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            parentMainWindow = this.Parent as MainWindow;
-            navHead = master.NavHead;
+            parentMainWindow = this.Parent as MainWindow;            
 
             if (debug)
             {
@@ -68,25 +88,10 @@ namespace JustClimbTrial.Views.Pages
             }
             viewModel.LoadData();
 
-            
-            // pass this Page to the top row user control so it can use this Page's NavigationService
-            navHead.ParentPage = this;
-
             // set titles
             string titleFormat = "Just Climb - {0} Routes";
-            string headerRowTitleFormat = "{0} - Route Select";
-            switch (climbMode)
-            {
-                case ClimbMode.Training:
-                    Title = string.Format(titleFormat, "Training");
-                    navHead.HeaderRowTitle = string.Format(headerRowTitleFormat, "Training");
-                    break;
-                case ClimbMode.Boulder:
-                default:
-                    Title = string.Format(titleFormat, "Boulder");
-                    navHead.HeaderRowTitle = string.Format(headerRowTitleFormat, "Boulder");
-                    break;
-            }
+            Title = string.Format(titleFormat, 
+                ClimbModeGlobals.StringDict[climbMode]);           
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

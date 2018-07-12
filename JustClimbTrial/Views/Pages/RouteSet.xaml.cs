@@ -1,16 +1,12 @@
 ﻿using JustClimbTrial.DataAccess;
-using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
-using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
-using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.UserControls;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -65,33 +61,26 @@ namespace JustClimbTrial.Views.Pages
 
             // set titles
             string titleFormat = "Just Climb - {0} Route Set";
-            string headerRowTitleFormat = "Route Set - {0} {1}";
-            string rockStatusTemplateResourceKey;            
+            Title = string.Format(titleFormat, 
+                ClimbModeGlobals.StringDict[aClimbMode]);
+            newRouteNo = 
+                ClimbModeGlobals.LargestRouteNoByWallFuncDict[aClimbMode](AppGlobal.WallID) + 1;
 
+            string rockStatusTemplateResourceKey;            
             switch (aClimbMode)
             {
-                case ClimbMode.Training:
-                    newRouteNo = TrainingRouteDataAccess.LargestTrainingRouteNoByWall(AppGlobal.WallID) + 1;
-                    Title = string.Format(titleFormat, "Training");
-                    navHead.HeaderRowTitle =
-                        string.Format(headerRowTitleFormat, "Training", newRouteNo);
+                case ClimbMode.Training:                                        
                     rockStatusTemplateResourceKey = TrainingRockStatusTemplateResourceKey;
                     break;
                 case ClimbMode.Boulder:
-                default:
-                    newRouteNo = BoulderRouteDataAccess.LargestBoulderRouteNoByWall(AppGlobal.WallID) + 1;
-                    Title = string.Format(titleFormat, "Boulder");
-                    navHead.HeaderRowTitle =
-                        string.Format(headerRowTitleFormat, "Boulder", newRouteNo);                            
+                default:                    
                     rockStatusTemplateResourceKey = BoulderRockStatusTemplateResourceKey;
                     break;                                
             }
 
             WindowTitle = Title;            
             //SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
-            SetTemplateOfControlFromResource(ctrlRockStatus, rockStatusTemplateResourceKey);            
-
-            navHead.ParentPage = this;
+            SetTemplateOfControlFromResource(ctrlRockStatus, rockStatusTemplateResourceKey);                        
 
             // !!! Important !!!
             // somehow if the following is called in Page_Loaded event handler,
@@ -102,6 +91,15 @@ namespace JustClimbTrial.Views.Pages
 
 
         #region initialization
+
+        private void InitializeNavHead()
+        {
+            HeaderRowNavigation navHead = master.NavHead;
+            string headerRowTitleFormat = "Route Set - {0} {1}";
+            navHead.HeaderRowTitle = string.Format(headerRowTitleFormat,
+                ClimbModeGlobals.StringDict[routeSetClimbMode], newRouteNo);
+            navHead.ParentPage = this;
+        }
 
         // InitializeSaveRouteCommands() has to be called after initializing rocksOnWallViewModel
         private void InitializeSaveRouteCommands()
@@ -163,6 +161,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            InitializeNavHead();
+
             mainWindowClient = this.Parent as MainWindow;
 
             if (mainWindowClient.KinectManagerClient.OpenKinect())

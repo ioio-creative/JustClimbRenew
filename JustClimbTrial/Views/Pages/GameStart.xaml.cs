@@ -201,6 +201,29 @@ namespace JustClimbTrial.Views.Pages
             BtnRestartGame.Command = new RelayCommand(RestartCommand, CanRestartGame);
         }
 
+        private void InitializeNavHead()
+        {
+            navHead = master.NavHead;
+
+            // pass this Page to the top row user control so it can use this Page's NavigationService
+            navHead.ParentPage = this;
+
+            string routeNo;
+            switch (climbMode)
+            {
+                case ClimbMode.Training:
+                    routeNo = TrainingRouteDataAccess.TrainingRouteNoById(routeId);
+                    break;
+                case ClimbMode.Boulder:
+                default:
+                    routeNo = BoulderRouteDataAccess.BoulderRouteNoById(routeId);
+                    break;
+            }
+            navHead.HeaderRowTitle =
+                string.Format(HeaderRowTitleFormat, ClimbModeGlobals.StringDict[climbMode],
+                    routeNo);
+        }
+
         #endregion
 
 
@@ -252,10 +275,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            navHead = master.NavHead;
-
-            // pass this Page to the top row user control so it can use this Page's NavigationService
-            navHead.ParentPage = this;
+            InitializeNavHead();
 
             // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
             navSvc = this.NavigationService;
@@ -501,9 +521,6 @@ namespace JustClimbTrial.Views.Pages
             {
                 case ClimbMode.Training:
                     #region Training Mode Setup
-                    navHead.HeaderRowTitle =
-                        string.Format(HeaderRowTitleFormat, "Training", TrainingRouteDataAccess.TrainingRouteNoById(routeId));
-
                     nextRockOnTrainRoute = rocksOnRouteVM.RockOnRouteEnumerator;
                     nextRockOnTrainRoute.Reset();
                     nextRockOnTrainRoute.MoveNext();
@@ -524,9 +541,6 @@ namespace JustClimbTrial.Views.Pages
                 case ClimbMode.Boulder:
                 default:
                     #region Boulder Mode Setup
-                    navHead.HeaderRowTitle =
-                        string.Format(HeaderRowTitleFormat, "Bouldering", BoulderRouteDataAccess.BoulderRouteNoById(routeId));
-
                     interRocksOnBoulderRoute = rocksOnRouteVM.InterRocks;
 
                     //interRockOnBoulderRouteTimers = allRocksOnBoulderRoute.Select( x => { return x.MyRockTimerHelper; });

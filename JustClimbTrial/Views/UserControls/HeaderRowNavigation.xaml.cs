@@ -47,7 +47,6 @@ namespace JustClimbTrial.Views.UserControls
         public Visibility StaffOptionsVisibility
         {
             get { return _staffOptionsVisibility; }
-
             set
             {
                 if (_staffOptionsVisibility != value)
@@ -62,7 +61,6 @@ namespace JustClimbTrial.Views.UserControls
         public Visibility BtnRecordDemoVideoVisibility
         {
             get { return _btnRecordDemoVideoVisibility; }
-
             set
             {
                 if (_btnRecordDemoVideoVisibility != value)

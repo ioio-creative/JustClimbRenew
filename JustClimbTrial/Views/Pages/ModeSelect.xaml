@@ -8,6 +8,7 @@
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Just Climb - Select Mode" 
       WindowTitle="Just Climb - Select Mode"
+      DataContext="{Binding RelativeSource={RelativeSource Self}}"
       Loaded="Page_Loaded"
       Unloaded="Page_Unloaded">
     <Grid>
@@ -35,8 +36,8 @@
             Grid.Row="3" Grid.Column="1" 
             HorizontalAlignment="Stretch"
             Margin="5,0,5,15"
-            Click="BtnBoulder_Click" Opacity="0.5">
-            Boulder
+            Click="BtnBoulder_Click" Opacity="0.5"
+            Content="{Binding BtnBoulderText}">
         </Button>
 
         <Image Source="/Resources/Images/btn1_Training - Mode.png"
@@ -47,8 +48,8 @@
             Grid.Row="3" Grid.Column="3" 
             HorizontalAlignment="Stretch"
             Margin="5,0,5,15"
-            Click="BtnTraining_Click" Opacity="0.5">
-            Training
+            Click="BtnTraining_Click" Opacity="0.5"           
+            Content="{Binding BtnTrainingText}">
         </Button>
     </Grid>
 </Page>

@@ -5,6 +5,7 @@ using JustClimbTrial.Kinect;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.Dialogs;
+using JustClimbTrial.Views.UserControls;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -86,17 +87,21 @@ namespace JustClimbTrial.Views.Pages
         #endregion
 
 
+        #region constructors 
+
         public NewWall()
         {           
             InitializeComponent();
-
-            // set navHead
-            newWallNo = WallDataAccess.LargestWallNo + 1;
-            navHead.HeaderRowTitle = string.Format("Scan KinectWall - {0}", newWallNo);
-            navHead.ParentPage = this;
+            
+            newWallNo = WallDataAccess.LargestWallNo + 1;            
         }
 
-        private void InitialiseCommands()
+        #endregion
+
+
+        #region initialization
+
+        private void InitializeCommands()
         {
             snapshotWallBtn.Command = new RelayCommand(
                 SnapShotWall, CanSnapShotWall);
@@ -109,6 +114,15 @@ namespace JustClimbTrial.Views.Pages
             saveWallBtn.Command = new RelayCommand(
                 SaveWall, CanSaveWall);
         }
+
+        private void InitializeNavHead()
+        {
+            HeaderRowNavigation navHead = master.NavHead;
+            navHead.HeaderRowTitle = string.Format("Scan KinectWall - {0}", newWallNo);
+            navHead.ParentPage = this;
+        }
+
+        #endregion
 
 
         #region command methods executed when button clicked
@@ -214,6 +228,8 @@ namespace JustClimbTrial.Views.Pages
 
         public void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            InitializeNavHead();
+
             mainWindowClient = this.Parent as MainWindow;
 
             kinectManagerClient = mainWindowClient.KinectManagerClient;
@@ -249,7 +265,7 @@ namespace JustClimbTrial.Views.Pages
             jcWall = new KinectWall(canvas, kinectManagerClient.kinectSensor.CoordinateMapper);
             rocksOnWallViewModel = new RocksOnWallViewModel(canvas, kinectManagerClient.kinectSensor.CoordinateMapper);
 
-            InitialiseCommands();
+            InitializeCommands();
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

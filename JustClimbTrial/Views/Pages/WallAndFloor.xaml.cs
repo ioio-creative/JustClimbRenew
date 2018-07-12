@@ -1,23 +1,17 @@
-﻿using JustClimbTrial.Helpers;
+﻿using JustClimbTrial.Extensions;
+using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
+using JustClimbTrial.Properties;
+using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Kinect;
-using JustClimbTrial.Extensions;
-using System.Numerics;
-using JustClimbTrial.Properties;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -46,10 +40,18 @@ namespace JustClimbTrial.Views.Pages
         private Ellipse[] threePtEllipses = new Ellipse[3];
         private int threePtIdxCnt = 0;
 
+
+        #region constructors
+
         public WallAndFloor()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+
+        #region event handlers
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -83,11 +85,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            
-
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
-            kinectManagerClient.multiSourceFrame = null;
-            
+            kinectManagerClient.multiSourceFrame = null;            
         }
 
         private void ConfigWallBtn_Click(object sender, RoutedEventArgs e)
@@ -249,6 +248,9 @@ namespace JustClimbTrial.Views.Pages
                 }
             }
         }
+
+        #endregion
+
 
         private CameraSpacePoint GetCamSpacePtFromMouseClick(Point mousePt, SpaceMode spMode)
         {

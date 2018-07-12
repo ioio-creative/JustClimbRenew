@@ -4,8 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
-      xmlns:viewModel="clr-namespace:JustClimbTrial.ViewModels"
-      xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls"      
+      xmlns:viewModel="clr-namespace:JustClimbTrial.ViewModels"      
       xmlns:masters="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"
       mc:Ignorable="d" 
       d:DesignHeight="360" d:DesignWidth="640"
@@ -27,7 +26,6 @@
                     <CollectionViewSource x:Key="cvsRouteVideos" Source="{Binding NonDemoRouteVideoViewModels}" />
                 </Grid.Resources>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
@@ -114,18 +112,18 @@
                     DEMO
                 </Button>
                 <Button x:Name="BtnPlaySelectedVideo" 
-                    Grid.Row="3" Grid.Column="1">
+                    Grid.Row="2" Grid.Column="1">
                     PLAY SELECTED VIDEO
                 </Button>
-                <TextBlock Grid.Row="3" Grid.Column="2"
+                <TextBlock Grid.Row="2" Grid.Column="2"
                    x:Name="LbIsRecordingDemo">
                 </TextBlock>
-                <TextBlock Grid.Row="3" Grid.Column="3">
+                <TextBlock Grid.Row="2" Grid.Column="3">
                     Game status:
                 </TextBlock>
-                <TextBlock Grid.Row="3" Grid.Column="4" 
+                <TextBlock Grid.Row="2" Grid.Column="4" 
                     x:Name="LbGameStatusDet" Text="Idling" />
-                <Button Grid.Row="3" Grid.Column="5" 
+                <Button Grid.Row="2" Grid.Column="5" 
                     x:Name="BtnRestartGame">
                     RESTART
                 </Button>
