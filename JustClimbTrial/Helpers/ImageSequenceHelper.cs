@@ -86,7 +86,7 @@ namespace JustClimbTrial.Helpers
         private event EventHandler SequenceFolderEnded;
 
 
-        public ImageSequenceHelper(Image image, bool loop = false, int fps = 25)
+        public ImageSequenceHelper(Image image, bool loop = false, int fps = 15)
         {
             this.image = image;
             this.updateImageTimer = new DispatcherTimer(DispatcherPriority.Render);

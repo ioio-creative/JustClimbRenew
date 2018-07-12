@@ -362,11 +362,11 @@ namespace JustClimbTrial.ViewModels
 
             BoulderImage = new Image
             {
-                //png image dimension: 3000 x 3000
+                //png image dimension: 500 x 500
                 //centre circle size: 300x300
-                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00017.png"))),
-                Width = 3000 / 300 * meanLength,
-                Height = 3000 / 300 * meanLength,
+                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
+                Width = 500 / 300 * meanLength,
+                Height = 500 / 300 * meanLength,
                 Stretch = Stretch.Fill
             };
         }
@@ -386,11 +386,11 @@ namespace JustClimbTrial.ViewModels
 
             BoulderImage = new Image
             {
-                //png image dimension: 3000 x 3000
+                //png image dimension: 500 x 500
                 //centre circle size: 300x300
-                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00017.png"))),
-                Width = 500 / 500 * meanLength,
-                Height = 3000 / 300 * meanLength,
+                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
+                Width = 500 / 300 * meanLength,
+                Height = 500 / 300 * meanLength,
                 Stretch = Stretch.Fill
             };
 

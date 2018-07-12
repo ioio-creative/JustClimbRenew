@@ -12,7 +12,7 @@ namespace JustClimbTrial.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -91,7 +91,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\ButtonNormal")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\1")]
         public string BoulderButtonNormalImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonNormalImgSequenceDirectory"]));
@@ -145,7 +145,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsDebugMode {
             get {
                 return ((bool)(this["IsDebugMode"]));
@@ -190,7 +190,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\1_Button_Show")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\1")]
         public string BoulderButtonShowImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShowImgSequenceDirectory"]));
@@ -199,7 +199,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\2A_Feedback_Lite")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\4")]
         public string BoulderButtonFeedbackImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonFeedbackImgSequenceDirectory"]));
@@ -208,7 +208,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\3_Button_Shine_Pop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\7a")]
         public string BoulderButtonShinePopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShinePopImgSequenceDirectory"]));
@@ -217,7 +217,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\4_Button_Shine_Loop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\7b")]
         public string BoulderButtonShineLoopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShineLoopImgSequenceDirectory"]));
@@ -226,7 +226,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\5_Button_Shine_Feedback_Pop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\a")]
         public string BoulderButtonShineFeedbackPopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShineFeedbackPopImgSequenceDirectory"]));
@@ -235,7 +235,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\6_Button_Shine_Feedback_Loop")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\b")]
         public string BoulderButtonShineFeedbackLoopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShineFeedbackLoopImgSequenceDirectory"]));

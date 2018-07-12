@@ -34,7 +34,7 @@
       <Value Profile="(Default)">..\AppFiles\Resources\Videos</Value>
     </Setting>
     <Setting Name="BoulderButtonNormalImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\ButtonNormal</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\1</Value>
     </Setting>
     <Setting Name="VideoTempDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\temp\TempRecording</Value>
@@ -52,7 +52,7 @@
       <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="IsDebugMode" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="GameplayStartVideoPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\Videos\Start.mp4</Value>
@@ -67,22 +67,22 @@
       <Value Profile="(Default)">..\AppFiles\Resources\Videos\Ready.mp4</Value>
     </Setting>
     <Setting Name="BoulderButtonShowImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\1_Button_Show</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\1</Value>
     </Setting>
     <Setting Name="BoulderButtonFeedbackImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\2A_Feedback_Lite</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\4</Value>
     </Setting>
     <Setting Name="BoulderButtonShinePopImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\3_Button_Shine_Pop</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\7a</Value>
     </Setting>
     <Setting Name="BoulderButtonShineLoopImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\4_Button_Shine_Loop</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\7b</Value>
     </Setting>
     <Setting Name="BoulderButtonShineFeedbackPopImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\5_Button_Shine_Feedback_Pop</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\a</Value>
     </Setting>
     <Setting Name="BoulderButtonShineFeedbackLoopImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\6_Button_Shine_Feedback_Loop</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\b</Value>
     </Setting>
     <Setting Name="WandF" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
