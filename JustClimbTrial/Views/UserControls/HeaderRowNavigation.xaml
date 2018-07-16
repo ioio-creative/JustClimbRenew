@@ -27,7 +27,7 @@
 
         <Button x:Name="btnRescanWall"
                 Grid.Column="1" VerticalAlignment="Bottom"
-                Background="Transparent" BorderBrush="Transparent"               
+                Background="Transparent" BorderBrush="Transparent"             
                 Visibility="{Binding StaffOptionsVisibility}">
             <Image Source="/Resources/Images/btn1_Rescan - General.png" 
                Margin="10,0,10,5"/>

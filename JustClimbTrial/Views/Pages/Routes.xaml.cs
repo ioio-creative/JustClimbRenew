@@ -80,6 +80,8 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            InitializeNavHead();
+
             parentMainWindow = this.Parent as MainWindow;            
 
             if (debug)

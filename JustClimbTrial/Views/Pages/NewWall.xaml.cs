@@ -54,25 +54,6 @@ namespace JustClimbTrial.Views.Pages
         private ushort[] lastNotNullDepthData;
         private byte[] lastNotNullColorData;
 
-        /// <summary>
-        ///Bitmap to display
-        /// </summary>
-        private WriteableBitmap bitmap = null;
-
-        /// <summary>
-        /// The size in bytes of the bitmap back buffer
-        /// </summary>
-        private uint bitmapBackBufferSize = 0;
-
-        /// <summary>
-        /// Size of the RGB pixel in the bitmap
-        /// </summary>
-        private readonly int bytesPerPixel = (PixelFormats.Bgr32.BitsPerPixel + 7) / 8;
-
-        private IList<Body> _bodies;
-
-        private bool _displayBody = false;
-        //private bool _mirror = false;
 
         private KinectWall jcWall;
 
@@ -245,12 +226,6 @@ namespace JustClimbTrial.Views.Pages
                 colorMappedToDepthSpace = new DepthSpacePoint[(int)(colorWidth * colorHeight)];
                 lastNotNullDepthData = new ushort[(int)depthWidth * (int)depthHeight];
                 lastNotNullColorData = new byte[(int)colorWidth * (int)colorHeight * PixelFormats.Bgr32.BitsPerPixel / 8];
-
-                bitmap = new WriteableBitmap((int)depthWidth, (int)depthHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
-
-                // Calculate the WriteableBitmap back buffer size
-                bitmapBackBufferSize = (uint)((bitmap.BackBufferStride * (bitmap.PixelHeight - 1)) + (bitmap.PixelWidth * bytesPerPixel)); 
-                
             }
             else
             {
@@ -273,6 +248,12 @@ namespace JustClimbTrial.Views.Pages
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
 
             kinectManagerClient.multiSourceFrame = null;
+
+            colorMappedToDepthSpace = null;
+            lastNotNullColorData = null;
+            lastNotNullDepthData = null;
+            jcWall = null;
+            GC.Collect();
         }        
        
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -370,33 +351,39 @@ namespace JustClimbTrial.Views.Pages
             {
                 return;
             }
-           
-            using (ColorFrame colorFrame = mSourceFrame.ColorFrameReference.AcquireFrame())
-            {
-                if (colorFrame != null)
-                {                    
-                    BitmapSource newWallColorBitmapSrc = kinectManagerClient.ToBitmapSrc(colorFrame);
-                    cameraIMG.Source = newWallColorBitmapSrc;
-                    colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
-                    mainWindowClient.ShowImageInPlaygroundCanvas(newWallColorBitmapSrc);
-                }
-            }
-  
-            using (DepthFrame depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame())
-            {          
-                if (depthFrame != null)
-                {                    
-                    // Access the depth frame data directly via LockImageBuffer to avoid making a copy
-                    using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
-                    {
-                        kinectManagerClient.kinectSensor.CoordinateMapper.MapColorFrameToDepthSpaceUsingIntPtr(
-                            depthFrameData.UnderlyingBuffer,
-                            depthFrameData.Size,
-                            colorMappedToDepthSpace);
 
-                        depthFrame.CopyFrameDataToArray(lastNotNullDepthData);
-                    }   
-                }
+            if (lastNotNullColorData != null)
+            {
+                using (ColorFrame colorFrame = mSourceFrame.ColorFrameReference.AcquireFrame())
+                {
+                    if (colorFrame != null)
+                    {
+                        BitmapSource newWallColorBitmapSrc = kinectManagerClient.ToBitmapSrc(colorFrame);
+                        cameraIMG.Source = newWallColorBitmapSrc;
+                        colorFrame.CopyConvertedFrameDataToArray(lastNotNullColorData, ColorImageFormat.Bgra);
+                        mainWindowClient.ShowImageInPlaygroundCanvas(newWallColorBitmapSrc);
+                    }
+                } 
+            }
+
+            if (colorMappedToDepthSpace != null && lastNotNullDepthData != null)
+            {
+                using (DepthFrame depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame())
+                {
+                    if (depthFrame != null)
+                    {
+                        // Access the depth frame data directly via LockImageBuffer to avoid making a copy
+                        using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
+                        {
+                            kinectManagerClient.kinectSensor.CoordinateMapper.MapColorFrameToDepthSpaceUsingIntPtr(
+                                depthFrameData.UnderlyingBuffer,
+                                depthFrameData.Size,
+                                colorMappedToDepthSpace);
+
+                            depthFrame.CopyFrameDataToArray(lastNotNullDepthData);
+                        }
+                    }
+                } 
             }
         }
         #endregion

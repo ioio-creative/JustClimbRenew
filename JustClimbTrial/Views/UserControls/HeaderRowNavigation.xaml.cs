@@ -188,8 +188,11 @@ namespace JustClimbTrial.Views.UserControls
             if (dialogResult)
             {
                 routeSetModeSelect.Close();
-                RouteSet routeSetPage = new RouteSet(routeSetModeSelect.ClimbModeSelected);
-                ParentPage.NavigationService.Navigate(routeSetPage);
+                if (ParentPage != null)
+                {
+                    RouteSet routeSetPage = new RouteSet(routeSetModeSelect.ClimbModeSelected);
+                    ParentPage.NavigationService.Navigate(routeSetPage); 
+                }
             }
         }
 
