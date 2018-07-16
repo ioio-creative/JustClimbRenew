@@ -45,9 +45,9 @@ namespace JustClimbTrial.ViewModels
         public Canvas BCanvas { get; set; }
 
         //Animation sequence, used in GameStart
-        //png image dimension: 500 x 500
-        //centre circle size: 300x300
+        //png image dimension: 500 x 500       
         private const int srcImgDimension = 500;
+        //centre scaling comparator
         private const int srcImgCenterDimension = 300;
         private Image rockImage;
 
@@ -407,8 +407,8 @@ namespace JustClimbTrial.ViewModels
             rockImage = new Image
             {   
                 Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
-                Width = srcImgDimension / srcImgCenterDimension * meanLength,
-                Height = srcImgDimension / srcImgCenterDimension * meanLength,
+                Width =  (double)srcImgDimension / srcImgCenterDimension * meanLength,
+                Height = (double)srcImgDimension / srcImgCenterDimension * meanLength,
                 Stretch = Stretch.Fill
             };
         }

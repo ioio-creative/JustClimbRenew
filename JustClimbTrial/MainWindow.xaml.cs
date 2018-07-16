@@ -69,6 +69,7 @@ namespace JustClimbTrial
                 {                   
                     playgroundWindow.ShowImage(wallLogImg, 0.5);
                 }
+
                 UiHelper.NotifyUser("Kinect connected!");
             }
             else

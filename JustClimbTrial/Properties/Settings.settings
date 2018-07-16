@@ -73,10 +73,10 @@
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\4</Value>
     </Setting>
     <Setting Name="BoulderButtonShinePopImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\7a</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\7b</Value>
     </Setting>
     <Setting Name="BoulderButtonShineLoopImgSequenceDirectory" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\7b</Value>
+      <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\7c</Value>
     </Setting>
     <Setting Name="BoulderButtonShineFeedbackPopImgSequenceDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\a</Value>

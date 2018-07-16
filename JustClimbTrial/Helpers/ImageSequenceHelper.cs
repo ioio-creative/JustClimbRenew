@@ -32,40 +32,15 @@ namespace JustClimbTrial.Helpers
             ShineFeedbackLoopSequence
         };
 
-        //public static BitmapSource[] CombinedList; //= ShowSequence.Concat(ShinePopSequence).Concat(ShineLoopSequence).ToArray();
-
-        static ImageSequenceHelper()
-        {
-            //List<BitmapSource> list = new List<BitmapSource>();
-
-            //foreach (BitmapSource bms in ShowSequence)
-            //{
-            //    list.Add(bms);
-            //}
-
-            //foreach (BitmapSource bms in ShinePopSequence)
-            //{
-            //    list.Add(bms);
-            //}
-
-            ////foreach (BitmapSource bms in ShineLoopSequence)
-            ////{
-            ////    list.Add(bms);
-            ////}
-
-            //CombinedList = list.ToArray();
-        }
+        #endregion
 
 
-    #endregion
+        //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
+        private BitmapSource[][] sequencePlaylist = null;        
+        private const int defaultFPS = 10;
 
-
-    //private static IReadOnlyDictionary<RockAnimationSeq, string>Animation
-    private BitmapSource[][] sequencePlaylist;
+        private bool isCurrentFolderToLoop = false;
         private bool isLastFolderToLoop = false;
-
-
-        public bool isCurrentFolderToLoop = true;
 
         private int currentFolder;
         private int currentImgIdxInFolder;
@@ -80,7 +55,7 @@ namespace JustClimbTrial.Helpers
         private event EventHandler SequenceFolderEnded;
 
 
-        public ImageSequenceHelper(Image image, bool loop = false, int fps = 15)
+        public ImageSequenceHelper(Image image, bool loop = false, int fps = defaultFPS)
         {
             this.image = image;
             this.updateImageTimer = new DispatcherTimer(DispatcherPriority.Render);
@@ -102,7 +77,14 @@ namespace JustClimbTrial.Helpers
 
             currentFolder = 0;
             imagesInFolder = sequencePlaylist[currentFolder++];
+            //clear previous sub (if any)
+            SequenceFolderEnded -= SequenceFolderEndedHandler;
             SequenceFolderEnded += SequenceFolderEndedHandler;                                     
+        }
+
+        public void ClearSequences()
+        {
+            sequencePlaylist = null;
         }
 
         public void Load(BitmapSource[] images)
@@ -131,8 +113,11 @@ namespace JustClimbTrial.Helpers
 
         public void Play()
         {
-            this.currentImgIdxInFolder = 0;
-            this.updateImageTimer.Start();
+            if (sequencePlaylist != null)
+            {
+                this.currentImgIdxInFolder = 0;
+                this.updateImageTimer.Start(); 
+            }
         }
 
         public void Stop()
@@ -168,18 +153,18 @@ namespace JustClimbTrial.Helpers
         {
             Stop();
 
-            if (currentFolder == sequencePlaylist.Length)  // last folder
+            if (currentFolder == sequencePlaylist.Length)  // last folder finished
             {               
                 // unsubscribe from sequence folder ended event
                 SequenceFolderEnded -= SequenceFolderEndedHandler;
+                isCurrentFolderToLoop = isLastFolderToLoop;
 
                 if (isLastFolderToLoop)
-                {
-                    isCurrentFolderToLoop = true;
+                {                   
                     Play();
                 }
             }
-            else  // not last folder
+            else  // not last folder, proceed to next folder
             {
                 imagesInFolder = sequencePlaylist[currentFolder++];
 

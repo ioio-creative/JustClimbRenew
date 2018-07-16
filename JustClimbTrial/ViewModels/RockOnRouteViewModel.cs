@@ -1,5 +1,6 @@
 ﻿using JustClimbTrial.Enums;
 using JustClimbTrial.Helpers;
+using System;
 using System.Windows.Media.Imaging;
 
 namespace JustClimbTrial.ViewModels
@@ -24,7 +25,7 @@ namespace JustClimbTrial.ViewModels
         }
 
 
-        #region set training rock
+        #region route set drawing func
 
         public void SetRockTrainingSeqAndDraw(int seqNo, bool mirrorSeqNo = false)
         {
@@ -37,16 +38,16 @@ namespace JustClimbTrial.ViewModels
             MyRockViewModel.UndrawSequenceRockOnCanvas();
         }
 
-        #endregion
-
-
-        #region set boulder rock
-
         public void SetRockStatusAndDrawShape(RockOnBoulderStatus status)
         {
             BoulderStatus = status;
             DrawRockShapeWrtBoulderStatus();
         }
+
+        #endregion
+
+
+        #region gamestart drawing func (debug)
 
         public void DrawRockShapeWrtBoulderStatus()
         {
@@ -82,6 +83,9 @@ namespace JustClimbTrial.ViewModels
             } 
         }
 
+        #endregion
+
+        #region gamestart img seq func (release)
         public void SetRockImageWrtBoulderStatus()
         {
             //TODO: initialize boulder img sequences according to boulder status
@@ -112,7 +116,7 @@ namespace JustClimbTrial.ViewModels
 
         public void SetRockImageSeqWrtTrainSeq(int maxSeqNo)
         {
-            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), true);
+            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), false);
             if (TrainingSeq == 1)
             {
                 RockAnimationSequence.SetSequences(true,
@@ -122,17 +126,16 @@ namespace JustClimbTrial.ViewModels
                         ImageSequenceHelper.ShinePopSequence,  // 3
                         //ImageSequenceHelper.ShineLoopSequence  // 4
                         ImageSequenceHelper.ShineFeedbackLoopSequence
-                    }
-                );
+                    });
             }
             else if (TrainingSeq == maxSeqNo)
-            {      
-                RockAnimationSequence.SetSequences(true,
+            {
+                RockAnimationSequence.SetSequences(false,
                     new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
             }
             else
             {
-                RockAnimationSequence.SetSequences(true,
+                RockAnimationSequence.SetSequences(false,
                     new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
             }
         }
@@ -140,6 +143,18 @@ namespace JustClimbTrial.ViewModels
         public void PlayRockImgSequence()
         {
             RockAnimationSequence.Play();
+        }
+
+        public void SetAndPlayActivePopAndShineImgSeq()
+        {
+            RockAnimationSequence.Stop();
+            RockAnimationSequence.SetSequences(true,
+                new BitmapSource[][]
+                {
+                    ImageSequenceHelper.ShinePopSequence,  // 3
+                    ImageSequenceHelper.ShineLoopSequence  // 4
+                });
+            PlayRockImgSequence();
         }
         #endregion
     }

@@ -208,7 +208,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\7a")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\7b")]
         public string BoulderButtonShinePopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShinePopImgSequenceDirectory"]));
@@ -217,7 +217,7 @@ namespace JustClimbTrial.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\7b")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\ImgSequences\\BoulderButton\\Lite\\7c")]
         public string BoulderButtonShineLoopImgSequenceDirectory {
             get {
                 return ((string)(this["BoulderButtonShineLoopImgSequenceDirectory"]));

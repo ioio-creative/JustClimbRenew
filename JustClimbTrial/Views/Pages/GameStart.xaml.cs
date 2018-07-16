@@ -39,13 +39,14 @@ namespace JustClimbTrial.Views.Pages
         private const string HeaderRowTitleFormat = "{0} Route {1} - Video Playback";
 
         private readonly bool debug = AppGlobal.DEBUG;
+        private readonly bool drawSkeleton = true;
 
         // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
         private NavigationService navSvc;
         private HeaderRowNavigation navHead;
 
         private const float DefaultDistanceThreshold = 0.1f;
-                
+
         private Tuple<string, string> videoIdAndNo;
         private GameStartViewModel viewModel;
 
@@ -59,7 +60,6 @@ namespace JustClimbTrial.Views.Pages
         private IEnumerable<RockOnRouteViewModel> interRocksOnBoulderRoute;
         private Func<RockOnRouteViewModel, bool> isBoulderTargetReachedFunc;
         //private IEnumerable<RockTimerHelper> interRockOnBoulderRouteTimers;
-        //private CameraSpacePoint[] interRocksOnRouteCamSP;
 
 
         private ulong playerBodyID;
@@ -185,7 +185,7 @@ namespace JustClimbTrial.Views.Pages
                     HourString = "time"
                 });
             }
-           
+
             // set titles
             Title = "Just Climb - Game Start";
             WindowTitle = Title;
@@ -303,7 +303,7 @@ namespace JustClimbTrial.Views.Pages
                 rocksOnRouteVM = RocksOnRouteViewModel.CreateFromDatabase(climbMode,
                     routeId, mainWindowClient.GetPlaygroundCanvas(), kinectManagerClient.ManagerCoorMapper);
 
-                ResetGameStart();                
+                ResetGameStart();
 
                 kinectManagerClient.BodyFrameArrived += HandleBodyListArrived;
             }
@@ -315,7 +315,7 @@ namespace JustClimbTrial.Views.Pages
             navSvc.Navigating -= NavigationService_Navigating;
             navSvc = null;
 
-            gameplayVideoRecClient.StopRecordingIfIsRecording();            
+            gameplayVideoRecClient.StopRecordingIfIsRecording();
 
             kinectManagerClient.BodyFrameArrived -= HandleBodyListArrived;
             navHead.PropertyChanged -= HandleNavHeadIsRecordDemoChanged;
@@ -323,7 +323,7 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient.ClearPlaygroundCanvas();
             if (debug)
             {
-                mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
             }
         }
 
@@ -334,7 +334,7 @@ namespace JustClimbTrial.Views.Pages
             //floorPlane = new Plane(floorClipPlane.X, floorClipPlane.Y, floorClipPlane.Z, floorClipPlane.W);
 
             //remove skeleton shape and empty List<>when DEBUG
-            if (debug)
+            if (debug || drawSkeleton)
             {
                 foreach (Shape skeletonShape in skeletonBodies.SelectMany(shapes => shapes))
                 {
@@ -366,7 +366,7 @@ namespace JustClimbTrial.Views.Pages
                     if (body != null && body.IsTracked)
                     {
                         //draw skeleton shape when DEBUG
-                        if (debug)
+                        if (debug || drawSkeleton)
                         {
                             IEnumerable<Shape> skeletonShapes = mainWindowClient.DrawSkeletonInPlaygroundCanvas(body, kinectManagerClient.ManagerCoorMapper, SpaceMode.Color);
                             skeletonBodies.Add(skeletonShapes);
@@ -512,25 +512,27 @@ namespace JustClimbTrial.Views.Pages
             //rocktimers tick sub and unsub
             mainWindowClient.ClearPlaygroundCanvas();
 
-            
+            if (debug)
+            {
+                rocksOnRouteVM.DrawAllRocksOnRouteInGame();
+                if (climbMode == ClimbMode.Training)
+                {
+                    rocksOnRouteVM.DrawTrainingPathInGame();
+                }
+            }
+            else
+            {
+                rocksOnRouteVM.SetRocksImgSequences();
+                rocksOnRouteVM.PlayAllRocksOnRouteImgSequencesInGame();
+            }
             
             switch (climbMode)
             {
                 case ClimbMode.Training:
                     #region Training Mode Setup
-                    nextRockOnTrainRoute = rocksOnRouteVM.RockOnRouteEnumerator;
+                    nextRockOnTrainRoute = rocksOnRouteVM.GetEnumerator();
                     nextRockOnTrainRoute.Reset();
                     nextRockOnTrainRoute.MoveNext();
-                    //Console.WriteLine("rock: " + nextRockOnTrainRoute.Current.TrainingSeq);
-
-                    if (debug)
-                    {
-                        rocksOnRouteVM.DrawTrainingPathInGame();
-                    }
-                    else
-                    {
-
-                    }
 
                     #endregion
                     break;
@@ -542,45 +544,11 @@ namespace JustClimbTrial.Views.Pages
 
                     //interRockOnBoulderRouteTimers = allRocksOnBoulderRoute.Select( x => { return x.MyRockTimerHelper; });
                     //int interRocksCnt = interRocksOnBoulderRoute.Count();
-                    //interRocksOnRouteCamSP = new CameraSpacePoint[interRocksOnBoulderRoute.Count()];
 
-                    int i = 0;
-                    if (debug)
-                    {
-                        //foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
-                        //{
-                        //    interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                        //    i++;
-                        //}
-                    }
-                    else
-                    {
-                        rocksOnRouteVM.StartRock.SetRockImageWrtBoulderStatus();
-                        rocksOnRouteVM.EndRock.SetRockImageWrtBoulderStatus();
-
-                        foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
-                        {
-                            rockOnBoulderRoute.SetRockImageWrtBoulderStatus();
-                            rockOnBoulderRoute.PlayRockImgSequence();
-
-                            //interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
-                            i++;
-                        }
-                        rocksOnRouteVM.StartRock.PlayRockImgSequence();
-                        rocksOnRouteVM.EndRock.PlayRockImgSequence();
-                    }
                     #endregion
                     break;
             }//close switch (climbMode)    
             
-            if (debug)
-            {
-                rocksOnRouteVM.DrawAllRocksOnRouteInGame();
-            }
-            else
-            {
-                rocksOnRouteVM.PlayAllRocksOnRouteImgSequencesInGame();
-            }
             mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayReadyVideoPath(), true);
         }
 
@@ -676,8 +644,8 @@ namespace JustClimbTrial.Views.Pages
                             await OnGameplayStartAsync();
 
 
-                            //START ROCK REACHED VERIFIED                           
-
+                            //START ROCK REACHED VERIFIED
+                            //we move next first because of subsequent animation effect
                             nextRockOnTrainRoute.MoveNext();
 
                             //TODO: StartRock Feedback Animation
@@ -685,6 +653,12 @@ namespace JustClimbTrial.Views.Pages
                             {
                                 DebugRecolorRockVM(rocksOnRouteVM.StartRock);
                             }
+                            else
+                            {
+                                //we trigger animation on the NEXT rock
+                                nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
+                            }
+                            
                         }
                         //End Rock
                         else if (currentRockOnRouteVM == rocksOnRouteVM.EndRock)
@@ -1015,6 +989,7 @@ namespace JustClimbTrial.Views.Pages
 
                 if (interRocksVisualFeedBack)
                 {
+
                     foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
                     {
                         if (isBoulderTargetReachedFunc(rockOnRoute))

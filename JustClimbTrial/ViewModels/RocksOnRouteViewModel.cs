@@ -3,6 +3,7 @@ using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using Microsoft.Kinect;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
@@ -11,41 +12,46 @@ using System.Windows.Shapes;
 
 namespace JustClimbTrial.ViewModels
 {
-    public class RocksOnRouteViewModel
+    public class RocksOnRouteViewModel : IEnumerable<RockOnRouteViewModel>
     {
         /* used by GameStart */
 
         public ClimbMode RouteClimbMode { get; set; }
+
         public RockOnRouteViewModel StartRock
         {
             get
             {
+                RockOnRouteViewModel result;
                 switch (RouteClimbMode)
                 {
                     case ClimbMode.Boulder:
                     default:
-                        return rocksOnRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
+                        result =  rocksOnRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.Start);
                         break;
                     case ClimbMode.Training:
-                        return rocksOnRoute.FirstOrDefault();
+                        result = rocksOnRoute.FirstOrDefault();
                         break;
-                }                
+                }
+                return result;
             }
         }
         public RockOnRouteViewModel EndRock
         {
             get
             {
+                RockOnRouteViewModel result;
                 switch (RouteClimbMode)
                 {
                     case ClimbMode.Boulder:
                     default:
-                        return rocksOnRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
-                        //break;
+                        result = rocksOnRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
+                        break;
                     case ClimbMode.Training:
-                        return rocksOnRoute.LastOrDefault();
-                        //break;
+                        result = rocksOnRoute.LastOrDefault();
+                        break;
                 }
+                return result;
             }
         }
         public IEnumerable<RockOnRouteViewModel> InterRocks
@@ -59,25 +65,12 @@ namespace JustClimbTrial.ViewModels
                 });
             }
         }
-        public IEnumerator<RockOnRouteViewModel> RockOnRouteEnumerator
-        {
-            get
-            {
-                return rocksOnRoute.GetEnumerator();
-            }
-        }
-        public IEnumerable<RockOnRouteViewModel> RocksOnRoute
-        {
-            get
-            {
-                return rocksOnRoute;
-            }
-        }
+
         public int RouteLength
         {
             get
             {
-                return RocksOnRoute.Count();
+                return rocksOnRoute.Count();
             }
         }
 
@@ -228,7 +221,7 @@ namespace JustClimbTrial.ViewModels
         #endregion
 
 
-        #region manipulate selected rock
+        #region manipulate selected rock (route set)
 
         public bool IsSelectedRockOnRouteNull()
         {
@@ -312,28 +305,19 @@ namespace JustClimbTrial.ViewModels
         /* end of used by RouteSet */
 
         /* used by GameStart */
-        public void PlayAllRocksOnRouteImgSequencesInGame()
-        {
-            foreach (RockOnRouteViewModel rockOnRoute in RocksOnRoute)
-            {
-                rockOnRoute.PlayRockImgSequence();
-            }
-        }
-
-
         public void DrawAllRocksOnRouteInGame()
         {
             switch (RouteClimbMode)
             {
                 case ClimbMode.Boulder:
                 default:
-                    foreach (RockOnRouteViewModel rockOnTrainingRoute in RocksOnRoute)
+                    foreach (RockOnRouteViewModel rockOnTrainingRoute in rocksOnRoute)
                     {
                         rockOnTrainingRoute.DrawRockShapeWrtBoulderStatus();
                     }
                     break;
                 case ClimbMode.Training:
-                    foreach (RockOnRouteViewModel rockOnTrainingRoute in RocksOnRoute)
+                    foreach (RockOnRouteViewModel rockOnTrainingRoute in rocksOnRoute)
                     {
                         rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(RouteLength);
                     }
@@ -366,6 +350,37 @@ namespace JustClimbTrial.ViewModels
 
         #endregion
 
+        #region ImgSeq helpers (game start)
+
+        public void PlayAllRocksOnRouteImgSequencesInGame()
+        {
+            foreach (RockOnRouteViewModel rockOnRoute in this)
+            {
+                rockOnRoute.PlayRockImgSequence();
+            }
+        }
+
+        public void SetRocksImgSequences()
+        {
+            switch (RouteClimbMode)
+            {
+                case ClimbMode.Boulder:
+                default:
+                    foreach (RockOnRouteViewModel rockOnRoute in this)
+                    {
+                        rockOnRoute.SetRockImageWrtBoulderStatus();
+                    }
+                    break;
+                case ClimbMode.Training:
+                    foreach (RockOnRouteViewModel rockOnRoute in this)
+                    {
+                        rockOnRoute.SetRockImageSeqWrtTrainSeq(RouteLength);
+                    }
+                    break;
+            }
+        }
+
+        #endregion
 
         #region database
 
@@ -485,6 +500,21 @@ namespace JustClimbTrial.ViewModels
             }
 
             return new RocksOnRouteViewModel(aCanvas, aClimbMode, rocksOnRouteVM);
+        }
+
+        #endregion
+
+
+        #region IEnumerable interface
+
+        public IEnumerator<RockOnRouteViewModel> GetEnumerator()
+        {
+            return rocksOnRoute.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return rocksOnRoute.GetEnumerator();
         }
 
         #endregion
