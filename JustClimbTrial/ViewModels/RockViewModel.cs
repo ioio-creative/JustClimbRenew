@@ -45,11 +45,14 @@ namespace JustClimbTrial.ViewModels
         public Canvas BCanvas { get; set; }
 
         //Animation sequence, used in GameStart
-        public Image BoulderImage;
-        public ImageSequenceHelper BoulderButtonSequence;
+        //png image dimension: 500 x 500
+        //centre circle size: 300x300
+        private const int srcImgDimension = 500;
+        private const int srcImgCenterDimension = 300;
+        private Image rockImage;
 
         //Shape and TextBlock are used in Scan Wall, Route Set and GameStart(debug)
-        public Shape BoulderShape { get; set; }
+        public Shape RockShape { get; set; }
         private TextBlock TrainingRockSeqNoText;
 
         // derived quantities
@@ -135,7 +138,7 @@ namespace JustClimbTrial.ViewModels
         {
             MyRock = aRock;
             BCanvas = canvas;            
-            BoulderShape = GetNewRockOnWallEllipse();
+            RockShape = GetNewRockOnWallEllipse();
             
             // TODO: performance issue!!!
             //CreateRockImageSequence();
@@ -192,21 +195,21 @@ namespace JustClimbTrial.ViewModels
         public void DrawBoulder()
         {
             SetBoulderTopLeftPositionOnCanvas();
-            BCanvas.AddChild(BoulderShape);      
+            BCanvas.AddChild(RockShape);      
         }
 
         // TODO: need to change name as the function just changes width & height
         private void RedrawBoulder()
         {
-            BoulderShape.Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0));
-            BoulderShape.Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0));
+            RockShape.Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0));
+            RockShape.Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0));
             SetBoulderTopLeftPositionOnCanvas();
         }
 
         public void UndrawBoulder()
         {
-            BCanvas.RemoveChild(BoulderShape);
-            BoulderShape = null;
+            BCanvas.RemoveChild(RockShape);
+            RockShape = null;
         }
 
         private void SetBoulderTopLeftPositionOnCanvas()
@@ -214,7 +217,7 @@ namespace JustClimbTrial.ViewModels
             double normedLeft = bPoint.X - MyRock.Width.GetValueOrDefault(0) * 0.5;
             double normedTop = bPoint.Y - MyRock.Height.GetValueOrDefault(0) * 0.5;
 
-            BCanvas.SetLeftAndTop(BoulderShape, BCanvas.GetActualLengthWrtWidth(normedLeft), 
+            BCanvas.SetLeftAndTop(RockShape, BCanvas.GetActualLengthWrtWidth(normedLeft), 
                 BCanvas.GetActualLengthWrtHeight(normedTop));
         }
 
@@ -276,9 +279,9 @@ namespace JustClimbTrial.ViewModels
         private Shape ChangeRockShape(Func<Shape> shapeFactory)
         {
             UndrawBoulder();
-            BoulderShape = shapeFactory();
+            RockShape = shapeFactory();
             DrawBoulder();           
-            return BoulderShape;
+            return RockShape;
         }
         
         #endregion
@@ -348,7 +351,7 @@ namespace JustClimbTrial.ViewModels
         #region Recolor Shape Stroke
         public void RecolorRockShape(Brush color)
         {
-            BoulderShape.Stroke = color;
+            RockShape.Stroke = color;
         }
         #endregion
 
@@ -371,19 +374,19 @@ namespace JustClimbTrial.ViewModels
 
         public Image SetRockImage()
         {
-            BCanvas.SetLeftAndTop(BoulderImage, bCanvasPoint.X - BoulderImage.Width * 0.5, bCanvasPoint.Y - BoulderImage.Height * 0.5);
-            BCanvas.AddChild(BoulderImage);
+            InitializeRockImage();
+            
+            BCanvas.SetLeftAndTop(rockImage, bCanvasPoint.X - rockImage.Width * 0.5, bCanvasPoint.Y - rockImage.Height * 0.5);
+            BCanvas.AddChild(rockImage);
 
-            return BoulderImage;
-            BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, true);
-            BoulderButtonSequence.Load();
+            return rockImage;
         }
 
-        public void CreateBoulderImageSequence()
+        private void CreateBoulderImageSequence()
         {
             double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
 
-            BoulderImage = new Image
+            rockImage = new Image
             {
                 //png image dimension: 500 x 500
                 //centre circle size: 300x300
@@ -393,10 +396,21 @@ namespace JustClimbTrial.ViewModels
                 Stretch = Stretch.Fill
             };
 
-            BCanvas.SetLeftAndTop(BoulderImage, bCanvasPoint.X - BoulderImage.Width * 0.5, bCanvasPoint.Y - BoulderImage.Height * 0.5);
-            BCanvas.AddChild(BoulderImage);
+            BCanvas.SetLeftAndTop(rockImage, bCanvasPoint.X - rockImage.Width * 0.5, bCanvasPoint.Y - rockImage.Height * 0.5);
+            BCanvas.AddChild(rockImage);          
+        }
 
-            BoulderButtonSequence = new ImageSequenceHelper(BoulderImage, true);
+        private void InitializeRockImage()
+        {
+            double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
+
+            rockImage = new Image
+            {   
+                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
+                Width = srcImgDimension / srcImgCenterDimension * meanLength,
+                Height = srcImgDimension / srcImgCenterDimension * meanLength,
+                Stretch = Stretch.Fill
+            };
         }
 
         #endregion

@@ -311,8 +311,8 @@ namespace JustClimbTrial.Views.Pages
                 else  // rock already in list
                 {
                     rocksOnWallViewModel.SelectedRock = rockCorrespondsToCanvasPt;
-                    boulderWidthSlider.Value = rockCorrespondsToCanvasPt.BoulderShape.Width;
-                    boulderHeightSlider.Value = rockCorrespondsToCanvasPt.BoulderShape.Height;
+                    boulderWidthSlider.Value = rockCorrespondsToCanvasPt.RockShape.Width;
+                    boulderHeightSlider.Value = rockCorrespondsToCanvasPt.RockShape.Height;
                 }
             }
             else

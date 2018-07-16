@@ -512,11 +512,8 @@ namespace JustClimbTrial.Views.Pages
             //rocktimers tick sub and unsub
             mainWindowClient.ClearPlaygroundCanvas();
 
-            if (debug)
-            {
-                rocksOnRouteVM.DrawAllRocksOnRouteInGame();
-            }
-
+            
+            
             switch (climbMode)
             {
                 case ClimbMode.Training:
@@ -558,38 +555,32 @@ namespace JustClimbTrial.Views.Pages
                     }
                     else
                     {
-                        rocksOnRouteVM.StartRock.MyRockViewModel.CreateBoulderImageSequence();
-                        rocksOnRouteVM.StartRock.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            new BitmapSource[][]
-                            {
-                                ImageSequenceHelper.ShowSequence,  // 1
-                                ImageSequenceHelper.ShinePopSequence,  // 3
-                                //ImageSequenceHelper.ShineLoopSequence  // 4
-                                ImageSequenceHelper.ShineFeedbackLoopSequence
-                            }
-                        );
-
-                        rocksOnRouteVM.EndRock.MyRockViewModel.CreateBoulderImageSequence();
-                        rocksOnRouteVM.EndRock.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
+                        rocksOnRouteVM.StartRock.SetRockImageWrtBoulderStatus();
+                        rocksOnRouteVM.EndRock.SetRockImageWrtBoulderStatus();
 
                         foreach (var rockOnBoulderRoute in interRocksOnBoulderRoute)
                         {
-                            rockOnBoulderRoute.SetRockImageWrtStatus();
-                            rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.Play();
-
-                            //rockOnBoulderRoute.MyRockViewModel.CreateBoulderImageSequence();
-                            //rockOnBoulderRoute.MyRockViewModel.BoulderButtonSequence.SetAndPlaySequences(true,
-                            //  new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
+                            rockOnBoulderRoute.SetRockImageWrtBoulderStatus();
+                            rockOnBoulderRoute.PlayRockImgSequence();
 
                             //interRocksOnRouteCamSP[i] = rockOnBoulderRoute.MyRockViewModel.MyRock.GetCameraSpacePoint();
                             i++;
                         }
+                        rocksOnRouteVM.StartRock.PlayRockImgSequence();
+                        rocksOnRouteVM.EndRock.PlayRockImgSequence();
                     }
                     #endregion
                     break;
-            }//close switch (climbMode)              
-
+            }//close switch (climbMode)    
+            
+            if (debug)
+            {
+                rocksOnRouteVM.DrawAllRocksOnRouteInGame();
+            }
+            else
+            {
+                rocksOnRouteVM.PlayAllRocksOnRouteImgSequencesInGame();
+            }
             mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayReadyVideoPath(), true);
         }
 

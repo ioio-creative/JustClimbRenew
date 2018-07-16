@@ -41,10 +41,10 @@ namespace JustClimbTrial.ViewModels
                     case ClimbMode.Boulder:
                     default:
                         return rocksOnRoute.Single(x => x.BoulderStatus == RockOnBoulderStatus.End);
-                        break;
+                        //break;
                     case ClimbMode.Training:
                         return rocksOnRoute.LastOrDefault();
-                        break;
+                        //break;
                 }
             }
         }
@@ -108,7 +108,7 @@ namespace JustClimbTrial.ViewModels
                     {
                         // draw selected rock indicator
                         selectedRockIndicator = GetNewSelectedRockIndicatorCircle(
-                            selectedRockOnRoute.MyRockViewModel.BoulderShape);
+                            selectedRockOnRoute.MyRockViewModel.RockShape);
                         canvas.DrawShape(selectedRockIndicator,
                             selectedRockOnRoute.MyRockViewModel.BCanvasPoint);
                     }
@@ -245,7 +245,7 @@ namespace JustClimbTrial.ViewModels
                 // add it into the rocksOnRoute list
                 AddRockToRoute(SelectedRockOnRoute);
 
-                if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
+                if (SelectedRockOnRoute.MyRockViewModel.RockShape == null ||
                     SelectedRockOnRoute.TrainingSeq != seqNo)
                 {
                     SelectedRockOnRoute.SetRockTrainingSeqAndDraw(seqNo, mirrorSeqNo);                    
@@ -263,7 +263,7 @@ namespace JustClimbTrial.ViewModels
                 // add it into the rocksOnRoute list
                 AddRockToRoute(SelectedRockOnRoute);
 
-                if (SelectedRockOnRoute.MyRockViewModel.BoulderShape == null ||
+                if (SelectedRockOnRoute.MyRockViewModel.RockShape == null ||
                     SelectedRockOnRoute.BoulderStatus != status)
                 {
                     SelectedRockOnRoute.SetRockStatusAndDrawShape(status);             
@@ -312,6 +312,14 @@ namespace JustClimbTrial.ViewModels
         /* end of used by RouteSet */
 
         /* used by GameStart */
+        public void PlayAllRocksOnRouteImgSequencesInGame()
+        {
+            foreach (RockOnRouteViewModel rockOnRoute in RocksOnRoute)
+            {
+                rockOnRoute.PlayRockImgSequence();
+            }
+        }
+
 
         public void DrawAllRocksOnRouteInGame()
         {
@@ -321,7 +329,7 @@ namespace JustClimbTrial.ViewModels
                 default:
                     foreach (RockOnRouteViewModel rockOnTrainingRoute in RocksOnRoute)
                     {
-                        rockOnTrainingRoute.DrawRockShapeWrtStatus();
+                        rockOnTrainingRoute.DrawRockShapeWrtBoulderStatus();
                     }
                     break;
                 case ClimbMode.Training:
