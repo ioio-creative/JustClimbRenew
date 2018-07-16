@@ -8,12 +8,6 @@ using System.Windows.Threading;
 
 namespace JustClimbTrial.Helpers
 {
-    public enum RockAnimationSeq
-    {
-
-    }
-
-
     /// <summary>
     /// WPF Image Sequencer. Adapted from:
     /// http://blogarchive.claritycon.com/blog/2009/04/wpf-image-sequencer-for-animations/

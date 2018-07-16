@@ -1,5 +1,6 @@
 ﻿using JustClimbTrial.Enums;
 using JustClimbTrial.Helpers;
+using System.Windows.Media.Imaging;
 
 namespace JustClimbTrial.ViewModels
 {
@@ -12,7 +13,7 @@ namespace JustClimbTrial.ViewModels
         public int TrainingSeq { get; set; }
         public RockTimerHelper MyRockTimerHelper { get; set; }
 
-        public ImageSequenceHelper RockAnimationSequence;
+        private ImageSequenceHelper RockAnimationSequence;
         
         #endregion
 
@@ -44,10 +45,10 @@ namespace JustClimbTrial.ViewModels
         public void SetRockStatusAndDrawShape(RockOnBoulderStatus status)
         {
             BoulderStatus = status;
-            DrawRockShapeWrtStatus();
+            DrawRockShapeWrtBoulderStatus();
         }
 
-        public void DrawRockShapeWrtStatus()
+        public void DrawRockShapeWrtBoulderStatus()
         {
             switch (BoulderStatus)
             {
@@ -81,44 +82,65 @@ namespace JustClimbTrial.ViewModels
             } 
         }
 
-        public void SetRockImageWrtStatus()
+        public void SetRockImageWrtBoulderStatus()
         {
             //TODO: initialize boulder img sequences according to boulder status
-
-            //MyRockViewModel.CreateRockImageSequence();
+            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), true);
             switch (BoulderStatus)
             {
                 case RockOnBoulderStatus.Start:
-                    MyRockViewModel.SetRockImage();
+                    RockAnimationSequence.SetSequences(true,
+                    new BitmapSource[][]
+                    {
+                        ImageSequenceHelper.ShowSequence,  // 1
+                        ImageSequenceHelper.ShinePopSequence,  // 3
+                        //ImageSequenceHelper.ShineLoopSequence  // 4
+                        ImageSequenceHelper.ShineFeedbackLoopSequence
+                    });
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
-                    MyRockViewModel.SetRockImage();
+                    RockAnimationSequence.SetSequences(true,
+                    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
                     break;
                 case RockOnBoulderStatus.End:
-                    MyRockViewModel.SetRockImage();
+                    RockAnimationSequence.SetSequences(true,
+                    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
                     break;
             }
         }
 
-        public void SetRockImageWrtTrainSeq(int maxSeqNo)
+        public void SetRockImageSeqWrtTrainSeq(int maxSeqNo)
         {
             RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), true);
-
             if (TrainingSeq == 1)
             {
-                MyRockViewModel.ChangeRockShapeToStart();
+                RockAnimationSequence.SetSequences(true,
+                    new BitmapSource[][]
+                    {
+                        ImageSequenceHelper.ShowSequence,  // 1
+                        ImageSequenceHelper.ShinePopSequence,  // 3
+                        //ImageSequenceHelper.ShineLoopSequence  // 4
+                        ImageSequenceHelper.ShineFeedbackLoopSequence
+                    }
+                );
             }
             else if (TrainingSeq == maxSeqNo)
-            {
-                MyRockViewModel.ChangeRockShapeToEnd();
+            {      
+                RockAnimationSequence.SetSequences(true,
+                    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });  // 1
             }
             else
             {
-                MyRockViewModel.ChangeRockShapeToIntermediate();
+                RockAnimationSequence.SetSequences(true,
+                    new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
             }
         }
 
+        public void PlayRockImgSequence()
+        {
+            RockAnimationSequence.Play();
+        }
         #endregion
     }
 }
