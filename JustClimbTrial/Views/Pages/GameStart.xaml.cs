@@ -645,6 +645,11 @@ namespace JustClimbTrial.Views.Pages
 
 
                             //START ROCK REACHED VERIFIED
+                            if (!debug)
+                            {
+                                rocksOnRouteVM.StartRock.SetAndPlayFeedbackImgSeq();
+                            }
+
                             //we move next first because of subsequent animation effect
                             nextRockOnTrainRoute.MoveNext();
 
@@ -655,7 +660,7 @@ namespace JustClimbTrial.Views.Pages
                             }
                             else
                             {
-                                //we trigger animation on the NEXT rock
+                                //we trigger animation on the NEXT rock after start rock
                                 nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
                             }
                             
@@ -663,6 +668,11 @@ namespace JustClimbTrial.Views.Pages
                         //End Rock
                         else if (currentRockOnRouteVM == rocksOnRouteVM.EndRock)
                         {
+                            if (!debug)
+                            {
+                                rocksOnRouteVM.EndRock.SetAndPlayFeedbackShineLoopImgSeq();
+                            }
+
                             OnGameplayFinish();
                             
                             //END ROCK REACHED VERIFIED
@@ -684,10 +694,18 @@ namespace JustClimbTrial.Views.Pages
                             {
                                 DebugRecolorRockVM(currentRockOnRouteVM);
                             }
+                            else
+                            {
+                                nextRockOnTrainRoute.Current.SetAndPlayFeedbackImgSeq();
+                            }
 
 
                             //We call movenext after everything has been done to current RockVM
                             nextRockOnTrainRoute.MoveNext();
+                            if (!debug)
+                            {
+                                nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
+                            }
                         }
                         
                     }

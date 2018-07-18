@@ -97,9 +97,9 @@ namespace JustClimbTrial.ViewModels
                     new BitmapSource[][]
                     {
                         ImageSequenceHelper.ShowSequence,  // 1
-                        ImageSequenceHelper.ShinePopSequence,  // 3
-                        //ImageSequenceHelper.ShineLoopSequence  // 4
-                        ImageSequenceHelper.ShineFeedbackLoopSequence
+                        ImageSequenceHelper.ShinePopSequence,  // 4
+                        ImageSequenceHelper.ShineLoopSequence  // 7c
+                        //ImageSequenceHelper.ShineFeedbackLoopSequence //b
                     });
                     break;
                 case RockOnBoulderStatus.Int:
@@ -114,6 +114,11 @@ namespace JustClimbTrial.ViewModels
             }
         }
 
+        public void PlayRockImgSequence()
+        {
+            RockAnimationSequence.Play();
+        }
+
         public void SetRockImageSeqWrtTrainSeq(int maxSeqNo)
         {
             RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), false);
@@ -123,9 +128,9 @@ namespace JustClimbTrial.ViewModels
                     new BitmapSource[][]
                     {
                         ImageSequenceHelper.ShowSequence,  // 1
-                        ImageSequenceHelper.ShinePopSequence,  // 3
-                        //ImageSequenceHelper.ShineLoopSequence  // 4
-                        ImageSequenceHelper.ShineFeedbackLoopSequence
+                        ImageSequenceHelper.ShinePopSequence,  // 4
+                        ImageSequenceHelper.ShineLoopSequence  // 7c
+                        //ImageSequenceHelper.ShineFeedbackLoopSequence //b
                     });
             }
             else if (TrainingSeq == maxSeqNo)
@@ -140,19 +145,34 @@ namespace JustClimbTrial.ViewModels
             }
         }
 
-        public void PlayRockImgSequence()
-        {
-            RockAnimationSequence.Play();
-        }
-
         public void SetAndPlayActivePopAndShineImgSeq()
         {
             RockAnimationSequence.Stop();
             RockAnimationSequence.SetSequences(true,
                 new BitmapSource[][]
                 {
-                    ImageSequenceHelper.ShinePopSequence,  // 3
-                    ImageSequenceHelper.ShineLoopSequence  // 4
+                    ImageSequenceHelper.ShinePopSequence,  // 7b
+                    ImageSequenceHelper.ShineLoopSequence  // 7c
+                });
+            PlayRockImgSequence();
+        }
+
+        public void SetAndPlayFeedbackImgSeq()
+        {
+            RockAnimationSequence.Stop();
+            RockAnimationSequence.SetSequences(false,
+                new BitmapSource[][]{ ImageSequenceHelper.FeedbackSequence }); // 4
+            PlayRockImgSequence();
+        }
+
+        public void SetAndPlayFeedbackShineLoopImgSeq()
+        {
+            RockAnimationSequence.Stop();
+            RockAnimationSequence.SetSequences(true,
+                new BitmapSource[][]
+                {
+                    ImageSequenceHelper.ShineFeedbackPopSequence,  // a
+                    ImageSequenceHelper.ShineFeedbackLoopSequence  // b
                 });
             PlayRockImgSequence();
         }
