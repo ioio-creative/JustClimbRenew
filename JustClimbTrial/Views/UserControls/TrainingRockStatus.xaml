@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="btnTrainingSeqGoBack">
             <Button.Background>
-                <ImageBrush ImageSource="/Resources/Images/TrainingSeqGoBack.jpg" />
+                <ImageBrush ImageSource="/Resources/Images/btn1_return.png" />
             </Button.Background>
         </Button>
     </Grid>

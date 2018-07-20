@@ -136,13 +136,13 @@
                         <Button x:Name="btnConfirmRouteSet" 
                                 Grid.Row="1" Grid.Column="0">
                             <Button.Background>
-                                <ImageBrush ImageSource="/Resources/Images/Tick.jpg" />
+                                <ImageBrush ImageSource="/Resources/Images/btn1_confirm.png" />
                             </Button.Background>
                         </Button>
                         <Button x:Name="btnCancelRouteSet" 
                                 Grid.Row="1" Grid.Column="1">
                             <Button.Background>
-                                <ImageBrush ImageSource="/Resources/Images/Cancel.jpg" />
+                                <ImageBrush ImageSource="/Resources/Images/btn1_cancel.png" />
                             </Button.Background>
                         </Button>
                     </Grid>

@@ -142,8 +142,8 @@ namespace JustClimbTrial.Views.Pages
 
         //TODO: combine hold and endrock timer to avoid confusion
         //private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
-        private const int EndRockHoldTimerGoal = 20; //unit = 10 millisecs
-        private const int EndRockHoldTimerLag = 10;
+        private const int EndRockHoldTimerGoal = 25; //unit = 10 millisecs
+        private const int EndRockHoldTimerLag = 5;
         private bool isEndCountDownVideoPlaying = false;
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
