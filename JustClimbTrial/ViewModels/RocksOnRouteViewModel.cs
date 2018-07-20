@@ -360,6 +360,7 @@ namespace JustClimbTrial.ViewModels
             }
         }
 
+
         public void SetRocksImgSequences()
         {
             switch (RouteClimbMode)
