@@ -39,9 +39,7 @@ namespace JustClimbTrial.Helpers
         private BitmapSource[][] sequencePlaylist = null;        
         private const int defaultFPS = 10;
 
-        private bool isCurrentFolderToLoop = false;
         private bool isLastFolderToLoop = false;
-
         private int currentFolder;
         private int currentImgIdxInFolder;
         private Image image;
@@ -55,19 +53,19 @@ namespace JustClimbTrial.Helpers
         private event EventHandler SequenceFolderEnded;
 
 
-        public ImageSequenceHelper(Image image, bool loop = false, int fps = defaultFPS)
+        public ImageSequenceHelper(Image image, int fps = defaultFPS)
         {
             this.image = image;
             this.updateImageTimer = new DispatcherTimer(DispatcherPriority.Render);
             this.updateImageTimer.Interval = TimeSpan.FromMilliseconds(1000/fps);
             this.updateImageTimer.Tick += new EventHandler(this.UpdateImageTimer_Tick);
-            isCurrentFolderToLoop = loop;
+
         }
 
         public void SetAndPlaySequences(bool isLastFolderLoop, BitmapSource[][] imgFolders)
         {
             SetSequences(isLastFolderLoop, imgFolders);
-            Play();
+            PlayFromStart();
         }
 
         public void SetSequences(bool isLastFolderLoop, BitmapSource[][] imgFolders)
@@ -75,8 +73,6 @@ namespace JustClimbTrial.Helpers
             sequencePlaylist = imgFolders;
             isLastFolderToLoop = isLastFolderLoop;
 
-            currentFolder = 0;
-            imagesInFolder = sequencePlaylist[currentFolder++];
             //clear previous sub (if any)
             SequenceFolderEnded -= SequenceFolderEndedHandler;
             SequenceFolderEnded += SequenceFolderEndedHandler;                                     
@@ -87,20 +83,20 @@ namespace JustClimbTrial.Helpers
             sequencePlaylist = null;
         }
 
-        public void Load(BitmapSource[] images)
-        {
-            this.updateImageTimer.Stop();
+        //public void Load(BitmapSource[] images)
+        //{
+        //    this.updateImageTimer.Stop();
 
-            this.imagesInFolder = images;
+        //    this.imagesInFolder = images;
 
-            this.currentImgIdxInFolder = 0;
-            this.LoadCurrentIndex();          
-        }
+        //    this.currentImgIdxInFolder = 0;
+        //    this.LoadCurrentIndex();          
+        //}
 
-        public void Load()
-        {
-            Load(DefaultInitialSequence);
-        }
+        //public void Load()
+        //{
+        //    Load(DefaultInitialSequence);
+        //}
 
         private void LoadCurrentIndex()
         {
@@ -113,10 +109,17 @@ namespace JustClimbTrial.Helpers
 
         public void Play()
         {
+            this.updateImageTimer.Start();
+        }
+
+        public void PlayFromStart()
+        {
             if (sequencePlaylist != null)
             {
                 this.currentImgIdxInFolder = 0;
-                this.updateImageTimer.Start(); 
+                this.currentFolder = 0;
+                imagesInFolder = sequencePlaylist[currentFolder++];
+                Play();
             }
         }
 
@@ -131,15 +134,7 @@ namespace JustClimbTrial.Helpers
         private void UpdateImageTimer_Tick(object sender, EventArgs e)
         {
             if (this.currentImgIdxInFolder == this.imagesInFolder.Length)
-            {
-                if (isCurrentFolderToLoop)
-                {
-                    this.currentImgIdxInFolder = 0;                    
-                }
-                else
-                {
-                    Stop();
-                }
+            {                
                 SequenceFolderEnded?.Invoke(sender, e);
             }
 
@@ -151,26 +146,23 @@ namespace JustClimbTrial.Helpers
 
         private void SequenceFolderEndedHandler(object sender, EventArgs e)
         {
-            Stop();
-
             if (currentFolder == sequencePlaylist.Length)  // last folder finished
-            {               
-                // unsubscribe from sequence folder ended event
-                SequenceFolderEnded -= SequenceFolderEndedHandler;
-                isCurrentFolderToLoop = isLastFolderToLoop;
-
+            {
                 if (isLastFolderToLoop)
-                {                   
-                    Play();
+                {
+                    this.currentImgIdxInFolder = 0;
+                }
+                else
+                {
+                    Stop();
+                    SequenceFolderEnded -= SequenceFolderEndedHandler;
                 }
             }
             else  // not last folder, proceed to next folder
             {
                 imagesInFolder = sequencePlaylist[currentFolder++];
-
-                isCurrentFolderToLoop = false;
-                Play();                
-            }            
+                this.currentImgIdxInFolder = 0;
+            }      
         }
 
         #endregion

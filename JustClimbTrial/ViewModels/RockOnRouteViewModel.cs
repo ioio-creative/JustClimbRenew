@@ -89,7 +89,7 @@ namespace JustClimbTrial.ViewModels
         public void SetRockImageWrtBoulderStatus()
         {
             //TODO: initialize boulder img sequences according to boulder status
-            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), true);
+            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage());
             switch (BoulderStatus)
             {
                 case RockOnBoulderStatus.Start:
@@ -104,11 +104,11 @@ namespace JustClimbTrial.ViewModels
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
-                    RockAnimationSequence.SetSequences(true,
+                    RockAnimationSequence.SetSequences(false,
                     new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
                     break;
                 case RockOnBoulderStatus.End:
-                    RockAnimationSequence.SetSequences(true,
+                    RockAnimationSequence.SetSequences(false,
                     new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
                     break;
             }
@@ -116,12 +116,12 @@ namespace JustClimbTrial.ViewModels
 
         public void PlayRockImgSequence()
         {
-            RockAnimationSequence.Play();
+            RockAnimationSequence.PlayFromStart();
         }
 
         public void SetRockImageSeqWrtTrainSeq(int maxSeqNo)
         {
-            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage(), false);
+            RockAnimationSequence = new ImageSequenceHelper(MyRockViewModel.SetRockImage());
             if (TrainingSeq == 1)
             {
                 RockAnimationSequence.SetSequences(true,
