@@ -142,8 +142,8 @@ namespace JustClimbTrial.Views.Pages
 
         //TODO: combine hold and endrock timer to avoid confusion
         //private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
-        private const int EndRockHoldTimerGoal = 22; //unit = 10 millisecs
-        private const int EndRockHoldTimerLag = 8;
+        private const int EndRockHoldTimerGoal = 25; //unit = 10 millisecs
+        private const int EndRockHoldTimerLag = 5;
         private bool isEndCountDownVideoPlaying = false;
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -815,23 +815,14 @@ namespace JustClimbTrial.Views.Pages
                         playerBodyID = bodyID;
                         //Debug.WriteLine("Player Tracking ID: " + playerBodyID);
 
-                        //TODO: StartRock Feedback Animation
-                        if (debug)
-                        {
-                            DebugRecolorRockVM(rocksOnRouteVM.StartRock);
-                        }
-                        else
-                        {
-                            rocksOnRouteVM.StartRock.SetAndPlayFeedbackImgSeq();
-                        }
-
                         startRockTimer.Reset();
                         startRockTimer.RemoveTickEventHandler(startRockTimerTickEventHandler);
                         await OnGameplayStartAsync();
 
-                        foreach (RockOnRouteViewModel interRock in interRocksOnBoulderRoute)
+                        //TODO: StartRock Feedback Animation
+                        if (debug)
                         {
-                            interRock.SetAndPlayActivePopAndShineImgSeq();
+                            DebugRecolorRockVM(rocksOnRouteVM.StartRock);
                         }
                     }
                 }
@@ -858,16 +849,6 @@ namespace JustClimbTrial.Views.Pages
 
                     if (endRockTimer.IsTimerGoalReached())
                     {
-                        //TODO: EndRock Feedback Animation
-                        if (debug)
-                        {
-                            DebugRecolorRockVM(rocksOnRouteVM.EndRock, Brushes.White);
-                        }
-                        else
-                        {
-                            rocksOnRouteVM.EndRock.SetAndPlayFeedbackShineLoopImgSeq();
-                        }
-
                         OnGameplayFinish();
                         
                         //END ROCK REACHED VERIFIED
@@ -876,7 +857,13 @@ namespace JustClimbTrial.Views.Pages
 
                         //DO SOMETHING WHEN ANY BOTH HANDS REACHED END ROCK
                         //Play "Count down to 3" video
-                       
+
+
+                        //TODO: EndRock Feedback Animation
+                        if (debug)
+                        {
+                            DebugRecolorRockVM(rocksOnRouteVM.EndRock, Brushes.White);
+                        }
                     }
                 }
 
@@ -921,10 +908,6 @@ namespace JustClimbTrial.Views.Pages
                         if (debug)
                         {
                             DebugRecolorRockVM(rockOnRoute);
-                        }
-                        else
-                        {
-                            rockOnRoute.SetAndPlayFeedbackImgSeq();
                         }
                     }
 

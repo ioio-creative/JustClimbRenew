@@ -334,7 +334,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Home.jpg" />
     <Resource Include="Resources\Images\JustClimbWall.png" />
+    <Resource Include="Resources\Images\TrainingSeqGoBack.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\btn1_JC Logo - Landing.png" />
