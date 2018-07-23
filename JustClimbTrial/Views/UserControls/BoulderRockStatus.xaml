@@ -19,22 +19,22 @@
         <!-- row 0 -->
         <Button x:Name="btnStartStatus" 
                 Grid.Row="0" Grid.Column="0">
-            START
+            <Image Source="/Resources/Images/btn1_route start.png"/>
         </Button>
         <Button x:Name="btnEndStatus" 
                 Grid.Row="0" Grid.Column="1">
-            END
+            <Image Source="/Resources/Images/btn1_route end.png"/>
         </Button>
         <!-- end of row 0 -->
 
         <!-- row 1 -->
         <Button x:Name="btnIntermediateStatus" 
                 Grid.Row="1" Grid.Column="0">
-            INT
+            <Image Source="/Resources/Images/btn1_route int.png"/>
         </Button>
         <Button x:Name="btnNoneStatus" 
                 Grid.Row="1" Grid.Column="1">
-            NONE
+            <Image Source="/Resources/Images/btn1_route none.png"/>
         </Button>
         <!-- end of row 1 -->
     </Grid>
