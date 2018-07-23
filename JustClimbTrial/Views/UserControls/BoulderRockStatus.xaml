@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JustClimbTrial.Views.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="250" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -18,22 +18,26 @@
         
         <!-- row 0 -->
         <Button x:Name="btnStartStatus" 
-                Grid.Row="0" Grid.Column="0">
+                Grid.Row="0" Grid.Column="0"
+                Background="Transparent" BorderBrush="Transparent">
             <Image Source="/Resources/Images/btn1_route start.png"/>
         </Button>
         <Button x:Name="btnEndStatus" 
-                Grid.Row="0" Grid.Column="1">
+                Grid.Row="0" Grid.Column="1"
+                Background="Transparent" BorderBrush="Transparent">
             <Image Source="/Resources/Images/btn1_route end.png"/>
         </Button>
         <!-- end of row 0 -->
 
         <!-- row 1 -->
         <Button x:Name="btnIntermediateStatus" 
-                Grid.Row="1" Grid.Column="0">
+                Grid.Row="1" Grid.Column="0"
+                Background="Transparent" BorderBrush="Transparent">
             <Image Source="/Resources/Images/btn1_route int.png"/>
         </Button>
         <Button x:Name="btnNoneStatus" 
-                Grid.Row="1" Grid.Column="1">
+                Grid.Row="1" Grid.Column="1"
+                Background="Transparent" BorderBrush="Transparent">
             <Image Source="/Resources/Images/btn1_route none.png"/>
         </Button>
         <!-- end of row 1 -->

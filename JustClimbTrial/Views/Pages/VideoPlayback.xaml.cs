@@ -26,20 +26,16 @@ namespace JustClimbTrial.Views.Pages
         private bool supressNavTick = false;
 
         private readonly string videoFilePath;
-        private readonly bool isShowSaveVideoPanel;
 
         #endregion
         
 
         #region constructors
 
-        public VideoPlayback(string aVideoFilePath, 
-            MainWindow mainWindow,
-            bool isToShowSaveVideoPanel = false)
+        public VideoPlayback(string aVideoFilePath, MainWindow mainWindow)
         {
             mainWindowClient = mainWindow;
             videoFilePath = aVideoFilePath;
-            isShowSaveVideoPanel = isToShowSaveVideoPanel;
 
             InitializeComponent();
             //add some handlers manually because slider IsMoveToPointEnabled absorbs MouseButtonEvent
@@ -55,10 +51,8 @@ namespace JustClimbTrial.Views.Pages
         {
             playBtn.Command = new RelayCommand(PlayMedia, CanPlayMedia);
             pauseBtn.Command = new RelayCommand(PauseMedia, CanPauseMedia);
-            stopBtn.Command = new RelayCommand(StopMedia, CanStopMedia);
-            speedResetBtn.Command = new RelayCommand(ResetPlayMediaSpeed, CanResetPlayMediaSpeed);
-            saveVideoBtn.Command = new RelayCommand(PassSaveVideoMessageToDialogCaller, CanPassSaveVideoMessageToDialogCaller);
-            cancelSaveVideoBtn.Command = new RelayCommand(PassCancelSaveVideoMessageToDialogCaller, CanPassCancelSaveVideoMessageToDialogCaller);
+            backBtn.Command = new RelayCommand(StopAndClosePlaybackDialog, CanStopMedia);
+            speedResetBtn.Command = new RelayCommand(ResetPlayMediaSpeed, CanResetPlayMediaSpeed);          
         }
 
         private void InitializePropertyValues()
@@ -98,16 +92,6 @@ namespace JustClimbTrial.Views.Pages
         }
 
         private bool CanResetPlayMediaSpeed(object parameter = null)
-        {
-            return true;
-        }
-
-        private bool CanPassSaveVideoMessageToDialogCaller(object parameter = null)
-        {
-            return true;
-        }
-
-        private bool CanPassCancelSaveVideoMessageToDialogCaller(object parameter = null)
         {
             return true;
         }
@@ -160,21 +144,10 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient.SetSpeedRatioOfPlaybackMedia(1);
         }
 
-        private void PassSaveVideoMessageToDialogCaller(object parameter = null)
+        private void StopAndClosePlaybackDialog(object parameter = null)
         {
-            ISavingVideo mySavingVideoParent = this.Parent as ISavingVideo;
-            mySavingVideoParent.TmpVideoFilePath = videoFilePath;
-            mySavingVideoParent.IsConfirmSaveVideo = true;
-
-            (mySavingVideoParent as Window).Close();
-        }
-
-        private void PassCancelSaveVideoMessageToDialogCaller(object parameter = null)
-        {
-            ISavingVideo mySavingVideoParent = this.Parent as ISavingVideo;
-            mySavingVideoParent.IsConfirmSaveVideo = false;
-
-            (mySavingVideoParent as Window).Close();
+            StopMedia();
+            (this.Parent as NavigationWindow).Close();
         }
 
         #endregion
@@ -193,9 +166,6 @@ namespace JustClimbTrial.Views.Pages
 
             mediaPlayback.Source = new Uri(videoFilePath);
             mainWindowClient.ChangeSrcInPlaygbackMedia(videoFilePath);
-
-            panelSaveVideo.Visibility =
-                isShowSaveVideoPanel ? Visibility.Visible : Visibility.Collapsed;
 
             InitializeCommands();
         }
