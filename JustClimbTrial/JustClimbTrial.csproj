@@ -344,16 +344,12 @@
     <Resource Include="Resources\Images\btn1_cancel.png" />
     <Resource Include="Resources\Images\btn1_confirm.png" />
     <Resource Include="Resources\update from client\btn1_demo done.png" />
-    <Resource Include="Resources\update from client\btn1_Demo.png" />
     <Resource Include="Resources\update from client\btn1_done.png" />
     <Resource Include="Resources\update from client\btn1_pause.png" />
-    <Resource Include="Resources\update from client\btn1_Play select video.png" />
     <Resource Include="Resources\Images\btn1_record demo.png" />
     <Resource Include="Resources\Images\btn1_Rescan - General.png" />
-    <Resource Include="Resources\update from client\btn1_Restart.png" />
     <Resource Include="Resources\Images\btn1_return.png" />
     <Resource Include="Resources\Images\btn1_Route Set - General.png" />
-    <Resource Include="Resources\update from client\btn1_start to play.png" />
     <Resource Include="Resources\update from client\sample.png" />
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +357,12 @@
     <Resource Include="Resources\Images\btn1_route int.png" />
     <Resource Include="Resources\Images\btn1_route none.png" />
     <Resource Include="Resources\Images\btn1_route start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\btn1_Demo.png" />
+    <Resource Include="Resources\Images\btn1_Play select video.png" />
+    <Resource Include="Resources\Images\btn1_Restart.png" />
+    <Resource Include="Resources\Images\btn1_start to play.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
