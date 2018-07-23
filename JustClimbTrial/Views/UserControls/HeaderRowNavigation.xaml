@@ -8,6 +8,22 @@
              d:DesignHeight="90" d:DesignWidth="960"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="btnRecordDemoVideoTemplate">
+            <Button x:Name="btnRecordDemoVideo"
+                    Background="Transparent" BorderBrush="Transparent"
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,0">
+                <Image Source="/Resources/Images/btn1_record demo.png" />
+            </Button>
+        </ControlTemplate>
+        <ControlTemplate x:Key="btnCancelRecordDemoVideoTemplate">
+            <Button x:Name="btnCancelRecordDemoVideo"
+                    Content="Cancel Record Demo"
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
+        </ControlTemplate>
+    </UserControl.Resources>
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -30,35 +46,21 @@
                 Background="Transparent" BorderBrush="Transparent"             
                 Visibility="{Binding StaffOptionsVisibility}">
             <Image Source="/Resources/Images/btn1_Rescan - General.png" 
-               Margin="10,0,10,5"/>
+               Margin="10,0,10,5" />
         </Button >
-        <!--<Image Source="/Resources/Images/btn1_Rescan - General.png" 
-               Grid.Column="1" Margin="10,0,10,5"
-               VerticalAlignment="Bottom"
-               Visibility="{Binding StaffOptionsVisibility}"/>-->
-        <Button x:Name="btnRouteSet" Content="Route Set" 
-                Grid.Column="2" Opacity="0"
-                Visibility="{Binding StaffOptionsVisibility}"/>
-        <Image Source="/Resources/Images/btn1_Route Set - General.png" 
-               Grid.Column="2" Margin="10,0,10,5"
-               VerticalAlignment="Bottom"
-               Visibility="{Binding StaffOptionsVisibility}"/>
-
-        <StackPanel x:Name="panelStaffOptions" Grid.Column="3"
-                    Orientation="Horizontal"
-                    Visibility="{Binding StaffOptionsVisibility}">
-            <Button x:Name="btnRecordDemoVideo"
-                    Opacity="0"
-                    Visibility="{Binding BtnRecordDemoVideoVisibility}">
-                <Image Source="/Resources/Images/btn1_record demo.png" 
-                    Margin="0,0,10,9"
-                    VerticalAlignment="Bottom" />
-            </Button>
-            <Button x:Name="btnCancelRecordDemoVideo"
-                    Content="Cancel Record Demo"
-                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
-        </StackPanel>
         
+        <Button x:Name="btnRouteSet"
+                Grid.Column="2" VerticalAlignment="Bottom"
+                Background="Transparent" BorderBrush="Transparent"
+                Visibility="{Binding StaffOptionsVisibility}">
+            <Image Source="/Resources/Images/btn1_Route Set - General.png" 
+                    Margin="10,0,10,5" />
+        </Button>
+
+        <Control x:Name="ctrlSwitchDemoMode"
+                 Grid.Column="3"
+                 Visibility="{Binding StaffOptionsVisibility}" />
+
         <TextBlock x:Name="lbTitle"
             Grid.Column="4" 
             Text="{Binding HeaderRowTitle}">
