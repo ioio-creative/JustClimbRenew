@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"       
+      xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
+      xmlns:customControl="clr-namespace:JustClimbTrial.Views.CustomControls"
       mc:Ignorable="d"
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Just Climb - Home"
@@ -33,16 +34,23 @@
                HorizontalAlignment="Center" VerticalAlignment="Center"
                Margin="0,0,0,0" />
 
-        <Image Source="/Resources/Images/btn1_Start - Landing.png" 
+        <!--<Image Source="/Resources/Images/btn1_Start - Landing.png" 
                Grid.Row="5" Grid.Column="2" 
                VerticalAlignment="Top" HorizontalAlignment="Center"
                Margin="-20,0,-20,0" StretchDirection="DownOnly" Grid.RowSpan="2"/>
-
+        
         <Button x:Name="BtnStart"
             Grid.Row="5" Grid.Column="2"
             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
             Margin="-15,0,-15,10" 
             Click="BtnStart_Click" Opacity="0.5" >
-        </Button>
+        </Button>-->
+
+        <customControl:ImageButton x:Name="BtnStart"
+                                   Grid.Row="5"
+                                   Grid.Column="2"
+                                   Source="/Resources/Images/btn1_Start - Landing.png"
+                                   Opacity="0.5"
+                                   Click="BtnStart_Click" />
     </Grid>
 </Page>

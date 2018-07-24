@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JustClimbTrial.Views.UserControls"
+             xmlns:customControl="clr-namespace:JustClimbTrial.Views.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -11,10 +12,12 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnTrainingSeqGoBack">
+        <!--<Button x:Name="btnTrainingSeqGoBack">
             <Button.Background>
                 <ImageBrush ImageSource="/Resources/Images/btn1_return.png" />
             </Button.Background>
-        </Button>
+        </Button>-->
+        <customControl:ImageButton x:Name="btnTrainingSeqGoBack"
+                                   Source="/Resources/Images/btn1_return.png" />
     </Grid>
 </UserControl>

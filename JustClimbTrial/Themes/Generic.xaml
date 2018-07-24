@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:JustClimbTrial"
     xmlns:master="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"
-    xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls">
+    xmlns:userControl="clr-namespace:JustClimbTrial.Views.UserControls"
+    xmlns:customControl="clr-namespace:JustClimbTrial.Views.CustomControls">
 
     <!-- https://www.codeproject.com/Articles/23069/WPF-Master-Pages -->
     <Style TargetType="{x:Type master:MasterWithNavigation}">
@@ -27,6 +28,39 @@
                                 Content="{TemplateBinding Content}" />
                         </Grid>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- https://stackoverflow.com/questions/30463115/wpf-image-button-control -->
+    <Style TargetType="{x:Type customControl:ImageButton}">
+        <Setter Property="Height" Value="{Binding Path=Height, RelativeSource={RelativeSource TemplatedParent}}"/>
+        <Setter Property="Width" Value="{Binding Path=Width, RelativeSource={RelativeSource TemplatedParent}}"/>
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type customControl:ImageButton}">
+                    <Border BorderBrush="Red"
+                            BorderThickness="1">
+                        <Grid x:Name="LayoutGrid" 
+                            Background="DarkBlue">
+                            <Image x:Name="_Image"                               
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Stretch="Uniform"
+                               Source="{Binding Path=Source, RelativeSource={RelativeSource TemplatedParent}}"
+                        />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <!--<Setter Property="" TargetName="" Value=""/>-->
+                        </Trigger>
+                        <Trigger Property="Button.IsPressed" Value="True">
+                            <!--<Setter Property="" TargetName="" Value=""/>-->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

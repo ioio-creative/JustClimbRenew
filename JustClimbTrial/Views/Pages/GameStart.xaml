@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
       xmlns:viewModel="clr-namespace:JustClimbTrial.ViewModels"      
       xmlns:masters="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"
+      xmlns:customControl="clr-namespace:JustClimbTrial.Views.CustomControls"
       mc:Ignorable="d" 
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Boulder Route 1 - Video Playback"
@@ -107,14 +108,20 @@
                 <!-- end of row 1 -->
 
                 <!-- row 2 -->
-                <Button x:Name="BtnDemo" 
+                <!--<Button x:Name="BtnDemo" 
                     Grid.Row="2" Grid.Column="0">
                     <Image Source="/Resources/Images/btn1_Demo.png"/>
-                </Button>
-                <Button x:Name="BtnPlaySelectedVideo" 
+                </Button>-->
+                <customControl:ImageButton x:Name="BtnDemo" 
+                    Grid.Row="2" Grid.Column="0"
+                    Source="/Resources/Images/btn1_Demo.png" />
+                <!--<Button x:Name="BtnPlaySelectedVideo" 
                     Grid.Row="2" Grid.Column="1">
                     <Image Source="/Resources/Images/btn1_Play select video.png"/>
-                </Button>
+                </Button>-->
+                <customControl:ImageButton x:Name="BtnPlaySelectedVideo" 
+                    Grid.Row="2" Grid.Column="1"
+                    Source="/Resources/Images/btn1_Play select video.png" />
                 <TextBlock Grid.Row="2" Grid.Column="2"
                    x:Name="LbIsRecordingDemo">
                 </TextBlock>
@@ -123,10 +130,13 @@
                 </TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="4" 
                     x:Name="LbGameStatusDet" Text="Idling" />
-                <Button Grid.Row="2" Grid.Column="5" 
+                <!--<Button Grid.Row="2" Grid.Column="5" 
                     x:Name="BtnRestartGame">
                     <Image Source="/Resources/Images/btn1_Restart.png"/>
-                </Button>
+                </Button>-->
+                <customControl:ImageButton x:Name="BtnRestartGame"
+                                           Grid.Row="2" Grid.Column="5" 
+                                           Source="/Resources/Images/btn1_Restart.png" />
                 <!-- end of row 2 -->
             </Grid>
         </masters:MasterWithNavigation.Content>

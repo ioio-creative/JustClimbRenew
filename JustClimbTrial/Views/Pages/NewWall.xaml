@@ -3,63 +3,62 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
-    xmlns:viewModel="clr-namespace:JustClimbTrial.ViewModels"
-    xmlns:masters="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"      
+    xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"    
+    xmlns:master="clr-namespace:JustClimbTrial.Views.CustomControls.MasterPages"      
     mc:Ignorable="d" 
     d:DesignHeight="360" d:DesignWidth="640"
     Title="Just Climb - Scan Wall"
     WindowTitle="Just Climb - Scan Wall"
     Loaded="Page_Loaded"
     Unloaded="Page_Unloaded">
-    <masters:MasterWithNavigation x:Name="master">
-        <masters:MasterWithNavigation.Content>
+    <master:MasterWithNavigation x:Name="master">
+        <master:MasterWithNavigation.Content>
             <!-- parent grid -->
             <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="7*" />
-                        <ColumnDefinition Width="3*" />
-                    </Grid.ColumnDefinitions>
-                    <Viewbox Name="viewBox" Grid.Column="0" RenderTransformOrigin="0.5, 0.5">
-                        <Grid>
-                            <Image Name="cameraIMG" />
-                            <Canvas x:Name="canvas" Background="Transparent" MouseDown="canvas_MouseDown" 
-                                    Width="{Binding ActualWidth, ElementName=cameraIMG, Mode=OneWay}" 
-                                    Height="{Binding ActualHeight, ElementName=cameraIMG, Mode=OneWay}" />
-                        </Grid>
-                        <Viewbox.RenderTransform>
-                            <ScaleTransform ScaleX="-1"/>
-                        </Viewbox.RenderTransform>
-                    </Viewbox>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Viewbox Name="viewBox" Grid.Column="0" RenderTransformOrigin="0.5, 0.5">
+                    <Grid>
+                        <Image Name="cameraIMG" />
+                        <Canvas x:Name="canvas" Background="Transparent" MouseDown="canvas_MouseDown" 
+                                Width="{Binding ActualWidth, ElementName=cameraIMG, Mode=OneWay}" 
+                                Height="{Binding ActualHeight, ElementName=cameraIMG, Mode=OneWay}" />
+                    </Grid>
+                    <Viewbox.RenderTransform>
+                        <ScaleTransform ScaleX="-1"/>
+                    </Viewbox.RenderTransform>
+                </Viewbox>
 
-                    <StackPanel Grid.Column="1">
-                        <Button Name="snapshotWallBtn" Content="Snapshot Wall" 
-                                FontSize="10" Height="50" Margin="50 10 50 10" />
-                        <!-- width slider -->
-                        <DockPanel Margin="15 5 15 0">
-                            <TextBlock Text="Boulder Width" DockPanel.Dock="Left" />
-                            <TextBlock Text="{Binding ElementName=boulderWidthSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
-                                       DockPanel.Dock="Right" TextAlignment="Right" RenderTransformOrigin="2.157,0.156" />
-                        </DockPanel>
-                        <Slider x:Name="boulderWidthSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5" 
-                                IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
-                        <!-- end of wall slider -->
-                        <!-- height slider -->
-                        <DockPanel Margin="15 5 15 0">
-                            <TextBlock Text="Boulder Height" DockPanel.Dock="Left" />
-                            <TextBlock Text="{Binding ElementName=boulderHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
-                                       DockPanel.Dock="Right" TextAlignment="Right" RenderTransformOrigin="2.157,0.156" />
-                        </DockPanel>
-                        <Slider x:Name="boulderHeightSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5"
-                                IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
-                        <!-- end of height slider -->
-                        <Button Name="deselectRockBtn" Content="De-select Rock" FontSize="10" Height="50" Margin="50 10 50 10" />
-                        <Button Name="removeRockBtn" Content="Remove Rock" FontSize="10" Height="50" Margin="50 10 50 10" />
-                        <Button Name="removeAllRocksBtn" Content="Remove All Rocks" FontSize="10" Height="50" Margin="50 10 50 10" />
-                        <Button Name="saveWallBtn" Content="Save Wall" FontSize="10"  Height="50" Margin="50 10 50 10" />
-                    </StackPanel>
-                </Grid>
+                <StackPanel Grid.Column="1">
+                    <Button Name="snapshotWallBtn" Content="Snapshot Wall" 
+                            FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <!-- width slider -->
+                    <DockPanel Margin="15 5 15 0">
+                        <TextBlock Text="Boulder Width" DockPanel.Dock="Left" />
+                        <TextBlock Text="{Binding ElementName=boulderWidthSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
+                                    DockPanel.Dock="Right" TextAlignment="Right" RenderTransformOrigin="2.157,0.156" />
+                    </DockPanel>
+                    <Slider x:Name="boulderWidthSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5" 
+                            IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
+                    <!-- end of wall slider -->
+                    <!-- height slider -->
+                    <DockPanel Margin="15 5 15 0">
+                        <TextBlock Text="Boulder Height" DockPanel.Dock="Left" />
+                        <TextBlock Text="{Binding ElementName=boulderHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" 
+                                    DockPanel.Dock="Right" TextAlignment="Right" RenderTransformOrigin="2.157,0.156" />
+                    </DockPanel>
+                    <Slider x:Name="boulderHeightSlider" Value="50" Margin="20 10 20 10" Minimum="0" Maximum="100" TickPlacement="BottomRight" TickFrequency="5"
+                            IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" ValueChanged="boulderSizeSlider_ValueChanged" />
+                    <!-- end of height slider -->
+                    <Button Name="deselectRockBtn" Content="De-select Rock" FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <Button Name="removeRockBtn" Content="Remove Rock" FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <Button Name="removeAllRocksBtn" Content="Remove All Rocks" FontSize="10" Height="50" Margin="50 10 50 10" />
+                    <Button Name="saveWallBtn" Content="Save Wall" FontSize="10"  Height="50" Margin="50 10 50 10" />
+                </StackPanel>
+            </Grid>
             <!-- end of parent grid -->            
-        </masters:MasterWithNavigation.Content>
-    </masters:MasterWithNavigation>
+        </master:MasterWithNavigation.Content>
+    </master:MasterWithNavigation>
 </Page>

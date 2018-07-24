@@ -152,6 +152,7 @@
     <Compile Include="ViewModels\RouteVideoViewModel.cs" />
     <Compile Include="ViewModels\RouteViewModel.cs" />
     <Compile Include="ViewModels\FilterHourViewModel.cs" />
+    <Compile Include="Views\CustomControls\ImageButton.cs" />
     <Compile Include="Views\CustomControls\MasterPages\MasterWithNavigation.cs" />
     <Compile Include="Views\Dialogs\RouteSetModeSelectDialog.xaml.cs">
       <DependentUpon>RouteSetModeSelectDialog.xaml</DependentUpon>

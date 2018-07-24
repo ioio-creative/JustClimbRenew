@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
+      xmlns:customControl="clr-namespace:JustClimbTrial.Views.CustomControls"
       mc:Ignorable="d" 
       Width="{Binding Path=Parent.ActualWidth}" Height="{Binding Path=Parent.ActualHeight}"      
       Title="VideoPlayback"
@@ -35,22 +36,29 @@
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Grid.ColumnSpan="2">
 
             <!-- Play button. -->
-            <Button Name="playBtn" Width="75" Height="20" Margin="10" 
+            <!--<Button Name="playBtn" Width="75" Height="20" Margin="10" 
                     Background="Transparent" BorderBrush="Transparent">
                 <Image Source="/Resources/Images/btn1_start to play.png" />
-            </Button>
+            </Button>-->
+            <customControl:ImageButton x:Name="playBtn" Width="75" Height="20" Margin="10"
+                                       Background="Transparent"
+                                       Source="/Resources/Images/btn1_start to play.png" />
 
             <!-- Pause button. -->
-            <Button Name="pauseBtn" Width="75" Height="20" Margin="10"
+            <!--<Button Name="pauseBtn" Width="75" Height="20" Margin="10"
                     Background="Transparent"  BorderBrush="Transparent">
                 <Image Source="/Resources/Images/btn1_pause.png" />
-            </Button>
+            </Button>-->
+            <customControl:ImageButton x:Name="pauseBtn" Width="75" Height="20" Margin="10"
+                                       Source="/Resources/Images/btn1_pause.png" />
 
             <!-- Stop button. -->
-            <Button Name="backBtn" Width="75" Height="20" Margin="10"
+            <!--<Button Name="backBtn" Width="75" Height="20" Margin="10"
                     Background="Transparent"  BorderBrush="Transparent">
                 <Image Source ="/Resources/Images/btn1_back.png" />
-            </Button>
+            </Button>-->
+            <customControl:ImageButton x:Name="backBtn" Width="75" Height="20" Margin="10"
+                                       Source="/Resources/Images/btn1_back.png" />
 
             <!-- Speed slider. This slider allows you to change the speed of the media playback. -->
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5" Width="80" MinWidth="60">
