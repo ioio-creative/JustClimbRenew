@@ -341,17 +341,12 @@
     <Resource Include="Resources\Images\btn1_JC Logo - Landing.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\update from client\btn1_back.png" />
     <Resource Include="Resources\Images\btn1_cancel.png" />
     <Resource Include="Resources\Images\btn1_confirm.png" />
-    <Resource Include="Resources\update from client\btn1_demo done.png" />
-    <Resource Include="Resources\update from client\btn1_done.png" />
-    <Resource Include="Resources\update from client\btn1_pause.png" />
     <Resource Include="Resources\Images\btn1_record demo.png" />
     <Resource Include="Resources\Images\btn1_Rescan - General.png" />
     <Resource Include="Resources\Images\btn1_return.png" />
     <Resource Include="Resources\Images\btn1_Route Set - General.png" />
-    <Resource Include="Resources\update from client\sample.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\btn1_route end.png" />

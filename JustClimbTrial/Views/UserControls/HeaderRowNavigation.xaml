@@ -12,6 +12,7 @@
         <ControlTemplate x:Key="btnRecordDemoVideoTemplate">
             <Button x:Name="btnRecordDemoVideo"
                     Background="Transparent" BorderBrush="Transparent"
+                    Command="{Binding BtnRecordDemoVideoCommand}"
                     Visibility="{Binding BtnRecordDemoVideoVisibility}"
                     VerticalAlignment="Bottom"
                     Margin="0,0,0,0">
@@ -21,6 +22,7 @@
         <ControlTemplate x:Key="btnCancelRecordDemoVideoTemplate">
             <Button x:Name="btnCancelRecordDemoVideo"
                     Content="Cancel Record Demo"
+                    Command="{Binding BtnCancelRecordDemoVideoCommand}"
                     Visibility="{Binding BtnRecordDemoVideoVisibility}" />
         </ControlTemplate>
     </UserControl.Resources>
