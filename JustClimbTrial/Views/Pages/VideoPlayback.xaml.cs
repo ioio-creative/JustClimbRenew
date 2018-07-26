@@ -125,7 +125,7 @@ namespace JustClimbTrial.Views.Pages
         private void StopMedia(object parameter = null)
         {
             // The Stop method stops and resets the media to be played from
-            // the beginning. 
+            // the beginning.
             TimeSpan beginning = TimeSpan.FromMilliseconds(0);
             mediaPlayback.Position = beginning;
             mainWindowClient.SetPositionOfPlaybackMedia(beginning);
