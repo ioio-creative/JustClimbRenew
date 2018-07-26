@@ -46,11 +46,9 @@
             Click="BtnStart_Click" Opacity="0.5" >
         </Button>-->
 
-        <customControl:ImageButton x:Name="BtnStart"
-                                   Grid.Row="5"
-                                   Grid.Column="2"
+        <customControl:ImageButton x:Name="BtnStart" Opacity="1"
+                                   Grid.Row="5" Grid.Column="2"
                                    Source="/Resources/Images/btn1_Start - Landing.png"
-                                   Opacity="0.5"
                                    Click="BtnStart_Click" />
     </Grid>
 </Page>

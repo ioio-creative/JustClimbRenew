@@ -45,7 +45,6 @@
         <customControl:ImageButton x:Name="BtnBoulder"
                                    Grid.Row="3" Grid.Column="1"
                                    Source="/Resources/Images/btn1_Boulder - Mode.png"
-                                   Opacity="0.5"
                                    Click="BtnBoulder_Click" />
 
         <!--<Image Source="/Resources/Images/btn1_Training - Mode.png"
@@ -63,7 +62,6 @@
         <customControl:ImageButton x:Name="BtnTraining"
                                    Grid.Row="3" Grid.Column="3"
                                    Source="/Resources/Images/btn1_Training - Mode.png"
-                                   Opacity="0.5"
                                    Click="BtnTraining_Click" />
     </Grid>
 </Page>

@@ -18,7 +18,7 @@ namespace JustClimbTrial.Views.Pages
     {
         private readonly bool debug = AppGlobal.DEBUG;
 
-        private MainWindow parentMainWindow;
+        private MainWindow mainWindowClient;
 
         private RoutesViewModel viewModel;
         private ClimbMode climbMode;
@@ -82,11 +82,12 @@ namespace JustClimbTrial.Views.Pages
         {
             InitializeNavHead();
 
-            parentMainWindow = this.Parent as MainWindow;            
+            mainWindowClient = this.Parent as MainWindow;
+            mainWindowClient.CheckAndLoadAndPlayScrnSvr();
 
             if (debug)
             {
-                parentMainWindow.SubscribeColorImgSrcToPlaygrd(); 
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd(); 
             }
             viewModel.LoadData();
 
@@ -98,7 +99,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            parentMainWindow.UnsubColorImgSrcToPlaygrd();
+            mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
 
         private void btnGameStart_Click(object sender, RoutedEventArgs e)

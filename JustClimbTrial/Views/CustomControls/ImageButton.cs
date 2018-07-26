@@ -53,7 +53,6 @@ namespace JustClimbTrial.Views.CustomControls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ImageButton), new FrameworkPropertyMetadata(typeof(ImageButton)));
         }
 
-
         public Uri Source
         {
             get { return (Uri)GetValue(SourceProperty); }

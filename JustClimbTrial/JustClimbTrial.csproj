@@ -113,6 +113,7 @@
     <Compile Include="Extensions\EllipseExtension.cs" />
     <Compile Include="Extensions\ImageControlExtension.cs" />
     <Compile Include="Extensions\ProcessExtension.cs" />
+    <Compile Include="Helpers\ControlTemplateHelper.cs" />
     <Compile Include="Helpers\FrameBasedAnimation.cs" />
     <Compile Include="Helpers\ImageSequenceHelper.cs" />
     <Compile Include="Extensions\RockExtension.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="ViewModels\RouteVideoViewModel.cs" />
     <Compile Include="ViewModels\RouteViewModel.cs" />
     <Compile Include="ViewModels\FilterHourViewModel.cs" />
+    <Compile Include="Views\CustomControls\ImageButton.cs" />
     <Compile Include="Views\CustomControls\MasterPages\MasterWithNavigation.cs" />
     <Compile Include="Views\Dialogs\RouteSetModeSelectDialog.xaml.cs">
       <DependentUpon>RouteSetModeSelectDialog.xaml</DependentUpon>

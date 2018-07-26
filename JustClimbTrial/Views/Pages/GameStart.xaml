@@ -27,9 +27,9 @@
                     <CollectionViewSource x:Key="cvsRouteVideos" Source="{Binding NonDemoRouteVideoViewModels}" />
                 </Grid.Resources>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -41,15 +41,17 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- row 0 -->
-                <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4">
+                <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,5,0,60">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="DATE" />
+                    <TextBlock Grid.Column="0" Margin="0,5,20,0"
+                               HorizontalAlignment="Right" 
+                               Text="DATE" />
                     <ComboBox x:Name="ddlYear"
                       Grid.Column="1"
                       ItemsSource="{Binding Years}"
@@ -108,36 +110,52 @@
                 <!-- end of row 1 -->
 
                 <!-- row 2 -->
-                <!--<Button x:Name="BtnDemo" 
-                    Grid.Row="2" Grid.Column="0">
-                    <Image Source="/Resources/Images/btn1_Demo.png"/>
-                </Button>-->
-                <customControl:ImageButton x:Name="BtnDemo" 
-                    Grid.Row="2" Grid.Column="0"
-                    Source="/Resources/Images/btn1_Demo.png" />
-                <!--<Button x:Name="BtnPlaySelectedVideo" 
-                    Grid.Row="2" Grid.Column="1">
-                    <Image Source="/Resources/Images/btn1_Play select video.png"/>
-                </Button>-->
-                <customControl:ImageButton x:Name="BtnPlaySelectedVideo" 
-                    Grid.Row="2" Grid.Column="1"
-                    Source="/Resources/Images/btn1_Play select video.png" />
-                <TextBlock Grid.Row="2" Grid.Column="2"
-                   x:Name="LbIsRecordingDemo">
-                </TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="3">
-                    Game status:
-                </TextBlock>
-                <TextBlock Grid.Row="2" Grid.Column="4" 
-                    x:Name="LbGameStatusDet" Text="Idling" />
-                <!--<Button Grid.Row="2" Grid.Column="5" 
-                    x:Name="BtnRestartGame">
-                    <Image Source="/Resources/Images/btn1_Restart.png"/>
-                </Button>-->
-                <customControl:ImageButton x:Name="BtnRestartGame"
-                                           Grid.Row="2" Grid.Column="5" 
-                                           Source="/Resources/Images/btn1_Restart.png" />
+                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--<Button x:Name="BtnDemo" 
+                        Grid.Row="2" Grid.Column="0">
+                        <Image Source="/Resources/Images/btn1_Demo.png"/>
+                    </Button>-->
+                    <customControl:ImageButton x:Name="BtnDemo" 
+                        Grid.Column="0"
+                        VerticalAlignment="Top" Margin="10, 10, 10, 10"
+                        Source="/Resources/Images/btn1_Demo.png" />
+                    <!--<Button x:Name="BtnPlaySelectedVideo" 
+                        Grid.Row="2" Grid.Column="1">
+                        <Image Source="/Resources/Images/btn1_Play select video.png"/>
+                    </Button>-->
+                    <customControl:ImageButton x:Name="BtnPlaySelectedVideo" 
+                        Grid.Column="1"
+                        VerticalAlignment="Top" Margin="20, 15, 20, 0"
+                        Source="/Resources/Images/btn1_Play select video.png" />
+                    <TextBlock Grid.Row="2" Grid.Column="2"
+                       x:Name="LbIsRecordingDemo">
+                    </TextBlock>
+                    <TextBlock FontSize="16"
+                               Grid.Column="3" Margin="0, 10, 5, 0"
+                               HorizontalAlignment="Right">
+                        Game status:
+                    </TextBlock>
+                    <TextBlock  FontSize="16"
+                                Grid.Column="4" Margin="5, 10, 0, 0"
+                                x:Name="LbGameStatusDet" Text="Idling" />
+                    <!--<Button Grid.Row="2" Grid.Column="5" 
+                        x:Name="BtnRestartGame">
+                        <Image Source="/Resources/Images/btn1_Restart.png"/>
+                    </Button>-->
+                    <customControl:ImageButton x:Name="BtnRestartGame"
+                                               Grid.Column="5"
+                                               VerticalAlignment="Top" Margin="10, 10, 10, 10"
+                                               Source="/Resources/Images/btn1_Restart.png" />
                 <!-- end of row 2 -->
+                </Grid>
             </Grid>
         </masters:MasterWithNavigation.Content>
     </masters:MasterWithNavigation>

@@ -13,7 +13,7 @@ namespace JustClimbTrial.Views.Pages
     public partial class ModeSelect : Page, INotifyPropertyChanged
     {
         private readonly bool debug = AppGlobal.DEBUG;
-        private MainWindow parentMainWindow;
+        private MainWindow mainWindowClient;
 
 
         #region dependency properties
@@ -75,16 +75,17 @@ namespace JustClimbTrial.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            parentMainWindow = this.Parent as MainWindow;
+            mainWindowClient = this.Parent as MainWindow;
             if (debug)
             {
-                parentMainWindow.SubscribeColorImgSrcToPlaygrd(); 
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd(); 
             }
+            mainWindowClient.CheckAndLoadAndPlayScrnSvr();
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            parentMainWindow.UnsubColorImgSrcToPlaygrd();
+            mainWindowClient.UnsubColorImgSrcToPlaygrd();
         }
 
         #endregion
