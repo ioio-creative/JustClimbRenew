@@ -78,9 +78,11 @@ namespace JustClimbTrial.Views.Pages
                     break;                                
             }
 
-            WindowTitle = Title;            
-            //SetTemplateOfControlFromResource(ctrlBtnDemo, BtnRecordDemoTemplateResourceKey);
-            SetTemplateOfControlFromResource(ctrlRockStatus, rockStatusTemplateResourceKey);                        
+            WindowTitle = Title;
+            //ControlTemplateHelper.SetTemplateOfControlFromResource(ctrlBtnDemo, this,
+                //BtnRecordDemoTemplateResourceKey);
+            ControlTemplateHelper.SetTemplateOfControlFromResource(ctrlRockStatus, this,
+                rockStatusTemplateResourceKey);                        
 
             // !!! Important !!!
             // somehow if the following is called in Page_Loaded event handler,
@@ -368,16 +370,6 @@ namespace JustClimbTrial.Views.Pages
 
 
         #region control template helpers
-
-        private void SetTemplateOfControlFromResource(Control ctrl, string resourceKey)
-        {
-            ctrl.Template = GetControlTemplateFromResource(resourceKey);
-        }
-
-        private ControlTemplate GetControlTemplateFromResource(string resourceKey)
-        {
-            return Resources[resourceKey] as ControlTemplate;
-        }
 
         // https://stackoverflow.com/questions/8126700/how-do-i-access-an-element-of-a-control-template-from-within-code-behind
         private BoulderRockStatus GetBoulderRockStatusUserControl()

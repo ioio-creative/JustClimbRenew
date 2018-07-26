@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:JustClimbTrial.Views.Pages"
+      xmlns:customControl="clr-namespace:JustClimbTrial.Views.CustomControls"
       mc:Ignorable="d" 
       d:DesignHeight="360" d:DesignWidth="640"
       Title="Just Climb - Select Mode" 
@@ -28,7 +29,8 @@
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <Image Source="/Resources/Images/btn1_Boulder - Mode.png"
+        
+        <!--<Image Source="/Resources/Images/btn1_Boulder - Mode.png"
             Grid.Row="3" Grid.Column="1" 
             VerticalAlignment="Top"   
             Margin="0,0,0,-30"/>
@@ -38,9 +40,15 @@
             Margin="5,0,5,15"
             Click="BtnBoulder_Click" Opacity="0.5"
             Content="{Binding BtnBoulderText}">
-        </Button>
+        </Button>-->
 
-        <Image Source="/Resources/Images/btn1_Training - Mode.png"
+        <customControl:ImageButton x:Name="BtnBoulder"
+                                   Grid.Row="3" Grid.Column="1"
+                                   Source="/Resources/Images/btn1_Boulder - Mode.png"
+                                   Opacity="0.5"
+                                   Click="BtnBoulder_Click" />
+
+        <!--<Image Source="/Resources/Images/btn1_Training - Mode.png"
             Grid.Row="3" Grid.Column="3" 
             VerticalAlignment="Top"   
             Margin="0,0,0,-30"/>
@@ -50,6 +58,12 @@
             Margin="5,0,5,15"
             Click="BtnTraining_Click" Opacity="0.5"           
             Content="{Binding BtnTrainingText}">
-        </Button>
+        </Button>-->
+
+        <customControl:ImageButton x:Name="BtnTraining"
+                                   Grid.Row="3" Grid.Column="3"
+                                   Source="/Resources/Images/btn1_Training - Mode.png"
+                                   Opacity="0.5"
+                                   Click="BtnTraining_Click" />
     </Grid>
 </Page>

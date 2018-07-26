@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.Extensions;
+using JustClimbTrial.Helpers;
 using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.Views.Dialogs;
@@ -15,7 +16,15 @@ namespace JustClimbTrial.Views.UserControls
     /// </summary>
     public partial class HeaderRowNavigation : UserControl, INotifyPropertyChanged
     {
-        private bool _isRecordDemoVideo;
+        #region resource keys
+
+        private const string BtnRecordDemoVideoTemplateResourceKey = "btnRecordDemoVideoTemplate";
+        private const string BtnCancelRecordDemoVideoTemplateResourceKey = "btnCancelRecordDemoVideoTemplate";
+
+        #endregion
+
+
+        private bool _isRecordDemoVideo = false;
         public bool IsRecordDemoVideo
         {
             get { return _isRecordDemoVideo; }
@@ -24,6 +33,9 @@ namespace JustClimbTrial.Views.UserControls
                 if (_isRecordDemoVideo != value)
                 {
                     _isRecordDemoVideo = value;
+
+                    ShowSwitchDemoModeControl();
+
                     OnPropertyChanged(nameof(IsRecordDemoVideo));
                 }
             }
@@ -52,6 +64,7 @@ namespace JustClimbTrial.Views.UserControls
                 if (_staffOptionsVisibility != value)
                 {
                     _staffOptionsVisibility = value;
+
                     OnPropertyChanged(nameof(StaffOptionsVisibility));
                 }
             }
@@ -66,7 +79,43 @@ namespace JustClimbTrial.Views.UserControls
                 if (_btnRecordDemoVideoVisibility != value)
                 {
                     _btnRecordDemoVideoVisibility = value;
+
+                    if (_btnRecordDemoVideoVisibility == Visibility.Visible)
+                    {
+                        ShowSwitchDemoModeControl();
+                    }
+         
                     OnPropertyChanged(nameof(BtnRecordDemoVideoVisibility));
+                }
+            }
+        }
+
+        private ICommand _btnRecordDemoVideoCommand;
+        public ICommand BtnRecordDemoVideoCommand
+        {
+            get { return _btnRecordDemoVideoCommand; }
+            set
+            {
+                if (_btnRecordDemoVideoCommand != value)
+                {
+                    _btnRecordDemoVideoCommand = value;
+
+                    OnPropertyChanged(nameof(BtnRecordDemoVideoCommand));
+                }
+            }
+        }
+
+        private ICommand _btnCancelRecordDemoVideoCommand;
+        public ICommand BtnCancelRecordDemoVideoCommand
+        {
+            get { return _btnCancelRecordDemoVideoCommand; }
+            set
+            {
+                if (_btnCancelRecordDemoVideoCommand != value)
+                {
+                    _btnCancelRecordDemoVideoCommand = value;
+
+                    OnPropertyChanged(nameof(BtnCancelRecordDemoVideoCommand));
                 }
             }
         }
@@ -121,9 +170,10 @@ namespace JustClimbTrial.Views.UserControls
                 new RelayCommand(SwitchToNewWallPage, CanSwitchToNewWallPage);
             btnRouteSet.Command =
                 new RelayCommand(SwitchToRouteSetPage, CanSwitchToRouteSetPage);
-            btnRecordDemoVideo.Command =
+
+            BtnRecordDemoVideoCommand =
                 new RelayCommand(SwitchOnRecordDemoVideoMode, CanSwitchOnRecordDemoVideoMode);
-            btnCancelRecordDemoVideo.Command =
+            BtnCancelRecordDemoVideoCommand =
                 new RelayCommand(SwitchOffRecordDemoVideoMode, CanSwitchOffRecordDemoVideoMode);
         }
 
@@ -272,6 +322,37 @@ namespace JustClimbTrial.Views.UserControls
             }
         }
 
-        #endregion        
+        #endregion
+
+
+        #region control template helpers
+
+        private void ShowSwitchDemoModeControl()
+        {
+            if (_isRecordDemoVideo)
+            {
+                ShowBtnCancelRecordDemoVideo();
+            }
+            else
+            {
+                ShowBtnRecordDemoVideo();
+            }
+        }
+
+        private void ShowBtnRecordDemoVideo()
+        {
+            ControlTemplateHelper.SetTemplateOfControlFromResource(
+                ctrlSwitchDemoMode, this,
+                BtnRecordDemoVideoTemplateResourceKey);
+        }
+
+        private void ShowBtnCancelRecordDemoVideo()
+        {
+            ControlTemplateHelper.SetTemplateOfControlFromResource(
+                ctrlSwitchDemoMode, this,
+                BtnCancelRecordDemoVideoTemplateResourceKey);
+        }
+
+        #endregion
     }
 }
