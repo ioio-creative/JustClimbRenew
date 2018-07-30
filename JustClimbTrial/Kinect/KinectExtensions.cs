@@ -49,8 +49,8 @@ namespace JustClimbTrial.Kinect
             new Tuple<JointType, JointType>( JointType.WristRight, JointType.HandRight ),
             new Tuple<JointType, JointType>( JointType.HandLeft, JointType.HandTipLeft ),
             new Tuple<JointType, JointType>( JointType.HandRight, JointType.HandTipRight ),
-            new Tuple<JointType, JointType>( JointType.HandTipLeft, JointType.ThumbLeft ),
-            new Tuple<JointType, JointType>( JointType.HandTipRight, JointType.ThumbRight ),
+            new Tuple<JointType, JointType>( JointType.HandLeft, JointType.ThumbLeft ),
+            new Tuple<JointType, JointType>( JointType.HandRight, JointType.ThumbRight ),
             new Tuple<JointType, JointType>( JointType.SpineMid, JointType.SpineBase ),
             new Tuple<JointType, JointType>( JointType.SpineBase, JointType.HipLeft ),
             new Tuple<JointType, JointType>( JointType.SpineBase, JointType.HipRight ),
@@ -331,7 +331,7 @@ namespace JustClimbTrial.Kinect
                 //minDepth = frame.DepthMinReliableDistance;
                 //maxDepth = frame.DepthMaxReliableDistance;
                 minDepth = 2000;//frame.DepthMinReliableDistance;
-                maxDepth = 6500;//frame.DepthMaxReliableDistance;
+                maxDepth = 7500;//frame.DepthMaxReliableDistance;
                 //Debug.WriteLine($"Use Reliable Depth: {minDepth}.min, {maxDepth}.max");
             }
 
