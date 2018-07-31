@@ -43,6 +43,7 @@ namespace JustClimbTrial.Views.Pages
                 return AppGlobal.DEBUG;
             }
         }
+
         private readonly bool drawSkeleton = true;
 
         // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
