@@ -193,13 +193,18 @@ namespace JustClimbTrial.Views.Pages
                 if (debug)
                 {
                     mainWindowClient.SubscribeColorImgSrcToPlaygrd();
-                } 
+                }
+                mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
             }
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {            
-            mainWindowClient.UnsubColorImgSrcToPlaygrd();
+        {
+            if (debug)
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
+            }
+            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)
@@ -232,6 +237,18 @@ namespace JustClimbTrial.Views.Pages
                             break;
                     }
                 } 
+            }
+        }
+
+        private void HandleDebugModeChanged(bool _debug)
+        {
+            if (_debug)
+            {
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
+            }
+            else
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
             }
         }
 

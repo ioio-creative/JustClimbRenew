@@ -1,13 +1,6 @@
-﻿using JustClimbTrial.Kinect;
-using Microsoft.Kinect;
-using System;
+﻿using JustClimbTrial.Globals;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using JustClimbTrial.Globals;
-using System.IO;
-using JustClimbTrial.Helpers;
-using JustClimbTrial.Properties;
 
 namespace JustClimbTrial.Views.Pages
 {
@@ -62,9 +55,9 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
         }
 
-        private void HandleDebugModeChanged(bool debug)
+        private void HandleDebugModeChanged(bool _debug)
         {
-            if (debug)
+            if (_debug)
             {
                 mainWindowClient.SubscribeColorImgSrcToPlaygrd();
             }

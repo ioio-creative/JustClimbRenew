@@ -65,7 +65,10 @@ namespace JustClimbTrial.Views.Windows
 
         private void PlaygroundMedia_Loaded(object sender, RoutedEventArgs e)
         {
-            if(LoopMedia)PlaygroundMedia.Play();
+            if (LoopMedia)
+            {
+                PlaygroundMedia.Play();
+            }
         }
 
         private void PlaygroundMedia_MediaOpened(object sender, RoutedEventArgs e)
@@ -75,7 +78,10 @@ namespace JustClimbTrial.Views.Windows
 
         private void PlaygroundMedia_MediaEnded(object sender, RoutedEventArgs e)
         {
-            if(LoopMedia)PlaygroundMedia.Position = TimeSpan.FromSeconds(0);
+            if (LoopMedia)
+            {
+                PlaygroundMedia.Position = TimeSpan.FromSeconds(0);
+            }
             else
             {
                 PlaygroundMedia.Stop();

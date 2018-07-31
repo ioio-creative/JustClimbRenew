@@ -392,6 +392,7 @@ namespace JustClimbTrial.Views.Pages
                 } 
             }
         }
+
         #endregion
 
         #region slider value converters

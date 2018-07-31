@@ -316,6 +316,7 @@ namespace JustClimbTrial.Views.Pages
                 {
                     mainWindowClient.SubscribeColorImgSrcToPlaygrd();
                 }
+                mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
 
                 navHead.PropertyChanged += HandleNavHeadIsRecordDemoChanged;
 
@@ -345,6 +346,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.UnsubColorImgSrcToPlaygrd();
             }
+            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
         }
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
@@ -450,9 +452,21 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient.RemovePlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
         }
 
+        private void HandleDebugModeChanged(bool _debug)
+        {
+            if (_debug)
+            {
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
+            }
+            else
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
+            }
+        }
+
         #endregion
 
-        
+
         #region State Change Tasks
 
         private async Task OnGameplayStartAsync()

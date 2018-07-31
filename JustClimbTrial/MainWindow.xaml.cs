@@ -140,8 +140,7 @@ namespace JustClimbTrial
             if (DebugModeChanged != null)
             {
                 DebugModeChanged(AppGlobal.DEBUG); 
-            }
-            
+            }            
         }
 
         private void HandleDebugModeChanged(bool _debug)
@@ -169,7 +168,8 @@ namespace JustClimbTrial
         public void SubscribeColorImgSrcToPlaygrd()
         {
             KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
-        }
+        }        
+
         public void UnsubColorImgSrcToPlaygrd()
         {
             KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;
@@ -187,7 +187,9 @@ namespace JustClimbTrial
             }
         }
 
+        
         #region Playground Canvas ctrl
+
         public Canvas GetPlaygroundCanvas()
         {
             return playgroundCanvas;
@@ -212,9 +214,12 @@ namespace JustClimbTrial
         {
             playgroundCanvas.Children.Clear();
         }
+
         #endregion
 
+
         #region Playground Media ctrl
+
         public void ChangeSrcAndPlayInPlaygroundMedia(string uriString, bool loop = false)
         {
             StopPlaygroundMedia();
@@ -254,8 +259,10 @@ namespace JustClimbTrial
         {
             playgroundMedia.MediaEnded -= eventHandler;
         }
+        
         #endregion
 
+        
         #region Playback Media ctrl
 
         public void ChangeSrcAndPlayInPlaygbackMedia(string uriString, bool loop = false)

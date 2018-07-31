@@ -1,4 +1,5 @@
 ﻿using JustClimbTrial.Extensions;
+using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
 using JustClimbTrial.Properties;
@@ -22,6 +23,14 @@ namespace JustClimbTrial.Views.Pages
     //Remarks: If calibration not accurate in practice, should use sampling and averaging to calibrate planes
     public partial class WallAndFloor : Page
     {
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
+
         private MainWindow mainWindowClient;
         // declare Kinect object and frame reader
         private KinectManager kinectManagerClient;

@@ -1,5 +1,4 @@
 ﻿using JustClimbTrial.Globals;
-using JustClimbTrial.Interfaces;
 using JustClimbTrial.Mvvm.Infrastructure;
 using System;
 using System.Diagnostics;
@@ -24,7 +23,9 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
+
         #region private members
+
         private MainWindow mainWindowClient;
 
         private DispatcherTimer timer = new DispatcherTimer();

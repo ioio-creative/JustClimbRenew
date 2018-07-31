@@ -86,12 +86,29 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.SubscribeColorImgSrcToPlaygrd(); 
             }
+            mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
             mainWindowClient.CheckAndLoadAndPlayScrnSvr();
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
-            mainWindowClient.UnsubColorImgSrcToPlaygrd();
+            if (debug)
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
+            }
+            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
+        }
+
+        private void HandleDebugModeChanged(bool _debug)
+        {
+            if (_debug)
+            {
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
+            }
+            else
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
+            }
         }
 
         #endregion
