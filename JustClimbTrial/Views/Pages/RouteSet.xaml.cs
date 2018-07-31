@@ -19,9 +19,14 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class RouteSet : Page
     {
-        private readonly bool debug = AppGlobal.DEBUG;
-        
-                
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
+
         #region resource keys
 
         private const string TrainingRockStatusTemplateResourceKey = "trainingRockStatusTemplate";

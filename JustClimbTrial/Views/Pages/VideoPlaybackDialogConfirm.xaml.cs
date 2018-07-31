@@ -21,7 +21,13 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoPlaybackDialogConfirm : Page
     {
-        private readonly bool debug = AppGlobal.DEBUG;
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
 
         // need to pass externalPlaybackMonitor to another view
         private MediaElement externalPlaybackMonitor;

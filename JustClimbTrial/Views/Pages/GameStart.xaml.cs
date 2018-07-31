@@ -34,9 +34,15 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class GameStart : Page, ISavingVideo
     {
-        private const string HeaderRowTitleFormat = "{0} Route {1} - Video Playback";
+        private const string HeaderRowTitleFormat = "{0} Route {1}";
 
-        private readonly bool debug = AppGlobal.DEBUG;
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
         private readonly bool drawSkeleton = true;
 
         // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
@@ -257,14 +263,30 @@ namespace JustClimbTrial.Views.Pages
 
         private async void RestartCommand(object parameter = null)
         {
-            //TODO: review restart logic
             if (gameplayVideoRecClient.IsRecording)
             {
-                await SaveVideoRecordedInDbAndLocallyAsync();
+                MessageBoxResult mbr =
+                        MessageBox.Show("Restart current play? The video in-recording will be deleted.", "Stop Recording and Restart?",
+                            MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                switch (mbr)
+                {
+                    case MessageBoxResult.Yes:
+                        //We don't save the video when manually retart the game
+                        await ForgoVideoRecordingAndClearBufferAsync();
+                        ResetGameStart();
+                        break;
+                    case MessageBoxResult.No:
+                    default:
+                        break;
+                }
             }
-
-            ResetGameStart();
+            else
+            {
+                ResetGameStart();
+            }
         }
+
+        
 
         #endregion
 
@@ -443,7 +465,7 @@ namespace JustClimbTrial.Views.Pages
                     break;
                 case ClimbMode.Training:
                     videoIdAndNo = TrainingRouteVideoDataAccess.GenerateIdAndNo();
-                    break;                
+                    break;
             }
 
             // start video recording
@@ -1159,6 +1181,18 @@ namespace JustClimbTrial.Views.Pages
 
 
         #region video recording
+
+        private async Task ForgoVideoRecordingAndClearBufferAsync()
+        {
+            await gameplayVideoRecClient.StopRecordingIfIsRecordingAndClearBufferWithoutExportVideoAsync();
+            UiHelper.NotifyUser("Video Recording Stopped and Cleared.");
+
+            //navHead.IsRecordDemoVideo setter already checks current state before changing value
+            // this would change this.isRecordingDemo as well
+            // as isRecordingDemo is bound to navHead.IsRecordDemoVideo
+            // via event handler OnNavHeadIsRecordDemoChanged
+            navHead.IsRecordDemoVideo = false;
+        }
 
         private async Task SaveVideoRecordedInDbAndLocallyAsync()
         {

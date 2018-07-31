@@ -9,12 +9,14 @@
         <Style TargetType="{x:Type customControl:ImageButton}">
             <Setter Property="Height" Value="{Binding Path=ActualHeight, RelativeSource={RelativeSource TemplatedParent}}"/>
             <Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"/>
-            <Setter Property="Opacity" Value="1" />
+            <!--<Setter Property="HorizontalAlignment" Value="{Binding Path=HorizontalAlignment, RelativeSource={RelativeSource TemplatedParent}}" />
+            <Setter Property="VerticalAlignment" Value="{Binding Path=VerticalAlignment, RelativeSource={RelativeSource TemplatedParent}}" />-->
+            <Setter Property="Margin" Value="{Binding Path=Margin, RelativeSource={RelativeSource TemplatedParent}}" />
+            <Setter Property="Opacity" Value="{Binding Path=Opacity, RelativeSource={RelativeSource TemplatedParent}}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type customControl:ImageButton}">
-                        <Border BorderBrush="Transparent" BorderThickness="1"
-                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border BorderBrush="Transparent" BorderThickness="1">
                             <Image x:Name="_Image"
                                    Stretch="Uniform"
                                    Source="{Binding Path=Source, RelativeSource={RelativeSource TemplatedParent}}"

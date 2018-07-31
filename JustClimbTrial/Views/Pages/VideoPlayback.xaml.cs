@@ -16,7 +16,13 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class VideoPlayback : Page
     {
-        private readonly bool debug = AppGlobal.DEBUG;
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
 
         #region private members
         private MainWindow mainWindowClient;

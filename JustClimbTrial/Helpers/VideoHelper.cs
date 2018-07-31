@@ -245,7 +245,14 @@ namespace JustClimbTrial.Helpers
             int exitCode = ExportVideo(videoBufferSubfolderPathByKey, outputFilePath);
             ClearBuffer();
             return exitCode;
-        }        
+        }
+        
+        public async Task StopRecordingIfIsRecordingAndClearBufferWithoutExportVideoAsync()
+        {
+            StopRecordingIfIsRecording();
+            await WaitingForAllBufferFramesSavedAsync();
+            ClearBuffer();
+        }
 
         #endregion
 

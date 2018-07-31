@@ -52,7 +52,7 @@
       <Value Profile="(Default)">15</Value>
     </Setting>
     <Setting Name="IsDebugMode" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="GameplayStartVideoPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\Videos\Start.mp4</Value>

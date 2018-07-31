@@ -23,7 +23,13 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     public partial class NewWall : Page
     {
-        private readonly bool debug = AppGlobal.DEBUG;
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
 
         #region constants
 

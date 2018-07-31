@@ -26,7 +26,7 @@ namespace JustClimbTrial.Globals
         private static Settings settings = new Settings();
         public static string FfmpegExePath { get; }
         public static int MaxVideoRecordDurationInMinutes { get; }
-        public static bool DEBUG { get; }
+        public static bool DEBUG { get; set; }
         public static bool WAF { get; }
 
         static AppGlobal()
