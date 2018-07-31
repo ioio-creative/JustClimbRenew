@@ -637,9 +637,11 @@ namespace JustClimbTrial.Kinect
                 Regex r = new Regex(pattern);
                 Regex failOverR = new Regex(failOverPattern);
 
-                for (int i = 1; i < lines.Length; i++)
+                // skip first line
+                foreach (string line in lines.Skip(1))
+                //for (int i = 1; i < lines.Length; i++)
                 {
-                    string line = lines[i];
+                    //string line = lines[i];
                     Match match = r.Match(line);
                     if (match.Success)
                     {
