@@ -20,15 +20,35 @@ namespace JustClimbTrial.Views.Windows
             InitializeComponent();
         }
 
-        public void ShowImage(string sourcePath, double opacity = 0.5)
+        public void LoadImage(string sourcePath)
         {
             PlaygroundCamera.SetSourceByPath(sourcePath);
-            PlaygroundCamera.Opacity = opacity;
         }
 
-        public void ShowImage(BitmapSource source, double opacity = 0.5)
-        {            
+        public void LoadImage(BitmapSource source)
+        {
             PlaygroundCamera.Source = source;
+        }
+
+        public void LoadAndShowImage(string sourcePath, double opacity = 0.5)
+        {
+            LoadImage(sourcePath);
+            SetImageOpacity(opacity);
+        }
+
+        public void LoadAndShowImage(BitmapSource source, double opacity = 0.5)
+        {            
+            LoadImage(source);
+            SetImageOpacity(opacity);
+        }
+
+        public void HideImage()
+        {
+            SetImageOpacity(0);
+        }
+
+        public void SetImageOpacity(double opacity)
+        {
             PlaygroundCamera.Opacity = opacity;
         }
 

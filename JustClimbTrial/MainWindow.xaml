@@ -9,4 +9,8 @@
     Source="/Views/Pages/JustClimbHome.xaml"
     Loaded="NavigationWindow_Loaded"
     Closed="NavigationWindow_Closed">
+    <NavigationWindow.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWindow.DebugModeToggleCommand}"
+                        Executed="DebugModeToggleCommandExecuted" />
+    </NavigationWindow.CommandBindings>
 </NavigationWindow>

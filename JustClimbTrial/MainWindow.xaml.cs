@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -21,10 +22,20 @@ namespace JustClimbTrial
     public partial class MainWindow : NavigationWindow
     {
         //in Debug Mode we display the live camera image from Kinect at all times
-        private readonly bool debug = AppGlobal.DEBUG;
         private readonly bool wallAndFloor = AppGlobal.WAF;
 
         public KinectManager KinectManagerClient;
+
+        public event Action<bool> DebugModeChanged;
+        //reference: https://stackoverflow.com/questions/1361350/keyboard-shortcuts-in-wpf
+        public static RoutedCommand DebugModeToggleCommand = new RoutedCommand();
+        private bool debug
+        {
+            get
+            {
+                return AppGlobal.DEBUG;
+            }
+        }
 
         private Playground playgroundWindow;
 
@@ -42,10 +53,18 @@ namespace JustClimbTrial
 
             playgroundWindow = new Playground();
             playgroundWindow.Show();
+
+            InitializeDebugModeToggleCommand();
+           
         }
+
+
+        #region event handlers
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            DebugModeChanged += HandleDebugModeChanged;
+
             //Get registered wall from File
             Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
             BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
@@ -58,17 +77,15 @@ namespace JustClimbTrial
             playgroundMedia = playgroundWindow.PlaygroundMedia;
             playgroundCanvas = playgroundWindow.PlaygroundCanvas;
             playbackMedia = playgroundWindow.PlaybackMedia;
-            //MUST LOAD AN IMAGE TO PLAYGROUND CANVAS TO GIVE DIMENSION
-            playgroundWindow.ShowImage(wallLogImg, 0);
+
+            playgroundWindow.LoadImage(wallLogImg);
+
             //play ScreenSaver.mp4 in Playground Window
             CheckAndLoadAndPlayScrnSvr();
 
             if (isOpenKinectSuccessful)
-            {                             
-                if (debug)
-                {                   
-                    playgroundWindow.ShowImage(wallLogImg, 0.5);
-                }
+            {
+                ChangeDebugWallLogImg();
 
                 UiHelper.NotifyUser("Kinect connected!");
             }
@@ -90,7 +107,8 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
         {
-            KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;          
+            DebugModeChanged -= HandleDebugModeChanged;
+            UnsubColorImgSrcToPlaygrd();
             playgroundWindow.Close();
             if (KinectManagerClient.multiSourceReader != null)
             {
@@ -103,8 +121,48 @@ namespace JustClimbTrial
 
         private void HandleColorImageSourceArrived(object sender, ColorBitmapSrcEventArgs e)
         {
-            playgroundWindow.ShowImage(e.GetColorBitmapSrc());
+            playgroundWindow.LoadAndShowImage(e.GetColorBitmapSrc());
         }
+
+        #endregion
+
+
+        #region debug commands and func
+
+        private void InitializeDebugModeToggleCommand()
+        {
+            DebugModeToggleCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Alt | ModifierKeys.Control));
+        }
+
+        private void DebugModeToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            AppGlobal.DEBUG = !AppGlobal.DEBUG;
+            if (DebugModeChanged != null)
+            {
+                DebugModeChanged(AppGlobal.DEBUG); 
+            }
+            
+        }
+
+        private void HandleDebugModeChanged(bool _debug)
+        {
+            UiHelper.NotifyUser("Debug Mode: " + (_debug ? "On" : "Off"));
+            ChangeDebugWallLogImg();
+        }
+
+        private void ChangeDebugWallLogImg()
+        {
+            if (debug)
+            {
+                playgroundWindow.SetImageOpacity(0.5);
+            }
+            else
+            {
+                playgroundWindow.HideImage();
+            }
+        }
+
+        #endregion
 
 
         //This is only called by several Pages when debug mode in On
@@ -137,7 +195,7 @@ namespace JustClimbTrial
 
         public void ShowImageInPlaygroundCanvas(BitmapSource bitmapSrc)
         {
-            playgroundWindow.ShowImage(bitmapSrc);
+            playgroundWindow.LoadAndShowImage(bitmapSrc);
         }
 
         public IEnumerable<Shape> DrawSkeletonInPlaygroundCanvas(Body body, CoordinateMapper coorMapper, SpaceMode spaceMode)

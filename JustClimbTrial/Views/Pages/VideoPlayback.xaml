@@ -10,12 +10,12 @@
       Title="VideoPlayback"
       Loaded="Page_Loaded">
 
-    <Grid Name="PlaybackGrid" Width="{Binding Path=VideoPlayback}">
+    <Grid Name="PlaybackGrid" Width="{Binding Path=VideoPlayback}" MinWidth="960">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="12*" Name="PlaybackWindow"/>
             <RowDefinition Height="1*" />
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
 
         <!-- row 0 Video Window-->
@@ -25,56 +25,71 @@
                       ScrubbingEnabled="True" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
                       MediaOpened="mediaPlayback_MediaOpended" 
                       MediaEnded="mediaPlayback_MediaEnded" 
-                      Loaded="mediaPlayback_Loaded" Grid.ColumnSpan="2" Margin="0,0,0,18" Grid.RowSpan="2" />
+                      Loaded="mediaPlayback_Loaded" Margin="0,0,0,18"/>
 
         <!-- row 1 Video Navigation-->
         <!-- Seek to slider. Ths slider allows you to jump to different parts of the media playback. -->
-        <Slider Grid.Row="1" Name="navigationSlider" Margin="20 0 20 0" VerticalAlignment="Center"
-                IsMoveToPointEnabled="True" Grid.ColumnSpan="2" />
+        <Slider Grid.Row="1" Name="navigationSlider" Margin="20 0 10 0" VerticalAlignment="Center"
+                IsMoveToPointEnabled="True"/>
 
         <!-- row 2 Video Controls-->
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Orientation="Horizontal" Grid.ColumnSpan="2">
-
+        <Grid Name="VideoControlBar" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            
             <!-- Play button. -->
             <!--<Button Name="playBtn" Width="75" Height="20" Margin="10" 
-                    Background="Transparent" BorderBrush="Transparent">
-                <Image Source="/Resources/Images/btn1_start to play.png" />
-            </Button>-->
-            <customControl:ImageButton x:Name="playBtn" Width="75" Height="20" Margin="10"
+                Background="Transparent" BorderBrush="Transparent">
+            <Image Source="/Resources/Images/btn1_start to play.png" />
+        </Button>-->
+            <customControl:ImageButton x:Name="playBtn" 
+                                       Grid.Column="1" Margin="5"
                                        Background="Transparent"
                                        Source="/Resources/Images/btn1_start to play.png" />
 
             <!-- Pause button. -->
             <!--<Button Name="pauseBtn" Width="75" Height="20" Margin="10"
-                    Background="Transparent"  BorderBrush="Transparent">
-                <Image Source="/Resources/Images/btn1_pause.png" />
-            </Button>-->
-            <customControl:ImageButton x:Name="pauseBtn" Width="75" Height="20" Margin="10"
+                Background="Transparent"  BorderBrush="Transparent">
+            <Image Source="/Resources/Images/btn1_pause.png" />
+        </Button>-->
+            <customControl:ImageButton x:Name="pauseBtn"
+                                       Grid.Column="2" Margin="5"
+                                       Background="Transparent"
                                        Source="/Resources/Images/btn1_pause.png" />
 
             <!-- Stop button. -->
             <!--<Button Name="backBtn" Width="75" Height="20" Margin="10"
-                    Background="Transparent"  BorderBrush="Transparent">
-                <Image Source ="/Resources/Images/btn1_back.png" />
-            </Button>-->
-            <customControl:ImageButton x:Name="backBtn" Width="75" Height="20" Margin="10"
-                                       Source="/Resources/Images/btn1_back.png" />
+                Background="Transparent"  BorderBrush="Transparent">
+            <Image Source ="/Resources/Images/btn1_back.png" />
+        </Button>-->
+            <customControl:ImageButton x:Name="backBtn" Grid.Column="3" Margin="5"
+                                    Source="/Resources/Images/btn1_back.png" />
 
             <!-- Speed slider. This slider allows you to change the speed of the media playback. -->
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5" Width="80" MinWidth="60">
-                <TextBlock HorizontalAlignment="Right" Foreground="Black" Margin="5"  VerticalAlignment="Center">
+            <!--<StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="4" Margin="15, 0, 15, 15">-->
+            <TextBlock Grid.Column="4" Margin="15, 0, 15, 15" 
+                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                       Foreground="Black" FontSize="16">
                     <Run Text="Speed: " />
                     <Run Text="{Binding ElementName=speedRatioSlider, Path=Value}" />
                     <Run Text="%" />
-                </TextBlock>
-            </StackPanel>
+            </TextBlock>
+            <!--</StackPanel>-->
 
             <Slider Name="speedRatioSlider" VerticalAlignment="Center" PreviewMouseUp="ChangeMediaSpeedRatio" 
-                    IsMoveToPointEnabled="True" TickPlacement="None" TickFrequency="5" IsSnapToTickEnabled="True" 
-                    Value="100" Minimum="25" Maximum="300"  Width="100" Margin="10"/>
+                IsMoveToPointEnabled="True" TickPlacement="None" TickFrequency="5" IsSnapToTickEnabled="True" 
+                Value="100" Minimum="25" Maximum="300"  Grid.Column="5" Margin="15, 0, 15, 15"/>
             <!--Reset Speed Button-->
-            <Button Name="speedResetBtn" Content="Reset Speed" Width="80" Height="20" Margin="10" />
+            <Button Name="speedResetBtn" Content="Reset Speed" Grid.Column="6" Margin="15, 0, 15, 15"/>
 
-        </StackPanel>
+        </Grid>
     </Grid>
 </Page>
