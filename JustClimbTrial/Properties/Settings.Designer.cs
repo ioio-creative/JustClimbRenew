@@ -245,9 +245,9 @@ namespace JustClimbTrial.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool WandF {
+        public bool WallCal {
             get {
-                return ((bool)(this["WandF"]));
+                return ((bool)(this["WallCal"]));
             }
         }
         

@@ -21,7 +21,7 @@ namespace JustClimbTrial.Views.Pages
     /// </summary>
     /// 
     //Remarks: If calibration not accurate in practice, should use sampling and averaging to calibrate planes
-    public partial class WallAndFloor : Page
+    public partial class WallCalibration : Page
     {
         private bool debug
         {
@@ -52,7 +52,7 @@ namespace JustClimbTrial.Views.Pages
 
         #region constructors
 
-        public WallAndFloor()
+        public WallCalibration()
         {
             InitializeComponent();
         }

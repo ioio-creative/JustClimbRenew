@@ -22,7 +22,13 @@ namespace JustClimbTrial
     public partial class MainWindow : NavigationWindow
     {
         //in Debug Mode we display the live camera image from Kinect at all times
-        private readonly bool wallAndFloor = AppGlobal.WAF;
+        private bool wallCal
+        {
+            get
+            {
+                return AppGlobal.WALLCALIBRATE;
+            }
+        }
 
         public KinectManager KinectManagerClient;
 
@@ -36,6 +42,8 @@ namespace JustClimbTrial
                 return AppGlobal.DEBUG;
             }
         }
+
+        public static RoutedCommand WallCalibrationCommand = new RoutedCommand();
 
         private Playground playgroundWindow;
 
@@ -55,6 +63,7 @@ namespace JustClimbTrial
             playgroundWindow.Show();
 
             InitializeDebugModeToggleCommand();
+            InitializeWallCalibrationCommand();
            
         }
 
@@ -97,12 +106,6 @@ namespace JustClimbTrial
                 }
             }
 
-            //Wall & Floor Calibration
-            if (wallAndFloor)
-            {
-                WallAndFloor wAndF = new WallAndFloor();
-                Navigate(wAndF);
-            }
         }
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
@@ -141,6 +144,25 @@ namespace JustClimbTrial
             {
                 DebugModeChanged(AppGlobal.DEBUG); 
             }            
+        }
+
+        private void InitializeWallCalibrationCommand()
+        {
+            WallCalibrationCommand.InputGestures.Add(new KeyGesture(Key.W, ModifierKeys.Alt | ModifierKeys.Control));
+        }
+
+        private void WallCalibrationCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            AppGlobal.WALLCALIBRATE = !AppGlobal.WALLCALIBRATE;
+            if (wallCal)
+            {
+                WallCalibration WallCal = new WallCalibration();
+                Navigate(WallCal); 
+            }
+            else
+            {
+                GoBack();
+            }
         }
 
         private void HandleDebugModeChanged(bool _debug)

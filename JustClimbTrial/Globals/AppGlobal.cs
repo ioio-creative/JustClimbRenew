@@ -27,14 +27,14 @@ namespace JustClimbTrial.Globals
         public static string FfmpegExePath { get; }
         public static int MaxVideoRecordDurationInMinutes { get; }
         public static bool DEBUG { get; set; }
-        public static bool WAF { get; }
+        public static bool WALLCALIBRATE { get; set; }
 
         static AppGlobal()
         {
             FfmpegExePath = settings.FfmpegExePath;
             MaxVideoRecordDurationInMinutes = settings.MaxVideoRecordDurationInMinutes;
             DEBUG = settings.IsDebugMode;
-            WAF = settings.WandF;
+            WALLCALIBRATE = settings.WallCal;
         }        
     }
 }

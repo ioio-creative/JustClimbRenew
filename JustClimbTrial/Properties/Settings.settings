@@ -84,7 +84,7 @@
     <Setting Name="BoulderButtonShineFeedbackLoopImgSequenceDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\b</Value>
     </Setting>
-    <Setting Name="WandF" Type="System.Boolean" Scope="Application">
+    <Setting Name="WallCal" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="WallPlaneStr" Type="System.String" Scope="User">
