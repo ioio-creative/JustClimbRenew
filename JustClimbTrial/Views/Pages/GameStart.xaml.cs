@@ -50,7 +50,7 @@ namespace JustClimbTrial.Views.Pages
         private NavigationService navSvc;
         private HeaderRowNavigation navHead;
 
-        private const float DefaultDistanceThreshold = 0.1f;
+        private const float DefaultDistanceThreshold = 0.25f;
 
         private Tuple<string, string> videoIdAndNo;
         private GameStartViewModel viewModel;

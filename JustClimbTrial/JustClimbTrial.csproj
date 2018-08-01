@@ -187,8 +187,8 @@
     <Compile Include="Views\Pages\VideoPlaybackDialogConfirm.xaml.cs">
       <DependentUpon>VideoPlaybackDialogConfirm.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\WallAndFloor.xaml.cs">
-      <DependentUpon>WallAndFloor.xaml</DependentUpon>
+    <Compile Include="Views\Pages\WallCalibration.xaml.cs">
+      <DependentUpon>WallCalibration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\BoulderRockStatus.xaml.cs">
       <DependentUpon>BoulderRockStatus.xaml</DependentUpon>
@@ -265,7 +265,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\WallAndFloor.xaml">
+    <Page Include="Views\Pages\WallCalibration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -278,8 +278,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\MyRockShape.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserControls\TrainingRockStatus.xaml">
       <SubType>Designer</SubType>
