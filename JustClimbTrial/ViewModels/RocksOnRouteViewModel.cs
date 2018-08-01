@@ -305,6 +305,7 @@ namespace JustClimbTrial.ViewModels
         /* end of used by RouteSet */
 
         /* used by GameStart */
+
         public void DrawAllRocksOnRouteInGame()
         {
             switch (RouteClimbMode)
@@ -360,7 +361,6 @@ namespace JustClimbTrial.ViewModels
             }
         }
 
-
         public void SetRocksImgSequences()
         {
             switch (RouteClimbMode)
@@ -382,6 +382,7 @@ namespace JustClimbTrial.ViewModels
         }
 
         #endregion
+
 
         #region database
 

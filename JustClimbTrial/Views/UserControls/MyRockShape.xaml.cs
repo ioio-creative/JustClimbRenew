@@ -44,6 +44,16 @@ namespace JustClimbTrial.Views.UserControls
 
         #region event handlers
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            gridContainer.Children.Add(rockShape);
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            gridContainer.Children.Remove(rockShape);
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {            
             base.OnMouseMove(e);
@@ -114,6 +124,6 @@ namespace JustClimbTrial.Views.UserControls
             return rockShape.Height;
         }
 
-        #endregion
+        #endregion        
     }
 }

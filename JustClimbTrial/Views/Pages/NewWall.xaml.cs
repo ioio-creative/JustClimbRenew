@@ -37,6 +37,9 @@ namespace JustClimbTrial.Views.Pages
         private const string RockOverlapsWarningMsg = 
             "Please set a smaller rock size to avoid overlaps among rocks!";
 
+        private const string DepthInfoMissingWarningMsg = 
+            "No depth info is captured for this point!";
+
         private const DragDropEffects supportedDragDropEffects = DragDropEffects.Move;
 
         #endregion
@@ -238,7 +241,6 @@ namespace JustClimbTrial.Views.Pages
             }
             else
             {
-                //Debug.WriteLine("Kinect not available!");
                 UiHelper.NotifyUser("Kinect not available!");
             }
 
@@ -290,7 +292,7 @@ namespace JustClimbTrial.Views.Pages
                         }
                         else
                         {
-                            UiHelper.NotifyUser("No depth info is captured for this point!");
+                            UiHelper.NotifyUser(DepthInfoMissingWarningMsg);
                         }
                     }
                     else
@@ -331,26 +333,30 @@ namespace JustClimbTrial.Views.Pages
             {
                 // Canvas inherits Panel
                 Panel _canvas = sender as Panel;
-                RockViewModel _rockVM = e.Data.GetData(MyRockShape.RockViewModelDataFormatName) as RockViewModel;
+                RockViewModel selectedRock = rocksOnWallViewModel.SelectedRock;
 
-                if (_canvas != null && _rockVM != null)
+                if (_canvas != null && selectedRock != null)
                 {
-                    Point mousePt = e.GetPosition(cameraIMG);
-                    Size boulderSizeOnCanvas = _rockVM.SizeOnCanvas;
+                    Point mousePt = e.GetPosition(cameraIMG);                    
 
                     // check rock overlaps
-                    if (rocksOnWallViewModel.IsOverlapWithRocksOnWall(
-                            mousePt, boulderSizeOnCanvas)
+                    if (rocksOnWallViewModel.IsOverlapWithRocksOnWallOtherThanSelectedRock(
+                            mousePt, selectedRock.SizeOnCanvas)
                         == false)
                     {
                         CameraSpacePoint csp = jcWall.GetCamSpacePointFromMousePoint(mousePt, _mode);
                         if (!csp.Equals(default(CameraSpacePoint)))
                         {
-                            _rockVM.MoveBoulder(csp, kinectManagerClient.kinectSensor.CoordinateMapper);
+                            // note: 
+                            // use RocksOnWallViewModel.MoveSelectedRock() 
+                            // instead of RockViewModel.MoveBoulder()
+                            // because RocksOnWallViewModel.MoveSelectedRock()
+                            // will set the selected rock indicator as well
+                            rocksOnWallViewModel.MoveSelectedRock(csp);
                         }
                         else
                         {
-                            UiHelper.NotifyUser("No depth info is captured for this point!");
+                            UiHelper.NotifyUser(DepthInfoMissingWarningMsg);
                         }
                     }
                     else

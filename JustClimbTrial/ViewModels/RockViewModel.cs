@@ -265,7 +265,7 @@ namespace JustClimbTrial.ViewModels
             double normedLeft = bPoint.X - MyRock.Width.GetValueOrDefault(0) * 0.5;
             double normedTop = bPoint.Y - MyRock.Height.GetValueOrDefault(0) * 0.5;
 
-            BCanvas.SetLeftAndTop(RockShapeContainer.GetShape(), BCanvas.GetActualLengthWrtWidth(normedLeft), 
+            BCanvas.SetLeftAndTop(RockShapeContainer, BCanvas.GetActualLengthWrtWidth(normedLeft), 
                 BCanvas.GetActualLengthWrtHeight(normedTop));
         }
 

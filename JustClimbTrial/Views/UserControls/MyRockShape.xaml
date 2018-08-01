@@ -6,10 +6,13 @@
              xmlns:local="clr-namespace:JustClimbTrial.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             AllowDrop="True">
-    <Grid x:Name="gridContainer">
-        <!--<Ellipse x:Name="rockShapeUi"
+             AllowDrop="True"
+             Loaded="UserControl_Loaded"
+             Unloaded="UserControl_Unloaded">
+    <Grid x:Name="gridContainer"
+          Background="Transparent" />
+    <!--<Ellipse x:Name="rockShapeUi"
                  Height="100" Width="100"
                  Fill="Blue" />-->
-    </Grid>
+
 </UserControl>
