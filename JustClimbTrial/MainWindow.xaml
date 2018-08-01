@@ -12,5 +12,7 @@
     <NavigationWindow.CommandBindings>
         <CommandBinding Command="{x:Static local:MainWindow.DebugModeToggleCommand}"
                         Executed="DebugModeToggleCommandExecuted" />
+        <CommandBinding Command="{x:Static local:MainWindow.WallCalibrationCommand}"
+                        Executed="WallCalibrationCommandExecuted" />
     </NavigationWindow.CommandBindings>
 </NavigationWindow>
