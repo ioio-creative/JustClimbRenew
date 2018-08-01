@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,8 @@ namespace JustClimbTrial.Views.UserControls
 
                 // Initiate the drag-and-drop operation.
                 DragDrop.DoDragDrop(this, data, allowedDragDropEffects);
+
+                Debug.WriteLine("Do Drag & Drop");
             }
         }
 
