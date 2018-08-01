@@ -95,7 +95,11 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             kinectManagerClient.multiSourceReader.MultiSourceFrameArrived -= Reader_MultiSourceFrameArrived;
-            kinectManagerClient.multiSourceFrame = null;            
+            kinectManagerClient.multiSourceFrame = null;
+            colorMappedToDepthSpace = null;
+            kinectDepthData = null;
+
+            GC.Collect();
         }
 
         private void ConfigWallBtn_Click(object sender, RoutedEventArgs e)
@@ -240,19 +244,22 @@ namespace JustClimbTrial.Views.Pages
                 }
             }
 
-            using (DepthFrame depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame())
+            if (colorMappedToDepthSpace != null)
             {
-                if (depthFrame != null)
+                using (DepthFrame depthFrame = mSourceFrame.DepthFrameReference.AcquireFrame())
                 {
-                    // Access the depth frame data directly via LockImageBuffer to avoid making a copy
-                    using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
+                    if (depthFrame != null)
                     {
-                        kinectManagerClient.kinectSensor.CoordinateMapper.MapColorFrameToDepthSpaceUsingIntPtr(
-                            depthFrameData.UnderlyingBuffer,
-                            depthFrameData.Size,
-                            colorMappedToDepthSpace);
+                        // Access the depth frame data directly via LockImageBuffer to avoid making a copy
+                        using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
+                        {
+                            kinectManagerClient.kinectSensor.CoordinateMapper.MapColorFrameToDepthSpaceUsingIntPtr(
+                                depthFrameData.UnderlyingBuffer,
+                                depthFrameData.Size,
+                                colorMappedToDepthSpace);
 
-                        depthFrame.CopyFrameDataToArray(kinectDepthData);
+                            depthFrame.CopyFrameDataToArray(kinectDepthData);
+                        }
                     }
                 }
             }

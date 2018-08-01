@@ -7,6 +7,7 @@ using JustClimbTrial.Views.Windows;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -154,14 +155,17 @@ namespace JustClimbTrial
         private void WallCalibrationCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             AppGlobal.WALLCALIBRATE = !AppGlobal.WALLCALIBRATE;
-            if (wallCal)
+            if (Content.GetType() != typeof(WallCalibration))
             {
+                UnsubColorImgSrcToPlaygrd();
                 WallCalibration WallCal = new WallCalibration();
                 Navigate(WallCal); 
             }
             else
             {
                 GoBack();
+                RemoveBackEntry();
+                GC.Collect();
             }
         }
 
