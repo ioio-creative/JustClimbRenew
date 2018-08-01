@@ -101,7 +101,7 @@ namespace JustClimbTrial.ViewModels
                     {
                         // draw selected rock indicator
                         selectedRockIndicator = GetNewSelectedRockIndicatorCircle(
-                            selectedRockOnRoute.MyRockViewModel.RockShape);
+                            selectedRockOnRoute.MyRockViewModel.RockShapeContainer.GetShape());
                         canvas.DrawShape(selectedRockIndicator,
                             selectedRockOnRoute.MyRockViewModel.BCanvasPoint);
                     }
@@ -238,7 +238,7 @@ namespace JustClimbTrial.ViewModels
                 // add it into the rocksOnRoute list
                 AddRockToRoute(SelectedRockOnRoute);
 
-                if (SelectedRockOnRoute.MyRockViewModel.RockShape == null ||
+                if (SelectedRockOnRoute.MyRockViewModel.RockShapeContainer == null ||
                     SelectedRockOnRoute.TrainingSeq != seqNo)
                 {
                     SelectedRockOnRoute.SetRockTrainingSeqAndDraw(seqNo, mirrorSeqNo);                    
@@ -256,7 +256,7 @@ namespace JustClimbTrial.ViewModels
                 // add it into the rocksOnRoute list
                 AddRockToRoute(SelectedRockOnRoute);
 
-                if (SelectedRockOnRoute.MyRockViewModel.RockShape == null ||
+                if (SelectedRockOnRoute.MyRockViewModel.RockShapeContainer == null ||
                     SelectedRockOnRoute.BoulderStatus != status)
                 {
                     SelectedRockOnRoute.SetRockStatusAndDrawShape(status);             
