@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.Enums;
 using JustClimbTrial.Globals;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
