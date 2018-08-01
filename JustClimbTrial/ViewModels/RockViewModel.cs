@@ -2,9 +2,9 @@
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
+using JustClimbTrial.Views.UserControls;
 using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,7 +25,7 @@ namespace JustClimbTrial.ViewModels
         public Rock MyRock { get; set; }
 
         //2D positions (x/y), normalized [0,1]
-        private readonly Point bPoint;
+        private Point bPoint;
         public Point BPoint
         {
             get
@@ -34,7 +34,7 @@ namespace JustClimbTrial.ViewModels
             }            
         }
         //scaled point wrt canvas dimensions (x/y)
-        private readonly Point bCanvasPoint;
+        private Point bCanvasPoint;
         public Point BCanvasPoint
         {
             get
@@ -52,7 +52,7 @@ namespace JustClimbTrial.ViewModels
         private Image rockImage;
 
         //Shape and TextBlock are used in Scan Wall, Route Set and GameStart(debug)
-        public Shape RockShape { get; set; }
+        public MyRockShape RockShapeContainer { get; set; }
         private TextBlock TrainingRockSeqNoText;
 
         // derived quantities
@@ -87,6 +87,38 @@ namespace JustClimbTrial.ViewModels
             get
             {
                 return BPoint.Y + MyRock.Height.GetValueOrDefault(0) * 0.5;
+            }
+        }
+
+        private double widthOnCanvas
+        {
+            get
+            {
+                return BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0));
+            }
+        }
+
+        private double heightOnCanvas
+        {
+            get
+            {
+                return BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0));
+            }
+        }
+
+        private double meanLengthOnCanvas
+        {
+            get
+            {
+                return 0.5 * (widthOnCanvas + heightOnCanvas);
+            }
+        }
+
+        public Size SizeOnCanvas
+        {
+            get
+            {
+                return new Size(widthOnCanvas, heightOnCanvas);
             }
         }
 
@@ -138,7 +170,7 @@ namespace JustClimbTrial.ViewModels
         {
             MyRock = aRock;
             BCanvas = canvas;            
-            RockShape = GetNewRockOnWallEllipse();
+            RockShapeContainer = new MyRockShape(GetNewRockOnWallEllipse(), this);
             
             // TODO: performance issue!!!
             //CreateRockImageSequence();
@@ -195,29 +227,45 @@ namespace JustClimbTrial.ViewModels
         public void DrawBoulder()
         {
             SetBoulderTopLeftPositionOnCanvas();
-            BCanvas.AddChild(RockShape);      
+            BCanvas.AddChild(RockShapeContainer);      
+        }
+
+        public void UndrawBoulder()
+        {
+            BCanvas.RemoveChild(RockShapeContainer);
+            RockShapeContainer = null;
+        }
+
+        public void MoveBoulder(CameraSpacePoint csp, CoordinateMapper coorMap)
+        {
+            MyRock.CoorX = csp.X;
+            MyRock.CoorY = csp.Y;
+            MyRock.CoorZ = csp.Z;
+
+            if (coorMap != null)
+            {
+                bCanvasPoint = coorMap.MapCameraSpacePointToPointOnCanvas(csp, BCanvas, SpaceMode.Color);
+                bPoint = BCanvas.GetNormalisedPoint(bCanvasPoint);
+            }
+
+            RedrawBoulder();
         }
 
         // TODO: need to change name as the function just changes width & height
         private void RedrawBoulder()
         {
-            RockShape.Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0));
-            RockShape.Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0));
+            RockShapeContainer.SetWidth(widthOnCanvas);
+            RockShapeContainer.SetHeight(heightOnCanvas);
+            
             SetBoulderTopLeftPositionOnCanvas();
-        }
-
-        public void UndrawBoulder()
-        {
-            BCanvas.RemoveChild(RockShape);
-            RockShape = null;
-        }
-
+        }        
+        
         private void SetBoulderTopLeftPositionOnCanvas()
         {
             double normedLeft = bPoint.X - MyRock.Width.GetValueOrDefault(0) * 0.5;
             double normedTop = bPoint.Y - MyRock.Height.GetValueOrDefault(0) * 0.5;
 
-            BCanvas.SetLeftAndTop(RockShape, BCanvas.GetActualLengthWrtWidth(normedLeft), 
+            BCanvas.SetLeftAndTop(RockShapeContainer.GetShape(), BCanvas.GetActualLengthWrtWidth(normedLeft), 
                 BCanvas.GetActualLengthWrtHeight(normedTop));
         }
 
@@ -279,9 +327,9 @@ namespace JustClimbTrial.ViewModels
         private Shape ChangeRockShape(Func<Shape> shapeFactory)
         {
             UndrawBoulder();
-            RockShape = shapeFactory();
+            RockShapeContainer = new MyRockShape(shapeFactory(), this);
             DrawBoulder();           
-            return RockShape;
+            return RockShapeContainer.GetShape();
         }
         
         #endregion
@@ -294,8 +342,8 @@ namespace JustClimbTrial.ViewModels
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
+                Width = widthOnCanvas,
+                Height = heightOnCanvas,
                 Fill = Brushes.Transparent,
                 StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.DarkRed
@@ -308,8 +356,8 @@ namespace JustClimbTrial.ViewModels
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
+                Width = widthOnCanvas,
+                Height = heightOnCanvas,
                 Fill = Brushes.Transparent,
                 StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Green
@@ -322,8 +370,8 @@ namespace JustClimbTrial.ViewModels
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
+                Width = widthOnCanvas,
+                Height = heightOnCanvas,
                 Fill = Brushes.Transparent,
                 StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Yellow
@@ -336,8 +384,8 @@ namespace JustClimbTrial.ViewModels
         {
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)),
-                Height = BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)),
+                Width = widthOnCanvas,
+                Height = heightOnCanvas,
                 Fill = Brushes.Transparent,
                 StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Red
@@ -348,18 +396,22 @@ namespace JustClimbTrial.ViewModels
 
         #endregion
 
+
         #region Recolor Shape Stroke
+
         public void RecolorRockShape(Brush color)
         {
-            RockShape.Stroke = color;
+            RockShapeContainer.RecolorRockShape(color);
         }
+
         #endregion
+
 
         #region image sequence helpers
 
         //public void CreateRockImageSequence()
         //{
-        //    double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
+        //    double meanLength = MeanLenghtOnCanvas;
 
         //    BoulderImage = new Image
         //    {
@@ -384,7 +436,7 @@ namespace JustClimbTrial.ViewModels
 
         private void CreateBoulderImageSequence()
         {
-            double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
+            double meanLength = meanLengthOnCanvas;
 
             rockImage = new Image
             {
@@ -402,7 +454,7 @@ namespace JustClimbTrial.ViewModels
 
         private void InitializeRockImage()
         {
-            double meanLength = BCanvas.GetActualLengthWrtWidth(MyRock.Width.GetValueOrDefault(0)) * 0.5 + BCanvas.GetActualLengthWrtHeight(MyRock.Height.GetValueOrDefault(0)) * 0.5;
+            double meanLength = meanLengthOnCanvas;
 
             rockImage = new Image
             {   

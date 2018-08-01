@@ -45,7 +45,7 @@ namespace JustClimbTrial.ViewModels
                     if (selectedRock != null)
                     {
                         // draw selected rock indicator
-                        selectedRockIndicator = GetNewSelectedRockIndicator(selectedRock.RockShape);
+                        selectedRockIndicator = GetNewSelectedRockIndicator(selectedRock.RockShapeContainer.GetShape());
                         canvas.DrawShape(selectedRockIndicator, selectedRock.BCanvasPoint);
                     }
                 }

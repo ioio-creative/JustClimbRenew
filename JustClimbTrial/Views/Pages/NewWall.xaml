@@ -23,8 +23,12 @@
                     <Grid>
                         <Image Name="cameraIMG" />
                         <Canvas x:Name="canvas" Background="Transparent" MouseDown="canvas_MouseDown" 
-                                Width="{Binding ActualWidth, ElementName=cameraIMG, Mode=OneWay}" 
-                                Height="{Binding ActualHeight, ElementName=cameraIMG, Mode=OneWay}" />
+                            Width="{Binding ActualWidth, ElementName=cameraIMG, Mode=OneWay}" 
+                            Height="{Binding ActualHeight, ElementName=cameraIMG, Mode=OneWay}" 
+                            AllowDrop="True"
+                            DragOver="canvas_DragOver"
+                            Drop="canvas_Drop"
+                        />
                     </Grid>
                     <Viewbox.RenderTransform>
                         <ScaleTransform ScaleX="-1"/>

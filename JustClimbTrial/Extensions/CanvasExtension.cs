@@ -27,10 +27,17 @@ namespace JustClimbTrial.Extensions
             return length / canvas.ActualHeight;
         }
 
-        public static Point GetActualPoint(this Canvas canvas, Point NormPt)
+        public static Size GetNormalisedSize(this Canvas canvas, Size size)
         {
-            double actualX = GetActualLengthWrtWidth(canvas, NormPt.X);
-            double actualY = GetActualLengthWrtHeight(canvas, NormPt.Y);
+            double normedWidth = GetNormalisedLengthWrtWidth(canvas, size.Width);
+            double normedHeight = GetNormalisedLengthWrtHeight(canvas, size.Height);
+            return new Size(normedWidth, normedHeight);
+        }
+
+        public static Point GetActualPoint(this Canvas canvas, Point normPt)
+        {            
+            double actualX = GetActualLengthWrtWidth(canvas, normPt.X);
+            double actualY = GetActualLengthWrtHeight(canvas, normPt.Y);
             return new Point(actualX, actualY);
         }
 
@@ -42,6 +49,13 @@ namespace JustClimbTrial.Extensions
         public static double GetActualLengthWrtHeight(this Canvas canvas, double normLength)
         {
             return normLength * canvas.ActualHeight;
+        }
+
+        public static Size GetActualSize(this Canvas canvas, Size normSize)
+        {
+            double actualWidth = GetActualLengthWrtWidth(canvas, normSize.Width);
+            double actualHeight = GetActualLengthWrtHeight(canvas, normSize.Height);
+            return new Size(actualWidth, actualHeight);
         }
 
         public static void AddChild(this Canvas canvas, UIElement uiElement)

@@ -196,6 +196,9 @@
     <Compile Include="Views\UserControls\HeaderRowNavigation.xaml.cs">
       <DependentUpon>HeaderRowNavigation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\MyRockShape.xaml.cs">
+      <DependentUpon>MyRockShape.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\TrainingRockStatus.xaml.cs">
       <DependentUpon>TrainingRockStatus.xaml</DependentUpon>
     </Compile>
@@ -271,6 +274,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\HeaderRowNavigation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\MyRockShape.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

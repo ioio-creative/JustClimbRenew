@@ -31,10 +31,13 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
+
         #region constants
 
         private const string RockOverlapsWarningMsg = 
             "Please set a smaller rock size to avoid overlaps among rocks!";
+
+        private const DragDropEffects supportedDragDropEffects = DragDropEffects.Move;
 
         #endregion
 
@@ -273,7 +276,7 @@ namespace JustClimbTrial.Views.Pages
 
                 if (rockCorrespondsToCanvasPt == null)  // new rock
                 {
-                    Size newBoulderSizeOnCanvas = GetNewBoulderSizeOnCanvasFromSliders();
+                    Size newBoulderSizeOnCanvas = GetBoulderSizeOnCanvasFromSliders();
                     
                     // check rock overlaps
                     if (rocksOnWallViewModel.IsOverlapWithRocksOnWall(
@@ -298,13 +301,63 @@ namespace JustClimbTrial.Views.Pages
                 else  // rock already in list
                 {
                     rocksOnWallViewModel.SelectedRock = rockCorrespondsToCanvasPt;
-                    boulderWidthSlider.Value = rockCorrespondsToCanvasPt.RockShape.Width;
-                    boulderHeightSlider.Value = rockCorrespondsToCanvasPt.RockShape.Height;
+                    boulderWidthSlider.Value = rockCorrespondsToCanvasPt.RockShapeContainer.GetWidth();
+                    boulderHeightSlider.Value = rockCorrespondsToCanvasPt.RockShapeContainer.GetHeight();
                 }
             }
             else
             {
                 UiHelper.NotifyUser("Please take snap shot first.");
+            }
+        }
+
+        // https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/walkthrough-enabling-drag-and-drop-on-a-user-control
+        private void canvas_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(MyRockShape.RockViewModelDataFormatName))
+            {
+                // These Effects values are used in the drag source's
+                // GiveFeedback event handler to determine which cursor to display.
+                e.Effects = supportedDragDropEffects;
+            }
+        }
+
+        // https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/walkthrough-enabling-drag-and-drop-on-a-user-control
+        private void canvas_Drop(object sender, DragEventArgs e)
+        {
+            // If an element in the panel has already handled in the drop,
+            // the panel should not also handle it.
+            if (!e.Handled)
+            {
+                // Canvas inherits Panel
+                Panel _canvas = sender as Panel;
+                RockViewModel _rockVM = e.Data.GetData(MyRockShape.RockViewModelDataFormatName) as RockViewModel;
+
+                if (_canvas != null && _rockVM != null)
+                {
+                    Point mousePt = e.GetPosition(cameraIMG);
+                    Size boulderSizeOnCanvas = _rockVM.SizeOnCanvas;
+
+                    // check rock overlaps
+                    if (rocksOnWallViewModel.IsOverlapWithRocksOnWall(
+                            mousePt, boulderSizeOnCanvas)
+                        == false)
+                    {
+                        CameraSpacePoint csp = jcWall.GetCamSpacePointFromMousePoint(mousePt, _mode);
+                        if (!csp.Equals(default(CameraSpacePoint)))
+                        {
+                            _rockVM.MoveBoulder(csp, kinectManagerClient.kinectSensor.CoordinateMapper);
+                        }
+                        else
+                        {
+                            UiHelper.NotifyUser("No depth info is captured for this point!");
+                        }
+                    }
+                    else
+                    {
+                        UiHelper.NotifyUser(RockOverlapsWarningMsg);
+                    }
+                }
             }
         }
 
@@ -320,7 +373,7 @@ namespace JustClimbTrial.Views.Pages
 
             if (rocksOnWallViewModel != null && rocksOnWallViewModel.SelectedRock != null)
             {
-                Size newBoulderSizeOnCanvas = GetNewBoulderSizeOnCanvasFromSliders();
+                Size newBoulderSizeOnCanvas = GetBoulderSizeOnCanvasFromSliders();
 
                 // check rock overlaps
                 if (rocksOnWallViewModel.IsOverlapWithRocksOnWallOtherThanSelectedRock(
@@ -347,7 +400,7 @@ namespace JustClimbTrial.Views.Pages
                     boulderSizeSlider.Value -= boulderSizeSlider.TickFrequency;
                 }
             }
-        }
+        }        
 
         private void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
@@ -395,6 +448,7 @@ namespace JustClimbTrial.Views.Pages
 
         #endregion
 
+
         #region slider value converters
 
         private static double ConvertSliderValueToSizeOnCanvas(double sliderValue)
@@ -403,7 +457,7 @@ namespace JustClimbTrial.Views.Pages
             return multiplicationFactor * sliderValue;
         }
 
-        private Size GetNewBoulderSizeOnCanvasFromSliders()
+        private Size GetBoulderSizeOnCanvasFromSliders()
         {
             return new Size
             (
