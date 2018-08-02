@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -44,7 +45,13 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        private readonly bool drawSkeleton = true;
+        private KeyGesture skeletonVisibleToggleCommandKey = new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Alt);
+        public static RoutedCommand SkeletonVisibleToggleCommand = new RoutedCommand();
+        private bool drawSkeleton = false;
+
+        private KeyGesture cameraFeedToggleCommandKey = new KeyGesture(Key.F, ModifierKeys.Control | ModifierKeys.Alt);
+        public static RoutedCommand CameraFeedToggleCommand = new RoutedCommand();
+        private bool cameraFeed = false;
 
         // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
         private NavigationService navSvc;
@@ -153,7 +160,6 @@ namespace JustClimbTrial.Views.Pages
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         private Plane wallPlane;
-        private Plane floorPlane;
 
         private bool interRocksVisualFeedBack = true;
 
@@ -202,6 +208,8 @@ namespace JustClimbTrial.Views.Pages
             BtnDemo.Command = new RelayCommand(PlayDemoVideo, CanPlayDemoVideo);
             BtnPlaySelectedVideo.Command = new RelayCommand(PlaySelectedVideo, CanPlaySelectedVideo);
             BtnRestartGame.Command = new RelayCommand(RestartCommand, CanRestartGame);
+
+            InitializeSkeletonVisibleToggleCommand();
         }
 
         private void InitializeNavHead()
@@ -225,6 +233,16 @@ namespace JustClimbTrial.Views.Pages
             navHead.HeaderRowTitle =
                 string.Format(HeaderRowTitleFormat, ClimbModeGlobals.StringDict[climbMode],
                     routeNo);
+        }
+
+        private void InitializeSkeletonVisibleToggleCommand()
+        {
+            SkeletonVisibleToggleCommand.InputGestures.Add(skeletonVisibleToggleCommandKey);
+        }
+
+        private void InitializeCameraFeedToggleCommand()
+        {
+            CameraFeedToggleCommand.InputGestures.Add(cameraFeedToggleCommandKey);
         }
 
         #endregion
@@ -285,8 +303,6 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        
-
         #endregion
 
 
@@ -341,10 +357,9 @@ namespace JustClimbTrial.Views.Pages
             navHead.PropertyChanged -= HandleNavHeadIsRecordDemoChanged;
             mainWindowClient.RemovePlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
             mainWindowClient.ClearPlaygroundCanvas();
-            if (debug)
-            {
-                mainWindowClient.UnsubColorImgSrcToPlaygrd();
-            }
+
+            mainWindowClient.UnsubColorImgSrcToPlaygrd();
+
             AppGlobal.DebugModeChanged -= HandleDebugModeChanged;
         }
 
@@ -456,6 +471,29 @@ namespace JustClimbTrial.Views.Pages
             if (_debug)
             {
                 mainWindowClient.SubscribeColorImgSrcToPlaygrd();
+                rocksOnRouteVM.StopAndHideAllRocksOnRouteImgSequencesInGame();
+                rocksOnRouteVM.DrawAllRocksOnRouteInGame();
+            }
+            else
+            {
+                mainWindowClient.UnsubColorImgSrcToPlaygrd();
+                rocksOnRouteVM.UndrawAllRocksOnRouteInGame();
+                rocksOnRouteVM.ShowAndPlayAllRocksOnRouteImgSequencesInGame();
+            }
+        }
+
+        //TODO: page command bindings
+        private void SkeletonVisibleToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            drawSkeleton = !drawSkeleton;
+        }
+
+        private void CameraFeedToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            cameraFeed = !cameraFeed;
+            if (cameraFeed)
+            {
+                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
             }
             else
             {
@@ -547,6 +585,7 @@ namespace JustClimbTrial.Views.Pages
 
             if (debug)
             {
+                rocksOnRouteVM.SetRocksImgSequences();
                 rocksOnRouteVM.DrawAllRocksOnRouteInGame();
                 if (climbMode == ClimbMode.Training)
                 {
@@ -556,7 +595,7 @@ namespace JustClimbTrial.Views.Pages
             else
             {
                 rocksOnRouteVM.SetRocksImgSequences();
-                rocksOnRouteVM.PlayAllRocksOnRouteImgSequencesInGame();
+                rocksOnRouteVM.ShowAndPlayAllRocksOnRouteImgSequencesInGame();
             }
             
             switch (climbMode)
@@ -678,7 +717,11 @@ namespace JustClimbTrial.Views.Pages
 
 
                             //START ROCK REACHED VERIFIED
-                            if (!debug)
+                            if (debug)
+                            {
+                                rocksOnRouteVM.StartRock.SetFeedbackImgSeq();
+                            }
+                            else
                             {
                                 rocksOnRouteVM.StartRock.SetAndPlayFeedbackImgSeq();
                             }
@@ -690,6 +733,7 @@ namespace JustClimbTrial.Views.Pages
                             if (debug)
                             {
                                 DebugRecolorRockVM(rocksOnRouteVM.StartRock);
+                                nextRockOnTrainRoute.Current.SetActivePopAndShineImgSeq();
                             }
                             else
                             {
@@ -701,7 +745,12 @@ namespace JustClimbTrial.Views.Pages
                         //End Rock
                         else if (currentRockOnRouteVM == rocksOnRouteVM.EndRock)
                         {
-                            if (!debug)
+                            if (debug)
+                            {
+                                rocksOnRouteVM.EndRock.SetFeedbackShineLoopImgSeq();
+                                DebugRecolorRockVM(rocksOnRouteVM.EndRock, Brushes.White);                           
+                            }
+                            else
                             {
                                 rocksOnRouteVM.EndRock.SetAndPlayFeedbackShineLoopImgSeq();
                             }
@@ -710,11 +759,6 @@ namespace JustClimbTrial.Views.Pages
                             
                             //END ROCK REACHED VERIFIED
 
-                            //TODO: EndRock Feedback Animation
-                            if (debug)
-                            {
-                                DebugRecolorRockVM(rocksOnRouteVM.EndRock, Brushes.White);
-                            }
                         }
                         //Inter Rocks
                         else
@@ -722,10 +766,10 @@ namespace JustClimbTrial.Views.Pages
                             //TODO: Interrock reached behaviour                                  
                             //INTER ROCK REACHED VERIFIED
                             
-
                             if (debug)
                             {
                                 DebugRecolorRockVM(currentRockOnRouteVM);
+                                nextRockOnTrainRoute.Current.SetFeedbackImgSeq();
                             }
                             else
                             {
@@ -735,7 +779,12 @@ namespace JustClimbTrial.Views.Pages
 
                             //We call movenext after everything has been done to current RockVM
                             nextRockOnTrainRoute.MoveNext();
-                            if (!debug)
+
+                            if (debug)
+                            {
+                                nextRockOnTrainRoute.Current.SetActivePopAndShineImgSeq();
+                            }
+                            else
                             {
                                 nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
                             }
@@ -852,6 +901,7 @@ namespace JustClimbTrial.Views.Pages
                         if (debug)
                         {
                             DebugRecolorRockVM(rocksOnRouteVM.StartRock);
+                            rocksOnRouteVM.StartRock.SetFeedbackImgSeq();
                         }
                         else
                         {
@@ -862,9 +912,20 @@ namespace JustClimbTrial.Views.Pages
                         startRockTimer.RemoveTickEventHandler(startRockTimerTickEventHandler);
                         await OnGameplayStartAsync();
 
-                        foreach (RockOnRouteViewModel interRock in interRocksOnBoulderRoute)
+
+                        if (debug)
                         {
-                            interRock.SetAndPlayActivePopAndShineImgSeq();
+                            foreach (RockOnRouteViewModel interRock in interRocksOnBoulderRoute)
+                            {
+                                interRock.SetActivePopAndShineImgSeq();
+                            }
+                        }
+                        else
+                        {
+                            foreach (RockOnRouteViewModel interRock in interRocksOnBoulderRoute)
+                            {
+                                interRock.SetAndPlayActivePopAndShineImgSeq();
+                            }
                         }
                     }
                 }
@@ -894,6 +955,7 @@ namespace JustClimbTrial.Views.Pages
                         //TODO: EndRock Feedback Animation
                         if (debug)
                         {
+                            rocksOnRouteVM.EndRock.SetFeedbackShineLoopImgSeq();
                             DebugRecolorRockVM(rocksOnRouteVM.EndRock, Brushes.White);
                         }
                         else
@@ -953,6 +1015,7 @@ namespace JustClimbTrial.Views.Pages
                         //TODO: animation Feedback for that rock
                         if (debug)
                         {
+                            rockOnRoute.SetFeedbackImgSeq();
                             DebugRecolorRockVM(rockOnRoute);
                         }
                         else

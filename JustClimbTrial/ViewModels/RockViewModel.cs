@@ -444,25 +444,26 @@ namespace JustClimbTrial.ViewModels
             BCanvas.AddChild(rockImage);
 
             return rockImage;
-        }
+        }       
 
-        private void CreateBoulderImageSequence()
-        {
-            double meanLength = meanLengthOnCanvas;
+        //TODO: Cleanup if checked no error
+        //private void CreateBoulderImageSequence()
+        //{
+        //    double meanLength = meanLengthOnCanvas;
 
-            rockImage = new Image
-            {
-                //png image dimension: 500 x 500
-                //centre circle size: 300x300
-                Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
-                Width = 500 / 300 * meanLength,
-                Height = 500 / 300 * meanLength,
-                Stretch = Stretch.Fill
-            };
+        //    rockImage = new Image
+        //    {
+        //        //png image dimension: 500 x 500
+        //        //centre circle size: 300x300
+        //        Source = new BitmapImage(new Uri(System.IO.Path.Combine(FileHelper.BoulderButtonNormalImgSequenceDirectory(), "1_00007.png"))),
+        //        Width = 500 / 300 * meanLength,
+        //        Height = 500 / 300 * meanLength,
+        //        Stretch = Stretch.Fill
+        //    };
 
-            BCanvas.SetLeftAndTop(rockImage, bCanvasPoint.X - rockImage.Width * 0.5, bCanvasPoint.Y - rockImage.Height * 0.5);
-            BCanvas.AddChild(rockImage);          
-        }
+        //    BCanvas.SetLeftAndTop(rockImage, bCanvasPoint.X - rockImage.Width * 0.5, bCanvasPoint.Y - rockImage.Height * 0.5);
+        //    BCanvas.AddChild(rockImage);          
+        //}
 
         private void InitializeRockImage()
         {
@@ -476,6 +477,17 @@ namespace JustClimbTrial.ViewModels
                 Stretch = Stretch.Fill
             };
         }
+        
+        public void ShowRockImage()
+        {
+            rockImage.Opacity = 1;
+        }
+
+        public void HideRockImage()
+        {
+            rockImage.Opacity = 0;
+        }
+
 
         #endregion
     }

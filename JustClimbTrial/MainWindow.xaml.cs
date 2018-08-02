@@ -43,7 +43,7 @@ namespace JustClimbTrial
         private KeyGesture wallCalibrationCommandKey = new KeyGesture(Key.W, ModifierKeys.Alt | ModifierKeys.Control);
         public static RoutedCommand WallCalibrationCommand = new RoutedCommand();
 
-        private KeyGesture isFullScreenToggleCommandKey = new KeyGesture(Key.F, ModifierKeys.Alt | ModifierKeys.Control);
+        private KeyGesture isFullScreenToggleCommandKey = new KeyGesture(Key.Enter, ModifierKeys.Alt);
         public static RoutedCommand IsFullScreenToggleCommand = new RoutedCommand();
 
         /* end of commands associated with keyboard short cuts */
