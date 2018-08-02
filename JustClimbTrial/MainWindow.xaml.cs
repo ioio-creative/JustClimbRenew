@@ -209,17 +209,11 @@ namespace JustClimbTrial
         {
             if (isFullScreen)
             {
-                WindowState = WindowState.Maximized;
-                WindowStyle = WindowStyle.None;
-                //ResizeMode = ResizeMode.NoResize;
-                ShowsNavigationUI = false;
+                WindowHelper.SetWindowNormal(this);
             }
             else
             {
-                WindowState = WindowState.Normal;
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                //ResizeMode = ResizeMode.CanResizeWithGrip;
-                ShowsNavigationUI = true;
+                WindowHelper.SetWindowFullScreen(this);
             }
         }
 

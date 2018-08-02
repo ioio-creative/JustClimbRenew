@@ -44,11 +44,11 @@
                     <RowDefinition Height ="2*" MinHeight="10"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <Button x:Name="ConfigWallBtn" Content="Configure Wall" Click="ConfigWallBtn_Click" />
-                    <Button x:Name="UndoBtn" Content="Undo" Click="UndoBtn_Click" />
-                    <Button x:Name="ConfirmBtn" Content="Confirm" Click="ConfirmBtn_Click" />
+                    <Button x:Name="ConfigWallBtn" Content="Configure Wall" />
+                    <Button x:Name="UndoBtn" Content="Undo" />
+                    <Button x:Name="ConfirmBtn" Content="Confirm" />
                 </StackPanel>
-                <Button Grid.Row="1" Name="CancelBtn" Content="Cancel" Click="CancelBtn_Click" />
+                <Button Grid.Row="1" Name="CancelBtn" Content="Cancel" />
             </Grid>
         </Grid>
         <!-- end of grid 1 -->

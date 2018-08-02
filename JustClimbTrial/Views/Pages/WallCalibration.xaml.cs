@@ -2,6 +2,7 @@
 using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using JustClimbTrial.Kinect;
+using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.Properties;
 using Microsoft.Kinect;
 using System;
@@ -63,7 +64,10 @@ namespace JustClimbTrial.Views.Pages
 
         private void InitializeCommands()
         {
-
+            ConfigWallBtn.Command = new RelayCommand(ConfigWall, CanConfigWall);
+            UndoBtn.Command = new RelayCommand(Undo, CanUndo);
+            ConfirmBtn.Command = new RelayCommand(Confirm, CanConfirm);
+            CancelBtn.Command = new RelayCommand(Cancel, CanCancel);
         }
 
         #endregion
@@ -171,6 +175,8 @@ namespace JustClimbTrial.Views.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             mainWindowClient = Parent as MainWindow;
+
+            InitializeCommands();
 
             kinectManagerClient = mainWindowClient.KinectManagerClient;
             if (kinectManagerClient.kinectSensor != null)

@@ -125,6 +125,7 @@
     <Compile Include="Helpers\RockTimerHelper.cs" />
     <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Interfaces\ISavingVideo.cs" />
     <Compile Include="Kinect\KinectManager.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
