@@ -29,7 +29,7 @@ namespace JustClimbTrial
 
         /* commands associated with keyboard short cuts */
 
-        public event Action<bool> DebugModeChanged;
+        private KeyGesture debugModeToggleCommandKey = new KeyGesture(Key.D, ModifierKeys.Alt | ModifierKeys.Control);
         //reference: https://stackoverflow.com/questions/1361350/keyboard-shortcuts-in-wpf
         public static RoutedCommand DebugModeToggleCommand = new RoutedCommand();
         private bool debug
@@ -40,8 +40,10 @@ namespace JustClimbTrial
             }
         }
 
+        private KeyGesture wallCalibrationCommandKey = new KeyGesture(Key.W, ModifierKeys.Alt | ModifierKeys.Control);
         public static RoutedCommand WallCalibrationCommand = new RoutedCommand();
 
+        private KeyGesture isFullScreenToggleCommandKey = new KeyGesture(Key.F, ModifierKeys.Alt | ModifierKeys.Control);
         public static RoutedCommand IsFullScreenToggleCommand = new RoutedCommand();
 
         /* end of commands associated with keyboard short cuts */
@@ -68,14 +70,7 @@ namespace JustClimbTrial
             InitializeWallCalibrationCommand();
             InitializeIsFullScreenToggleCommand();
 
-
-            if (AppGlobal.IsFullScreen)
-            {
-                WindowState = WindowState.Maximized;
-                WindowStyle = WindowStyle.None;
-                //ResizeMode = ResizeMode.NoResize;
-                ShowsNavigationUI = false;
-            }
+            ToggleFullScreen(AppGlobal.IsFullScreen);
         }
 
 
@@ -83,7 +78,8 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            DebugModeChanged += HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged += HandleDebugModeChanged;
+            AppGlobal.IsFullScreenChanged += HandleIsFullScreenChanged;
 
             //Get registered wall from File
             Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
@@ -121,7 +117,9 @@ namespace JustClimbTrial
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
         {
-            DebugModeChanged -= HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged -= HandleDebugModeChanged;
+            AppGlobal.IsFullScreenChanged -= HandleIsFullScreenChanged;
+
             UnsubColorImgSrcToPlaygrd();
             playgroundWindow.Close();
             if (KinectManagerClient.multiSourceReader != null)
@@ -145,21 +143,17 @@ namespace JustClimbTrial
 
         private void InitializeDebugModeToggleCommand()
         {
-            DebugModeToggleCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Alt | ModifierKeys.Control));
+            DebugModeToggleCommand.InputGestures.Add(debugModeToggleCommandKey);
         }
 
         private void DebugModeToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            AppGlobal.DEBUG = !AppGlobal.DEBUG;
-            if (DebugModeChanged != null)
-            {
-                DebugModeChanged(AppGlobal.DEBUG); 
-            }            
+            AppGlobal.DEBUG = !AppGlobal.DEBUG;           
         }
 
         private void InitializeWallCalibrationCommand()
         {
-            WallCalibrationCommand.InputGestures.Add(new KeyGesture(Key.W, ModifierKeys.Alt | ModifierKeys.Control));
+            WallCalibrationCommand.InputGestures.Add(wallCalibrationCommandKey);
         }
 
         private void WallCalibrationCommandExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -198,13 +192,35 @@ namespace JustClimbTrial
 
         private void InitializeIsFullScreenToggleCommand()
         {
-            IsFullScreenToggleCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Alt | ModifierKeys.Control));
+            IsFullScreenToggleCommand.InputGestures.Add(isFullScreenToggleCommandKey);
         }
 
         private void IsFullScreenToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            AppGlobal.IsFullScreen = !AppGlobal.IsFullScreen;
-     
+            AppGlobal.IsFullScreen = !AppGlobal.IsFullScreen;     
+        }
+
+        private void HandleIsFullScreenChanged(bool _isFullScreenChanged)
+        {
+            ToggleFullScreen(_isFullScreenChanged);
+        }
+
+        private void ToggleFullScreen(bool isFullScreen)
+        {
+            if (isFullScreen)
+            {
+                WindowState = WindowState.Maximized;
+                WindowStyle = WindowStyle.None;
+                //ResizeMode = ResizeMode.NoResize;
+                ShowsNavigationUI = false;
+            }
+            else
+            {
+                WindowState = WindowState.Normal;
+                WindowStyle = WindowStyle.SingleBorderWindow;
+                //ResizeMode = ResizeMode.CanResizeWithGrip;
+                ShowsNavigationUI = true;
+            }
         }
 
         #endregion

@@ -194,7 +194,7 @@ namespace JustClimbTrial.Views.Pages
                 {
                     mainWindowClient.SubscribeColorImgSrcToPlaygrd();
                 }
-                mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
+                AppGlobal.DebugModeChanged += HandleDebugModeChanged;
             }
         }
 
@@ -204,7 +204,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.UnsubColorImgSrcToPlaygrd();
             }
-            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged -= HandleDebugModeChanged;
         }
 
         private void canvasWall_MouseDown(object sender, MouseButtonEventArgs e)

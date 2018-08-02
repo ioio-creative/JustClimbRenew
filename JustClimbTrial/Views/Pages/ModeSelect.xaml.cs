@@ -87,7 +87,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.SubscribeColorImgSrcToPlaygrd(); 
             }
-            mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged += HandleDebugModeChanged;
             mainWindowClient.CheckAndLoadAndPlayScrnSvr();
         }
 
@@ -97,7 +97,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
             }
-            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged -= HandleDebugModeChanged;
         }
 
         private void HandleDebugModeChanged(bool _debug)

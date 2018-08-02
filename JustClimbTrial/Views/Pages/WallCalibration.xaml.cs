@@ -127,7 +127,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-            if ( wallPlane != default(System.Numerics.Plane) && floorPlane != default(System.Numerics.Plane))
+            if ( wallPlane != default(System.Numerics.Plane)) // && floorPlane != default(System.Numerics.Plane))
             {
                 Settings settings = new Settings();
 
@@ -139,16 +139,16 @@ namespace JustClimbTrial.Views.Pages
 
                 settings.Save();
 
-                if (UiHelper.NotifyUserResult("Wall and Floor Saved as Planes. Click \"OK\" to quit Application.") == MessageBoxResult.OK)
+                if (UiHelper.NotifyUserResult("Wall saved as a plane. Click \"OK\" to quit Application.") == MessageBoxResult.OK)
                 {
                     Application.Current.Shutdown();
                 }
             }
-            else if (wallPlane == default(System.Numerics.Plane) && floorPlane == default(System.Numerics.Plane))
-            {
-                UiHelper.NotifyUser("Please Configure Points on Wall and Floor");
+            //else if (wallPlane == default(System.Numerics.Plane) && floorPlane == default(System.Numerics.Plane))
+            //{
+            //    UiHelper.NotifyUser("Please Configure Points on Wall and Floor");
 
-            }
+            //}
             else if( wallPlane == default(System.Numerics.Plane) )
             {
                 UiHelper.NotifyUser("Please Configure Points on Wall");

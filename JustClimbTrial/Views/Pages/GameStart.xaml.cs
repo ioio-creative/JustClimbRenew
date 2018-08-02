@@ -315,7 +315,7 @@ namespace JustClimbTrial.Views.Pages
                 {
                     mainWindowClient.SubscribeColorImgSrcToPlaygrd();
                 }
-                mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
+                AppGlobal.DebugModeChanged += HandleDebugModeChanged;
 
                 navHead.PropertyChanged += HandleNavHeadIsRecordDemoChanged;
 
@@ -345,7 +345,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.UnsubColorImgSrcToPlaygrd();
             }
-            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged -= HandleDebugModeChanged;
         }
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)

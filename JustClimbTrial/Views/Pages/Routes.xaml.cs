@@ -95,7 +95,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.SubscribeColorImgSrcToPlaygrd(); 
             }
-            mainWindowClient.DebugModeChanged += HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged += HandleDebugModeChanged;
 
             viewModel.LoadData();
 
@@ -111,7 +111,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
             }
-            mainWindowClient.DebugModeChanged -= HandleDebugModeChanged;
+            AppGlobal.DebugModeChanged -= HandleDebugModeChanged;
         }
 
         private void btnGameStart_Click(object sender, RoutedEventArgs e)
