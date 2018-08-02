@@ -223,13 +223,15 @@ namespace JustClimbTrial.ViewModels
             }
         }
 
-        public void MoveSelectedRock(CameraSpacePoint cameraSpacePt)
+        public bool MoveSelectedRock(CameraSpacePoint cameraSpacePt)
         {
+            bool isSuccessful = false;
             if (SelectedRock != null)
             {
-                SelectedRock.MoveBoulder(cameraSpacePt, coorMap);
+                isSuccessful = SelectedRock.MoveBoulder(cameraSpacePt, coorMap);
                 ResetIndicator();
             }
+            return isSuccessful;
         }
 
         #endregion

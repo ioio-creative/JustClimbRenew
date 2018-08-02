@@ -236,19 +236,31 @@ namespace JustClimbTrial.ViewModels
             RockShapeContainer = null;
         }
 
-        public void MoveBoulder(CameraSpacePoint csp, CoordinateMapper coorMap)
+        public bool MoveBoulder(CameraSpacePoint csp, CoordinateMapper coorMap)
         {
+            bool isSuccessful = false;
+
             MyRock.CoorX = csp.X;
             MyRock.CoorY = csp.Y;
             MyRock.CoorZ = csp.Z;
 
             if (coorMap != null)
             {
-                bCanvasPoint = coorMap.MapCameraSpacePointToPointOnCanvas(csp, BCanvas, SpaceMode.Color);
-                bPoint = BCanvas.GetNormalisedPoint(bCanvasPoint);
+                try
+                {
+                    bCanvasPoint = coorMap.MapCameraSpacePointToPointOnCanvas(csp, BCanvas, SpaceMode.Color);
+                    bPoint = BCanvas.GetNormalisedPoint(bCanvasPoint);
+                    isSuccessful = true;
+                }
+                catch (Exception ex)
+                {
+                    isSuccessful = false;
+                }
             }
 
             RedrawBoulder();
+
+            return isSuccessful;
         }
 
         // TODO: need to change name as the function just changes width & height

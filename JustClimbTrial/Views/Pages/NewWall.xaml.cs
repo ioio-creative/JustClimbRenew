@@ -348,9 +348,7 @@ namespace JustClimbTrial.Views.Pages
                             // instead of RockViewModel.MoveBoulder()
                             // because RocksOnWallViewModel.MoveSelectedRock()
                             // will set the selected rock indicator as well
-                            rocksOnWallViewModel.MoveSelectedRock(csp);
-
-                            isAllowedDragMove = true;
+                            isAllowedDragMove = rocksOnWallViewModel.MoveSelectedRock(csp);                            
                         }
                     }
                 }
@@ -373,8 +371,10 @@ namespace JustClimbTrial.Views.Pages
         {
             // If an element in the panel has already handled in the drop,
             // the panel should not also handle it.
-            if (!e.Handled)
+            if (!e.Handled && e.Data.GetDataPresent(MyRockShape.RockViewModelDataFormatName))
             {
+                bool isAllowedDragMove = false;
+
                 // Canvas inherits Panel
                 Panel _canvas = sender as Panel;
                 RockViewModel selectedRock = rocksOnWallViewModel.SelectedRock;
@@ -396,7 +396,12 @@ namespace JustClimbTrial.Views.Pages
                             // instead of RockViewModel.MoveBoulder()
                             // because RocksOnWallViewModel.MoveSelectedRock()
                             // will set the selected rock indicator as well
-                            rocksOnWallViewModel.MoveSelectedRock(csp);
+                            isAllowedDragMove = rocksOnWallViewModel.MoveSelectedRock(csp);
+
+                            if (!isAllowedDragMove)
+                            {
+                                UiHelper.NotifyUser(DepthInfoMissingWarningMsg);
+                            }
                         }
                         else
                         {
@@ -407,6 +412,15 @@ namespace JustClimbTrial.Views.Pages
                     {
                         UiHelper.NotifyUser(RockOverlapsWarningMsg);
                     }
+                }
+
+                if (isAllowedDragMove)
+                {
+                    e.Effects = supportedDragDropEffects;
+                }
+                else
+                {
+                    e.Effects = DragDropEffects.None;
                 }
             }
         }
