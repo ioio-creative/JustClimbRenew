@@ -19,6 +19,12 @@
     <Page.DataContext>
         <StaticResource ResourceKey="gameStartViewModel"/>
     </Page.DataContext>
+    <Page.CommandBindings>
+        <CommandBinding Command="{x:Static local:GameStart.SkeletonVisibleToggleCommand}"
+                        Executed="SkeletonVisibleToggleCommandExecuted" />
+        <CommandBinding Command="{x:Static local:GameStart.CameraFeedToggleCommand}"
+                        Executed="CameraFeedToggleCommandExecuted" />
+    </Page.CommandBindings>
 
     <masters:MasterWithNavigation x:Name="master">
         <masters:MasterWithNavigation.Content>

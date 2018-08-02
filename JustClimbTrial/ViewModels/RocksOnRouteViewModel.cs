@@ -3,6 +3,7 @@ using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using Microsoft.Kinect;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -312,9 +313,9 @@ namespace JustClimbTrial.ViewModels
             {
                 case ClimbMode.Boulder:
                 default:
-                    foreach (RockOnRouteViewModel rockOnTrainingRoute in rocksOnRoute)
+                    foreach (RockOnRouteViewModel rockOnBoulderRoute in rocksOnRoute)
                     {
-                        rockOnTrainingRoute.DrawRockShapeWrtBoulderStatus();
+                        rockOnBoulderRoute.DrawRockShapeWrtBoulderStatus();
                     }
                     break;
                 case ClimbMode.Training:
@@ -323,6 +324,14 @@ namespace JustClimbTrial.ViewModels
                         rockOnTrainingRoute.DrawRockShapeWrtTrainSeq(RouteLength);
                     }
                     break;
+            }
+        }
+
+        public void UndrawAllRocksOnRouteInGame()
+        {
+            foreach (RockOnRouteViewModel rockOnRoute in rocksOnRoute)
+            {
+                rockOnRoute.MyRockViewModel.UndrawBoulder();
             }
         }
 
@@ -353,31 +362,49 @@ namespace JustClimbTrial.ViewModels
 
         #region ImgSeq helpers (game start)
 
-        public void PlayAllRocksOnRouteImgSequencesInGame()
+        public void ShowAndPlayAllRocksOnRouteImgSequencesInGame()
         {
             foreach (RockOnRouteViewModel rockOnRoute in this)
             {
                 rockOnRoute.PlayRockImgSequence();
+                rockOnRoute.MyRockViewModel.ShowRockImage();
+            }
+        }
+
+        public void StopAndHideAllRocksOnRouteImgSequencesInGame()
+        {
+            foreach (RockOnRouteViewModel rockOnRoute in this)
+            {
+                rockOnRoute.StopRockImgSequence();
+                rockOnRoute.MyRockViewModel.HideRockImage();
             }
         }
 
         public void SetRocksImgSequences()
         {
+            IEnumerable<Action> funcs;
             switch (RouteClimbMode)
             {
                 case ClimbMode.Boulder:
                 default:
-                    foreach (RockOnRouteViewModel rockOnRoute in this)
-                    {
-                        rockOnRoute.SetRockImageWrtBoulderStatus();
-                    }
+                    funcs = this.Select(x => new Action(x.SetRockImageWrtBoulderStatus));
+                    //foreach (RockOnRouteViewModel rockOnRoute in this)
+                    //{
+                    //    rockOnRoute.SetRockImageWrtBoulderStatus();
+                    //}
                     break;
                 case ClimbMode.Training:
-                    foreach (RockOnRouteViewModel rockOnRoute in this)
-                    {
-                        rockOnRoute.SetRockImageSeqWrtTrainSeq(RouteLength);
-                    }
+                    funcs = this.Select(x => new Action(() => { x.SetRockImageSeqWrtTrainSeq(RouteLength); }));
+                    //foreach (RockOnRouteViewModel rockOnRoute in this)
+                    //{
+                    //    rockOnRoute.SetRockImageSeqWrtTrainSeq(RouteLength);
+                    //}
                     break;
+            }
+
+            foreach (Action func in funcs)
+            {
+                func();
             }
         }
 
