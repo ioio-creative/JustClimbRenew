@@ -22,16 +22,12 @@ namespace JustClimbTrial
     /// </summary>
     public partial class MainWindow : NavigationWindow
     {
-        //in Debug Mode we display the live camera image from Kinect at all times
-        private bool wallCal
-        {
-            get
-            {
-                return AppGlobal.WALLCALIBRATE;
-            }
-        }
+        //in Debug Mode we display the live camera image from Kinect at all times        
 
         public KinectManager KinectManagerClient;
+
+
+        /* commands associated with keyboard short cuts */
 
         public event Action<bool> DebugModeChanged;
         //reference: https://stackoverflow.com/questions/1361350/keyboard-shortcuts-in-wpf
@@ -45,6 +41,11 @@ namespace JustClimbTrial
         }
 
         public static RoutedCommand WallCalibrationCommand = new RoutedCommand();
+
+        public static RoutedCommand IsFullScreenToggleCommand = new RoutedCommand();
+
+        /* end of commands associated with keyboard short cuts */
+
 
         private Playground playgroundWindow;
 
@@ -65,7 +66,16 @@ namespace JustClimbTrial
 
             InitializeDebugModeToggleCommand();
             InitializeWallCalibrationCommand();
-           
+            InitializeIsFullScreenToggleCommand();
+
+
+            if (AppGlobal.IsFullScreen)
+            {
+                WindowState = WindowState.Maximized;
+                WindowStyle = WindowStyle.None;
+                //ResizeMode = ResizeMode.NoResize;
+                ShowsNavigationUI = false;
+            }
         }
 
 
@@ -154,8 +164,7 @@ namespace JustClimbTrial
 
         private void WallCalibrationCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            AppGlobal.WALLCALIBRATE = !AppGlobal.WALLCALIBRATE;
-            if (Content.GetType() != typeof(WallCalibration))
+            if (!(Content is WallCalibration))
             {
                 UnsubColorImgSrcToPlaygrd();
                 WallCalibration WallCal = new WallCalibration();
@@ -185,6 +194,17 @@ namespace JustClimbTrial
             {
                 playgroundWindow.HideImage();
             }
+        }
+
+        private void InitializeIsFullScreenToggleCommand()
+        {
+            IsFullScreenToggleCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Alt | ModifierKeys.Control));
+        }
+
+        private void IsFullScreenToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            AppGlobal.IsFullScreen = !AppGlobal.IsFullScreen;
+     
         }
 
         #endregion

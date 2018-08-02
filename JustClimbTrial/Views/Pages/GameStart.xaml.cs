@@ -165,8 +165,6 @@ namespace JustClimbTrial.Views.Pages
             //Load Wall and Floor Planes to local variables
             float[] planeParams = Settings.Default.WallPlaneStr.Split(',').Select(x => float.Parse(x)).ToArray();
             wallPlane = new Plane(planeParams[0], planeParams[1], planeParams[2], planeParams[3]);
-            planeParams = Settings.Default.FloorPlaneStr.Split(',').Select(x => float.Parse(x)).ToArray();
-            floorPlane = new Plane(planeParams[0], planeParams[1], planeParams[2], planeParams[3]);
 
             routeId = aRouteId;
             climbMode = aClimbMode;

@@ -14,5 +14,7 @@
                         Executed="DebugModeToggleCommandExecuted" />
         <CommandBinding Command="{x:Static local:MainWindow.WallCalibrationCommand}"
                         Executed="WallCalibrationCommandExecuted" />
+        <CommandBinding Command="{x:Static local:MainWindow.IsFullScreenToggleCommand}"
+                        Executed="IsFullScreenToggleCommandExecuted" />
     </NavigationWindow.CommandBindings>
 </NavigationWindow>

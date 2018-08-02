@@ -242,15 +242,6 @@ namespace JustClimbTrial.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool WallCal {
-            get {
-                return ((bool)(this["WallCal"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1,2,3,4")]
@@ -263,24 +254,21 @@ namespace JustClimbTrial.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1,2,3,4")]
-        public string FloorPlaneStr {
-            get {
-                return ((string)(this["FloorPlaneStr"]));
-            }
-            set {
-                this["FloorPlaneStr"] = value;
-            }
-        }
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("..\\AppFiles\\Resources\\Videos\\Gameover.mp4")]
         public string GameOverVideoPath {
             get {
                 return ((string)(this["GameOverVideoPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsFullScreen {
+            get {
+                return ((bool)(this["IsFullScreen"]));
             }
         }
     }

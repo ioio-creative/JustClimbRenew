@@ -84,17 +84,14 @@
     <Setting Name="BoulderButtonShineFeedbackLoopImgSequenceDirectory" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\ImgSequences\BoulderButton\Lite\b</Value>
     </Setting>
-    <Setting Name="WallCal" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="WallPlaneStr" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1,2,3,4</Value>
-    </Setting>
-    <Setting Name="FloorPlaneStr" Type="System.String" Scope="User">
       <Value Profile="(Default)">1,2,3,4</Value>
     </Setting>
     <Setting Name="GameOverVideoPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">..\AppFiles\Resources\Videos\Gameover.mp4</Value>
+    </Setting>
+    <Setting Name="IsFullScreen" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

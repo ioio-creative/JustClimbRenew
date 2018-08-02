@@ -1,4 +1,4 @@
-- Route Set - Drag & Drop
+- ////Route Set - Drag & Drop
 - ////Hidden button for triggering debug mode in UI
 - Redefine skeleton on target
 - ////Tune floor calibration
@@ -6,3 +6,6 @@
 - ////What would happen if pressing "restart" at the middle of the game? Should export video or not?
 - Thumbnail for route during route select
 - Thumbnail for video during video select
+- Set up SQL Server at client computer
+- Set up Team Viewer at client computer
+- Set up full screen and automatically spawn window in another display if available

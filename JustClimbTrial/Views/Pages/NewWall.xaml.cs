@@ -8,7 +8,6 @@ using JustClimbTrial.Views.Dialogs;
 using JustClimbTrial.Views.UserControls;
 using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;

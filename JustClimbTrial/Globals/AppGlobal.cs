@@ -1,6 +1,7 @@
 ﻿using JustClimbTrial.DataAccess;
 using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Properties;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -27,14 +28,30 @@ namespace JustClimbTrial.Globals
         public static string FfmpegExePath { get; }
         public static int MaxVideoRecordDurationInMinutes { get; }
         public static bool DEBUG { get; set; }
-        public static bool WALLCALIBRATE { get; set; }
+
+        private static bool isFullScreen;
+        public static bool IsFullScreen
+        {
+            get { return isFullScreen; }
+            set
+            {
+                if (isFullScreen != value)
+                {
+                    isFullScreen = value;
+                    IsFullScreenChanged?.Invoke(value);
+                }
+            }
+        }
+
+        // events
+        public static event Action<bool> IsFullScreenChanged;
 
         static AppGlobal()
         {
             FfmpegExePath = settings.FfmpegExePath;
             MaxVideoRecordDurationInMinutes = settings.MaxVideoRecordDurationInMinutes;
-            DEBUG = settings.IsDebugMode;
-            WALLCALIBRATE = settings.WallCal;
+            DEBUG = settings.IsDebugMode;        
+            IsFullScreen = settings.IsFullScreen;
         }        
     }
 }

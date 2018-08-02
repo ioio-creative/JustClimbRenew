@@ -43,8 +43,7 @@ namespace JustClimbTrial.Views.Pages
         private DepthSpacePoint[] colorMappedToDepthSpace;
         private ushort[] kinectDepthData;
 
-        private Plane wallPlane;
-        private Plane floorPlane;
+        private Plane wallPlane;        
         private Vector3[] threePoints = new Vector3[3];
         private Ellipse[] threePtEllipses = new Ellipse[3];
         private int threePtIdxCnt = 0;
@@ -112,16 +111,6 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        private void ConfigFloorBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (!threePoints.Where(x => x == default(Vector3)).Any())
-            {
-                floorPlane = Plane.CreateFromVertices(threePoints[0], threePoints[1], threePoints[2]);
-                threePoints = new Vector3[3];
-                canvas.Children.Clear();
-            }
-        }
-
         private void UndoBtn_Click(object sender, RoutedEventArgs e)
         {
             //Removed last entered point
@@ -148,12 +137,6 @@ namespace JustClimbTrial.Views.Pages
                     wallPlane.Normal.Z,
                     wallPlane.D);
 
-                settings.FloorPlaneStr = string.Format("{0},{1},{2},{3}",
-                    floorPlane.Normal.X,
-                    floorPlane.Normal.Y,
-                    floorPlane.Normal.Z,
-                    floorPlane.D);
-
                 settings.Save();
 
                 if (UiHelper.NotifyUserResult("Wall and Floor Saved as Planes. Click \"OK\" to quit Application.") == MessageBoxResult.OK)
@@ -170,10 +153,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 UiHelper.NotifyUser("Please Configure Points on Wall");
             }
-            else if( floorPlane == default(System.Numerics.Plane))
-            {
-                UiHelper.NotifyUser("Please Configure Points on Floor");
-            }
+
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)

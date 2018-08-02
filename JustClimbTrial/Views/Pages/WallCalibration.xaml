@@ -45,7 +45,6 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
                     <Button x:Name="ConfigWallBtn" Content="Configure Wall" Click="ConfigWallBtn_Click" />
-                    <Button x:Name="ConfigFloorBtn" Content="Configure Floor" Click="ConfigFloorBtn_Click" />
                     <Button x:Name="UndoBtn" Content="Undo" Click="UndoBtn_Click" />
                     <Button x:Name="ConfirmBtn" Content="Confirm" Click="ConfirmBtn_Click" />
                 </StackPanel>
