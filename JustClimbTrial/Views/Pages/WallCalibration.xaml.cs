@@ -59,6 +59,113 @@ namespace JustClimbTrial.Views.Pages
         #endregion
 
 
+        #region initialization
+
+        private void InitializeCommands()
+        {
+
+        }
+
+        #endregion
+
+
+        #region command methods
+
+        private bool CanConfigWall(object parameter = null)
+        {
+            return true;
+        }
+
+        private void ConfigWall(object parameter = null)
+        {
+            if (!threePoints.Where(x => x == default(Vector3)).Any())
+            {
+                wallPlane = Plane.CreateFromVertices(threePoints[0], threePoints[1], threePoints[2]);
+                threePoints = new Vector3[3];
+                canvas.Children.Clear();
+            }
+        }
+
+        private bool CanUndo(object parameter = null)
+        {
+            return true;
+        }
+
+        private void Undo(object parameter = null)
+        {
+            //Removed last entered point
+            threePtIdxCnt = ((threePtIdxCnt - 1) + 3) % 3;
+            if (threePoints[threePtIdxCnt] != default(Vector3))
+            {
+                if (threePtEllipses[threePtIdxCnt] != null)
+                {
+                    canvas.RemoveChild(threePtEllipses[threePtIdxCnt]);
+                }
+                threePoints[threePtIdxCnt] = default(Vector3);
+            }
+        }
+
+        private bool CanConfirm(object parameter = null)
+        {
+            return true;
+        }
+
+        private void Confirm(object parameter = null)
+        {
+            if (wallPlane != default(System.Numerics.Plane)) // && floorPlane != default(System.Numerics.Plane))
+            {
+                Settings settings = new Settings();
+
+                settings.WallPlaneStr = string.Format("{0},{1},{2},{3}",
+                    wallPlane.Normal.X,
+                    wallPlane.Normal.Y,
+                    wallPlane.Normal.Z,
+                    wallPlane.D);
+
+                settings.Save();
+
+                if (UiHelper.NotifyUserResult("Wall saved as a plane. Click \"OK\" to quit Application.") == MessageBoxResult.OK)
+                {
+                    Application.Current.Shutdown();
+                }
+            }
+            //else if (wallPlane == default(System.Numerics.Plane) && floorPlane == default(System.Numerics.Plane))
+            //{
+            //    UiHelper.NotifyUser("Please Configure Points on Wall and Floor");
+
+            //}
+            else if (wallPlane == default(System.Numerics.Plane))
+            {
+                UiHelper.NotifyUser("Please Configure Points on Wall");
+            }
+        }
+
+        private bool CanCancel(object parameter = null)
+        {
+            return true;
+        }
+
+        private void Cancel(object parameter = null)
+        {
+            string messageBoxText = "Do you want to cancel and quit the application?";
+            string caption = "Exit";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button);
+
+            // Process message box results
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    Application.Current.Shutdown();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }
+        }
+
+        #endregion
+
+
         #region event handlers
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -99,79 +206,6 @@ namespace JustClimbTrial.Views.Pages
             kinectDepthData = null;
 
             GC.Collect();
-        }
-
-        private void ConfigWallBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (!threePoints.Where(x => x == default(Vector3)).Any())
-            {
-                wallPlane = Plane.CreateFromVertices(threePoints[0], threePoints[1], threePoints[2]);
-                threePoints = new Vector3[3];
-                canvas.Children.Clear();
-            }
-        }
-
-        private void UndoBtn_Click(object sender, RoutedEventArgs e)
-        {
-            //Removed last entered point
-            threePtIdxCnt = ( (threePtIdxCnt - 1) + 3 ) % 3;
-            if (threePoints[threePtIdxCnt] != default(Vector3))
-            {
-                if (threePtEllipses[threePtIdxCnt] != null)
-                {
-                    canvas.RemoveChild(threePtEllipses[threePtIdxCnt]);
-                }
-                threePoints[threePtIdxCnt] = default(Vector3); 
-            }
-        }
-
-        private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if ( wallPlane != default(System.Numerics.Plane)) // && floorPlane != default(System.Numerics.Plane))
-            {
-                Settings settings = new Settings();
-
-                settings.WallPlaneStr = string.Format("{0},{1},{2},{3}",
-                    wallPlane.Normal.X,
-                    wallPlane.Normal.Y,
-                    wallPlane.Normal.Z,
-                    wallPlane.D);
-
-                settings.Save();
-
-                if (UiHelper.NotifyUserResult("Wall saved as a plane. Click \"OK\" to quit Application.") == MessageBoxResult.OK)
-                {
-                    Application.Current.Shutdown();
-                }
-            }
-            //else if (wallPlane == default(System.Numerics.Plane) && floorPlane == default(System.Numerics.Plane))
-            //{
-            //    UiHelper.NotifyUser("Please Configure Points on Wall and Floor");
-
-            //}
-            else if( wallPlane == default(System.Numerics.Plane) )
-            {
-                UiHelper.NotifyUser("Please Configure Points on Wall");
-            }
-
-        }
-
-        private void CancelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            string messageBoxText = "Do you want to cancel and quit the application?";
-            string caption = "Exit";
-            MessageBoxButton button = MessageBoxButton.YesNo;
-            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button);
-
-            // Process message box results
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    Application.Current.Shutdown();
-                    break;
-                case MessageBoxResult.No:
-                    break;
-            }
         }
 
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
