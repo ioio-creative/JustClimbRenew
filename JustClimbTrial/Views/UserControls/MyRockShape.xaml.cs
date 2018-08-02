@@ -60,14 +60,7 @@ namespace JustClimbTrial.Views.UserControls
             base.OnMouseMove(e);
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                // Package the data.
-                DataObject data = new DataObject();
-                data.SetData(RockViewModelDataFormatName, owner);
-
-                // Initiate the drag-and-drop operation.
-                DragDrop.DoDragDrop(this, data, allowedDragDropEffects);
-
-                Debug.WriteLine("Do Drag & Drop");
+                DoDragDrop();
             }
         }
 
@@ -127,6 +120,24 @@ namespace JustClimbTrial.Views.UserControls
             return rockShape.Height;
         }
 
-        #endregion        
+        #endregion
+
+
+        #region drag & drop helpers
+
+        // exposed for others to initialize drag drop
+        public void DoDragDrop()
+        {
+            // Package the data.
+            DataObject data = new DataObject();
+            data.SetData(RockViewModelDataFormatName, owner);
+
+            // Initiate the drag-and-drop operation.
+            DragDrop.DoDragDrop(this, data, allowedDragDropEffects);
+
+            //Debug.WriteLine("Do Drag & Drop");
+        }
+
+        #endregion
     }
 }

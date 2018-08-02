@@ -41,25 +41,34 @@ namespace JustClimbTrial.Kinect
         }
 
         public CameraSpacePoint GetCamSpacePointFromMousePoint(Point mousePt, SpaceMode spMode)
-        {
+        {           
+            CameraSpacePoint camPtFromMousePt = default(CameraSpacePoint);
+
             if (!IsSnapshotTaken)
             {
-                return default(CameraSpacePoint);
+                return camPtFromMousePt;
             }
 
-            Tuple<float, float> dimensions = KinectExtensions.FrameDimensions[spMode];
-            float x_temp = (float)(mousePt.X * dimensions.Item1 / wCanvas.ActualWidth);
-            float y_temp = (float)(mousePt.Y * dimensions.Item2 / wCanvas.ActualHeight);
-
-            DepthSpacePoint depPtFromMousePt = dCoordinatesInColorFrame[(int)(x_temp + 0.5f) + (int)(y_temp + 0.5f) * (int)dimensions.Item1];
-
-            if (depPtFromMousePt.X == float.NegativeInfinity || depPtFromMousePt.Y == float.NegativeInfinity)
+            try
             {
-                return default(CameraSpacePoint);
-            }
+                Tuple<float, float> dimensions = KinectExtensions.FrameDimensions[spMode];
+                float x_temp = (float)(mousePt.X * dimensions.Item1 / wCanvas.ActualWidth);
+                float y_temp = (float)(mousePt.Y * dimensions.Item2 / wCanvas.ActualHeight);
 
-            ushort depth = wallDepthData[(int)depPtFromMousePt.X + (int)(depPtFromMousePt.Y) * (int)KinectExtensions.FrameDimensions[SpaceMode.Depth].Item1];
-            CameraSpacePoint camPtFromMousePt = wallMapper.MapDepthPointToCameraSpace(depPtFromMousePt, depth);
+                DepthSpacePoint depPtFromMousePt = dCoordinatesInColorFrame[(int)(x_temp + 0.5f) + (int)(y_temp + 0.5f) * (int)dimensions.Item1];
+
+                if (depPtFromMousePt.X == float.NegativeInfinity || depPtFromMousePt.Y == float.NegativeInfinity)
+                {
+                    return default(CameraSpacePoint);
+                }
+
+                ushort depth = wallDepthData[(int)depPtFromMousePt.X + (int)(depPtFromMousePt.Y) * (int)KinectExtensions.FrameDimensions[SpaceMode.Depth].Item1];
+                camPtFromMousePt = wallMapper.MapDepthPointToCameraSpace(depPtFromMousePt, depth);
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             return camPtFromMousePt;
         }

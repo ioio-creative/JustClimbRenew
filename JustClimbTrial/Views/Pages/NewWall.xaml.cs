@@ -35,7 +35,7 @@ namespace JustClimbTrial.Views.Pages
         #region constants
 
         private const string RockOverlapsWarningMsg = 
-            "Please set a smaller rock size to avoid overlaps among rocks!";
+            "Rocks can't overlap each other!";
 
         private const string DepthInfoMissingWarningMsg = 
             "No depth info is captured for this point!";
@@ -268,9 +268,11 @@ namespace JustClimbTrial.Views.Pages
         }        
        
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
+        {            
             if (isSnapShotTaken)
             {
+                //Debug.WriteLine("canvas_MouseDown");
+
                 Point mouseClickPt = e.GetPosition(cameraIMG);
 
                 RockViewModel rockCorrespondsToCanvasPt =
@@ -305,6 +307,9 @@ namespace JustClimbTrial.Views.Pages
                     rocksOnWallViewModel.SelectedRock = rockCorrespondsToCanvasPt;
                     boulderWidthSlider.Value = rockCorrespondsToCanvasPt.RockShapeContainer.GetWidth();
                     boulderHeightSlider.Value = rockCorrespondsToCanvasPt.RockShapeContainer.GetHeight();
+
+                    // if rock already in list, enable drag drop!
+                    rockCorrespondsToCanvasPt.RockShapeContainer.DoDragDrop();
                 }
             }
             else
@@ -318,9 +323,48 @@ namespace JustClimbTrial.Views.Pages
         {
             if (e.Data.GetDataPresent(MyRockShape.RockViewModelDataFormatName))
             {
+                //Debug.WriteLine("canvas_DragOver");
+
+                bool isAllowedDragMove = false;
+
+                // Canvas inherits Panel
+                Panel _canvas = sender as Panel;
+                RockViewModel selectedRock = rocksOnWallViewModel.SelectedRock;
+
+                if (_canvas != null && selectedRock != null)
+                {
+                    Point mousePt = e.GetPosition(cameraIMG);
+
+                    // check rock overlaps
+                    if (rocksOnWallViewModel.IsOverlapWithRocksOnWallOtherThanSelectedRock(
+                            mousePt, selectedRock.SizeOnCanvas)
+                        == false)
+                    {
+                        CameraSpacePoint csp = jcWall.GetCamSpacePointFromMousePoint(mousePt, _mode);
+                        if (!csp.Equals(default(CameraSpacePoint)))
+                        {
+                            // note: 
+                            // use RocksOnWallViewModel.MoveSelectedRock() 
+                            // instead of RockViewModel.MoveBoulder()
+                            // because RocksOnWallViewModel.MoveSelectedRock()
+                            // will set the selected rock indicator as well
+                            rocksOnWallViewModel.MoveSelectedRock(csp);
+
+                            isAllowedDragMove = true;
+                        }
+                    }
+                }
+
                 // These Effects values are used in the drag source's
                 // GiveFeedback event handler to determine which cursor to display.
-                e.Effects = supportedDragDropEffects;
+                if (isAllowedDragMove)
+                {                    
+                    e.Effects = supportedDragDropEffects;
+                }
+                else
+                {
+                    e.Effects = DragDropEffects.None;
+                }
             }
         }
 
