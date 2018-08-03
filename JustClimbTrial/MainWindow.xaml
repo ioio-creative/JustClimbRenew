@@ -17,4 +17,15 @@
         <CommandBinding Command="{x:Static local:MainWindow.IsFullScreenToggleCommand}"
                         Executed="IsFullScreenToggleCommandExecuted" />
     </NavigationWindow.CommandBindings>
+    <NavigationWindow.InputBindings>
+        <KeyBinding Command="{x:Static local:MainWindow.DebugModeToggleCommand}"
+                    Key="D"
+                    Modifiers="Alt+Ctrl" />
+        <KeyBinding Command="{x:Static local:MainWindow.WallCalibrationCommand}"
+                    Key="W"
+                    Modifiers="Alt+Ctrl" />
+        <KeyBinding Command="{x:Static local:MainWindow.IsFullScreenToggleCommand}"
+                    Key="Enter"
+                    Modifiers="Alt" />
+    </NavigationWindow.InputBindings>
 </NavigationWindow>

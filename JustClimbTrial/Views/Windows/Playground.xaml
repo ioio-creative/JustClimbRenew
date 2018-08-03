@@ -7,19 +7,16 @@
         mc:Ignorable="d"
         Title="Playground" Name="PlaygroundWindow"
         Height="720" Width="1280" Background="Black" 
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
 >
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:Playground.ToggleFullScreenCmd}"
-                        Executed="ToggleFullScreenCmdExecuted" 
-                        CanExecute="ToggleFullScreenCmdCanExecute" />
+                        Executed="ToggleFullScreenCmdExecuted" />
     </Window.CommandBindings>
     
     <Window.InputBindings>
         <KeyBinding Command="{x:Static local:Playground.ToggleFullScreenCmd}"
                     Key="Enter"
-                    Modifiers="Alt"
-                    CommandParameter="{Binding Path=Self}"/>
+                    Modifiers="Alt" />
     </Window.InputBindings>
 
     <Viewbox Name="PlaygroundView" RenderTransformOrigin="0.5, 0.5" Stretch="Uniform"

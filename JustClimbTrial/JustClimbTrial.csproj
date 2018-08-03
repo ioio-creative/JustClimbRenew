@@ -129,7 +129,6 @@
     <Compile Include="Helpers\VideoHelper.cs" />
     <Compile Include="Interfaces\ISavingVideo.cs" />
     <Compile Include="Kinect\KinectManager.cs" />
-    <Compile Include="Mvvm\Commands\ToggleFullScreenCommand.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

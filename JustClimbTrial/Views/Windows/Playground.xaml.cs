@@ -1,5 +1,4 @@
 ﻿using JustClimbTrial.Extensions;
-using JustClimbTrial.Mvvm.Infrastructure;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -12,8 +11,12 @@ namespace JustClimbTrial.Views.Windows
     /// </summary>
     public partial class Playground : Window
     {
-        //public static RoutedCommand ToggleFullScreenCmd = new RoutedCommand();
+        /* commands associated with keyboard short cuts */
+
         public static RoutedCommand ToggleFullScreenCmd = new RoutedCommand();
+
+        /* end of commands associated with keyboard short cuts */
+
 
         public bool LoopMedia = true;
         public bool PlaygroundMediaPlaying;
@@ -30,16 +33,11 @@ namespace JustClimbTrial.Views.Windows
 
         #region key gesture commands
 
-        //private void ToggleFullScreenCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        //{
-        //    e.CanExecute = true;
-        //}
-
-        //private void ToggleFullScreenCmdExecuted(object sender, ExecutedRoutedEventArgs e)
-        //{
-        //    isFullScreen = !isFullScreen;
-        //    this.ToggleFullScreen(isFullScreen);            
-        //}
+        private void ToggleFullScreenCmdExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            isFullScreen = !isFullScreen;
+            this.ToggleFullScreen(isFullScreen);
+        }
 
         #endregion
 

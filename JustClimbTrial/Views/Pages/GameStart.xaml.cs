@@ -45,13 +45,17 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        private KeyGesture skeletonVisibleToggleCommandKey = new KeyGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Control);
+
+        /* commands associated with keyboard short cuts */
+        
         public static RoutedCommand SkeletonVisibleToggleCommand = new RoutedCommand();
         private bool drawSkeleton = false;
-
-        private KeyGesture cameraFeedToggleCommandKey = new KeyGesture(Key.F, ModifierKeys.Alt | ModifierKeys.Control);
+        
         public static RoutedCommand CameraFeedToggleCommand = new RoutedCommand();
         private bool cameraFeed = false;
+
+        /* end of commands associated with keyboard short cuts */
+
 
         // https://highfieldtales.wordpress.com/2013/07/27/how-to-prevent-the-navigation-off-a-page-in-wpf/
         private NavigationService navSvc;
@@ -212,9 +216,6 @@ namespace JustClimbTrial.Views.Pages
             BtnDemo.Command = new RelayCommand(PlayDemoVideo, CanPlayDemoVideo);
             BtnPlaySelectedVideo.Command = new RelayCommand(PlaySelectedVideo, CanPlaySelectedVideo);
             BtnRestartGame.Command = new RelayCommand(RestartCommand, CanRestartGame);
-
-            InitializeSkeletonVisibleToggleCommand();
-            InitializeCameraFeedToggleCommand();
         }
 
         private void InitializeNavHead()
@@ -238,16 +239,6 @@ namespace JustClimbTrial.Views.Pages
             navHead.HeaderRowTitle =
                 string.Format(HeaderRowTitleFormat, ClimbModeGlobals.StringDict[climbMode],
                     routeNo);
-        }
-
-        private void InitializeSkeletonVisibleToggleCommand()
-        {
-            SkeletonVisibleToggleCommand.InputGestures.Add(skeletonVisibleToggleCommandKey);
-        }
-
-        private void InitializeCameraFeedToggleCommand()
-        {
-            CameraFeedToggleCommand.InputGestures.Add(cameraFeedToggleCommandKey);
         }
 
         #endregion

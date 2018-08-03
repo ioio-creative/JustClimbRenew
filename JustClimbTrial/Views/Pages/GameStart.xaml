@@ -23,6 +23,14 @@
         <CommandBinding Command="{x:Static local:GameStart.CameraFeedToggleCommand}"
                         Executed="CameraFeedToggleCommandExecuted" />
     </Page.CommandBindings>
+    <Page.InputBindings>
+        <KeyBinding Command="{x:Static local:GameStart.SkeletonVisibleToggleCommand}"
+            Key="S"
+            Modifiers="Alt+Ctrl" />
+        <KeyBinding Command="{x:Static local:GameStart.CameraFeedToggleCommand}"
+            Key="F"
+            Modifiers="Alt+Ctrl" />
+    </Page.InputBindings>
     <Page.DataContext>
         <StaticResource ResourceKey="gameStartViewModel"/>
     </Page.DataContext>

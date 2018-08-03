@@ -28,8 +28,7 @@ namespace JustClimbTrial
 
 
         /* commands associated with keyboard short cuts */
-
-        private KeyGesture debugModeToggleCommandKey = new KeyGesture(Key.D, ModifierKeys.Alt | ModifierKeys.Control);
+        
         //reference: https://stackoverflow.com/questions/1361350/keyboard-shortcuts-in-wpf
         public static RoutedCommand DebugModeToggleCommand = new RoutedCommand();
         private bool debug
@@ -39,11 +38,8 @@ namespace JustClimbTrial
                 return AppGlobal.DEBUG;
             }
         }
-
-        private KeyGesture wallCalibrationCommandKey = new KeyGesture(Key.W, ModifierKeys.Alt | ModifierKeys.Control);
-        public static RoutedCommand WallCalibrationCommand = new RoutedCommand();
-
-        private KeyGesture isFullScreenToggleCommandKey = new KeyGesture(Key.Enter, ModifierKeys.Alt);
+        
+        public static RoutedCommand WallCalibrationCommand = new RoutedCommand();        
         public static RoutedCommand IsFullScreenToggleCommand = new RoutedCommand();
 
         /* end of commands associated with keyboard short cuts */
@@ -62,10 +58,6 @@ namespace JustClimbTrial
         public MainWindow()
         {
             InitializeComponent();
-
-            InitializeDebugModeToggleCommand();
-            InitializeWallCalibrationCommand();
-            InitializeIsFullScreenToggleCommand();
 
             this.ToggleFullScreen(AppGlobal.IsFullScreen);
             
@@ -154,19 +146,9 @@ namespace JustClimbTrial
 
         #region debug commands and func
 
-        private void InitializeDebugModeToggleCommand()
-        {
-            DebugModeToggleCommand.InputGestures.Add(debugModeToggleCommandKey);
-        }
-
         private void DebugModeToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             AppGlobal.DEBUG = !AppGlobal.DEBUG;           
-        }
-
-        private void InitializeWallCalibrationCommand()
-        {
-            WallCalibrationCommand.InputGestures.Add(wallCalibrationCommandKey);
         }
 
         private void WallCalibrationCommandExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -201,11 +183,6 @@ namespace JustClimbTrial
             {
                 playgroundWindow.HideImage();
             }
-        }
-
-        private void InitializeIsFullScreenToggleCommand()
-        {
-            IsFullScreenToggleCommand.InputGestures.Add(isFullScreenToggleCommandKey);
         }
 
         private void IsFullScreenToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
