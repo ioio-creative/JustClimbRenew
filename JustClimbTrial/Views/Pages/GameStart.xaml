@@ -12,20 +12,21 @@
       Title="Boulder Route 1 - Video Playback"
       WindowTitle="Boulder Route 1 - Video Playback"
       Loaded="Page_Loaded"
-      Unloaded="Page_Unloaded">
+      Unloaded="Page_Unloaded"
+>
     <Page.Resources>
         <viewModel:GameStartViewModel x:Key="gameStartViewModel" />
     </Page.Resources>
-    <Page.DataContext>
-        <StaticResource ResourceKey="gameStartViewModel"/>
-    </Page.DataContext>
     <Page.CommandBindings>
         <CommandBinding Command="{x:Static local:GameStart.SkeletonVisibleToggleCommand}"
                         Executed="SkeletonVisibleToggleCommandExecuted" />
         <CommandBinding Command="{x:Static local:GameStart.CameraFeedToggleCommand}"
                         Executed="CameraFeedToggleCommandExecuted" />
     </Page.CommandBindings>
-
+    <Page.DataContext>
+        <StaticResource ResourceKey="gameStartViewModel"/>
+    </Page.DataContext>
+    
     <masters:MasterWithNavigation x:Name="master">
         <masters:MasterWithNavigation.Content>
             <Grid x:Name="v_gridContainer">
