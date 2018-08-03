@@ -4,14 +4,13 @@ using JustClimbTrial.Globals;
 using JustClimbTrial.Helpers;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
 
 namespace JustClimbTrial
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         public App()
         {
@@ -25,6 +24,6 @@ namespace JustClimbTrial
 
             //methods relating to video recording
             Directory.CreateDirectory(FileHelper.VideoBufferFolderPath());
-        }
+        }        
     }
 }

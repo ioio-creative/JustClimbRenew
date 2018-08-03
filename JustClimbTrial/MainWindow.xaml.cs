@@ -63,14 +63,27 @@ namespace JustClimbTrial
         {
             InitializeComponent();
 
-            playgroundWindow = new Playground();
-            playgroundWindow.Show();
-
             InitializeDebugModeToggleCommand();
             InitializeWallCalibrationCommand();
             InitializeIsFullScreenToggleCommand();
 
             this.ToggleFullScreen(AppGlobal.IsFullScreen);
+            
+            // show playground window
+
+            playgroundWindow = new Playground();
+
+            System.Windows.Forms.Screen[] allScreens = System.Windows.Forms.Screen.AllScreens;
+            System.Windows.Forms.Screen screenToShowPlaygroundWindow = allScreens[0];
+
+            if (allScreens.Length > 1)
+            {
+                screenToShowPlaygroundWindow = allScreens[1];
+                playgroundWindow.ToggleFullScreen();
+            }
+
+            playgroundWindow.ShowInScreen(
+                screenToShowPlaygroundWindow);
         }
 
 

@@ -1,6 +1,8 @@
 ﻿using JustClimbTrial.Extensions;
+using JustClimbTrial.Mvvm.Infrastructure;
 using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace JustClimbTrial.Views.Windows
@@ -10,15 +12,37 @@ namespace JustClimbTrial.Views.Windows
     /// </summary>
     public partial class Playground : Window
     {
+        //public static RoutedCommand ToggleFullScreenCmd = new RoutedCommand();
+        public static RoutedCommand ToggleFullScreenCmd = new RoutedCommand();
+
         public bool LoopMedia = true;
         public bool PlaygroundMediaPlaying;
         public bool PlaybackMediaPlaying;
 
+        private bool isFullScreen = false;
+
 
         public Playground()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
+
+
+        #region key gesture commands
+
+        //private void ToggleFullScreenCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        //{
+        //    e.CanExecute = true;
+        //}
+
+        //private void ToggleFullScreenCmdExecuted(object sender, ExecutedRoutedEventArgs e)
+        //{
+        //    isFullScreen = !isFullScreen;
+        //    this.ToggleFullScreen(isFullScreen);            
+        //}
+
+        #endregion
+
 
         public void LoadImage(string sourcePath)
         {
@@ -63,6 +87,9 @@ namespace JustClimbTrial.Views.Windows
             PlaygroundCamera.Height = height;
         }
 
+
+        #region event handlers
+
         private void PlaygroundMedia_Loaded(object sender, RoutedEventArgs e)
         {
             if (LoopMedia)
@@ -96,6 +123,8 @@ namespace JustClimbTrial.Views.Windows
         private void PlaybackMedia_MediaOpened(object sender, RoutedEventArgs e)
         {
            
-        }       
+        }        
+
+        #endregion
     }
 }
