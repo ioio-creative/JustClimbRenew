@@ -70,7 +70,7 @@ namespace JustClimbTrial
             InitializeWallCalibrationCommand();
             InitializeIsFullScreenToggleCommand();
 
-            ToggleFullScreen(AppGlobal.IsFullScreen);
+            this.ToggleFullScreen(AppGlobal.IsFullScreen);
         }
 
 
@@ -202,19 +202,7 @@ namespace JustClimbTrial
 
         private void HandleIsFullScreenChanged(bool _isFullScreenChanged)
         {
-            ToggleFullScreen(_isFullScreenChanged);
-        }
-
-        private void ToggleFullScreen(bool isFullScreen)
-        {
-            if (isFullScreen)
-            {
-                WindowHelper.SetWindowNormal(this);
-            }
-            else
-            {
-                WindowHelper.SetWindowFullScreen(this);
-            }
+            this.ToggleFullScreen(_isFullScreenChanged);
         }
 
         #endregion
