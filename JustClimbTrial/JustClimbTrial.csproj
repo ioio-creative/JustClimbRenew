@@ -113,6 +113,7 @@
     <Compile Include="Extensions\EllipseExtension.cs" />
     <Compile Include="Extensions\ImageControlExtension.cs" />
     <Compile Include="Extensions\ProcessExtension.cs" />
+    <Compile Include="Extensions\WindowExtension.cs" />
     <Compile Include="Helpers\ControlTemplateHelper.cs" />
     <Compile Include="Helpers\FrameBasedAnimation.cs" />
     <Compile Include="Helpers\ImageSequenceHelper.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="Helpers\RockTimerHelper.cs" />
     <Compile Include="Helpers\UiHelper.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
-    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Interfaces\ISavingVideo.cs" />
     <Compile Include="Kinect\KinectManager.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

@@ -12,9 +12,9 @@
               Margin="0,0,-8,-31">
         <Grid>
             <MediaElement x:Name="PlaygroundMedia" ScrubbingEnabled="False" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="None"                
-                              Loaded="PlaygroundMedia_Loaded"
-                      MediaOpened="PlaygroundMedia_MediaOpened" 
-                      MediaEnded="PlaygroundMedia_MediaEnded">
+                Loaded="PlaygroundMedia_Loaded"
+                MediaOpened="PlaygroundMedia_MediaOpened" 
+                MediaEnded="PlaygroundMedia_MediaEnded">
                 <MediaElement.LayoutTransform>
                     <ScaleTransform ScaleX="-1"/>
                 </MediaElement.LayoutTransform>
@@ -26,8 +26,8 @@
                     >
             </Canvas>
             <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
-                              LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
-                              MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
+                LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
+                MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
         </Grid>
         <Viewbox.RenderTransform>
             <ScaleTransform ScaleX="-1"/>
