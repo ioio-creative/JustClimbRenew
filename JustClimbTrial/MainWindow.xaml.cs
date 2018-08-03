@@ -225,11 +225,14 @@ namespace JustClimbTrial
         public void SubscribeColorImgSrcToPlaygrd()
         {
             KinectManagerClient.ColorImageSourceArrived += HandleColorImageSourceArrived;
-        }        
+            playgroundWindow.PlaygroundCamera.Opacity = 1;
+        }
 
         public void UnsubColorImgSrcToPlaygrd()
         {
             KinectManagerClient.ColorImageSourceArrived -= HandleColorImageSourceArrived;
+            playgroundWindow.PlaygroundCamera.Opacity = 0;
+
         }
 
         public void CheckAndLoadAndPlayScrnSvr()

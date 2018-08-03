@@ -52,7 +52,6 @@
         </Button>-->
             <customControl:ImageButton x:Name="playBtn" 
                                        Grid.Column="1" Margin="5"
-                                       Background="Transparent"
                                        Source="/Resources/Images/btn1_start to play.png" />
 
             <!-- Pause button. -->
@@ -62,7 +61,6 @@
         </Button>-->
             <customControl:ImageButton x:Name="pauseBtn"
                                        Grid.Column="2" Margin="5"
-                                       Background="Transparent"
                                        Source="/Resources/Images/btn1_pause.png" />
 
             <!-- Stop button. -->

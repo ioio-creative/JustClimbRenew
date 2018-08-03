@@ -12,17 +12,32 @@
     
     <!-- Custom Control for Toggling between demo and non-demo during GameStart -->
     <UserControl.Resources>
+        <!--http://mark-dot-net.blogspot.com/2007/07/creating-custom-wpf-button-template-in.html-->
+        <!--<Style TargetType="{x:Type Button}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
         <ControlTemplate x:Key="btnRecordDemoVideoTemplate">
-            <Grid>
-                <customControl:ImageButton x:Name="btnRecordDemoVideo" VerticalAlignment="Bottom"
-                                       Command="{Binding BtnRecordDemoVideoCommand}"
-                                       Visibility="{Binding BtnRecordDemoVideoVisibility}"    
-                                       Source="/Resources/Images/btn1_record demo.png" />
-            </Grid>
+            <Button x:Name="btnRecordDemoVideo"
+                    VerticalAlignment="Center"
+                    Command="{Binding BtnRecordDemoVideoCommand}"
+                    Visibility="{Binding BtnRecordDemoVideoVisibility}">
+                <Border BorderBrush="Transparent">
+                    <Image Stretch="Uniform"
+                           Source="/Resources/Images/btn1_record demo.png" />
+                </Border>
+            </Button>
         </ControlTemplate>
         <ControlTemplate x:Key="btnCancelRecordDemoVideoTemplate">
             <Button x:Name="btnCancelRecordDemoVideo"
-                    Content="Cancel Record Demo" VerticalAlignment="Top"
+                    Content="Cancel Record Demo" VerticalAlignment="Center"
                     Command="{Binding BtnCancelRecordDemoVideoCommand}"
                     Visibility="{Binding BtnRecordDemoVideoVisibility}" />
         </ControlTemplate>

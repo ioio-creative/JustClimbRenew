@@ -45,11 +45,11 @@ namespace JustClimbTrial.Views.Pages
             }
         }
 
-        private KeyGesture skeletonVisibleToggleCommandKey = new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Alt);
+        private KeyGesture skeletonVisibleToggleCommandKey = new KeyGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Control);
         public static RoutedCommand SkeletonVisibleToggleCommand = new RoutedCommand();
         private bool drawSkeleton = false;
 
-        private KeyGesture cameraFeedToggleCommandKey = new KeyGesture(Key.F, ModifierKeys.Control | ModifierKeys.Alt);
+        private KeyGesture cameraFeedToggleCommandKey = new KeyGesture(Key.F, ModifierKeys.Alt | ModifierKeys.Control);
         public static RoutedCommand CameraFeedToggleCommand = new RoutedCommand();
         private bool cameraFeed = false;
 
@@ -168,6 +168,10 @@ namespace JustClimbTrial.Views.Pages
 
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
+            //In order to execute command bindings
+            Focusable = true;
+            Focus();
+
             //Load Wall and Floor Planes to local variables
             float[] planeParams = Settings.Default.WallPlaneStr.Split(',').Select(x => float.Parse(x)).ToArray();
             wallPlane = new Plane(planeParams[0], planeParams[1], planeParams[2], planeParams[3]);
@@ -210,6 +214,7 @@ namespace JustClimbTrial.Views.Pages
             BtnRestartGame.Command = new RelayCommand(RestartCommand, CanRestartGame);
 
             InitializeSkeletonVisibleToggleCommand();
+            InitializeCameraFeedToggleCommand();
         }
 
         private void InitializeNavHead()
@@ -486,6 +491,13 @@ namespace JustClimbTrial.Views.Pages
         private void SkeletonVisibleToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             drawSkeleton = !drawSkeleton;
+            if (!drawSkeleton)
+            {
+                foreach (Shape skeletonShape in skeletonBodies.SelectMany(shapes => shapes))
+                {
+                    mainWindowClient.GetPlaygroundCanvas().RemoveChild(skeletonShape);
+                }
+            }
         }
 
         private void CameraFeedToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
