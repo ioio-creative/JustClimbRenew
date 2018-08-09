@@ -44,7 +44,8 @@ namespace JustClimbTrial.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=IOIO-PC;Initial Catalog=JustClimb;User ID=IoioSa;Password=Ioio0512")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-NSE6A6A\\SQLEXPRESS;Initial Catalog=JustClimb;User ID=IoioSa;P" +
+            "assword=Ioio0512")]
         public string JustClimbConnectionString {
             get {
                 return ((string)(this["JustClimbConnectionString"]));
@@ -54,8 +55,8 @@ namespace JustClimbTrial.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=sing-mssql-1.chdc0elhkwnt.ap-southeast-1.rds.amazonaws.com;Initial Ca" +
-            "talog=JustClimb;User ID=IoioSa;Password=Ioio0512;Persist Security Info=True;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ioio-aws.cpj7x1dsbh3k.ap-southeast-1.rds.amazonaws.com;Initial Catalo" +
+            "g=JustClimb;User ID=IoioSa;Password=Ioio0512;Persist Security Info=True;")]
         public string JustClimbConnectionString1 {
             get {
                 return ((string)(this["JustClimbConnectionString1"]));
