@@ -180,14 +180,8 @@
     <Compile Include="Views\Pages\RouteSet.xaml.cs">
       <DependentUpon>RouteSet.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Pages\Test.xaml.cs">
-      <DependentUpon>Test.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Pages\VideoPlayback.xaml.cs">
       <DependentUpon>VideoPlayback.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Pages\VideoPlaybackDialogConfirm.xaml.cs">
-      <DependentUpon>VideoPlaybackDialogConfirm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\WallCalibration.xaml.cs">
       <DependentUpon>WallCalibration.xaml</DependentUpon>
@@ -255,15 +249,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Pages\Test.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Pages\VideoPlayback.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Pages\VideoPlaybackDialogConfirm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -374,6 +360,9 @@
     <Resource Include="Resources\Images\btn1_Play select video.png" />
     <Resource Include="Resources\Images\btn1_Restart.png" />
     <Resource Include="Resources\Images\btn1_start to play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Recycled\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

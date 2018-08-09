@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="VideoPlaybackDialogConfirm" Height="100" Width="300">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />

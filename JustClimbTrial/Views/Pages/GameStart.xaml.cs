@@ -278,9 +278,10 @@ namespace JustClimbTrial.Views.Pages
         {
             if (gameplayVideoRecClient.IsRecording)
             {
-                MessageBoxResult mbr =
-                        MessageBox.Show("Restart current play? The video in-recording will be deleted.", "Stop Recording and Restart?",
-                            MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                MessageBoxResult mbr = UiHelper.NotifyUserYesNo("Restart current play? The video in-recording will be deleted.", 
+                                                                "Stop Recording and Restart?", 
+                                                                MessageBoxImage.Warning);
+
                 switch (mbr)
                 {
                     case MessageBoxResult.Yes:

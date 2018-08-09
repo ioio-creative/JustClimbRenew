@@ -6,16 +6,21 @@
         xmlns:local="clr-namespace:JustClimbTrial.Views.Dialogs"
         mc:Ignorable="d"
         Title="Just Climb - Route Set Mode Select" Height="100" Width="300"
-        MinHeight="100" MinWidth="300" 
-        ResizeMode="CanResizeWithGrip"
+        MinHeight="200" MinWidth="500" 
+        ResizeMode="NoResize"
         ShowInTaskbar="False" 
         WindowStartupLocation="CenterOwner">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="FontSize" Value="16" />
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" 
+        <TextBlock Grid.Row="0" FontSize="16" 
                    Text="Route set mode : " 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center" />
@@ -34,13 +39,13 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="btnBoulder"
                 Grid.Row="1" Grid.Column="1" 
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Stretch" FontSize="16"
                 Click="btnBoulder_Click">
                 Boulder
             </Button>
             <Button x:Name="btnTraining"
                 Grid.Row="1" Grid.Column="3" 
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Stretch" FontSize="16"
                 Click="btnTraining_Click">
                 Training
             </Button>
