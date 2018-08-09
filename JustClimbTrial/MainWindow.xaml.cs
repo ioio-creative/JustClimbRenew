@@ -41,6 +41,7 @@ namespace JustClimbTrial
         
         public static RoutedCommand WallCalibrationCommand = new RoutedCommand();        
         public static RoutedCommand IsFullScreenToggleCommand = new RoutedCommand();
+        public static RoutedCommand CloseAppCommand = new RoutedCommand();
 
         /* end of commands associated with keyboard short cuts */
 
@@ -145,6 +146,14 @@ namespace JustClimbTrial
 
 
         #region debug commands and func
+
+        private void CloseAppCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (UiHelper.NotifyUserYesNo("Close Application?") == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
+        }
 
         private void DebugModeToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {

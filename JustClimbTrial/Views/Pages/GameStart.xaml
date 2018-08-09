@@ -57,6 +57,14 @@
 
                 <!-- row 0 -->
                 <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,5,0,60">
+                    <Grid.Resources>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="FontSize" Value="16" />
+                        </Style>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="FontSize" Value="16" />
+                        </Style>
+                    </Grid.Resources>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="2*" />
@@ -112,7 +120,8 @@
                   IsEnabled="True" 
                   IsReadOnly="True"
                   EnableRowVirtualization="True" 
-                  Width="auto" 
+                  Width="auto"
+                  FontSize="16"
                   ItemsSource="{Binding Source={StaticResource ResourceKey=cvsRouteVideos}}"
                   Margin="10,10,10,10" 
                   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" 

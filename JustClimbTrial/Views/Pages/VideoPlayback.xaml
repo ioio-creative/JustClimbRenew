@@ -75,7 +75,7 @@
             <!--<StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Column="4" Margin="15, 0, 15, 15">-->
             <TextBlock Grid.Column="4" Margin="15, 0, 15, 15" 
                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                       Foreground="Black" FontSize="16">
+                       Foreground="Black">
                     <Run Text="Speed: " />
                     <Run Text="{Binding ElementName=speedRatioSlider, Path=Value}" />
                     <Run Text="%" />

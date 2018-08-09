@@ -34,7 +34,7 @@
             <Grid Grid.Column="1">
                 <Grid.Resources>
                     <Style TargetType="{x:Type Button}">
-                        <Setter Property="FontSize" Value="10" />
+                        <Setter Property="FontSize" Value="16" />
                         <Setter Property="Height" Value="50" />
                         <Setter Property="Margin" Value="50 10 50 10" />
                     </Style>
@@ -43,7 +43,7 @@
                     <RowDefinition Height="8*"/>
                     <RowDefinition Height ="2*" MinHeight="10"/>
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
+                <StackPanel Grid.Row="0" Margin="5, 20, 5, 20">
                     <Button x:Name="ConfigWallBtn" Content="Configure Wall" />
                     <Button x:Name="UndoBtn" Content="Undo" />
                     <Button x:Name="ConfirmBtn" Content="Confirm" />

@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:JustClimbTrial"
     mc:Ignorable="d"
-    Title="MainWindow" Height="720" Width="1280" 
+    Title="MainWindow" Height="720" Width="1280" ResizeMode="NoResize"
     Source="/Views/Pages/JustClimbHome.xaml"
     Loaded="NavigationWindow_Loaded"
     Closed="NavigationWindow_Closed">
@@ -16,6 +16,8 @@
                         Executed="WallCalibrationCommandExecuted" />
         <CommandBinding Command="{x:Static local:MainWindow.IsFullScreenToggleCommand}"
                         Executed="IsFullScreenToggleCommandExecuted" />
+        <CommandBinding Command="{x:Static local:MainWindow.CloseAppCommand}"
+                        Executed="CloseAppCommandExecuted" />
     </NavigationWindow.CommandBindings>
     <NavigationWindow.InputBindings>
         <KeyBinding Command="{x:Static local:MainWindow.DebugModeToggleCommand}"
@@ -27,5 +29,7 @@
         <KeyBinding Command="{x:Static local:MainWindow.IsFullScreenToggleCommand}"
                     Key="Enter"
                     Modifiers="Alt" />
+        <KeyBinding Command="{x:Static local:MainWindow.CloseAppCommand}"
+                    Key="Esc" />
     </NavigationWindow.InputBindings>
 </NavigationWindow>

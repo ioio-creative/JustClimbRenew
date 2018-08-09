@@ -42,6 +42,14 @@
         <master:MasterWithNavigation.Content>
             <!-- parent grid -->
             <Grid>
+                <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize" Value="16" />
+                    </Style>
+                    <Style TargetType="{x:Type ComboBox}">
+                        <Setter Property="FontSize" Value="16" />
+                    </Style>
+                </Grid.Resources>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*" />
                     <ColumnDefinition Width="3*" />
@@ -78,7 +86,7 @@
 
                     <!-- age & difficulty, row 1 -->
                     <!-- grid 3 -->
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" Margin="10,0,10,0">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
