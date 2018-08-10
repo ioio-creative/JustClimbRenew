@@ -32,12 +32,16 @@
             <Image Name="PlaygroundCamera" Stretch="Uniform">
             </Image>
             <Canvas Name="PlaygroundCanvas" Background="Transparent"
-                    Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=PlaygroundCamera, Mode=OneWay}"
-                    >
+                    Width="{Binding ActualWidth, ElementName=PlaygroundCamera, Mode=OneWay}" 
+                    Height="{Binding ActualHeight, ElementName=PlaygroundCamera, Mode=OneWay}" >
             </Canvas>
             <MediaElement x:Name="PlaybackMedia" ScrubbingEnabled ="True"
                 LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="Uniform"
-                MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded"/>
+                MediaOpened="PlaybackMedia_MediaOpened" Loaded="PlaybackMedia_Loaded">
+                <MediaElement.LayoutTransform>
+                    <ScaleTransform ScaleX="-1"/>
+                </MediaElement.LayoutTransform>
+            </MediaElement>
         </Grid>
         <Viewbox.RenderTransform>
             <ScaleTransform ScaleX="-1"/>

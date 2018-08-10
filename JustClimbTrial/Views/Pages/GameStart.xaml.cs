@@ -263,15 +263,41 @@ namespace JustClimbTrial.Views.Pages
 
         private void PlayDemoVideo(object parameter = null)
         {
-            RouteVideoViewModel demoVideoVM = viewModel.DemoRouteVideoViewModel;
-            ShowVideoPlaybackDialog(demoVideoVM);
+            if (gameStarted)
+            {
+                UiHelper.NotifyUser("Cannot access playback during an unfinished game.");
+            }
+            else
+            {
+                mainWindowClient.StopPlaygroundMedia();
+                mainWindowClient.HidePlaygroundCanvas();
+
+                RouteVideoViewModel demoVideoVM = viewModel.DemoRouteVideoViewModel;
+                ShowVideoPlaybackDialog(demoVideoVM);
+                //executed after video playback dialog is closed
+                mainWindowClient.ShowPlaygroundCanvas();
+                ResetGameStart(); 
+            }
         }
 
         private void PlaySelectedVideo(object parameter = null)
         {
-            RouteVideoViewModel selectedVideoVM =
-                DgridRouteVideos.SelectedItem as RouteVideoViewModel;
-            ShowVideoPlaybackDialog(selectedVideoVM);
+            if (gameStarted)
+            {
+                UiHelper.NotifyUser("Cannot access playback during an unfinished game.");
+            }
+            else
+	        {
+                mainWindowClient.StopPlaygroundMedia();
+                mainWindowClient.HidePlaygroundCanvas();
+
+                RouteVideoViewModel selectedVideoVM =
+                    DgridRouteVideos.SelectedItem as RouteVideoViewModel;
+                ShowVideoPlaybackDialog(selectedVideoVM);
+                //executed after video playback dialog is closed
+                mainWindowClient.ShowPlaygroundCanvas();
+                ResetGameStart(); 
+            }
         }
 
         private async void RestartCommand(object parameter = null)
@@ -466,16 +492,25 @@ namespace JustClimbTrial.Views.Pages
         private void HandleDebugModeChanged(bool _debug)
         {
             if (_debug)
-            {
-                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
+            {               
                 rocksOnRouteVM.StopAndHideAllRocksOnRouteImgSequencesInGame();
                 rocksOnRouteVM.DrawAllRocksOnRouteInGame();
+
+                if (!cameraFeed)
+                {
+                    mainWindowClient.SubscribeColorImgSrcToPlaygrd(); 
+                }
             }
             else
             {
-                mainWindowClient.UnsubColorImgSrcToPlaygrd();
                 rocksOnRouteVM.UndrawAllRocksOnRouteInGame();
                 rocksOnRouteVM.ShowAndPlayAllRocksOnRouteImgSequencesInGame();
+
+                if (!cameraFeed)
+                {
+                    mainWindowClient.UnsubColorImgSrcToPlaygrd(); 
+                }       
+                CheckAndUndrawSkeletonBodies();
             }
         }
 
@@ -483,25 +518,22 @@ namespace JustClimbTrial.Views.Pages
         private void SkeletonVisibleToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             drawSkeleton = !drawSkeleton;
-            if (!drawSkeleton)
-            {
-                foreach (Shape skeletonShape in skeletonBodies.SelectMany(shapes => shapes))
-                {
-                    mainWindowClient.GetPlaygroundCanvas().RemoveChild(skeletonShape);
-                }
-            }
+            CheckAndUndrawSkeletonBodies();
         }
 
         private void CameraFeedToggleCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             cameraFeed = !cameraFeed;
-            if (cameraFeed)
+            if (!debug)
             {
-                mainWindowClient.SubscribeColorImgSrcToPlaygrd();
-            }
-            else
-            {
-                mainWindowClient.UnsubColorImgSrcToPlaygrd();
+                if (cameraFeed)
+                {
+                    mainWindowClient.SubscribeColorImgSrcToPlaygrd();
+                }
+                else
+                {
+                    mainWindowClient.UnsubColorImgSrcToPlaygrd();
+                } 
             }
         }
 
@@ -585,7 +617,6 @@ namespace JustClimbTrial.Views.Pages
         {
             //TODO: Check Video Recorder after reset (multiple export after reset)
             //rocktimers tick sub and unsub
-            mainWindowClient.ClearPlaygroundCanvas();
 
             if (debug)
             {
@@ -641,10 +672,9 @@ namespace JustClimbTrial.Views.Pages
                 CheckGameOverWithTimer(playerBody);
             }
 
-            IEnumerable<Joint> LHandJoints =
-                        body.Joints.Where(x => KinectExtensions.LHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
-            IEnumerable<Joint> RHandJoints =
-                body.Joints.Where(x => KinectExtensions.RHandJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+            IEnumerable<Joint> LHandJoints = KinectExtensions.FilterJointsByJointTypes(body, KinectExtensions.LHandJointTypes);
+            IEnumerable<Joint> RHandJoints = KinectExtensions.FilterJointsByJointTypes(body, KinectExtensions.RHandJointTypes);
+ 
             switch (climbMode)
             {
                 case ClimbMode.Training:
@@ -664,31 +694,40 @@ namespace JustClimbTrial.Views.Pages
         {
             bool reached = false;
 
+            IEnumerable<Joint> UpperTorsoJoints = KinectExtensions.FilterJointsByJointTypes(body, KinectExtensions.UpperTorsoJointTypes);
+
             //Both hands need to be on starting rock to start training mode
             if (rockOnRouteVM == rocksOnRouteVM.StartRock)
             {
-                reached = IsJointGroupOnRock(LHandJoints.Union(RHandJoints), rockOnRouteVM.MyRockViewModel);
+                reached = IsJointGroupOnRock(LHandJoints.Union(RHandJoints).Union(UpperTorsoJoints), rockOnRouteVM.MyRockViewModel);
                 //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
-                if (reached)
+                //if (reached)
+                //{
+                //    Debug.Write(body.Joints[JointType.HandTipLeft].Position.X);
+                //    Debug.Write(body.Joints[JointType.HandTipLeft].Position.Y);
+                //    Debug.WriteLine(body.Joints[JointType.HandTipLeft].Position.Z);
+                //}
+            }
+            else if (body.TrackingId == playerBodyID)
+            {
+                //Both hands need to be on final rock to end game
+                if (rockOnRouteVM == rocksOnRouteVM.EndRock)
                 {
-                    Debug.Write(body.Joints[JointType.HandTipLeft].Position.X);
-                    Debug.Write(body.Joints[JointType.HandTipLeft].Position.Y);
-                    Debug.WriteLine(body.Joints[JointType.HandTipLeft].Position.Z);
+                    reached = IsJointGroupOnRock(LHandJoints.Union(RHandJoints).Union(UpperTorsoJoints), rockOnRouteVM.MyRockViewModel);
+                    //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
+                }
+                //Single hand can validate for all the other rocks in between
+                else
+                {
+                    IEnumerable<Joint> handJoints =
+                        LHandJoints.Union(RHandJoints);  //.Where(x => KinectExtensions.FilterJointsByJointTypes(body, KinectExtensions.HandJointTypes));
+                    reached = IsJointGroupOnRock(handJoints, rockOnRouteVM.MyRockViewModel);
                 }
             }
-            //Both hands need to be on final rock to end game
-            else if (rockOnRouteVM == rocksOnRouteVM.EndRock)
-            {
-                reached = IsJointGroupOnRock(LHandJoints.Union(RHandJoints), rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
-                //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
-            }
-            //Single hand can validate for all the other rocks in between
             else
             {
-                IEnumerable<Joint> handJoints =
-                    LHandJoints.Union(RHandJoints);  //.Where(x => KinectExtensions.HandJoints.Contains(x.JointType));
-                reached = IsJointGroupOnRock(handJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
-            }
+                reached = false;
+            }            
 
             return reached;
         }
@@ -1041,10 +1080,10 @@ namespace JustClimbTrial.Views.Pages
         private bool IsBoulderTargetReached(RockOnRouteViewModel rockOnRouteVM, Body body,
             IEnumerable<Joint> LHandJoints, IEnumerable<Joint> RHandJoints)
         {
-            bool reached;
+            bool reached = false;
 
-            IEnumerable<Joint> fourLimbJoints =
-                        body.Joints.Where(x => KinectExtensions.LimbJoints.Contains(x.Value.JointType)).Select(y => y.Value);
+            IEnumerable<Joint> fourLimbJoints = LHandJoints.Union(RHandJoints).
+                Union(KinectExtensions.FilterJointsByJointTypes(body, KinectExtensions.UpperTorsoJointTypes));                        
 
             switch (rockOnRouteVM.BoulderStatus)
             {
@@ -1055,11 +1094,11 @@ namespace JustClimbTrial.Views.Pages
                     break;
                 case RockOnBoulderStatus.Int:
                 default:
-                    reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    reached = body.TrackingId == playerBodyID && IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
                     break;
                 case RockOnBoulderStatus.End:
-                    //reached = AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
-                    reached = IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel) && body.TrackingId == playerBodyID;
+                    //reached = body.TrackingId == playerBodyID && AreBothJointGroupsOnRock(LHandJoints, RHandJoints, rockOnRouteVM.MyRockViewModel);
+                    reached = body.TrackingId == playerBodyID && IsJointGroupOnRock(fourLimbJoints, rockOnRouteVM.MyRockViewModel);
                     break;
             }
 
@@ -1383,6 +1422,17 @@ namespace JustClimbTrial.Views.Pages
         private void DebugRecolorRockVM(RockOnRouteViewModel rockVM, Brush color)
         {
             rockVM.MyRockViewModel.RecolorRockShape(color);
+        }
+
+        private void CheckAndUndrawSkeletonBodies()
+        {
+            if (!drawSkeleton)
+            {
+                foreach (Shape skeletonShape in skeletonBodies.SelectMany(shapes => shapes))
+                {
+                    mainWindowClient.GetPlaygroundCanvas().RemoveChild(skeletonShape);
+                }
+            }
         }
 
         #endregion

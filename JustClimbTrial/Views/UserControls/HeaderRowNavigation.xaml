@@ -76,7 +76,7 @@
 
         </Grid>
         <TextBlock x:Name="lbTitle" Grid.Column="4" FontSize="16"
-                   HorizontalAlignment="Center" VerticalAlignment="Top"
+                   HorizontalAlignment="Center" VerticalAlignment="Bottom"
                    Text="{Binding HeaderRowTitle}">
         </TextBlock>
 

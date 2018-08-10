@@ -9,15 +9,11 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <!--<Button x:Name="btnTrainingSeqGoBack">
-            <Button.Background>
-                <ImageBrush ImageSource="/Resources/Images/btn1_return.png" />
-            </Button.Background>
-        </Button>-->
-        <customControl:ImageButton x:Name="btnTrainingSeqGoBack"
+
+        <customControl:ImageButton x:Name="btnTrainingSeqGoBack" Grid.Column="0"
                                    Source="/Resources/Images/btn1_return.png" />
     </Grid>
 </UserControl>

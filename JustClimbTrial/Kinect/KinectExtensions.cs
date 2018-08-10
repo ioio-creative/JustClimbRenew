@@ -63,44 +63,49 @@ namespace JustClimbTrial.Kinect
         };
 
         //Joint Types to validate boulder checkpoints
-        public static IEnumerable<JointType> UpperTorsoJoints = new JointType[]
+        public static IEnumerable<JointType> UpperTorsoJointTypes = new JointType[]
         {
             JointType.Head,
-            JointType.Neck,
-            JointType.SpineShoulder,
+            //JointType.Neck,
+            //JointType.SpineShoulder,
             JointType.ShoulderLeft,
             JointType.ShoulderRight
         };
 
-        public static IEnumerable<JointType> LHandJoints = new JointType[]
+        public static IEnumerable<JointType> LHandJointTypes = new JointType[]
         {
             JointType.HandLeft,
-            JointType.ThumbLeft,
-            JointType.WristLeft
+            //JointType.ThumbLeft,
+            //JointType.WristLeft
         };
 
-        public static IEnumerable<JointType> RHandJoints = new JointType[]
+        public static IEnumerable<JointType> RHandJointTypes = new JointType[]
         {
             JointType.HandRight,
-            JointType.ThumbRight,
-            JointType.WristRight
+            //JointType.ThumbRight,
+            //JointType.WristRight
         };
         
-        public static IEnumerable<JointType> LLegJoints = new JointType[]
+        public static IEnumerable<JointType> LLegJointTypes = new JointType[]
         {
-            JointType.AnkleLeft,
-            JointType.FootLeft,
+            //JointType.AnkleLeft,
+            JointType.FootLeft
         };
 
-        public static IEnumerable<JointType> RLegJoints = new JointType[]
+        public static IEnumerable<JointType> RLegJointTypes = new JointType[]
         {
-            JointType.AnkleRight,
-            JointType.FootRight,
+            //JointType.AnkleRight,
+            JointType.FootRight
         };
 
-        public static IEnumerable<JointType> HandJoints = LHandJoints.Union(RHandJoints);
-        public static IEnumerable<JointType> LegJoints = LLegJoints.Union(RLegJoints);   
-        public static IEnumerable<JointType> LimbJoints = HandJoints.Union(LLegJoints);
+        public static IEnumerable<JointType> HandJointTypes = LHandJointTypes.Union(RHandJointTypes);
+        public static IEnumerable<JointType> LegJointTypes = LLegJointTypes.Union(RLegJointTypes);   
+        public static IEnumerable<JointType> LimbJointTypes = HandJointTypes.Union(LegJointTypes);
+
+        public static IEnumerable<Joint> FilterJointsByJointTypes(Body body, IEnumerable<JointType> jointTypes)
+        {
+            return body.Joints.Where(x => jointTypes.Contains(x.Value.JointType)).Select(y => y.Value);
+        }
 
 
         #region Skeleton with Body.Joint<CameraSpacePoints>

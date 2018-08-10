@@ -17,42 +17,21 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
-        <!-- row 0 -->
-        <!--<Button x:Name="btnStartStatus" 
-                Grid.Row="0" Grid.Column="0"
-                Background="Transparent" BorderBrush="Transparent">
-            <Image Source="/Resources/Images/btn1_route start.png"/>
-        </Button>-->
         <customControl:ImageButton x:Name="btnStartStatus"
                                    Grid.Row="0" Grid.Column="0"
                                    Source="/Resources/Images/btn1_route start.png" />
-        <!--<Button x:Name="btnEndStatus" 
-                Grid.Row="0" Grid.Column="1"
-                Background="Transparent" BorderBrush="Transparent">
-            <Image Source="/Resources/Images/btn1_route end.png" />
-        </Button>-->
+
         <customControl:ImageButton x:Name="btnEndStatus"
                                    Grid.Row="0" Grid.Column="1"
                                    Source="/Resources/Images/btn1_route end.png" />
-        <!-- end of row 0 -->
 
-        <!-- row 1 -->
-        <!--<Button x:Name="btnIntermediateStatus" 
-                Grid.Row="1" Grid.Column="0"
-                Background="Transparent" BorderBrush="Transparent">
-            <Image Source="/Resources/Images/btn1_route int.png"/>
-        </Button>-->
         <customControl:ImageButton x:Name="btnIntermediateStatus"
                                    Grid.Row="1" Grid.Column="0"
                                    Source="/Resources/Images/btn1_route int.png" />
-        <!--<Button x:Name="btnNoneStatus" 
-                Grid.Row="1" Grid.Column="1"
-                Background="Transparent" BorderBrush="Transparent">
-            <Image Source="/Resources/Images/btn1_route none.png" />
-        </Button>-->
+
         <customControl:ImageButton x:Name="btnNoneStatus"
                                    Grid.Row="1" Grid.Column="1"
                                    Source="/Resources/Images/btn1_route none.png" />
-        <!-- end of row 1 -->
+
     </Grid>
 </UserControl>

@@ -382,30 +382,30 @@ namespace JustClimbTrial.ViewModels
 
         public void SetRocksImgSequences()
         {
-            IEnumerable<Action> funcs;
+            //IEnumerable<Action> funcs;
             switch (RouteClimbMode)
             {
                 case ClimbMode.Boulder:
                 default:
-                    funcs = this.Select(x => new Action(x.SetRockImageWrtBoulderStatus));
-                    //foreach (RockOnRouteViewModel rockOnRoute in this)
-                    //{
-                    //    rockOnRoute.SetRockImageWrtBoulderStatus();
-                    //}
+                    //funcs = this.Select(x => new Action(x.SetRockImageWrtBoulderStatus));
+                    foreach (RockOnRouteViewModel rockOnRoute in this)
+                    {
+                        rockOnRoute.SetRockImageWrtBoulderStatus();
+                    }
                     break;
                 case ClimbMode.Training:
-                    funcs = this.Select(x => new Action(() => { x.SetRockImageSeqWrtTrainSeq(RouteLength); }));
-                    //foreach (RockOnRouteViewModel rockOnRoute in this)
-                    //{
-                    //    rockOnRoute.SetRockImageSeqWrtTrainSeq(RouteLength);
-                    //}
+                    //funcs = this.Select(x => new Action(() => { x.SetRockImageSeqWrtTrainSeq(RouteLength); }));
+                    foreach (RockOnRouteViewModel rockOnRoute in this)
+                    {
+                        rockOnRoute.SetRockImageSeqWrtTrainSeq(RouteLength);
+                    }
                     break;
             }
 
-            foreach (Action func in funcs)
-            {
-                func();
-            }
+            //foreach (Action func in funcs)
+            //{
+            //    func();
+            //}
         }
 
         #endregion

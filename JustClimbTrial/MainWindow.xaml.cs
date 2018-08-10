@@ -241,6 +241,11 @@ namespace JustClimbTrial
             return playgroundCanvas;
         }
 
+        public void ShowPlaygroundCanvas()
+        {
+            playgroundCanvas.Opacity = 1;
+        }
+
         public void ShowImageInPlaygroundCanvas(BitmapSource bitmapSrc)
         {
             playgroundWindow.LoadAndShowImage(bitmapSrc);
@@ -254,6 +259,11 @@ namespace JustClimbTrial
         public void RemoveChildFromPlaygroundCanvas(UIElement uiElement)
         {
             playgroundCanvas.RemoveChild(uiElement);
+        }
+
+        public void HidePlaygroundCanvas()
+        {
+            playgroundCanvas.Opacity = 0;
         }
 
         public void ClearPlaygroundCanvas()
@@ -311,11 +321,21 @@ namespace JustClimbTrial
         
         #region Playback Media ctrl
 
+        public void ShowPlaybackMedia()
+        {
+            playbackMedia.Opacity = 1;
+        }
+
+        public void HidePlaybackMedia()
+        {
+            playbackMedia.Opacity = 0;
+        }
+
         public void ChangeSrcAndPlayInPlaygbackMedia(string uriString, bool loop = false)
         {
             StopPlaygbackMedia();
             ChangeSrcInPlaygbackMedia(uriString);
-            PlayPlaygbackMedia(loop);
+            PlayPlaybackMedia(loop);
         }
 
         public void ChangeSrcInPlaygbackMedia(string uriString)
@@ -323,7 +343,7 @@ namespace JustClimbTrial
             playbackMedia.Source = new Uri(uriString);
         }
 
-        public void PlayPlaygbackMedia(bool loop = false)
+        public void PlayPlaybackMedia(bool loop = false)
         {
             playgroundWindow.LoopMedia = loop;
             playbackMedia.Visibility = Visibility.Visible;
@@ -336,7 +356,7 @@ namespace JustClimbTrial
             playbackMedia.Stop();
         }
 
-        public void PausePlaygbackMedia()
+        public void PausePlaybackMedia()
         {
             playbackMedia.Pause();
         }

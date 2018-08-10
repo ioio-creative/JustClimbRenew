@@ -8,7 +8,8 @@
       mc:Ignorable="d" 
       Width="{Binding Path=Parent.ActualWidth}" Height="{Binding Path=Parent.ActualHeight}"      
       Title="VideoPlayback"
-      Loaded="Page_Loaded">
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
 
     <Grid Name="PlaybackGrid" Width="{Binding Path=VideoPlayback}" MinWidth="960">
 

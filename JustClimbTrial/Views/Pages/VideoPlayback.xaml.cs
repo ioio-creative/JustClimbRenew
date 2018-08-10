@@ -115,7 +115,7 @@ namespace JustClimbTrial.Views.Pages
             // already running.
             timer.Start();
             mediaPlayback.Play();
-            mainWindowClient.PlayPlaygbackMedia();
+            mainWindowClient.PlayPlaybackMedia();
 
             // Initialize the MediaElement property values.
             InitializePropertyValues();
@@ -126,7 +126,7 @@ namespace JustClimbTrial.Views.Pages
             // The Pause method pauses the media if it is currently running.
             // The Play method can be used to resume.
             mediaPlayback.Pause();
-            mainWindowClient.PausePlaygbackMedia();
+            mainWindowClient.PausePlaybackMedia();
         }
 
         private void StopMedia(object parameter = null)
@@ -154,7 +154,10 @@ namespace JustClimbTrial.Views.Pages
         private void StopAndClosePlaybackDialog(object parameter = null)
         {
             StopMedia();
+            mainWindowClient.ShowPlaygroundCanvas();
             (this.Parent as NavigationWindow).Close();
+
+            //mainWindowClient.
         }
 
         #endregion
@@ -173,10 +176,18 @@ namespace JustClimbTrial.Views.Pages
 
             mediaPlayback.Source = new Uri(videoFilePath);
             mainWindowClient.ChangeSrcInPlaygbackMedia(videoFilePath);
+            mainWindowClient.ShowPlaybackMedia();
+            mainWindowClient.PlayPlaybackMedia();
+            mainWindowClient.PausePlaybackMedia();
 
             InitializeCommands();
         }
-        
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            mainWindowClient.HidePlaybackMedia();
+        }
+
         private void mediaPlayback_Loaded(object sender, RoutedEventArgs e)
         {
             // show first frame of video in WPF MediaElement
@@ -253,6 +264,8 @@ namespace JustClimbTrial.Views.Pages
             //navigationSlider.Value = navigationSlider.Maximum * mouseOnNav.X / navigationSlider.ActualWidth;
         }
 
-        #endregion        
+        #endregion
+
+        
     }
 }

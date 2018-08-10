@@ -7,6 +7,7 @@ using JustClimbTrial.Mvvm.Infrastructure;
 using JustClimbTrial.ViewModels;
 using JustClimbTrial.Views.UserControls;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -111,23 +112,35 @@ namespace JustClimbTrial.Views.Pages
         // InitializeSaveRouteCommands() has to be called after initializing rocksOnWallViewModel
         private void InitializeSaveRouteCommands()
         {
-            Func<bool> validateRoute;
+            Func<string> validateRoute;
 
             switch (routeSetClimbMode)
             {
                 case ClimbMode.Training:
                     validateRoute = () => 
-                        string.IsNullOrEmpty(rocksOnRouteViewModel.ValidateRocksOnTrainingRoute());
+                        rocksOnRouteViewModel.ValidateRocksOnTrainingRoute();
                     break;
                 case ClimbMode.Boulder:
                 default:
                     validateRoute = () =>
-                        string.IsNullOrEmpty(rocksOnRouteViewModel.ValidateRocksOnBoulderRoute());
+                        rocksOnRouteViewModel.ValidateRocksOnBoulderRoute();
                     break;
             }
 
-            Predicate<object> CanSaveRoute = x => 
-                string.IsNullOrEmpty(ValidateRouteParams()) && validateRoute();
+            Predicate<object> CanSaveRoute = x =>
+            {
+                bool isRouteValid = true;
+                string validationMsg = ValidateRouteParams();
+
+                if (string.IsNullOrEmpty(validationMsg))
+                {
+                    validationMsg = validateRoute();
+                }
+
+                isRouteValid = string.IsNullOrEmpty(validationMsg);
+                routeSetViewModel.RouteValidationMsg = validationMsg;
+                return isRouteValid;
+            };
 
             btnConfirmRouteSet.Command = new RelayCommand(SaveRoute, CanSaveRoute);
             btnCancelRouteSet.Command = new RelayCommand(CancelSaveRoute, CanCancelSaveRoute);

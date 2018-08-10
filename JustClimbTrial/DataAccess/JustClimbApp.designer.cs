@@ -63,7 +63,7 @@ namespace JustClimbTrial.DataAccess
     #endregion
 		
 		public JustClimbAppDataContext() : 
-				base(global::JustClimbTrial.Properties.Settings.Default.JustClimbConnectionString1, mappingSource)
+				base(global::JustClimbTrial.Properties.Settings.Default.JustClimbConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

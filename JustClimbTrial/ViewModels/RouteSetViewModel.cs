@@ -36,6 +36,12 @@ namespace JustClimbTrial.ViewModels
             set { SetValue(() => RouteDifficulties, value); }
         }
 
+        public string RouteValidationMsg
+        {
+            get { return GetValue(() => RouteValidationMsg); }
+            set { SetValue(() => RouteValidationMsg, value); }            
+        }
+
         #endregion
 
 
