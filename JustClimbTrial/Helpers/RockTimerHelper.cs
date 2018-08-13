@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Threading;
 
@@ -14,7 +15,7 @@ namespace JustClimbTrial.Helpers
         {
             get
             {
-                return numOfTickEventHandlers > 0;
+                return tickHandlers.Count > 0;
             }
         }
         public bool IsEnabled
@@ -26,7 +27,7 @@ namespace JustClimbTrial.Helpers
 
         }
 
-        private int numOfTickEventHandlers = 0;
+        private IList<EventHandler> tickHandlers = new List<EventHandler>();
         private DispatcherTimer timer;
 
         public RockTimerHelper(int goal = 5, int lag = 3, int msInterval = 100) : base()
@@ -88,13 +89,22 @@ namespace JustClimbTrial.Helpers
         public void AddTickEventHandler(EventHandler handler)
         {
             timer.Tick += handler;
-            numOfTickEventHandlers++;
+            tickHandlers.Add(handler);
         }
 
         public void RemoveTickEventHandler(EventHandler handler)
         {
             timer.Tick -= handler;
-            numOfTickEventHandlers--;
+            tickHandlers.Remove(handler);
+        }
+
+        public void ClearTickEventHandlers()
+        {
+            foreach (EventHandler handler in tickHandlers)
+            {
+                timer.Tick -= handler;
+            }
+            tickHandlers.Clear();
         }
     }
 }

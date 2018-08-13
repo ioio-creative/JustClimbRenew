@@ -108,7 +108,7 @@ namespace JustClimbTrial.Kinect
         }
 
 
-        #region Skeleton with Body.Joint<CameraSpacePoints>
+        #region Skeleton with Body.Joint<CameraSpacePoints> (deprecated in this app)
 
         public static void DrawSkeleton(this Canvas canvas, Body body)
         {
@@ -121,7 +121,7 @@ namespace JustClimbTrial.Kinect
 
             foreach (Tuple<JointType, JointType> standardJointLine in StandardJointLines)
             {
-                canvas.DrawLine(body.Joints[standardJointLine.Item1], body.Joints[standardJointLine.Item2]);
+                canvas.DrawLine(body.Joints[standardJointLine.Item1], body.Joints[standardJointLine.Item2]);                
             }
         }
 
@@ -137,7 +137,7 @@ namespace JustClimbTrial.Kinect
                 Debug.WriteLine($"Head Position in Camera Space = {joint.Position.X}, {joint.Position.Y}");
             }
 
-            // 3) Create a WPF ellipse.
+            // 3) Create a WPF canvas ellipse.
             Ellipse ellipse = new Ellipse
             {
                 Width = 20,
@@ -219,12 +219,30 @@ namespace JustClimbTrial.Kinect
             foreach (Tuple<JointType, JointType> standardJointLine in StandardJointLines)
             {
                 skeleton.Add(canvas.DrawLine(body.Joints[standardJointLine.Item1], body.Joints[standardJointLine.Item2], mapper, mode));
+
+                //if (standardJointLine.Item1 == JointType.ElbowLeft && standardJointLine.Item2 == JointType.WristLeft)
+                //{
+                //    Joint first = body.Joints[standardJointLine.Item1];
+                //    Joint second = body.Joints[standardJointLine.Item2];
+
+                //    Joint firstToSecond = second.Subtract(first).Multiply(1.2f);
+                //    Joint extendedSecond = first.Add(firstToSecond);
+                //    extendedSecond.TrackingState = TrackingState.Inferred;
+
+                //    skeleton.Add(canvas.DrawLine(first, extendedSecond, mapper, mode, 8, new SolidColorBrush(Colors.GreenYellow)));
+                //    skeleton.Add(canvas.DrawPoint(extendedSecond, mapper, mode, new SolidColorBrush(Colors.YellowGreen)));
+                //}
             }
 
             return skeleton;
         }
 
         public static Shape DrawPoint(this Canvas canvas, Joint joint, CoordinateMapper mapper, SpaceMode mode)
+        {
+            return DrawPoint(canvas, joint, mapper, mode, new SolidColorBrush(Colors.LightBlue));
+        }
+
+        public static Shape DrawPoint(this Canvas canvas, Joint joint, CoordinateMapper mapper, SpaceMode mode, Brush brush)
         {
             Shape shapeToReturn = null;
 
@@ -273,13 +291,20 @@ namespace JustClimbTrial.Kinect
                 //if (joint.JointType == 0) Debug.WriteLine($"Head Position in Color Space = {spPt.X}, {spPt.Y}");
 
                 // 3) Draw the point on Canvas
-                shapeToReturn = spPt.DrawPoint(canvas);
+                shapeToReturn = spPt.DrawPoint(canvas, brush);
             }
 
             return shapeToReturn;
         }
 
         public static Shape DrawLine(this Canvas canvas, Joint first, Joint second, CoordinateMapper mapper, SpaceMode mode)
+        {
+            return DrawLine(canvas, first, second, mapper, mode, 8, new SolidColorBrush(Colors.LightBlue));
+        }
+
+
+        public static Shape DrawLine(this Canvas canvas, Joint first, Joint second, CoordinateMapper mapper, SpaceMode mode,
+            double thickness, Brush brush)
         {
             Shape lineToReturn = null;
 
@@ -310,13 +335,77 @@ namespace JustClimbTrial.Kinect
                 mySecondPoint = mySecondPoint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight, mode);
 
                 //call static DrawLine from class SpacePointBae
-                lineToReturn = SpacePointBase.DrawLine(canvas, myFirstPoint, mySecondPoint);
+                lineToReturn = SpacePointBase.DrawLine(canvas, myFirstPoint, mySecondPoint, thickness, brush);
             }
 
             return lineToReturn;
         }
 
-        #endregion        
+        #endregion
+
+
+        #region CameraSpacePoint extensions
+
+        public static CameraSpacePoint Add(this CameraSpacePoint pt1, CameraSpacePoint pt2)
+        {
+            return new CameraSpacePoint
+            {
+                X = pt1.X + pt2.X,
+                Y = pt1.Y + pt2.Y,
+                Z = pt1.Z + pt2.Z
+            };
+        }
+
+        public static CameraSpacePoint Subtract(this CameraSpacePoint pt1, CameraSpacePoint pt2)
+        {
+            return new CameraSpacePoint
+            {
+                X = pt1.X - pt2.X,
+                Y = pt1.Y - pt2.Y,
+                Z = pt1.Z - pt2.Z
+            };
+        }
+
+        public static CameraSpacePoint Multiply(this CameraSpacePoint pt, float scalar)
+        {
+            return new CameraSpacePoint
+            {
+                X = pt.X * scalar,
+                Y = pt.Y * scalar,
+                Z = pt.Z * scalar
+            };
+        }
+
+        #endregion
+
+
+        #region Joint extensions
+
+        public static Joint Add(this Joint joint1, Joint joint2)
+        {
+            return new Joint
+            {
+                Position = joint1.Position.Add(joint2.Position)
+            };
+        }
+
+        public static Joint Subtract(this Joint joint1, Joint joint2)
+        {
+            return new Joint
+            {
+                Position = joint1.Position.Subtract(joint2.Position)
+            };
+        }
+
+        public static Joint Multiply(this Joint joint, float scalar)
+        {
+            return new Joint
+            {
+                Position = joint.Position.Multiply(scalar)
+            };
+        }
+
+        #endregion
 
 
         #region Image Functions

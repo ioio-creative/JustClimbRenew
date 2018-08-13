@@ -60,7 +60,7 @@ namespace JustClimbTrial.Kinect
             return ScaleTo(width, height, dimensions.Item1, dimensions.Item2);
         }
 
-        public Shape DrawPoint(Canvas canvas)
+        public Shape DrawPoint(Canvas canvas, Brush brush)
         {
             Shape ellipseToReturn = null;
 
@@ -71,7 +71,7 @@ namespace JustClimbTrial.Kinect
                 {
                     Width = 20,
                     Height = 20,
-                    Fill = new SolidColorBrush(Colors.LightBlue)
+                    Fill = brush
                 };
 
                 // 2) Position the ellipse according to the joint's coordinates.
@@ -86,9 +86,9 @@ namespace JustClimbTrial.Kinect
 
             return ellipseToReturn;
         }
-    
 
-        public static Shape DrawLine(Canvas canvas, SpacePointBase first, SpacePointBase second)
+        public static Shape DrawLine(Canvas canvas, SpacePointBase first, SpacePointBase second,
+            double thickness, Brush brush)
         {
             Shape lineToReturn = null;
             if (first.IsValid && second.IsValid)
@@ -96,8 +96,8 @@ namespace JustClimbTrial.Kinect
                 lineToReturn = canvas.DrawLine(
                     new Point(first.X, first.Y),
                     new Point(second.X, second.Y),
-                    8,
-                    new SolidColorBrush(Colors.LightBlue));                
+                    thickness,
+                    brush);                
             }
 
             return lineToReturn;

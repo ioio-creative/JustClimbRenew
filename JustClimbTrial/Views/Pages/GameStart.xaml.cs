@@ -70,13 +70,15 @@ namespace JustClimbTrial.Views.Pages
 
         // Training mode use only
         private IEnumerator<RockOnRouteViewModel> nextRockOnTrainRoute;
-        private Func<RockOnRouteViewModel, bool> isTrainingTargetReachedFunc;
+        //private Func<RockOnRouteViewModel, bool> isTrainingTargetReachedFunc;
 
         // Boulder mode use only
         private IEnumerable<RockOnRouteViewModel> interRocksOnBoulderRoute;
-        private Func<RockOnRouteViewModel, bool> isBoulderTargetReachedFunc;
+        //private Func<RockOnRouteViewModel, bool> isBoulderTargetReachedFunc;
         //private IEnumerable<RockTimerHelper> interRockOnBoulderRouteTimers;
 
+        private IDictionary<ulong, Func<RockOnRouteViewModel, bool>> bodyAndTargetFuncsDict = new Dictionary<ulong, Func<RockOnRouteViewModel, bool>>();
+        
 
         private ulong playerBodyID;
         private Body playerBody;
@@ -158,8 +160,8 @@ namespace JustClimbTrial.Views.Pages
 
         //TODO: combine hold and endrock timer to avoid confusion
         //private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
-        private const int EndRockHoldTimerGoal = 22; //unit = 10 millisecs
-        private const int EndRockHoldTimerLag = 8;
+        private const int EndRockHoldTimerGoal = 25; //unit = 10 millisecs
+        private const int EndRockHoldTimerLag = 5;
         private bool isEndCountDownVideoPlaying = false;
 
         private DispatcherTimer gameOverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
@@ -561,12 +563,15 @@ namespace JustClimbTrial.Views.Pages
             //Play "Start" video
             mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayStartVideoPath());
 
+            bodyAndTargetFuncsDict = new Dictionary<ulong, Func<RockOnRouteViewModel, bool>>();
+
             gameStarted = true;
             Console.WriteLine("Game Started !");
         }
 
         private void OnGameplayFinish()
         {
+            ClearRockTimers();
             gameStarted = false;
             isEndCountDownVideoPlaying = false;
             Debug.WriteLine("Finished!");
@@ -604,6 +609,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void OnGameOver()
         {
+            ClearRockTimers();
             gameStarted = false;
             Debug.WriteLine("Over!");
             mainWindowClient.ClearPlaygroundCanvas();
@@ -615,8 +621,7 @@ namespace JustClimbTrial.Views.Pages
 
         private void ResetGameStart()
         {
-            //TODO: Check Video Recorder after reset (multiple export after reset)
-            //rocktimers tick sub and unsub
+            bodyAndTargetFuncsDict = new Dictionary<ulong, Func<RockOnRouteViewModel, bool>>();
 
             if (debug)
             {
@@ -659,6 +664,13 @@ namespace JustClimbTrial.Views.Pages
             mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameplayReadyVideoPath(), true);
         }
 
+        private void ClearRockTimers()
+        {
+            foreach (RockOnRouteViewModel rockVM in rocksOnRouteVM)
+            {
+                rockVM.MyRockTimerHelper.ClearTickEventHandlers();
+            }
+        }
         #endregion
 
 
@@ -739,7 +751,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 RockTimerHelper nextRockTimer = currentRockOnRouteVM.MyRockTimerHelper;            
 
-                if (isTrainingTargetReachedFunc(currentRockOnRouteVM))
+                if (bodyAndTargetFuncsDict[bodyID](currentRockOnRouteVM))
                 {
                     nextRockTimer.RockTimerCountIncr();
 
@@ -868,12 +880,14 @@ namespace JustClimbTrial.Views.Pages
             if (nextRockOnRouteVM != null)
             {
                 RockTimerHelper nextRockTimer = nextRockOnRouteVM.MyRockTimerHelper;
-                isTrainingTargetReachedFunc = (_rockOnRouteVM) =>
+                Func<RockOnRouteViewModel, bool> isTrainingTargetReachedFunc = (_rockOnRouteVM) =>
                 {
                     return IsTrainingTargetReached(_rockOnRouteVM, body, LHandJoints, RHandJoints);
                 };
 
-                if (isTrainingTargetReachedFunc(nextRockOnRouteVM))
+                bodyAndTargetFuncsDict[body.TrackingId] = isTrainingTargetReachedFunc;
+
+                if (bodyAndTargetFuncsDict[body.TrackingId](nextRockOnRouteVM))
                 {
                     //This Block only happens for End Rock
                     if (nextRockOnRouteVM == rocksOnRouteVM.EndRock)
@@ -930,7 +944,7 @@ namespace JustClimbTrial.Views.Pages
             EventHandler startRockTimerTickEventHandler = null;
             startRockTimerTickEventHandler = async (_sender, _e) =>
             {
-                if (isBoulderTargetReachedFunc(rocksOnRouteVM.StartRock))
+                if (bodyAndTargetFuncsDict[bodyID](rocksOnRouteVM.StartRock))
                 {
                     startRockTimer.RockTimerCountIncr();
 
@@ -989,7 +1003,7 @@ namespace JustClimbTrial.Views.Pages
             EventHandler endRockTimerTickEventHandler = null;
             endRockTimerTickEventHandler = (_sender, _e) =>
             {
-                if (isBoulderTargetReachedFunc(rocksOnRouteVM.EndRock))
+                if (bodyAndTargetFuncsDict[playerBodyID](rocksOnRouteVM.EndRock))
                 {
                     endRockTimer.RockTimerCountIncr();
 
@@ -1046,7 +1060,7 @@ namespace JustClimbTrial.Views.Pages
             EventHandler interRockTimerTickEventHandler = null;
             interRockTimerTickEventHandler = (_sender, _e) =>
             {
-                if (isBoulderTargetReachedFunc(rockOnRoute))
+                if (bodyAndTargetFuncsDict[playerBodyID](rockOnRoute))
                 {
                     interRockTimer.RockTimerCountIncr();
 
@@ -1070,6 +1084,7 @@ namespace JustClimbTrial.Views.Pages
                     if (interRockTimer.IsLagThresholdExceeded())
                     {
                         interRockTimer.Reset();
+                        interRockTimer.RemoveTickEventHandler(interRockTimerTickEventHandler);
                     }
                 }
             };//interRockTimerTickEventHandler = (_sender, _e) =>
@@ -1108,14 +1123,16 @@ namespace JustClimbTrial.Views.Pages
         private void BoulderGameplay(Body body, IEnumerable<Joint> LHandJoints,
            IEnumerable<Joint> RHandJoints)
         {
-            isBoulderTargetReachedFunc = (rockOnRouteVM) =>
+            Func<RockOnRouteViewModel, bool> isBoulderTargetReachedFunc = (rockOnRouteVM) =>
             {
                 return IsBoulderTargetReached(rockOnRouteVM, body, LHandJoints, RHandJoints);
             };
+            bodyAndTargetFuncsDict[body.TrackingId] = isBoulderTargetReachedFunc;
+
 
             if (!gameStarted) //Progress: Game not yet started, waiting player to reach Starting Point
             {
-                if (isBoulderTargetReachedFunc(rocksOnRouteVM.StartRock))
+                if (bodyAndTargetFuncsDict[body.TrackingId](rocksOnRouteVM.StartRock))
                 {
                     //DO SOMETHING WHEN RELEVANT JOINT(S) TOUCHES STARTING POINT
                     RockTimerHelper startRockTimer = rocksOnRouteVM.StartRock.MyRockTimerHelper;
@@ -1137,7 +1154,7 @@ namespace JustClimbTrial.Views.Pages
             {
                 //Progress: Game Started, waiting player to reach End Point
                 //CHECK END ROCK REACHED ALL THE TIME
-                if (isBoulderTargetReachedFunc(rocksOnRouteVM.EndRock))
+                if (bodyAndTargetFuncsDict[body.TrackingId](rocksOnRouteVM.EndRock))
                 {
                     RockTimerHelper endRockTimer = rocksOnRouteVM.EndRock.MyRockTimerHelper;
                     if (!isEndCountDownVideoPlaying)
@@ -1166,7 +1183,7 @@ namespace JustClimbTrial.Views.Pages
 
                     foreach (RockOnRouteViewModel rockOnRoute in interRocksOnBoulderRoute)
                     {
-                        if (isBoulderTargetReachedFunc(rockOnRoute))
+                        if (bodyAndTargetFuncsDict[body.TrackingId](rockOnRoute))
                         {
                             RockTimerHelper interRockTimer = rockOnRoute.MyRockTimerHelper;
 
