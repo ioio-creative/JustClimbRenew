@@ -87,38 +87,36 @@ namespace JustClimbTrial
             AppGlobal.DebugModeChanged += HandleDebugModeChanged;
             AppGlobal.IsFullScreenChanged += HandleIsFullScreenChanged;
 
-            //Get registered wall from File
-            Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
-            BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+            
 
             //activate sensor in Main Window only once
             KinectManagerClient = new KinectManager();
             bool isOpenKinectSuccessful = KinectManagerClient.OpenKinect();
 
-            //assign MediaElement ref to MainWindow member var
-            playgroundMedia = playgroundWindow.PlaygroundMedia;
-            playgroundCanvas = playgroundWindow.PlaygroundCanvas;
-            playbackMedia = playgroundWindow.PlaybackMedia;
-
-            playgroundWindow.LoadImage(wallLogImg);
-
-            //play ScreenSaver.mp4 in Playground Window
-            CheckAndLoadAndPlayScrnSvr();
-
             if (isOpenKinectSuccessful)
-            {
-                ChangeDebugWallLogImg();
+            {                            
+                //Get registered wall from File
+                Uri wallLogImgUri = new Uri(FileHelper.WallLogImagePath(AppGlobal.WallID));
+                BitmapImage wallLogImg = new BitmapImage(wallLogImgUri);
+                SetDebugWallLogImg();
+                playgroundWindow.LoadImage(wallLogImg);
+
+                //assign MediaElement ref to MainWindow member var
+                playgroundMedia = playgroundWindow.PlaygroundMedia;
+                playgroundCanvas = playgroundWindow.PlaygroundCanvas;
+                playbackMedia = playgroundWindow.PlaybackMedia;
+             
+                //play ScreenSaver.mp4 in Playground Window
+                CheckAndLoadAndPlayScrnSvr();
 
                 UiHelper.NotifyUser("Kinect connected!");
             }
             else
             {
-                if (UiHelper.NotifyUserResult("Kinect is not available!" + Environment.NewLine + "Please Check Kinect Connection and Restart Programme.") == MessageBoxResult.OK)
-                {
-                    Application.Current.Shutdown();
-                }
+                UiHelper.NotifyUser("Kinect connection ERROR" + Environment.NewLine + "Please try reconnect Kinect device and restart application.");
+                Application.Current.Shutdown();
             }
-
+                     
         }
 
         private void NavigationWindow_Closed(object sender, EventArgs e)
@@ -179,10 +177,10 @@ namespace JustClimbTrial
         private void HandleDebugModeChanged(bool _debug)
         {
             UiHelper.NotifyUser("Debug Mode: " + (_debug ? "On" : "Off"));
-            ChangeDebugWallLogImg();
+            SetDebugWallLogImg();
         }
 
-        private void ChangeDebugWallLogImg()
+        private void SetDebugWallLogImg()
         {
             if (debug)
             {
@@ -223,13 +221,16 @@ namespace JustClimbTrial
 
         public void CheckAndLoadAndPlayScrnSvr()
         {
-            Uri scrnSvrUri = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
-            if ( playgroundMedia.Source == null || !playgroundMedia.Source.Equals(scrnSvrUri))
+            if (playgroundMedia != null)
             {
-                playgroundMedia.Stop();
-                playgroundMedia.Source = scrnSvrUri;
-                playgroundWindow.LoopMedia = true;
-                playgroundMedia.Play();
+                Uri scrnSvrUri = new Uri(System.IO.Path.Combine(FileHelper.VideoResourcesFolderPath(), "ScreenSaver.mp4"));
+                if (playgroundMedia.Source == null || !playgroundMedia.Source.Equals(scrnSvrUri))
+                {
+                    playgroundMedia.Stop();
+                    playgroundMedia.Source = scrnSvrUri;
+                    playgroundWindow.LoopMedia = true;
+                    playgroundMedia.Play();
+                } 
             }
         }
 

@@ -1,12 +1,15 @@
-﻿using Microsoft.Kinect;
+﻿using JustClimbTrial.Helpers;
+using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -119,30 +122,54 @@ namespace JustClimbTrial.Kinect
         #endregion
 
         public KinectManager()
-        {
+        {          
+            if (!IsKinectConnected())
+            {
+                UiHelper.NotifyUser("Kinect Unfound" + Environment.NewLine + "Please connect Kinect device and restart application.");
+                Application.Current.Shutdown();                
+            }
+
             // initialize Kinect object
             kinectSensor = KinectSensor.GetDefault();
+        }
+
+        //https://stackoverflow.com/a/28213157
+        //Kinect 2 For Windows
+        private const string HardwareId = @"VID_045E&PID_02D9";
+        private const string WmiQuery = @"SELECT * FROM Win32_PnPEntity WHERE DeviceID LIKE '%{0}%'";
+        
+        public static bool IsKinectConnected()
+        {
+            // Use WMI to find devices with the proper hardware id for the Kinect2
+            // note that one Kinect2 is listed as three harwdare devices    
+            string query = String.Format(WmiQuery, HardwareId);
+            using (var searcher = new ManagementObjectSearcher(query))
+            {
+                using (var collection = searcher.Get())
+                {
+                    return collection.Count > 0;
+                }
+            }
         }
 
         public bool OpenKinect()
         {
             bool isSuccess = false;
-
-            
+           
             if (!kinectSensor.IsOpen)
             {
                 // activate sensor
-                kinectSensor.Open(); 
+                kinectSensor.Open();
             }
-            
+
             if (kinectSensor.IsOpen && multiSourceReader == null)
             {
                 multiSourceReader = kinectSensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
                 //multiSourceReader = mSrcReader;
 
-                multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;                  
+                multiSourceReader.MultiSourceFrameArrived += Manager_MultiSourceFrameArrived;
             }
-            
+
             isSuccess = kinectSensor.IsOpen && multiSourceReader != null;
 
             if (isSuccess)
@@ -151,7 +178,7 @@ namespace JustClimbTrial.Kinect
             }
             else
             {
-                Debug.WriteLine("Kinect not available!");
+                Debug.WriteLine("Kinect activation ERROR.");
             }
             return isSuccess;
         }
@@ -170,6 +197,16 @@ namespace JustClimbTrial.Kinect
                 kinectSensor.Close();
                 kinectSensor = null;
             }
+        }
+
+        public void PauseMultiSrcReader()
+        {
+            multiSourceReader.IsPaused = true;
+        }
+
+        public void UnpauseMultiSrcReader()
+        {
+            multiSourceReader.IsPaused = false;
         }
 
         public void Manager_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)

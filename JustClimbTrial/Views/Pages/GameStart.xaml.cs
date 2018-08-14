@@ -273,10 +273,12 @@ namespace JustClimbTrial.Views.Pages
             {
                 mainWindowClient.StopPlaygroundMedia();
                 mainWindowClient.HidePlaygroundCanvas();
+                mainWindowClient.KinectManagerClient.PauseMultiSrcReader();
 
                 RouteVideoViewModel demoVideoVM = viewModel.DemoRouteVideoViewModel;
                 ShowVideoPlaybackDialog(demoVideoVM);
                 //executed after video playback dialog is closed
+                mainWindowClient.KinectManagerClient.UnpauseMultiSrcReader();
                 mainWindowClient.ShowPlaygroundCanvas();
                 ResetGameStart(); 
             }
@@ -292,11 +294,13 @@ namespace JustClimbTrial.Views.Pages
 	        {
                 mainWindowClient.StopPlaygroundMedia();
                 mainWindowClient.HidePlaygroundCanvas();
+                mainWindowClient.KinectManagerClient.PauseMultiSrcReader();
 
                 RouteVideoViewModel selectedVideoVM =
                     DgridRouteVideos.SelectedItem as RouteVideoViewModel;
                 ShowVideoPlaybackDialog(selectedVideoVM);
                 //executed after video playback dialog is closed
+                mainWindowClient.KinectManagerClient.UnpauseMultiSrcReader();
                 mainWindowClient.ShowPlaygroundCanvas();
                 ResetGameStart(); 
             }
@@ -390,6 +394,7 @@ namespace JustClimbTrial.Views.Pages
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
         {
+
             //Microsoft.Kinect.Vector4 floorClipPlane = e.GetFloorClipPlane();
 
             //floorPlane = new Plane(floorClipPlane.X, floorClipPlane.Y, floorClipPlane.Z, floorClipPlane.W);
@@ -448,7 +453,8 @@ namespace JustClimbTrial.Views.Pages
                     }
 
                 }//CLOSE foreach (var body in bodies) 
-            }
+            } 
+            
         }
 
         private void HandleNavHeadIsRecordDemoChanged(object sender, PropertyChangedEventArgs e)
@@ -481,11 +487,16 @@ namespace JustClimbTrial.Views.Pages
         {
             //This Function should only be subscribed when Gameover or Finish videos are loaded to playground
 
+            //pause the kinect src reader first before exporting video
+            mainWindowClient.KinectManagerClient.PauseMultiSrcReader();
+
             // stop video recording
             if (gameplayVideoRecClient.IsRecording)
             {
                 await SaveVideoRecordedInDbAndLocallyAsync();
             }
+            //resume kinect src reader
+            mainWindowClient.KinectManagerClient.UnpauseMultiSrcReader();
 
             ResetGameStart();
             mainWindowClient.RemovePlaygrounMediaEndedEventHandler(HandlePlaygroundVideoEndedAsync);
