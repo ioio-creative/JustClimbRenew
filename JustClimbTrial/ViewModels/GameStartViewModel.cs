@@ -85,7 +85,7 @@ namespace JustClimbTrial.ViewModels
         #endregion
 
 
-        #region filter properties
+        #region bounded properties
 
         public string SelectedYear
         {
@@ -157,6 +157,12 @@ namespace JustClimbTrial.ViewModels
                     _hourFilter.AddFilter();
                 }
             }
+        }
+
+        public string GameStatusMsg
+        {
+            get { return GetValue(() => GameStatusMsg); }
+            set { SetValue(() => GameStatusMsg, value); }
         }
 
         #endregion
@@ -422,5 +428,7 @@ namespace JustClimbTrial.ViewModels
         }
 
         #endregion
+
+        
     }
 }

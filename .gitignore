@@ -327,4 +327,4 @@ JustClimbTrial/Properties/Settings.Designer.cs
 JustClimbTrial/Properties/Settings.settings
 
 *.mp4
-!**/AppFiles/Resources/Videos/
+!**/AppFiles/Resources/Videos/*
