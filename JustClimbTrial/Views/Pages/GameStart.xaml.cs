@@ -1,5 +1,4 @@
-﻿using JustClimbTrial.DataAccess;
-using JustClimbTrial.DataAccess.Entities;
+﻿using JustClimbTrial.DataAccess.Entities;
 using JustClimbTrial.Enums;
 using JustClimbTrial.Extensions;
 using JustClimbTrial.Globals;
@@ -199,7 +198,7 @@ namespace JustClimbTrial.Views.Pages
 
         public GameStart(string aRouteId, ClimbMode aClimbMode)
         {
-            //In order to execute command bindings
+            // In order to execute input/command bindings at page level
             Focusable = true;
             Focus();
 
@@ -275,7 +274,7 @@ namespace JustClimbTrial.Views.Pages
         #region command methods
 
         private bool CanPlayDemoVideo(object paramter = null)
-        {
+        {            
             return IsRouteContainDemoVideo;
         }
 
@@ -496,6 +495,12 @@ namespace JustClimbTrial.Views.Pages
                 {                   
                     viewModel.DemoStatusMsg = "Player Recording Mode";                   
                 }
+
+                // In order to execute input/command bindings at page level,
+                // page has to remain in focus.
+                // If Focus() is not called, the focused element would be 
+                // btnRecordDemoVideo in navHead user control, and input bindings would not be effective.
+                Focus();
             }
         }
 
@@ -648,7 +653,9 @@ namespace JustClimbTrial.Views.Pages
             ClearRockTimers();
             gameStarted = false;
             Debug.WriteLine("Over!");
-            mainWindowClient.ClearPlaygroundCanvas();
+
+            // TODO: Ask Hugo by Chris, 2018-08-14
+            //mainWindowClient.ClearPlaygroundCanvas();
 
             //Play "GameOver" Video
             mainWindowClient.ChangeSrcAndPlayInPlaygroundMedia(FileHelper.GameOverVideoPath());
@@ -707,6 +714,7 @@ namespace JustClimbTrial.Views.Pages
                 rockVM.MyRockTimerHelper.ClearTickEventHandlers();
             }
         }
+
         #endregion
 
 

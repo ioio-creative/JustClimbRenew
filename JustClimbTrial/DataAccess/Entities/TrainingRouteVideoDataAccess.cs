@@ -34,11 +34,6 @@ namespace JustClimbTrial.DataAccess.Entities
             return ValidTrainingRouteVideos.Where(x => x.Route == routeId);
         }
 
-        public static TrainingRouteVideo ValidTrainingRouteDemoVideoByRouteId(string routeId)
-        {
-            return ValidTrainingRouteVideosByRouteId(routeId).Single(x => x.IsDemo.GetValueOrDefault(false));
-        }
-
         public static TrainingRouteVideo TryGetValidTrainingRouteDemoVideoByRouteId(string routeId)
         {
             return ValidTrainingRouteVideosByRouteId(routeId).SingleOrDefault(x => x.IsDemo.GetValueOrDefault(false));
@@ -142,8 +137,11 @@ namespace JustClimbTrial.DataAccess.Entities
 
         private static void SetIsDemoOfExistingDemoRouteVideoToFalse(string routeId, bool isSubmitChanges = true)
         {
-            TrainingRouteVideo existingDemoVideo = ValidTrainingRouteDemoVideoByRouteId(routeId);
-            existingDemoVideo.IsDemo = false;
+            TrainingRouteVideo existingDemoVideo = TryGetValidTrainingRouteDemoVideoByRouteId(routeId);
+            if (existingDemoVideo != null)
+            {
+                existingDemoVideo.IsDemo = false;
+            }
 
             if (isSubmitChanges)
             {
