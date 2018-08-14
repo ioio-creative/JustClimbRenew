@@ -165,6 +165,18 @@ namespace JustClimbTrial.ViewModels
             set { SetValue(() => GameStatusMsg, value); }
         }
 
+        public string DemoStatusMsg
+        {
+            get { return GetValue(() => DemoStatusMsg); }
+            set { SetValue(() => DemoStatusMsg, value); }
+        }
+
+        public string DemoAvailable
+        {
+            get { return GetValue(() => DemoAvailable); }
+            set { SetValue(() => DemoAvailable, value); }
+        }
+
         #endregion
 
 

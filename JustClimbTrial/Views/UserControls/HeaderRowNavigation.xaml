@@ -26,29 +26,31 @@
 
         <ControlTemplate x:Key="btnRecordDemoVideoTemplate">
             <Button x:Name="btnRecordDemoVideo"
-                    VerticalAlignment="Center"
-                    Command="{Binding BtnRecordDemoVideoCommand}"
-                    Visibility="{Binding BtnRecordDemoVideoVisibility}">
+                    VerticalAlignment="Center" Background="Transparent"
+                    Command="{Binding BtnRecordDemoVideoCommand}">
                 <Border BorderBrush="Transparent">
                     <Image Stretch="Uniform"
                            Source="/Resources/Images/btn1_record demo.png" />
                 </Border>
             </Button>
+            <!--<customControl:ImageButton x:Name="btnRecordDemoVideo"
+                                       Command="{Binding BtnRecordDemoVideoCommand}"                                       
+                                       Source="/Resources/Images/btn1_record demo.png">
+            </customControl:ImageButton>-->
         </ControlTemplate>
         <ControlTemplate x:Key="btnCancelRecordDemoVideoTemplate">
-            <Button x:Name="btnCancelRecordDemoVideo"
+            <Button x:Name="btnCancelRecordDemoVideo" FontSize="16" Margin="15, 10, 15, 10"
+                    MinHeight="70"
+                    Background="Transparent"
                     Content="Cancel Record Demo" VerticalAlignment="Center"
-                    Command="{Binding BtnCancelRecordDemoVideoCommand}"
-                    Visibility="{Binding BtnRecordDemoVideoVisibility}" />
+                    Command="{Binding BtnCancelRecordDemoVideoCommand}" />
         </ControlTemplate>
     </UserControl.Resources>
     
     <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="11*" />
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
@@ -59,29 +61,36 @@
                                    PreviewMouseDown="btnStaffOptions_PreviewMouseDown" 
                                    Source="/Resources/Images/btn1_JC Logo - General.png" />
 
-        <customControl:ImageButton x:Name="btnRescanWall"
-                                   Grid.Column="1" Margin="10, 0, 10, 0"
+        <Grid Grid.Column="1" Visibility="{Binding StaffOptionsVisibility}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            
+            <customControl:ImageButton x:Name="btnRescanWall"
+                                   Grid.Column="0" Margin="10, 0, 10, 0"
                                    VerticalAlignment="Bottom"
-                                   Visibility="{Binding StaffOptionsVisibility}"
                                    Source="/Resources/Images/btn1_Rescan - General.png" />
 
-        <customControl:ImageButton x:Name="btnRouteSet"
-                                   Grid.Column="2" Margin="10, 0, 10, 0"
+            <customControl:ImageButton x:Name="btnRouteSet"
+                                   Grid.Column="1" Margin="10, 0, 10, 0"
                                    VerticalAlignment="Bottom"
-                                   Visibility="{Binding StaffOptionsVisibility}"
                                    Source="/Resources/Images/btn1_Route Set - General.png" />
-        <Grid Grid.Column="3">
-            <Control x:Name="ctrlSwitchDemoMode"        
-                         Visibility="{Binding StaffOptionsVisibility}" />
 
+            <Control x:Name="ctrlSwitchDemoMode" 
+                     Grid.Column="2" Margin="10, 0, 10, 0"
+                     VerticalAlignment="Bottom"
+                     Visibility="{Binding BtnRecordDemoVideoVisibility}" />
         </Grid>
-        <TextBlock x:Name="lbTitle" Grid.Column="4" FontSize="16"
+        
+        <TextBlock x:Name="lbTitle" Grid.Column="2" FontSize="16"
                    HorizontalAlignment="Center" VerticalAlignment="Bottom"
                    Text="{Binding HeaderRowTitle}">
         </TextBlock>
 
         <customControl:ImageButton x:Name="btnHome" 
-                                   Grid.Column="5"
+                                   Grid.Column="3"
                                    HorizontalAlignment="Right" VerticalAlignment="Top"                               
                                    Source="/Resources/Images/btn1_Home - General.png" />   
     </Grid>

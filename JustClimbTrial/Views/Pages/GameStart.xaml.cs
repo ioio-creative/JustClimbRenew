@@ -114,7 +114,16 @@ namespace JustClimbTrial.Views.Pages
             {
                 if (viewModel != null)
                 {
-                    return viewModel.TryGetDemoRouteVideoViewModel != null;
+                    bool isRouteContainDemo = viewModel.TryGetDemoRouteVideoViewModel != null;                    
+                    if (isRouteContainDemo)
+                    {
+                        viewModel.DemoAvailable = "Demo Available";
+                    }
+                    else
+                    {
+                        viewModel.DemoAvailable = "No Demo Available for this Route";
+                    }
+                    return isRouteContainDemo;
                 }
                 else
                 {
@@ -155,8 +164,24 @@ namespace JustClimbTrial.Views.Pages
         #region Gameplay Flags/Timers
 
         //private int nextTrainRockIdx = 0;
-
-        private bool gameStarted = false;
+        private bool _gameStarted = false;
+        private bool gameStarted 
+        {
+            get { return _gameStarted; }
+            set
+            {
+                _gameStarted = value;
+                if (_gameStarted)
+                {
+                    viewModel.GameStatusMsg = "Game In Progress";
+                }
+                else
+                {
+                    viewModel.GameStatusMsg = "Waiting for Player to " + Environment.NewLine + " Start Game";
+                }                
+            }
+        }
+        
 
         //TODO: combine hold and endrock timer to avoid confusion
         //private RockTimerHelper endRockHoldTimer = new RockTimerHelper(goal: 24, lag: 6);
@@ -208,6 +233,7 @@ namespace JustClimbTrial.Views.Pages
             // set titles
             Title = "Just Climb - Game Start";
             WindowTitle = Title;
+            gameStarted = false;
         }
 
 
@@ -394,7 +420,6 @@ namespace JustClimbTrial.Views.Pages
 
         public void HandleBodyListArrived(object sender, BodyListArrEventArgs e)
         {
-
             //Microsoft.Kinect.Vector4 floorClipPlane = e.GetFloorClipPlane();
 
             //floorPlane = new Plane(floorClipPlane.X, floorClipPlane.Y, floorClipPlane.Z, floorClipPlane.W);
@@ -465,11 +490,11 @@ namespace JustClimbTrial.Views.Pages
 
                 if (isRecordingDemo)
                 {
-                    LbIsRecordingDemo.Text = "Demo Recording";
+                    viewModel.DemoStatusMsg = "Demo Recording Mode";
                 }
                 else
-                {
-                    LbIsRecordingDemo.Text = "";
+                {                   
+                    viewModel.DemoStatusMsg = "Player Recording Mode";                   
                 }
             }
         }
