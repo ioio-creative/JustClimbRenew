@@ -267,6 +267,7 @@ namespace JustClimbTrial
             playgroundCanvas.Opacity = 0;
         }
 
+        // use with care
         public void ClearPlaygroundCanvas()
         {
             playgroundCanvas.Children.Clear();

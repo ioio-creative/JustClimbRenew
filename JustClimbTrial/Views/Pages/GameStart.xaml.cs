@@ -653,8 +653,7 @@ namespace JustClimbTrial.Views.Pages
             ClearRockTimers();
             gameStarted = false;
             Debug.WriteLine("Over!");
-
-            // TODO: Ask Hugo by Chris, 2018-08-14
+            
             //mainWindowClient.ClearPlaygroundCanvas();
 
             //Play "GameOver" Video
