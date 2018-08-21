@@ -198,6 +198,8 @@ namespace JustClimbTrial.Views.Pages
                 jcWall.SaveWallData();
                 AppGlobal.WallID = newWallKey;
 
+                UiHelper.NotifyUser("New wall is registered successfully." + Environment.NewLine + "You will be directed to Route Set.");
+
                 RouteSetModeSelectDialog routeSetModeSelect = new RouteSetModeSelectDialog();
                 bool dialogResult = routeSetModeSelect.ShowDialog().GetValueOrDefault(false);
 

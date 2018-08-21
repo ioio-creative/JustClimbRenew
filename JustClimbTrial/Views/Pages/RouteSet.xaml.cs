@@ -311,6 +311,8 @@ namespace JustClimbTrial.Views.Pages
                         break;
                 }
 
+                UiHelper.NotifyUser( routeSetClimbMode.ToString() + " Route is Saved.");
+
                 // Switch to Routes page
                 Routes routesPage = new Routes(routeSetClimbMode);
                 this.NavigationService.Navigate(routesPage);
