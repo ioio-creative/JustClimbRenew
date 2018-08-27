@@ -380,7 +380,7 @@ namespace JustClimbTrial.ViewModels
             }
         }
 
-        public void SetRocksImgSequences()
+        public void ResetRocksImgSequences()
         {
             //IEnumerable<Action> funcs;
             switch (RouteClimbMode)
@@ -390,14 +390,18 @@ namespace JustClimbTrial.ViewModels
                     //funcs = this.Select(x => new Action(x.SetRockImageWrtBoulderStatus));
                     foreach (RockOnRouteViewModel rockOnRoute in this)
                     {
-                        rockOnRoute.SetRockImageWrtBoulderStatus();
+                        //rockOnRoute.ResetRockImageWrtBoulderStatus();
+                        rockOnRoute.CheckInitializeRockImage();
+                        rockOnRoute.ResetRockSpotlightFX();
                     }
                     break;
                 case ClimbMode.Training:
                     //funcs = this.Select(x => new Action(() => { x.SetRockImageSeqWrtTrainSeq(RouteLength); }));
                     foreach (RockOnRouteViewModel rockOnRoute in this)
                     {
-                        rockOnRoute.SetRockImageSeqWrtTrainSeq(RouteLength);
+                        //rockOnRoute.ResetRockImageSeqWrtTrainSeq(RouteLength);
+                        rockOnRoute.CheckInitializeRockImage();
+                        rockOnRoute.ResetRockSpotlightFX();
                     }
                     break;
             }

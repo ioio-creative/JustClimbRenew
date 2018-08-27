@@ -336,6 +336,11 @@ namespace JustClimbTrial.ViewModels
             return ChangeRockShape(GetNewRockOnWallEllipse);
         }
 
+        public Shape ChangeRockShapeToSpotlight()
+        {
+            return ChangeRockShape(GetNewRockSpotlightEllipse);
+        }
+
         private Shape ChangeRockShape(Func<Shape> shapeFactory)
         {
             UndrawBoulder();
@@ -401,6 +406,22 @@ namespace JustClimbTrial.ViewModels
                 Fill = Brushes.Transparent,
                 StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.Red
+            };
+
+            return boulderEllipse;
+        }
+
+        private Ellipse GetNewRockSpotlightEllipse()
+        {
+            double ellipseLength = widthOnCanvas > heightOnCanvas ? widthOnCanvas : heightOnCanvas;
+
+            Ellipse boulderEllipse = new Ellipse
+            {
+                Width = ellipseLength,
+                Height = ellipseLength,
+                Fill = Brushes.White,
+                StrokeThickness = DefaultBoulderShapeStrokeThickness,
+                Stroke = Brushes.White
             };
 
             return boulderEllipse;

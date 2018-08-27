@@ -87,7 +87,7 @@ namespace JustClimbTrial.ViewModels
         #endregion
 
         #region gamestart img seq func (release)
-        private void CheckInitializeRockImage()
+        public void CheckInitializeRockImage()
         {
             if (!rockAnimImgInitilized)
             {
@@ -95,8 +95,20 @@ namespace JustClimbTrial.ViewModels
                 rockAnimImgInitilized = true;
             }
         }
+        public void PlayRockImgSequence()
+        {
+            CheckInitializeRockImage();
 
-        public void SetRockImageWrtBoulderStatus()
+            RockAnimationSequence.PlayFromStart();
+
+        }
+
+        public void StopRockImgSequence()
+        {
+            RockAnimationSequence.Stop();
+        }
+
+        public void ResetRockImageWrtBoulderStatus()
         {
             CheckInitializeRockImage();
 
@@ -122,22 +134,9 @@ namespace JustClimbTrial.ViewModels
                     new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
                     break;
             }
-        }
+        }   
 
-        public void PlayRockImgSequence()
-        {
-            CheckInitializeRockImage();
-
-            RockAnimationSequence.PlayFromStart();
-
-        }
-
-        public void StopRockImgSequence()
-        {
-            RockAnimationSequence.Stop();           
-        }
-
-        public void SetRockImageSeqWrtTrainSeq(int maxSeqNo)
+        public void ResetRockImageSeqWrtTrainSeq(int maxSeqNo)
         {
             CheckInitializeRockImage();
 
@@ -163,6 +162,12 @@ namespace JustClimbTrial.ViewModels
                     new BitmapSource[][] { ImageSequenceHelper.ShowSequence });
             }
         }
+
+        public void ResetRockSpotlightFX()
+        {
+            MyRockViewModel.ChangeRockShapeToSpotlight();
+        }
+
 
         public void SetActivePopAndShineImgSeq()
         {

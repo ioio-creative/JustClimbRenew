@@ -667,7 +667,7 @@ namespace JustClimbTrial.Views.Pages
 
             if (debug)
             {
-                rocksOnRouteVM.SetRocksImgSequences();
+                rocksOnRouteVM.ResetRocksImgSequences();
                 rocksOnRouteVM.DrawAllRocksOnRouteInGame();
                 if (climbMode == ClimbMode.Training)
                 {
@@ -676,7 +676,7 @@ namespace JustClimbTrial.Views.Pages
             }
             else
             {
-                rocksOnRouteVM.SetRocksImgSequences();
+                rocksOnRouteVM.ResetRocksImgSequences();
                 rocksOnRouteVM.ShowAndPlayAllRocksOnRouteImgSequencesInGame();
             }
             
