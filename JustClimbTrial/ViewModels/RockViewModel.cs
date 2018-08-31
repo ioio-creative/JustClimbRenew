@@ -413,12 +413,12 @@ namespace JustClimbTrial.ViewModels
 
         private Ellipse GetNewRockSpotlightEllipse()
         {
-            double ellipseLength = widthOnCanvas > heightOnCanvas ? widthOnCanvas : heightOnCanvas;
+            //double ellipseLength = widthOnCanvas > heightOnCanvas ? widthOnCanvas : heightOnCanvas;
 
             Ellipse boulderEllipse = new Ellipse
             {
-                Width = ellipseLength,
-                Height = ellipseLength,
+                Width = widthOnCanvas,
+                Height = heightOnCanvas,
                 Fill = Brushes.White,
                 StrokeThickness = DefaultBoulderShapeStrokeThickness,
                 Stroke = Brushes.White

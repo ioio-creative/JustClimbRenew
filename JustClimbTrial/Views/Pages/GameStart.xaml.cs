@@ -821,6 +821,7 @@ namespace JustClimbTrial.Views.Pages
                             }
                             else
                             {
+                                rocksOnRouteVM.StartRock.MyRockViewModel.UndrawBoulder();
                                 rocksOnRouteVM.StartRock.SetAndPlayFeedbackImgSeq();
                             }
 
@@ -836,7 +837,7 @@ namespace JustClimbTrial.Views.Pages
                             else
                             {
                                 //we trigger animation on the NEXT rock after start rock
-                                nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
+                                //nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
                             }
                             
                         }
@@ -850,6 +851,7 @@ namespace JustClimbTrial.Views.Pages
                             }
                             else
                             {
+                                rocksOnRouteVM.EndRock.MyRockViewModel.UndrawBoulder();
                                 rocksOnRouteVM.EndRock.SetAndPlayFeedbackShineLoopImgSeq();
                             }
 
@@ -871,6 +873,7 @@ namespace JustClimbTrial.Views.Pages
                             }
                             else
                             {
+                                nextRockOnTrainRoute.Current.MyRockViewModel.UndrawBoulder();
                                 nextRockOnTrainRoute.Current.SetAndPlayFeedbackImgSeq();
                             }
 
@@ -884,7 +887,7 @@ namespace JustClimbTrial.Views.Pages
                             }
                             else
                             {
-                                nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
+                                //nextRockOnTrainRoute.Current.SetAndPlayActivePopAndShineImgSeq();
                             }
                         }
                         
@@ -1005,6 +1008,7 @@ namespace JustClimbTrial.Views.Pages
                         }
                         else
                         {
+                            rocksOnRouteVM.StartRock.MyRockViewModel.UndrawBoulder();
                             rocksOnRouteVM.StartRock.SetAndPlayFeedbackImgSeq();
                         }
 
@@ -1019,13 +1023,15 @@ namespace JustClimbTrial.Views.Pages
                             {
                                 interRock.SetActivePopAndShineImgSeq();
                             }
+                            rocksOnRouteVM.EndRock.SetActivePopAndShineImgSeq();
                         }
                         else
                         {
                             foreach (RockOnRouteViewModel interRock in interRocksOnBoulderRoute)
                             {
-                                interRock.SetAndPlayActivePopAndShineImgSeq();
+                                //interRock.SetAndPlayActivePopAndShineImgSeq();
                             }
+                            //rocksOnRouteVM.EndRock.SetAndPlayActivePopAndShineImgSeq();
                         }
                     }
                 }
@@ -1060,7 +1066,8 @@ namespace JustClimbTrial.Views.Pages
                         }
                         else
                         {
-                            rocksOnRouteVM.EndRock.SetAndPlayFeedbackShineLoopImgSeq();
+                            rocksOnRouteVM.EndRock.MyRockViewModel.UndrawBoulder();
+                            rocksOnRouteVM.EndRock.SetAndPlayFeedbackShineLoopImgSeq();             
                         }
 
                         OnGameplayFinish();
@@ -1120,6 +1127,7 @@ namespace JustClimbTrial.Views.Pages
                         }
                         else
                         {
+                            rockOnRoute.MyRockViewModel.UndrawBoulder();
                             rockOnRoute.SetAndPlayFeedbackImgSeq();
                         }
                     }
