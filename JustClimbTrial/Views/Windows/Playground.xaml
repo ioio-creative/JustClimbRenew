@@ -21,8 +21,8 @@
     <Viewbox Name="PlaygroundView" RenderTransformOrigin="0.5, 0.5" Stretch="Uniform"
               Margin="0,0,-8,-31">
         <Grid>
-            <MediaElement x:Name="PlaygroundMedia" ScrubbingEnabled="False" LoadedBehavior="Manual" UnloadedBehavior="Close" Stretch="None"                
-                Loaded="PlaygroundMedia_Loaded"
+            <MediaElement x:Name="PlaygroundMedia" ScrubbingEnabled="False" Stretch="None" Opacity="0.5"
+                LoadedBehavior="Manual" UnloadedBehavior="Close" Loaded="PlaygroundMedia_Loaded"
                 MediaOpened="PlaygroundMedia_MediaOpened" 
                 MediaEnded="PlaygroundMedia_MediaEnded">
                 <MediaElement.LayoutTransform>

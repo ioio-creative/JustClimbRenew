@@ -48,7 +48,7 @@ namespace JustClimbTrial.ViewModels
         //png image dimension: 500 x 500       
         private const int srcImgDimension = 500;
         //centre scaling comparator
-        private const int srcImgCenterDimension = 300;
+        private const int srcImgCenterDimension = 200;
         private Image rockImage;
 
         //Shape and TextBlock are used in Scan Wall, Route Set and GameStart(debug)
